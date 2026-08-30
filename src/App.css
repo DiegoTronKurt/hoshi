@@ -81,6 +81,11 @@
   cursor: not-allowed;
 }
 
+.controls label {
+  font-size: 0.85rem;
+  color: #555555;
+}
+
 .board-container {
   width: min(94vw, 480px);
   aspect-ratio: 1 / 1;
@@ -111,6 +116,51 @@
   margin: 0;
 }
 
+.status .result {
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+
+.status .saved-note {
+  color: #2f7a3d;
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+
+.saved-games {
+  width: 100%;
+}
+
+.saved-games h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.saved-games-empty {
+  text-align: center;
+  color: #777777;
+  font-size: 0.9rem;
+}
+
+.saved-games-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #333333;
+}
+
+.saved-games-list li {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  background: #ffffff;
+}
+
 @media (prefers-color-scheme: dark) {
   .app {
     background: #16140f;
@@ -130,5 +180,26 @@
 
   .status .captures {
     color: #cccccc;
+  }
+
+  .controls label {
+    color: #bbbbbb;
+  }
+
+  .status .saved-note {
+    color: #6fce82;
+  }
+
+  .saved-games-empty {
+    color: #999999;
+  }
+
+  .saved-games-list {
+    color: #dddddd;
+  }
+
+  .saved-games-list li {
+    background: #262218;
+    border-color: #55503f;
   }
 }

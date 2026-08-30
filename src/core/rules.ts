@@ -98,3 +98,17 @@ export function applyMove(state: GameState, point: number | null): MoveResult {
 
   return { legal: true, state: nextState, captured }
 }
+
+/**
+ * Todas las jugadas legales en la posicion actual, incluyendo pasar.
+ * Util para el bot (MCTS) y para resaltar jugadas validas en la interfaz.
+ */
+export function listLegalMoves(state: GameState): Array<number | null> {
+  const moves: Array<number | null> = []
+  for (let p = 0; p < state.board.stones.length; p++) {
+    if (state.board.stones[p] !== EMPTY) continue
+    if (applyMove(state, p).legal) moves.push(p)
+  }
+  moves.push(null)
+  return moves
+}
