@@ -1,0 +1,20 @@
+{
+  "app.title": "Hoshi",
+  "app.tagline": "Aprende Go desde la primera piedra",
+  "board.size": "Tamaño de tablero",
+  "board.newGame": "Partida nueva",
+  "board.pass": "Pasar",
+  "board.turn.black": "Le toca a negro",
+  "board.turn.white": "Le toca a blanco",
+  "board.gameOver": "Partida terminada. Dos pases seguidos.",
+  "board.captures": "Capturas",
+  "board.captures.black": "De negro",
+  "board.captures.white": "De blanco",
+  "board.illegal.occupied": "Ese punto ya está ocupado.",
+  "board.illegal.suicide": "Esa jugada dejaría al grupo sin libertades.",
+  "board.illegal.superko": "Esa jugada repetiría una posición anterior.",
+  "board.illegal.game_over": "La partida ya terminó.",
+  "language.label": "Idioma",
+  "language.en": "English",
+  "language.es": "Español"
+}

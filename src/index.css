@@ -1,0 +1,22 @@
+:root {
+  color-scheme: light dark;
+  font: 16px/1.45 system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}

@@ -1,0 +1,134 @@
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 1rem 3rem;
+  background: #f2eee4;
+  color: #1a1a1a;
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+}
+
+.tagline {
+  margin: 0.25rem 0 0.75rem;
+  color: #555555;
+}
+
+.language-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  border: 1px solid #cccccc;
+  border-radius: 999px;
+  padding: 0.15rem;
+}
+
+.language-switch button {
+  border: none;
+  background: transparent;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.language-switch button.active {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.app-main {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.controls select,
+.controls button {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.board-container {
+  width: min(94vw, 480px);
+  aspect-ratio: 1 / 1;
+}
+
+.board-container canvas {
+  display: block;
+  touch-action: manipulation;
+}
+
+.status {
+  text-align: center;
+}
+
+.status .turn {
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+
+.status .illegal-message {
+  color: #b23b3b;
+  margin: 0 0 0.35rem;
+}
+
+.status .captures {
+  font-variant-numeric: tabular-nums;
+  color: #444444;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: #16140f;
+    color: #ececec;
+  }
+
+  .tagline {
+    color: #bbbbbb;
+  }
+
+  .controls select,
+  .controls button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .status .captures {
+    color: #cccccc;
+  }
+}

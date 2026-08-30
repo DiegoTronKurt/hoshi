@@ -1,0 +1,20 @@
+{
+  "app.title": "Hoshi",
+  "app.tagline": "Learn Go from the very first stone",
+  "board.size": "Board size",
+  "board.newGame": "New game",
+  "board.pass": "Pass",
+  "board.turn.black": "Black to move",
+  "board.turn.white": "White to move",
+  "board.gameOver": "Game over. Two passes in a row.",
+  "board.captures": "Captures",
+  "board.captures.black": "By black",
+  "board.captures.white": "By white",
+  "board.illegal.occupied": "That point is already occupied.",
+  "board.illegal.suicide": "That move would leave the group with no liberties.",
+  "board.illegal.superko": "That move would repeat a previous position.",
+  "board.illegal.game_over": "The game is already over.",
+  "language.label": "Language",
+  "language.en": "English",
+  "language.es": "Español"
+}
