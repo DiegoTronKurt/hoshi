@@ -94,6 +94,10 @@ export function ExercisesScreen() {
   // tuya seguia dejando el objetivo alcanzable. Antes se llamaba dos veces
   // (una para validar, otra en un efecto aparte para la respuesta) sobre la
   // misma posicion, duplicando la espera sin necesidad.
+  //
+  // Tu piedra se muestra de inmediato al hacer clic, antes de esperar al
+  // solucionador: "Pensando..." solo aparece mientras se calcula la
+  // respuesta del rival, nunca antes de que tu jugada se vea en el tablero.
   async function handleIntersectionClick(point: number) {
     if (!isUserTurn || thinking || !problem || !game) return
     if (!region.includes(point)) return
@@ -104,6 +108,9 @@ export function ExercisesScreen() {
     const client = solverRef.current
     if (!client) return
 
+    setGame(result.state)
+    setLastMove(point)
+
     setThinking(true)
     const check = await client.solve({
       board: result.state.board,
@@ -113,6 +120,7 @@ export function ExercisesScreen() {
       toMove: result.state.toMove,
       objective: problem.objective,
       maxDepth: 8,
+      pruneAfterDecisive: true,
     })
     setThinking(false)
 
@@ -121,20 +129,17 @@ export function ExercisesScreen() {
       return
     }
 
-    let nextGame = result.state
-    let nextLastMove = point
-
-    if (!isResolved(nextGame)) {
-      const applied = applyMove(nextGame, check.root.move, { regionPoints: new Set(region) })
-      if (applied.legal && applied.state) {
-        nextGame = applied.state
-        nextLastMove = check.root.move ?? point
-      }
+    if (isResolved(result.state)) {
+      setStatus('solved')
+      return
     }
 
+    const applied = applyMove(result.state, check.root.move, { regionPoints: new Set(region) })
+    if (applied.legal && applied.state) {
+      setGame(applied.state)
+      setLastMove(check.root.move ?? point)
+    }
     setStatus('playing')
-    setGame(nextGame)
-    setLastMove(nextLastMove)
   }
 
   function handleNext() {

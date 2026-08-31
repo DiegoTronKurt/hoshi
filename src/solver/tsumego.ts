@@ -36,6 +36,16 @@ export interface SolveRequest {
   toMove: Color
   objective: Objective
   maxDepth?: number
+  /**
+   * Corta la busqueda en un nodo apenas se encuentra una jugada decisiva,
+   * sin evaluar el resto de candidatos ni sus subarboles. El arbol resultante
+   * queda incompleto (solo tiene la primera rama decisiva por nivel), asi que
+   * esto rompe childrenToSgf, que necesita ver todas las respuestas ganadoras
+   * del defensor para guardarlas en el banco. Solo sirve quien unicamente
+   * necesita saber si la posicion esta resuelta y una jugada recomendada
+   * (la pantalla de Ejercicios en vivo), no para generar el banco de problemas.
+   */
+  pruneAfterDecisive?: boolean
 }
 
 export interface SolveResult {
@@ -63,7 +73,7 @@ export const MAX_SEARCH_DEPTH = 14
  *    mitad de un tsumego), y hacia inviable el cacheo por posicion.
  */
 export function solve(request: SolveRequest): SolveResult {
-  const { board, region, targetPoints, targetColor, toMove, objective } = request
+  const { board, region, targetPoints, targetColor, toMove, objective, pruneAfterDecisive } = request
   const maxDepth = Math.min(request.maxDepth ?? MAX_SEARCH_DEPTH, MAX_SEARCH_DEPTH)
   const regionSet = new Set(region)
   const cache = new Map<string, RefutationNode>()
@@ -116,7 +126,10 @@ export function solve(request: SolveRequest): SolveResult {
       children.push(node)
 
       const isWinningForMover = defenderToMove ? child.liveForDefender : !child.liveForDefender
-      if (isWinningForMover && !decisive) decisive = node
+      if (isWinningForMover && !decisive) {
+        decisive = node
+        if (pruneAfterDecisive) break
+      }
     }
 
     if (children.length === 0) {
