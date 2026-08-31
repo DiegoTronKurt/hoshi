@@ -145,6 +145,9 @@ export function ExercisesScreen() {
   // Tu piedra se muestra de inmediato al hacer clic, antes de esperar al
   // solucionador: "Pensando..." solo aparece mientras se calcula la
   // respuesta del rival, nunca antes de que tu jugada se vea en el tablero.
+  // Si resulta que la jugada no resuelve el problema, se revierte: no queda
+  // permitido dejar una piedra puesta que no sirve, el tablero vuelve a como
+  // estaba antes del clic y solo se explica por que no funciona.
   async function handleIntersectionClick(point: number) {
     if (!isUserTurn || thinking || !problem || !game) return
     if (!region.includes(point)) return
@@ -154,6 +157,9 @@ export function ExercisesScreen() {
 
     const client = solverRef.current
     if (!client) return
+
+    const previousGame = game
+    const previousLastMove = lastMove
 
     setGame(result.state)
     setLastMove(point)
@@ -172,6 +178,8 @@ export function ExercisesScreen() {
     setThinking(false)
 
     if (!check.solved) {
+      setGame(previousGame)
+      setLastMove(previousLastMove)
       setStatus('incorrect')
       return
     }
