@@ -243,6 +243,140 @@
   padding: 2rem 1rem;
 }
 
+.review {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.review-header h2,
+.review > h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.review-header button,
+.review-games-list button {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.review-empty {
+  text-align: center;
+  color: #777777;
+  padding: 1.5rem 1rem;
+}
+
+.review-games-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.review-games-list li button {
+  width: 100%;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #333333;
+}
+
+.review-mistakes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.review-mistakes-list button {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.review-mistakes-list button.active {
+  border-color: #1a1a1a;
+}
+
+.review-mistake-move {
+  font-size: 0.8rem;
+  color: #666666;
+}
+
+.review-mistake-concept {
+  font-weight: 600;
+}
+
+.review-mistake-summary {
+  font-size: 0.85rem;
+  color: #444444;
+}
+
+.review-severity {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #eeeeee;
+  color: #555555;
+}
+
+.review-severity-high {
+  background: #f6dede;
+  color: #a12f2f;
+}
+
+.review-severity-medium {
+  background: #f7ecd6;
+  color: #8a6a1f;
+}
+
+.review-severity-low {
+  background: #e4e9e4;
+  color: #4a6350;
+}
+
+.review-board {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.review-hint-legend {
+  font-size: 0.8rem;
+  color: #2f6f9f;
+  margin: 0;
+}
+
 @media (prefers-color-scheme: dark) {
   .app {
     background: #16140f;
@@ -310,5 +444,53 @@
 
   .exercises-empty {
     color: #999999;
+  }
+
+  .review-header button,
+  .review-games-list button,
+  .review-mistakes-list button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .review-mistakes-list button.active {
+    border-color: #ececec;
+  }
+
+  .review-mistake-move {
+    color: #bbbbbb;
+  }
+
+  .review-mistake-summary {
+    color: #cccccc;
+  }
+
+  .review-empty {
+    color: #999999;
+  }
+
+  .review-severity {
+    background: #33302a;
+    color: #cccccc;
+  }
+
+  .review-severity-high {
+    background: #4a2626;
+    color: #e28c8c;
+  }
+
+  .review-severity-medium {
+    background: #453b22;
+    color: #e0c284;
+  }
+
+  .review-severity-low {
+    background: #2a332c;
+    color: #9fc0aa;
+  }
+
+  .review-hint-legend {
+    color: #7fb2d8;
   }
 }

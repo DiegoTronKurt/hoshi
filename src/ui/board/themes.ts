@@ -12,6 +12,7 @@ export interface BoardTheme {
   blackStone: StoneStyle
   whiteStone: StoneStyle
   lastMoveMarker: { color: string }
+  hintMarker: { color: string }
   coordinates: { color: string }
 }
 
@@ -23,5 +24,6 @@ export const minimoTheme: BoardTheme = {
   blackStone: { fill: '#1a1a1a', stroke: '#000000', strokeWidth: 1 },
   whiteStone: { fill: '#f7f7f2', stroke: '#333333', strokeWidth: 1 },
   lastMoveMarker: { color: '#c0392b' },
+  hintMarker: { color: '#2f6f9f' },
   coordinates: { color: '#999999' },
 }

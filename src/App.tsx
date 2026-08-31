@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useI18n } from './i18n'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
 import { PlayScreen } from './ui/play/PlayScreen'
+import { ReviewScreen } from './ui/review/ReviewScreen'
 import './App.css'
 
-type Screen = 'play' | 'exercises'
+type Screen = 'play' | 'exercises' | 'review'
 
 function App() {
   const { language, setLanguage, t } = useI18n()
@@ -38,10 +39,21 @@ function App() {
           >
             {t('nav.exercises')}
           </button>
+          <button
+            type="button"
+            className={screen === 'review' ? 'active' : ''}
+            onClick={() => setScreen('review')}
+          >
+            {t('nav.review')}
+          </button>
         </nav>
       </header>
 
-      <main className="app-main">{screen === 'play' ? <PlayScreen /> : <ExercisesScreen />}</main>
+      <main className="app-main">
+        {screen === 'play' && <PlayScreen />}
+        {screen === 'exercises' && <ExercisesScreen />}
+        {screen === 'review' && <ReviewScreen />}
+      </main>
     </div>
   )
 }

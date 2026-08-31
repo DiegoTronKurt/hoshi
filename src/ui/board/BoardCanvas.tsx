@@ -8,11 +8,13 @@ interface BoardCanvasProps {
   size: number
   stones: Int8Array
   lastMove: number | null
+  /** Punto sugerido a resaltar (por ejemplo, la jugada correcta en un reporte de errores). No es una piedra. */
+  hintMove?: number | null
   theme: BoardTheme
   onIntersectionClick: (point: number) => void
 }
 
-export function BoardCanvas({ size, stones, lastMove, theme, onIntersectionClick }: BoardCanvasProps) {
+export function BoardCanvas({ size, stones, lastMove, hintMove = null, theme, onIntersectionClick }: BoardCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const layoutRef = useRef({ displaySize: 0, margin: 0, cell: 0 })
@@ -86,7 +88,16 @@ export function BoardCanvas({ size, stones, lastMove, theme, onIntersectionClick
       ctx.fillStyle = theme.lastMoveMarker.color
       ctx.fill()
     }
-  }, [size, stones, lastMove, theme])
+
+    if (hintMove !== null) {
+      const [x, y] = toXY(size, hintMove)
+      ctx.beginPath()
+      ctx.arc(margin + x * cell, margin + y * cell, stoneRadius * 0.55, 0, Math.PI * 2)
+      ctx.lineWidth = 2
+      ctx.strokeStyle = theme.hintMarker.color
+      ctx.stroke()
+    }
+  }, [size, stones, lastMove, hintMove, theme])
 
   useEffect(() => {
     draw()

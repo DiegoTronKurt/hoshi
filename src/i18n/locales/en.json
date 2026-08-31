@@ -40,6 +40,7 @@
 
   "nav.play": "Play",
   "nav.exercises": "Exercises",
+  "nav.review": "Review",
 
   "exercises.title": "Exercises",
   "exercises.empty": "No verified exercises yet for this concept. Run the generator to add more.",
@@ -60,6 +61,16 @@
   "exercises.solvesInOne": "Solves in 1 move",
   "exercises.solvesInMany": "Solves in {{count}} moves",
   "exercises.noProblems": "No exercises for this concept yet.",
+
+  "review.title": "Review",
+  "review.noGames": "No saved games yet. Play a game first.",
+  "review.backToList": "Back to games",
+  "review.noMistakes": "No mistakes found in this game. Well played.",
+  "review.moveNumber": "Move {{n}}",
+  "review.severity.high": "High",
+  "review.severity.medium": "Medium",
+  "review.severity.low": "Low",
+  "review.suggestedMove": "Blue ring: suggested move instead.",
 
   "concept.LIBERTADES.label": "Liberties",
   "concept.LIBERTADES.summary": "The empty points next to a stone or group.",

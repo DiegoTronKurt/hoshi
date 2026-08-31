@@ -1,5 +1,106 @@
 # Notas de desarrollo
 
+## Fase 4: detectores de errores y pantalla Revisar
+
+### Qué se construyó
+
+- `src/analysis/mistakes.ts`: los 11 detectores marcados con `hasDetector: true`
+  en `concepts.ts` (sección 5.4 del documento de diseño): `ATARI_IGNORADO`,
+  `AUTOATARI`, `CAPTURA_PERDIDA`, `RELLENO_OJO_PROPIO`,
+  `RELLENO_TERRITORIO_PROPIO`, `ESCALERA_FALLIDA`, `CORTE_NO_DEFENDIDO`,
+  `TRIANGULO_VACIO`, `PRIMERA_LINEA_TEMPRANA`, `PASE_PREMATURO` y
+  `GRUPO_MURIO_SIN_OJOS`. Todos menos el último comparan la posición antes y
+  después de cada jugada; `GRUPO_MURIO_SIN_OJOS` es el único detector de
+  todo-el-juego (mira cada captura de 4 o más piedras y recorre el historial
+  hacia atrás buscando si el grupo llegó a tener dos ojos alguna vez).
+  `analyzeGame(size, komi, moves)` reproduce la partida completa y devuelve
+  `MistakeEvent[]` ordenados por número de jugada. No reimplementa análisis
+  de tablero: reutiliza `getGroup`, `bensonPassAlive`, `isSimpleEye`,
+  `solveLadder` y `computeAreaScore` tal como ya existían.
+- `src/ui/review/ReviewScreen.tsx`: pantalla Revisar. Lista las partidas
+  guardadas (mismo `listGames()` de la pantalla Jugar), corre `analyzeGame`
+  sobre la seleccionada y muestra el reporte de errores. Al hacer clic en un
+  error se reproduce la partida hasta esa jugada y se muestra el tablero en
+  ese punto, con la jugada equivocada marcada como última jugada y, cuando
+  el detector puede sugerir una alternativa, un anillo azul sobre el punto
+  sugerido.
+- `BoardCanvas` gana una prop opcional `hintMove` (un anillo, no una
+  piedra) para poder señalar la jugada sugerida sin afectar a las pantallas
+  Jugar y Ejercicios, que simplemente no la pasan.
+- Navegación: se agrega "Revisar" a la barra de pantallas en `App.tsx`.
+- 22 tests nuevos en `tests/analysis/mistakes.test.ts`: un caso positivo y
+  uno negativo por detector, con tableros construidos a mano.
+
+### Decisiones técnicas con alternativas (qué elegí y qué sacrifiqué)
+
+- **Las explicaciones del reporte reutilizan `concept.<ID>.summary`** (ya
+  existente para la pantalla de Ejercicios) en vez de escribir una plantilla
+  de texto nueva por cada `MistakeEvent`, como sugería literalmente el
+  documento de diseño (`explicacion: plantilla en español, parametrizada`).
+  El resumen del concepto ya explica el error en una frase y ya está
+  traducido a los dos idiomas; una plantilla aparte habría sido texto
+  duplicado sin agregar información.
+- **`MistakeEvent` no guarda un fragmento de SGF reproducible**
+  (`posicionSgf` en el documento de diseño). La pantalla Revisar ya tiene en
+  memoria la lista completa de jugadas de la partida seleccionada, así que
+  reproducir el tablero hasta la jugada del error es una función local
+  (`stateAtMove`), no algo que necesite serializarse. Ese campo solo haría
+  falta si el reporte tuviera que persistirse fuera de la sesión, que no es
+  el caso todavía.
+- **`CORTE_NO_DEFENDIDO` solo mira puntos de corte pegados a la jugada
+  misma**, no cualquier debilidad que ya existiera en el tablero antes. Sin
+  este recorte, una posición con un corte latente desde hace muchas jugadas
+  le habría atribuido el error a la jugada equivocada (o a varias jugadas
+  seguidas, una por cada turno que el corte siguiera sin defenderse).
+- **`TRIANGULO_VACIO` descarta cualquier jugada con una piedra rival
+  ortogonalmente pegada antes de jugar, o que deje a un grupo rival en
+  atari.** Es más conservador que "no capturó nada": una conexión de
+  triángulo vacío jugada bajo amenaza directa (para no dejarse cortar) es
+  una jugada correcta, no un error de forma.
+- **`PASE_PREMATURO` compara un solo paso** (jugar en cada punto vacío vs.
+  pasar) contra el conteo de área crudo, no una lectura completa del resto
+  de la partida. Es una señal concreta y barata de calcular (como mucho
+  tamaño del tablero llamadas a `computeAreaScore`), no una prueba de que
+  esa jugada específica gana la partida, pero alcanza para no pasar por
+  alto una captura o una invasión obvia todavía disponible.
+- **Bug real encontrado al escribir los tests, no al escribir el
+  detector**: `bensonPassAlive` devuelve el tablero vacío entero como
+  "territorio" cuando el color todavía no tiene ninguna cadena propia. Es
+  una verdad vacua del algoritmo (ninguna región queda descalificada porque
+  no hay ninguna cadena a la que pueda dejar de bordear), pero sin la
+  guarda `chains.length === 0` en `detectRellenoTerritorioPropio`, la
+  primerísima jugada de cualquier partida quedaba marcada como "rellenar
+  territorio propio". Se corrigió ahí mismo, no en `bensonPassAlive`,
+  porque el uso original de esa función (dentro del propio solucionador de
+  vida y muerte) siempre se llama con al menos una piedra ya puesta.
+- **Verificar la geometría de las escaleras a mano fue más difícil de lo
+  esperado**: no cualquier posición con "un rompedor cerca" hace que
+  `solveLadder` devuelva `escaped`. Terminé escribiendo un script de fuerza
+  bruta que probaba todas las posiciones de rompedor en el tablero para
+  encontrar una que realmente funcionara, en vez de derivarlo a mano. Queda
+  como recordatorio para la próxima vez que haga falta un tablero de
+  prueba con una escalera real: no asumir la geometría, verificarla con
+  `solveLadder` directamente antes de escribir el test.
+
+### Qué quedó pendiente
+
+- Todo lo de fases posteriores: FSRS y pantalla Hoy (Fase 5), lecciones de
+  los niveles 0 a 3, temas adicionales y accesibilidad avanzada (Fase 6).
+- El circuito de personalización del documento de diseño ("cuando un
+  detector dispara en una partida real, se inyectan 3 problemas de ese
+  concepto con prioridad alta") no existe todavía: depende de la cola de
+  repetición espaciada de la Fase 5, que tampoco existe.
+- La pantalla Revisar no tiene forma de reproducir la partida jugada a
+  jugada de forma continua (solo salta directamente a la posición de cada
+  error). Tampoco permite borrar partidas guardadas.
+- `PASE_PREMATURO`, al ser una comparación de un solo paso, no distingue
+  entre una jugada que gana territorio real y una que solo agita las aguas
+  sin asegurar nada; puede marcar como error un pase que en realidad era
+  razonable si la única jugada "grande" disponible en verdad no se puede
+  sostener. Está documentado como limitación conocida, no corregido, porque
+  arreglarlo de verdad necesitaría una lectura más profunda que una sola
+  jugada.
+
 ## Fase 3: solucionador, generador de problemas, pantalla de ejercicios
 
 Esta fue la fase más difícil del proyecto, tal como anticipaba el documento
