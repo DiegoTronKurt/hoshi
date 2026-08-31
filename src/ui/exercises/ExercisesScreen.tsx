@@ -17,6 +17,8 @@ import { minimoTheme } from '../board/themes'
 
 type Status = 'playing' | 'incorrect' | 'solved'
 
+const SOLVE_MAX_DEPTH = 8
+
 function pickEntry(entries: BankEntry[], excludeId?: string): BankEntry | null {
   const pool = entries.length > 1 ? entries.filter((e) => e.id !== excludeId) : entries
   if (pool.length === 0) return null
@@ -39,6 +41,7 @@ export function ExercisesScreen() {
   const [lastMove, setLastMove] = useState<number | null>(null)
   const [status, setStatus] = useState<Status>('playing')
   const [thinking, setThinking] = useState(false)
+  const [solutionMoves, setSolutionMoves] = useState<number | null>(null)
 
   const solverRef = useRef<SolverClient | null>(null)
   useEffect(() => {
@@ -89,6 +92,50 @@ export function ExercisesScreen() {
     if (isResolved(game)) setStatus('solved')
   }, [game, problem, isResolved])
 
+  // Simula la linea optima completa una vez, al cargar el problema, solo para
+  // contar cuantas jugadas propias hacen falta para resolverlo (se muestra en
+  // las instrucciones, ej. "Se resuelve en 1 jugada"). No tiene relacion con
+  // la jugada real del usuario ni con su solverRef.solve() del clic.
+  useEffect(() => {
+    setSolutionMoves(null)
+    const client = solverRef.current
+    if (!problem || !client) return
+    const p = problem
+    const c = client
+    let cancelled = false
+
+    async function countSolutionMoves() {
+      let state = gameStateFromBoard(p.board, p.toMove)
+      let studentMoves = 0
+      for (let ply = 0; ply < SOLVE_MAX_DEPTH; ply++) {
+        if (isResolved(state)) {
+          if (!cancelled) setSolutionMoves(studentMoves)
+          return
+        }
+        const result = await c.solve({
+          board: state.board,
+          region,
+          targetPoints: p.targetPoints,
+          targetColor: p.targetColor,
+          toMove: state.toMove,
+          objective: p.objective,
+          maxDepth: SOLVE_MAX_DEPTH,
+          pruneAfterDecisive: true,
+        })
+        if (cancelled || !result.solved || result.root.move === null) return
+        if (state.toMove === p.toMove) studentMoves++
+        const applied = applyMove(state, result.root.move, { regionPoints: new Set(region) })
+        if (!applied.legal || !applied.state) return
+        state = applied.state
+      }
+    }
+
+    countSolutionMoves()
+    return () => {
+      cancelled = true
+    }
+  }, [problem, region, isResolved])
+
   // Tu jugada y la respuesta del rival se resuelven con una sola llamada al
   // solucionador: pedirle la jugada del rival ya nos dice, de paso, si la
   // tuya seguia dejando el objetivo alcanzable. Antes se llamaba dos veces
@@ -119,7 +166,7 @@ export function ExercisesScreen() {
       targetColor: problem.targetColor,
       toMove: result.state.toMove,
       objective: problem.objective,
-      maxDepth: 8,
+      maxDepth: SOLVE_MAX_DEPTH,
       pruneAfterDecisive: true,
     })
     setThinking(false)
@@ -193,6 +240,9 @@ export function ExercisesScreen() {
       <p className="exercises-meta">
         {t('exercises.concept')}: {t(`concept.${problem.conceptId}.label` as TranslationKey)} · {t('exercises.toMove')}{' '}
         {t(toMoveKey)} · {t(objectiveKey)}
+        {solutionMoves !== null && (
+          <> · {solutionMoves === 1 ? t('exercises.solvesInOne') : t('exercises.solvesInMany', { count: solutionMoves })}</>
+        )}
       </p>
 
       <BoardCanvas

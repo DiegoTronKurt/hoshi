@@ -57,6 +57,8 @@
   "exercises.allConcepts": "Todos",
   "exercises.solved": "Resuelto. El grupo ya quedó definido.",
   "exercises.thinking": "Pensando...",
+  "exercises.solvesInOne": "Se resuelve en 1 jugada",
+  "exercises.solvesInMany": "Se resuelve en {{count}} jugadas",
   "exercises.noProblems": "Todavía no hay ejercicios para este concepto.",
 
   "concept.LIBERTADES.label": "Libertades",

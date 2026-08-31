@@ -13,7 +13,7 @@ const STORAGE_KEY = 'hoshi-language'
 interface I18nContextValue {
   language: Language
   setLanguage: (language: Language) => void
-  t: (key: TranslationKey) => string
+  t: (key: TranslationKey, params?: Record<string, string | number>) => string
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null)
@@ -44,7 +44,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     () => ({
       language,
       setLanguage,
-      t: (key: TranslationKey) => dictionaries[language][key] ?? dictionaries.en[key] ?? key,
+      t: (key: TranslationKey, params?: Record<string, string | number>) => {
+        const template = dictionaries[language][key] ?? dictionaries.en[key] ?? key
+        if (!params) return template
+        return template.replace(/{{(\w+)}}/g, (match, name) => String(params[name] ?? match))
+      },
     }),
     [language],
   )

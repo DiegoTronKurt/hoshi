@@ -57,6 +57,8 @@
   "exercises.allConcepts": "All",
   "exercises.solved": "Solved. The group is settled.",
   "exercises.thinking": "Thinking...",
+  "exercises.solvesInOne": "Solves in 1 move",
+  "exercises.solvesInMany": "Solves in {{count}} moves",
   "exercises.noProblems": "No exercises for this concept yet.",
 
   "concept.LIBERTADES.label": "Liberties",
