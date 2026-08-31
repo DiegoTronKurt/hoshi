@@ -1,5 +1,118 @@
 # Notas de desarrollo
 
+## Fase 3: solucionador, generador de problemas, pantalla de ejercicios
+
+Esta fue la fase más difícil del proyecto, tal como anticipaba el documento
+de diseño. Quedó registrada con más detalle porque varias decisiones no son
+obvias y alguien (yo, en una sesión futura) va a necesitar el contexto.
+
+### Qué se construyó
+
+- `src/analysis/concepts.ts`: el enumerado `ConceptId` completo de los 4
+  niveles, escrito antes que cualquier otro archivo de dominio de esta fase,
+  como exige la regla del proyecto. Cada concepto declara si tiene detector
+  (Fase 4, todavía no implementado) y si genera ejercicios.
+- `src/solver/region.ts`: recorte de una región (rectángulo del grupo
+  objetivo más margen) alrededor de una posición.
+- `src/solver/tsumego.ts`: solucionador exhaustivo de vida y muerte con
+  búsqueda adversarial completa (no solo la línea principal) y caché por
+  posición. Exporta `isGroupPassAlive`, reutilizado también en la pantalla
+  de ejercicios.
+- `src/solver/ladder.ts`: solucionador de escaleras, ambos bandos exploran
+  las libertades actuales del grupo perseguido.
+- `src/content/`: `seeds.ts` (formas clásicas escritas a mano, la única
+  excepción permitida, cada una verificada por el solucionador en
+  `tests/solver/tsumego.test.ts`), `problemSgf.ts` (serialización a SGF de
+  una posición más su árbol de refutaciones, usando `AB`/`AW` para las
+  piedras, `TR` para marcar el grupo objetivo, y `GB`/`GW` para marcar si
+  una jugada mantiene vivo al color objetivo), `problemBank.ts` (carga el
+  banco generado).
+- `tools/generate-problems.ts`: el pipeline completo de la sección 5.6 del
+  documento. Se corre con `npm run problems:generate`.
+- `src/ui/exercises/ExercisesScreen.tsx`: pantalla de ejercicios, con
+  selector de concepto, tablero interactivo y validación en vivo.
+- Se agregó navegación (Jugar / Ejercicios) en `App.tsx`, que ahora sí
+  corresponde porque hay dos pantallas reales.
+- 17 tests nuevos: formas clásicas verificadas a mano (con la derivación
+  completa razonada en comentarios, no solo el resultado), solucionador de
+  escaleras con y sin rompedor, invariante del generador sobre el banco
+  completo (cada problema se vuelve a resolver igual).
+
+### Decisiones técnicas con alternativas (qué elegí y qué sacrifiqué)
+
+- **El "muro" de una región solo está protegido de captura si toca el borde
+  de la región.** Si un grupo objetivo cabe entero dentro de la región (su
+  única libertad real es el espacio que se está peleando), el solucionador
+  sí lo deja capturar de verdad, porque ese es exactamente el resultado que
+  hay que poder representar cuando el objetivo es "matar". La simplificación
+  (piedras fuera de la región son una pared fija e incapturable) solo aplica
+  a lo que está genuinamente fuera del área de análisis. Riesgo: en un caso
+  raro esa pared en realidad no estaría viva en el tablero completo. Red de
+  seguridad: la regla 1 del proyecto, ningún problema entra al banco sin
+  volver a verificarse.
+- **El solucionador de vida y muerte no explora "pasar" como jugada
+  intermedia optativa**, solo cuando no queda ninguna jugada legal en la
+  región. Lo intenté con pasar libre primero y el árbol se volvía inmanejable
+  (un problema de 3 puntos tardaba minutos): cada nodo duplicaba sus ramas
+  sin aportar información nueva, porque nadie tenukea a mitad de un tsumego
+  acotado. Con esta restricción, las mismas formas se resuelven en
+  milisegundos. Está documentado en el comentario de `solve()`.
+- **El solucionador de escaleras no asume "el perseguidor siempre puede
+  forzar con una sola jugada"**, sino que en cada turno ambos bandos
+  exploran las libertades actuales del grupo perseguido como candidatas
+  (una búsqueda adversarial pequeña, no una heurística de dirección fija).
+  Lo intenté primero con la heurística clásica de "reducir a una libertad" y
+  daba resultados incorrectos apenas el grupo tocaba espacio abierto,
+  porque una escalera real necesita que el perseguidor seguido vuelva a
+  acorralar el espacio, no solo la primera vez. El umbral de "4 libertades
+  es escape" bajó a 3 tras verificar a mano que con 4 el algoritmo tardaba
+  demasiado en descartar posiciones que en la práctica ya estaban perdidas
+  para el perseguidor.
+- **El árbol de refutaciones que se guarda en SGF está recortado**: en los
+  nodos del defensor solo se guardan las jugadas que cumplen el objetivo (no
+  las erróneas), y en los nodos del rival como mucho dos respuestas
+  representativas. Sin este recorte, una posición de solo 3 puntos generaba
+  un SGF de casi 100 KB. La pantalla de ejercicios de todas formas valida
+  cualquier jugada del usuario llamando al solucionador en vivo en cada
+  paso, así que el recorte del archivo guardado no le quita cobertura al
+  ejercicio interactivo, y el árbol que sí se sigue verificando
+  exhaustivamente es el que se usó para decidir si el problema se acepta o
+  no en el generador.
+- **Se desecharon "pirámide de cuatro" y "seis en L"** de las posiciones
+  semilla por ahora. Al derivar pirámide de cuatro a mano encontré que en
+  realidad es condicional (vive si el dueño juega primero, muere si el rival
+  juega primero), igual que la recta de tres, y no "muerta sin importar
+  quién juegue" como asumí al leer la lista del documento. Prefiero no
+  adivinar la clasificación exacta de estas dos formas bajo presión de
+  tiempo. Quedan pendientes para cuando se pueda derivar con calma o,
+  todavía mejor, para la revisión de un jugador dan que sugiere el propio
+  documento.
+- **El generador de autojuego corrió con un alcance reducido** (3 partidas,
+  100 simulaciones por jugada) para esta primera tanda, no los parámetros
+  más generosos con los que arrancó originalmente el script. Un intento
+  inicial con más partidas y más simulaciones no terminó en varios minutos.
+  El banco actual tiene 6 problemas (3 semilla más 3 de autojuego). El
+  comando `npm run problems:generate` se puede volver a correr para agregar
+  más, ajustando `SELF_PLAY_GAMES`, `PLAYOUT_LEVELS` y `MAX_REGION_EMPTY` en
+  `tools/generate-problems.ts` según cuánto tiempo se quiera dedicar.
+
+### Qué quedó pendiente
+
+- Todo lo de fases posteriores: detectores de errores y pantalla Revisar
+  (Fase 4), FSRS y pantalla Hoy (Fase 5), lecciones de los niveles 0 a 3,
+  temas adicionales y accesibilidad avanzada (Fase 6).
+- El banco de problemas está lejos de la meta v1 de 300 (mínimo 30 por
+  concepto que genera ejercicios). Crece cada vez que se corre el generador.
+- Las formas semilla "pirámide de cuatro" y "seis en L" quedaron pendientes,
+  ver más arriba.
+- El generador solo etiqueta lo nuevo como `DOS_OJOS` o `PUNTO_VITAL` según
+  el objetivo (vivir/matar). Etiquetar con más precisión por concepto
+  (nakade, ojo falso, red, snapback, etc.) necesitaría una detección de
+  patrón más fina, no solo "vivir o morir", y quedó fuera de esta fase.
+- No hay manera de saltarse directamente a un problema por id ni de ver
+  cuántos problemas hay disponibles por concepto en la interfaz, solo se
+  eligen al azar dentro del filtro actual.
+
 ## Fase 1: núcleo de reglas y tablero en canvas
 
 ### Qué se construyó

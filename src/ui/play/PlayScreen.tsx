@@ -20,7 +20,7 @@ import type { StrengthLevel } from './strengthLevels'
 const KOMI = 6.5
 
 export function PlayScreen() {
-  const { language, setLanguage, t } = useI18n()
+  const { t } = useI18n()
 
   const [size, setSize] = useState(9)
   const [mode, setMode] = useState<GameMode>('local')
@@ -161,78 +161,58 @@ export function PlayScreen() {
   const turnKey = game.toMove === BLACK ? 'board.turn.black' : 'board.turn.white'
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>{t('app.title')}</h1>
-        <p className="tagline">{t('app.tagline')}</p>
-        <div className="language-switch" role="group" aria-label={t('language.label')}>
-          {(['en', 'es'] as const).map((lang) => (
-            <button
-              key={lang}
-              type="button"
-              className={lang === language ? 'active' : ''}
-              onClick={() => setLanguage(lang)}
-            >
-              {t(lang === 'en' ? 'language.en' : 'language.es')}
-            </button>
-          ))}
-        </div>
-      </header>
+    <>
+      <GameControls
+        size={size}
+        onSizeChange={handleSizeChange}
+        mode={mode}
+        onModeChange={handleModeChange}
+        strengthId={strengthId}
+        onStrengthChange={setStrengthId}
+        humanColor={humanColor}
+        onHumanColorChange={handleHumanColorChange}
+        onNewGame={() => resetGame(size)}
+        onPass={handlePass}
+        passDisabled={!isHumanTurn()}
+      />
 
-      <main className="app-main">
-        <GameControls
-          size={size}
-          onSizeChange={handleSizeChange}
-          mode={mode}
-          onModeChange={handleModeChange}
-          strengthId={strengthId}
-          onStrengthChange={setStrengthId}
-          humanColor={humanColor}
-          onHumanColorChange={handleHumanColorChange}
-          onNewGame={() => resetGame(size)}
-          onPass={handlePass}
-          passDisabled={!isHumanTurn()}
-        />
+      <BoardCanvas
+        size={size}
+        stones={game.board.stones}
+        lastMove={lastMove}
+        theme={minimoTheme}
+        onIntersectionClick={handleIntersectionClick}
+      />
 
-        <BoardCanvas
-          size={size}
-          stones={game.board.stones}
-          lastMove={lastMove}
-          theme={minimoTheme}
-          onIntersectionClick={handleIntersectionClick}
-        />
+      <div className="status" aria-live="polite">
+        {game.gameOver ? (
+          <>
+            <p className="turn">{t('board.gameOver')}</p>
+            {finalScore && (
+              <p className="result">
+                {t('play.result.title')}: {t('color.black')} {finalScore.black} - {t('color.white')}{' '}
+                {finalScore.white} (
+                {finalScore.black > finalScore.white ? t('play.result.winnerBlack') : t('play.result.winnerWhite')})
+              </p>
+            )}
+            {justSaved && <p className="saved-note">{t('play.saved')}</p>}
+          </>
+        ) : botThinking ? (
+          <p className="turn">{t('play.thinking')}</p>
+        ) : (
+          <p className="turn">{t(turnKey)}</p>
+        )}
+        {message && <p className="illegal-message">{t(`board.illegal.${message}`)}</p>}
+        <p className="captures">
+          {t('board.captures')}: {t('board.captures.black')} {game.captures.black} · {t('board.captures.white')}{' '}
+          {game.captures.white}
+        </p>
+      </div>
 
-        <div className="status" aria-live="polite">
-          {game.gameOver ? (
-            <>
-              <p className="turn">{t('board.gameOver')}</p>
-              {finalScore && (
-                <p className="result">
-                  {t('play.result.title')}: {t('color.black')} {finalScore.black} - {t('color.white')}{' '}
-                  {finalScore.white} (
-                  {finalScore.black > finalScore.white ? t('play.result.winnerBlack') : t('play.result.winnerWhite')}
-                  )
-                </p>
-              )}
-              {justSaved && <p className="saved-note">{t('play.saved')}</p>}
-            </>
-          ) : botThinking ? (
-            <p className="turn">{t('play.thinking')}</p>
-          ) : (
-            <p className="turn">{t(turnKey)}</p>
-          )}
-          {message && <p className="illegal-message">{t(`board.illegal.${message}`)}</p>}
-          <p className="captures">
-            {t('board.captures')}: {t('board.captures.black')} {game.captures.black} · {t('board.captures.white')}{' '}
-            {game.captures.white}
-          </p>
-        </div>
-
-        <section className="saved-games">
-          <h2>{t('play.savedGames.title')}</h2>
-          <SavedGamesList games={savedGames} />
-        </section>
-      </main>
-    </div>
+      <section className="saved-games">
+        <h2>{t('play.savedGames.title')}</h2>
+        <SavedGamesList games={savedGames} />
+      </section>
+    </>
   )
 }

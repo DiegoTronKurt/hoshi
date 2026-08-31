@@ -47,6 +47,30 @@
   color: #ffffff;
 }
 
+.screen-nav {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-top: 0.6rem;
+  border: 1px solid #cccccc;
+  border-radius: 999px;
+  padding: 0.15rem;
+}
+
+.screen-nav button {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.screen-nav button.active {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
 .app-main {
   width: 100%;
   max-width: 480px;
@@ -161,6 +185,64 @@
   background: #ffffff;
 }
 
+.exercises {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.exercises-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.exercises-controls select,
+.exercises-controls button {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.exercises-controls label {
+  font-size: 0.85rem;
+  color: #555555;
+}
+
+.exercises-meta {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #444444;
+}
+
+.exercises-status {
+  text-align: center;
+  min-height: 1.4rem;
+}
+
+.exercises-solved {
+  color: #2f7a3d;
+  font-weight: 600;
+}
+
+.exercises-incorrect {
+  color: #b23b3b;
+}
+
+.exercises-empty {
+  text-align: center;
+  color: #777777;
+  padding: 2rem 1rem;
+}
+
 @media (prefers-color-scheme: dark) {
   .app {
     background: #16140f;
@@ -201,5 +283,32 @@
   .saved-games-list li {
     background: #262218;
     border-color: #55503f;
+  }
+
+  .screen-nav {
+    border-color: #55503f;
+  }
+
+  .exercises-controls select,
+  .exercises-controls button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .exercises-controls label {
+    color: #bbbbbb;
+  }
+
+  .exercises-meta {
+    color: #cccccc;
+  }
+
+  .exercises-solved {
+    color: #6fce82;
+  }
+
+  .exercises-empty {
+    color: #999999;
   }
 }
