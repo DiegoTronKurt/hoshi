@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { conceptsThatGenerateExercises } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
 import { gameStateFromBoard, applyMove } from '../../core/rules'
@@ -38,7 +38,7 @@ export function ExercisesScreen() {
   const [game, setGame] = useState<GameState | null>(null)
   const [lastMove, setLastMove] = useState<number | null>(null)
   const [status, setStatus] = useState<Status>('playing')
-  const [waitingForOpponent, setWaitingForOpponent] = useState(false)
+  const [thinking, setThinking] = useState(false)
 
   const solverRef = useRef<SolverClient | null>(null)
   useEffect(() => {
@@ -72,54 +72,30 @@ export function ExercisesScreen() {
   const userColor = problem?.toMove ?? null
   const isUserTurn = status === 'playing' && !!game && !!problem && game.toMove === userColor
 
-  // Turno automatico del rival: responde con la jugada que mas dificulta al objetivo.
-  useEffect(() => {
-    if (!problem || !game || status !== 'playing') return
-    if (game.toMove === userColor) return
-    const client = solverRef.current
-    if (!client) return
-
-    let cancelled = false
-    setWaitingForOpponent(true)
-
-    client
-      .solve({
-        board: game.board,
-        region,
-        targetPoints: problem.targetPoints,
-        targetColor: problem.targetColor,
-        toMove: game.toMove,
-        objective: problem.objective,
-        maxDepth: 8,
-      })
-      .then((result) => {
-        if (cancelled) return
-        setWaitingForOpponent(false)
-        const move = result.root.move
-        const applied = applyMove(game, move, { regionPoints: new Set(region) })
-        if (!applied.legal || !applied.state) return
-        setGame(applied.state)
-        setLastMove(move)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [game, problem, region, userColor, status])
+  const isResolved = useCallback(
+    (g: GameState): boolean => {
+      if (!problem) return false
+      if (problem.objective === 'live') {
+        return isGroupPassAlive(g.board, problem.targetPoints, problem.targetColor)
+      }
+      return !problem.targetPoints.some((p) => g.board.stones[p] === problem.targetColor)
+    },
+    [problem],
+  )
 
   // Revisa si el objetivo ya quedo definido despues de cada jugada.
   useEffect(() => {
     if (!problem || !game) return
-    if (problem.objective === 'live') {
-      if (isGroupPassAlive(game.board, problem.targetPoints, problem.targetColor)) setStatus('solved')
-    } else {
-      const survives = problem.targetPoints.some((p) => game.board.stones[p] === problem.targetColor)
-      if (!survives) setStatus('solved')
-    }
-  }, [game, problem])
+    if (isResolved(game)) setStatus('solved')
+  }, [game, problem, isResolved])
 
+  // Tu jugada y la respuesta del rival se resuelven con una sola llamada al
+  // solucionador: pedirle la jugada del rival ya nos dice, de paso, si la
+  // tuya seguia dejando el objetivo alcanzable. Antes se llamaba dos veces
+  // (una para validar, otra en un efecto aparte para la respuesta) sobre la
+  // misma posicion, duplicando la espera sin necesidad.
   async function handleIntersectionClick(point: number) {
-    if (!isUserTurn || waitingForOpponent || !problem || !game) return
+    if (!isUserTurn || thinking || !problem || !game) return
     if (!region.includes(point)) return
 
     const result = applyMove(game, point, { regionPoints: new Set(region) })
@@ -128,7 +104,7 @@ export function ExercisesScreen() {
     const client = solverRef.current
     if (!client) return
 
-    setWaitingForOpponent(true)
+    setThinking(true)
     const check = await client.solve({
       board: result.state.board,
       region,
@@ -138,16 +114,27 @@ export function ExercisesScreen() {
       objective: problem.objective,
       maxDepth: 8,
     })
-    setWaitingForOpponent(false)
+    setThinking(false)
 
     if (!check.solved) {
       setStatus('incorrect')
       return
     }
 
+    let nextGame = result.state
+    let nextLastMove = point
+
+    if (!isResolved(nextGame)) {
+      const applied = applyMove(nextGame, check.root.move, { regionPoints: new Set(region) })
+      if (applied.legal && applied.state) {
+        nextGame = applied.state
+        nextLastMove = check.root.move ?? point
+      }
+    }
+
     setStatus('playing')
-    setGame(result.state)
-    setLastMove(point)
+    setGame(nextGame)
+    setLastMove(nextLastMove)
   }
 
   function handleNext() {
@@ -214,7 +201,7 @@ export function ExercisesScreen() {
       <div className="exercises-status" aria-live="polite">
         {status === 'solved' && <p className="exercises-solved">{t('exercises.solved')}</p>}
         {status === 'incorrect' && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
-        {status === 'playing' && waitingForOpponent && <p>{t('play.thinking')}</p>}
+        {status === 'playing' && thinking && <p>{t('exercises.thinking')}</p>}
       </div>
     </div>
   )
