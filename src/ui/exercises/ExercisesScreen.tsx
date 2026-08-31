@@ -1,23 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { conceptsThatGenerateExercises } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
-import { gameStateFromBoard, applyMove } from '../../core/rules'
 import { BLACK } from '../../core/types'
-import type { GameState } from '../../core/types'
 import { listBankEntries, loadProblem } from '../../content/problemBank'
 import type { BankEntry } from '../../content/problemBank'
 import type { Problem } from '../../content/problemSgf'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
-import { computeRegion } from '../../solver/region'
 import { SolverClient } from '../../solver/client'
-import { isGroupPassAlive } from '../../solver/tsumego'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { minimoTheme } from '../board/themes'
-
-type Status = 'playing' | 'incorrect' | 'solved'
-
-const SOLVE_MAX_DEPTH = 8
+import { useSolvableProblem } from './useSolvableProblem'
 
 function pickEntry(entries: BankEntry[], excludeId?: string): BankEntry | null {
   const pool = entries.length > 1 ? entries.filter((e) => e.id !== excludeId) : entries
@@ -37,16 +30,12 @@ export function ExercisesScreen() {
 
   const [entry, setEntry] = useState<BankEntry | null>(() => pickEntry(entries))
   const [problem, setProblem] = useState<Problem | null>(null)
-  const [game, setGame] = useState<GameState | null>(null)
-  const [lastMove, setLastMove] = useState<number | null>(null)
-  const [status, setStatus] = useState<Status>('playing')
-  const [thinking, setThinking] = useState(false)
-  const [solutionMoves, setSolutionMoves] = useState<number | null>(null)
 
-  const solverRef = useRef<SolverClient | null>(null)
+  const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
   useEffect(() => {
-    solverRef.current = new SolverClient()
-    return () => solverRef.current?.terminate()
+    const client = new SolverClient()
+    setSolverClient(client)
+    return () => client.terminate()
   }, [])
 
   useEffect(() => {
@@ -55,149 +44,17 @@ export function ExercisesScreen() {
   }, [entries])
 
   useEffect(() => {
-    if (!entry) {
-      setProblem(null)
-      setGame(null)
-      return
-    }
-    const loaded = loadProblem(entry)
-    setProblem(loaded)
-    setGame(gameStateFromBoard(loaded.board, loaded.toMove))
-    setLastMove(null)
-    setStatus('playing')
+    setProblem(entry ? loadProblem(entry) : null)
   }, [entry])
 
-  const region = useMemo(() => {
-    if (!problem) return []
-    return computeRegion(problem.board, problem.targetPoints, 1)
-  }, [problem])
-
-  const userColor = problem?.toMove ?? null
-  const isUserTurn =
-    (status === 'playing' || status === 'incorrect') && !!game && !!problem && game.toMove === userColor
-
-  const isResolved = useCallback(
-    (g: GameState): boolean => {
-      if (!problem) return false
-      if (problem.objective === 'live') {
-        return isGroupPassAlive(g.board, problem.targetPoints, problem.targetColor)
-      }
-      return !problem.targetPoints.some((p) => g.board.stones[p] === problem.targetColor)
-    },
-    [problem],
+  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, reset } = useSolvableProblem(
+    entry,
+    problem,
+    solverClient,
   )
-
-  // Revisa si el objetivo ya quedo definido despues de cada jugada.
-  useEffect(() => {
-    if (!problem || !game) return
-    if (isResolved(game)) setStatus('solved')
-  }, [game, problem, isResolved])
-
-  // Simula la linea optima completa una vez, al cargar el problema, solo para
-  // contar cuantas jugadas propias hacen falta para resolverlo (se muestra en
-  // las instrucciones, ej. "Se resuelve en 1 jugada"). No tiene relacion con
-  // la jugada real del usuario ni con su solverRef.solve() del clic.
-  useEffect(() => {
-    setSolutionMoves(null)
-    const client = solverRef.current
-    if (!problem || !client) return
-    const p = problem
-    const c = client
-    let cancelled = false
-
-    async function countSolutionMoves() {
-      let state = gameStateFromBoard(p.board, p.toMove)
-      let studentMoves = 0
-      for (let ply = 0; ply < SOLVE_MAX_DEPTH; ply++) {
-        if (isResolved(state)) {
-          if (!cancelled) setSolutionMoves(studentMoves)
-          return
-        }
-        const result = await c.solve({
-          board: state.board,
-          region,
-          targetPoints: p.targetPoints,
-          targetColor: p.targetColor,
-          toMove: state.toMove,
-          objective: p.objective,
-          maxDepth: SOLVE_MAX_DEPTH,
-          pruneAfterDecisive: true,
-        })
-        if (cancelled || !result.solved || result.root.move === null) return
-        if (state.toMove === p.toMove) studentMoves++
-        const applied = applyMove(state, result.root.move, { regionPoints: new Set(region) })
-        if (!applied.legal || !applied.state) return
-        state = applied.state
-      }
-    }
-
-    countSolutionMoves()
-    return () => {
-      cancelled = true
-    }
-  }, [problem, region, isResolved])
-
-  // Tu jugada y la respuesta del rival se resuelven con una sola llamada al
-  // solucionador: pedirle la jugada del rival ya nos dice, de paso, si la
-  // tuya seguia dejando el objetivo alcanzable. Antes se llamaba dos veces
-  // (una para validar, otra en un efecto aparte para la respuesta) sobre la
-  // misma posicion, duplicando la espera sin necesidad.
-  //
-  // La piedra no se dibuja hasta saber que la jugada es correcta: si no
-  // resuelve el problema, el tablero nunca cambia, solo se explica por que
-  // no funciona y se puede intentar de nuevo de inmediato en otro punto.
-  async function handleIntersectionClick(point: number) {
-    if (!isUserTurn || thinking || !problem || !game) return
-    if (!region.includes(point)) return
-
-    const result = applyMove(game, point, { regionPoints: new Set(region) })
-    if (!result.legal || !result.state) return
-
-    const client = solverRef.current
-    if (!client) return
-
-    setThinking(true)
-    const check = await client.solve({
-      board: result.state.board,
-      region,
-      targetPoints: problem.targetPoints,
-      targetColor: problem.targetColor,
-      toMove: result.state.toMove,
-      objective: problem.objective,
-      maxDepth: SOLVE_MAX_DEPTH,
-      pruneAfterDecisive: true,
-    })
-    setThinking(false)
-
-    if (!check.solved) {
-      setStatus('incorrect')
-      return
-    }
-
-    if (isResolved(result.state)) {
-      setGame(result.state)
-      setLastMove(point)
-      setStatus('solved')
-      return
-    }
-
-    const applied = applyMove(result.state, check.root.move, { regionPoints: new Set(region) })
-    const nextGame = applied.legal && applied.state ? applied.state : result.state
-    const nextLastMove = applied.legal && applied.state ? (check.root.move ?? point) : point
-    setGame(nextGame)
-    setLastMove(nextLastMove)
-    setStatus('playing')
-  }
 
   function handleNext() {
     setEntry(pickEntry(entries, entry?.id))
-  }
-
-  function handleReset() {
-    if (!problem) return
-    setGame(gameStateFromBoard(problem.board, problem.toMove))
-    setLastMove(null)
-    setStatus('playing')
   }
 
   if (entries.length === 0) {
@@ -210,6 +67,7 @@ export function ExercisesScreen() {
 
   if (!problem || !game) return null
 
+  const userColor = problem.toMove
   const objectiveKey: TranslationKey = problem.objective === 'live' ? 'exercises.objective.live' : 'exercises.objective.kill'
   const toMoveKey: TranslationKey = userColor === BLACK ? 'color.black' : 'color.white'
 
@@ -229,7 +87,7 @@ export function ExercisesScreen() {
             </option>
           ))}
         </select>
-        <button type="button" onClick={handleReset}>
+        <button type="button" onClick={reset}>
           {t('exercises.reset')}
         </button>
         <button type="button" onClick={handleNext}>

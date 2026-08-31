@@ -1,7 +1,8 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { listGames, saveGame } from '../../src/storage/db'
-import type { SavedGameRecord } from '../../src/storage/db'
+import { createCard } from '../../src/learning/fsrs'
+import { getSrsCard, listAttempts, listGames, listSrsCards, recordAttempt, saveGame, saveSrsCard } from '../../src/storage/db'
+import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../src/storage/db'
 
 function sampleRecord(overrides: Partial<SavedGameRecord> = {}): Omit<SavedGameRecord, 'id'> {
   return {
@@ -38,5 +39,65 @@ describe('almacenamiento de partidas', () => {
     const games = await listGames()
     expect(games.length).toBe(2)
     expect(games.map((g) => g.mode)).toEqual(['local', 'bot'])
+  })
+})
+
+function sampleAttempt(overrides: Partial<AttemptRecord> = {}): Omit<AttemptRecord, 'id'> {
+  return {
+    problemId: 'p1',
+    conceptId: 'DOS_OJOS',
+    createdAt: new Date('2026-01-01T00:00:00Z').toISOString(),
+    solved: true,
+    wrongAttempts: 0,
+    ...overrides,
+  }
+}
+
+describe('almacenamiento de intentos de ejercicio', () => {
+  it('guarda un intento y lo recupera con listAttempts', async () => {
+    const id = await recordAttempt(sampleAttempt())
+    const attempts = await listAttempts()
+
+    expect(attempts.length).toBe(1)
+    expect(attempts[0].id).toBe(id)
+    expect(attempts[0].solved).toBe(true)
+  })
+
+  it('acumula varios intentos', async () => {
+    await recordAttempt(sampleAttempt({ solved: true }))
+    await recordAttempt(sampleAttempt({ solved: false, wrongAttempts: 2 }))
+
+    const attempts = await listAttempts()
+    expect(attempts.length).toBe(2)
+    expect(attempts.map((a) => a.solved)).toEqual([true, false])
+  })
+})
+
+describe('almacenamiento de tarjetas SRS', () => {
+  it('guarda una tarjeta y la recupera por problemId', async () => {
+    const card = createCard(new Date('2026-01-01T00:00:00Z'))
+    const record: SrsCardRecord = { problemId: 'p1', conceptId: 'DOS_OJOS', card }
+    await saveSrsCard(record)
+
+    const found = await getSrsCard('p1')
+    expect(found?.conceptId).toBe('DOS_OJOS')
+    expect(found?.card.due.getTime()).toBe(card.due.getTime())
+  })
+
+  it('revisar la misma tarjeta actualiza la fila en vez de duplicarla', async () => {
+    const card = createCard(new Date('2026-01-01T00:00:00Z'))
+    await saveSrsCard({ problemId: 'p1', conceptId: 'DOS_OJOS', card })
+
+    const updatedCard = { ...card, reps: 1 }
+    await saveSrsCard({ problemId: 'p1', conceptId: 'DOS_OJOS', card: updatedCard })
+
+    const all = await listSrsCards()
+    expect(all.length).toBe(1)
+    expect(all[0].card.reps).toBe(1)
+  })
+
+  it('getSrsCard devuelve undefined si el problema nunca se reviso', async () => {
+    const found = await getSrsCard('inexistente')
+    expect(found).toBeUndefined()
   })
 })
