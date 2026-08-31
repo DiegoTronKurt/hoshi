@@ -38,9 +38,11 @@
   "play.savedGames.vsBot": "contra el bot",
   "play.savedGames.local": "local",
 
+  "nav.today": "Hoy",
   "nav.play": "Jugar",
   "nav.exercises": "Ejercicios",
   "nav.review": "Revisar",
+  "nav.profile": "Perfil",
 
   "exercises.title": "Ejercicios",
   "exercises.empty": "Todavía no hay ejercicios verificados para este concepto. Corre el generador para agregar más.",
@@ -71,6 +73,24 @@
   "review.severity.medium": "Media",
   "review.severity.low": "Baja",
   "review.suggestedMove": "Anillo azul: jugada sugerida en su lugar.",
+
+  "today.title": "Hoy",
+  "today.empty": "Todavía no hay problemas en el banco. Vuelve cuando el banco de ejercicios tenga contenido.",
+  "today.planOverview.count": "{{n}} problemas planeados para hoy",
+  "today.reason.overdue": "Repaso",
+  "today.reason.weak": "Área débil",
+  "today.reason.new": "Nuevo",
+  "today.start": "Empezar sesión",
+  "today.progress": "{{current}} de {{total}}",
+  "today.skip": "No lo sé",
+  "today.next": "Siguiente",
+  "today.complete.title": "Sesión completa",
+  "today.complete.summary": "{{solved}} de {{total}} resueltos",
+
+  "profile.title": "Perfil",
+  "profile.weakest": "Áreas más débiles",
+  "profile.noData": "Sin datos",
+  "profile.level": "Nivel {{n}}",
 
   "concept.LIBERTADES.label": "Libertades",
   "concept.LIBERTADES.summary": "Los puntos vacíos junto a una piedra o grupo.",

@@ -83,7 +83,10 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
 }
 
 /** Los conceptos con peor puntaje, dejando afuera los que todavia no tienen datos. */
-export function weakestConcepts(profiles: Record<ConceptId, ConceptProfile>, count = 5): ConceptProfile[] {
+export function weakestConcepts(
+  profiles: Record<ConceptId, ConceptProfile>,
+  count = 5,
+): Array<ConceptProfile & { score: number }> {
   return ALL_CONCEPT_IDS.map((id) => profiles[id])
     .filter((p): p is ConceptProfile & { score: number } => p !== undefined && p.score !== null)
     .sort((a, b) => a.score - b.score)

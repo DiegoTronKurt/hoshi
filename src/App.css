@@ -377,6 +377,185 @@
   margin: 0;
 }
 
+.today {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.today h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.today-empty {
+  text-align: center;
+  color: #777777;
+  padding: 2rem 1rem;
+}
+
+.today-plan-count {
+  text-align: center;
+  color: #555555;
+  margin: 0;
+}
+
+.today-plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.today-plan-list li {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.today-progress {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #555555;
+  margin: 0;
+}
+
+.today-reason {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #eeeeee;
+  color: #555555;
+}
+
+.today-reason-overdue {
+  background: #f6dede;
+  color: #a12f2f;
+}
+
+.today-reason-weak {
+  background: #f7ecd6;
+  color: #8a6a1f;
+}
+
+.today-reason-new {
+  background: #e0ecf4;
+  color: #2f6f9f;
+}
+
+.today-controls button {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.today > button {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.profile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.profile h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.profile h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+}
+
+.profile-weakest ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.profile-concept-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.profile-concept-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.profile-concept-label {
+  flex: 0 0 40%;
+  color: #333333;
+}
+
+.profile-bar-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: #eeeeee;
+  overflow: hidden;
+}
+
+.profile-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.profile-bar-good {
+  background: #4a9d5c;
+}
+
+.profile-bar-medium {
+  background: #c99a2e;
+}
+
+.profile-bar-low {
+  background: #b23b3b;
+}
+
+.profile-no-data {
+  flex: 1;
+  font-size: 0.8rem;
+  color: #999999;
+}
+
 @media (prefers-color-scheme: dark) {
   .app {
     background: #16140f;
@@ -492,5 +671,62 @@
 
   .review-hint-legend {
     color: #7fb2d8;
+  }
+
+  .today-empty {
+    color: #999999;
+  }
+
+  .today-plan-count,
+  .today-progress {
+    color: #bbbbbb;
+  }
+
+  .today-plan-list li {
+    background: #262218;
+    border-color: #55503f;
+  }
+
+  .today-reason {
+    background: #33302a;
+    color: #cccccc;
+  }
+
+  .today-reason-overdue {
+    background: #4a2626;
+    color: #e28c8c;
+  }
+
+  .today-reason-weak {
+    background: #453b22;
+    color: #e0c284;
+  }
+
+  .today-reason-new {
+    background: #22323d;
+    color: #7fb2d8;
+  }
+
+  .today-controls button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .today > button {
+    background: #ececec;
+    color: #1a1a1a;
+  }
+
+  .profile-concept-label {
+    color: #dddddd;
+  }
+
+  .profile-bar-track {
+    background: #33302a;
+  }
+
+  .profile-no-data {
+    color: #999999;
   }
 }

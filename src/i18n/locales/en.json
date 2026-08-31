@@ -38,9 +38,11 @@
   "play.savedGames.vsBot": "vs bot",
   "play.savedGames.local": "local",
 
+  "nav.today": "Today",
   "nav.play": "Play",
   "nav.exercises": "Exercises",
   "nav.review": "Review",
+  "nav.profile": "Profile",
 
   "exercises.title": "Exercises",
   "exercises.empty": "No verified exercises yet for this concept. Run the generator to add more.",
@@ -71,6 +73,24 @@
   "review.severity.medium": "Medium",
   "review.severity.low": "Low",
   "review.suggestedMove": "Blue ring: suggested move instead.",
+
+  "today.title": "Today",
+  "today.empty": "No problems in the bank yet. Come back once the exercise bank has content.",
+  "today.planOverview.count": "{{n}} problems planned for today",
+  "today.reason.overdue": "Review",
+  "today.reason.weak": "Weak area",
+  "today.reason.new": "New",
+  "today.start": "Start session",
+  "today.progress": "{{current}} of {{total}}",
+  "today.skip": "I don't know",
+  "today.next": "Next",
+  "today.complete.title": "Session complete",
+  "today.complete.summary": "{{solved}} of {{total}} solved",
+
+  "profile.title": "Profile",
+  "profile.weakest": "Weakest areas",
+  "profile.noData": "No data yet",
+  "profile.level": "Level {{n}}",
 
   "concept.LIBERTADES.label": "Liberties",
   "concept.LIBERTADES.summary": "The empty points next to a stone or group.",

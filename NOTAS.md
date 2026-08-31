@@ -1,5 +1,111 @@
 # Notas de desarrollo
 
+## Fase 5: FSRS, perfil de habilidad, planificador y pantalla Hoy
+
+### Qué se construyó
+
+- `src/learning/fsrs.ts`: envoltorio delgado sobre `ts-fsrs` (la librería de
+  referencia del algoritmo, sin dependencias propias). Se eligió la
+  implementación real de FSRS en vez de SM-2 a pedido explícito (la
+  alternativa más simple, sin dependencias nuevas, tampoco era mala, pero
+  FSRS da intervalos más precisos y la librería es la misma que usa Anki).
+  `gradeFromAttempt()` traduce el resultado binario de un intento (resuelto
+  o no, con cuántos errores antes de acertar) a una nota FSRS de 4 niveles.
+- `src/learning/profile.ts`: perfil de habilidad por concepto (documento de
+  diseño, 5.5), con el mínimo de evidencia (5 ejercicios o 3 partidas) antes
+  de mostrar un número.
+- `src/learning/session.ts`: planificador de sesión diaria, 60% vencidos de
+  la cola SRS / 25% conceptos más débiles / 15% contenido nuevo.
+- `src/storage/db.ts`: dos almacenes nuevos, `intentos` (un registro por
+  intento de ejercicio) y `srs` (una tarjeta FSRS por problema).
+- `src/ui/exercises/useSolvableProblem.ts`: toda la mecánica de resolver un
+  problema contra el solucionador, extraída de `ExercisesScreen` (que ahora
+  la usa sin cambiar de comportamiento) para que la reutilice también
+  `TodayScreen`. Centraliza el registro de aprendizaje: cualquier problema
+  resuelto actualiza `intentos` y la tarjeta SRS de ese problema, sin
+  importar si se llegó a él desde práctica libre en Ejercicios o desde una
+  sesión dirigida en Hoy.
+- `src/ui/today/TodayScreen.tsx`: pantalla Hoy, ahora la pantalla de inicio
+  de la app. Arma la sesión del día con `planSession`, la persona la resuelve
+  problema por problema (con un botón "No lo sé" para saltar sin adivinar,
+  necesario porque FSRS necesita una nota aunque no se resuelva) y al
+  terminar muestra un resumen.
+- `src/ui/profile/ProfileScreen.tsx`: pantalla Perfil. Lista de los 5
+  conceptos más débiles arriba, y todos los conceptos evaluables agrupados
+  por nivel con una barra de progreso (o "Sin datos") debajo.
+- Navegación completa a cinco pestañas (Hoy, Jugar, Ejercicios, Revisar,
+  Perfil), tal como especifica la sección 6.1 del documento de diseño.
+
+### Decisiones técnicas con alternativas (qué elegí y qué sacrifiqué)
+
+- **La nota FSRS se deriva del resultado, no se le pregunta a la persona.**
+  El documento de diseño no especifica esto, y el patrón habitual de FSRS
+  (Anki) es pedir una autoevaluación de 4 botones (Otra vez/Difícil/Bien/
+  Fácil) después de cada revisión. Nuestra interfaz ya valida cada jugada
+  en vivo contra el solucionador, así que pedir además una autoevaluación
+  sería redundante y una fricción nueva. Se usa: no resuelto -> Otra vez,
+  resuelto con errores en el camino -> Difícil, resuelto a la primera ->
+  Bien. "Fácil" no se usa nunca por esta vía: no hay ninguna señal de "esto
+  me costó menos de lo esperado" de donde sacarlo sin inventar un umbral de
+  tiempo arbitrario.
+- **`ERROR_RATE_FACTOR = 10`** (cuántos puntos resta cada error de un
+  concepto por cada 100 jugadas totales) no sale de ningún lado: el
+  documento de diseño deja "factor" sin especificar. Se eligió para que la
+  escala sea legible (un error cada 10 jugadas dificultad ya deja ese
+  componente en 0, uno cada 100 lo deja en 90), documentado en el código
+  para poder ajustarlo con criterio más adelante si el número se siente mal
+  calibrado en la práctica.
+- **`SECONDS_PER_PROBLEM = 45`** (para convertir los minutos de sesión en
+  una cantidad de problemas) es una estimación a ojo, no un dato medido.
+  No hay todavía información real de cuánto tarda una persona en resolver
+  estos tsumegos; es un solo número aislado en `session.ts`, fácil de
+  ajustar cuando haya datos reales sin tocar el resto del planificador.
+- **Perfil se muestra como lista con barras agrupada por nivel, no como un
+  radar geométrico** (que es lo que pide el documento de diseño). Un radar
+  con dos docenas de ejes es difícil de leer incluso en pantalla grande, y
+  mucho más en un teléfono angosto; una lista agrupada por nivel transmite
+  la misma idea (progreso organizado por nivel) sin la complejidad de
+  dibujar un polígono SVG a mano. Si en algún momento se justifica el
+  esfuerzo visual, se puede agregar un radar sin tocar `computeProfiles`.
+- **La pantalla Perfil oculta los conceptos sin ninguna fuente de
+  evidencia posible** (`conceptsWithEvidence` en `concepts.ts`): los que
+  no tienen detector ni generan ejercicios (`LIBERTADES`, `KO`,
+  `CONTEO_AREA`, etc.) van a mostrar "Sin datos" para siempre, así que
+  incluirlos sería solo ruido.
+- **Bug real encontrado al conectar `TodayScreen`**: el patrón ya usado en
+  `ExercisesScreen` guardaba el `SolverClient` en un `ref`, poblado recién
+  dentro de un `useEffect`. Como mutar un ref no dispara un re-render, el
+  hook `useSolvableProblem` (que sí necesita reaccionar cuando el cliente
+  pasa de `null` a listo) se quedaba con `null` para siempre en la primera
+  carga. Se cambió a `useState` en ambas pantallas: mismo patrón de "crear
+  el worker una sola vez", pero con una actualización que sí re-renderiza.
+- **Practicar en Ejercicios (sin pasar por Hoy) también cuenta para el
+  aprendizaje.** Fue una decisión deliberada, no algo que pidiera el
+  documento de diseño explícitamente: separar "practicar" de "que cuente"
+  hubiera sido confuso (¿por qué resolver el mismo problema en Ejercicios
+  no hace nada, pero en Hoy sí?). Como el registro vive en el hook
+  compartido, ambas pantallas se comportan igual sin código extra.
+
+### Qué quedó pendiente
+
+- Todo lo de la fase siguiente: lecciones de los niveles 0 a 3, temas
+  adicionales (Sumi-e, Kaya, Nocturno OLED) y accesibilidad avanzada
+  (Fase 6).
+- El circuito "si un concepto acumula 3 errores en 5 partidas, se reabre su
+  lección" no se implementó: no hay lecciones todavía (Fase 6), así que no
+  hay nada que reabrir.
+- El banco de problemas sigue en 6 (la meta de la Fase 3 era 300). En la
+  práctica esto significa que casi toda sesión de Hoy se compone de
+  contenido "Nuevo" simplemente porque no hay mucho más para elegir; el
+  planificador ya está listo para cuando el banco crezca, no hace falta
+  tocarlo.
+- La pantalla Perfil no tiene todavía el "historial, ajustes y temas" que
+  menciona la sección 6.1 del documento para la pestaña Perfil; eso es
+  contenido de la Fase 6 (temas) y de una futura pantalla de ajustes que
+  no estaba en el alcance de esta fase.
+- `PASE_PREMATURO` (Fase 4) sigue siendo una comparación de un solo paso;
+  el perfil hereda esa misma limitación al contar sus errores.
+
 ## Fase 4: detectores de errores y pantalla Revisar
 
 ### Qué se construyó

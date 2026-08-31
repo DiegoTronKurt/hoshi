@@ -331,3 +331,11 @@ export const ALL_CONCEPT_IDS = Object.keys(CONCEPTS) as ConceptId[]
 export function conceptsThatGenerateExercises(): Concept[] {
   return ALL_CONCEPT_IDS.map((id) => CONCEPTS[id]).filter((c) => c.generatesExercises)
 }
+
+/** Conceptos que alguna vez pueden acumular evidencia real (un detector que
+ * dispare en una partida, o un ejercicio que se resuelva). Los que no tienen
+ * ninguna de las dos cosas nunca van a dejar de estar "sin datos", asi que
+ * la pantalla de Perfil los deja afuera en vez de mostrar filas muertas. */
+export function conceptsWithEvidence(): Concept[] {
+  return ALL_CONCEPT_IDS.map((id) => CONCEPTS[id]).filter((c) => c.hasDetector || c.generatesExercises)
+}

@@ -2,14 +2,16 @@ import { useState } from 'react'
 import { useI18n } from './i18n'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
 import { PlayScreen } from './ui/play/PlayScreen'
+import { ProfileScreen } from './ui/profile/ProfileScreen'
 import { ReviewScreen } from './ui/review/ReviewScreen'
+import { TodayScreen } from './ui/today/TodayScreen'
 import './App.css'
 
-type Screen = 'play' | 'exercises' | 'review'
+type Screen = 'today' | 'play' | 'exercises' | 'review' | 'profile'
 
 function App() {
   const { language, setLanguage, t } = useI18n()
-  const [screen, setScreen] = useState<Screen>('play')
+  const [screen, setScreen] = useState<Screen>('today')
 
   return (
     <div className="app">
@@ -28,7 +30,10 @@ function App() {
             </button>
           ))}
         </div>
-        <nav className="screen-nav" role="group" aria-label={t('nav.play')}>
+        <nav className="screen-nav" role="group" aria-label={t('nav.today')}>
+          <button type="button" className={screen === 'today' ? 'active' : ''} onClick={() => setScreen('today')}>
+            {t('nav.today')}
+          </button>
           <button type="button" className={screen === 'play' ? 'active' : ''} onClick={() => setScreen('play')}>
             {t('nav.play')}
           </button>
@@ -46,13 +51,22 @@ function App() {
           >
             {t('nav.review')}
           </button>
+          <button
+            type="button"
+            className={screen === 'profile' ? 'active' : ''}
+            onClick={() => setScreen('profile')}
+          >
+            {t('nav.profile')}
+          </button>
         </nav>
       </header>
 
       <main className="app-main">
+        {screen === 'today' && <TodayScreen />}
         {screen === 'play' && <PlayScreen />}
         {screen === 'exercises' && <ExercisesScreen />}
         {screen === 'review' && <ReviewScreen />}
+        {screen === 'profile' && <ProfileScreen />}
       </main>
     </div>
   )
