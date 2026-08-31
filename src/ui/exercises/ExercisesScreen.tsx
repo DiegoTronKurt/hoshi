@@ -73,7 +73,8 @@ export function ExercisesScreen() {
   }, [problem])
 
   const userColor = problem?.toMove ?? null
-  const isUserTurn = status === 'playing' && !!game && !!problem && game.toMove === userColor
+  const isUserTurn =
+    (status === 'playing' || status === 'incorrect') && !!game && !!problem && game.toMove === userColor
 
   const isResolved = useCallback(
     (g: GameState): boolean => {
@@ -142,12 +143,9 @@ export function ExercisesScreen() {
   // (una para validar, otra en un efecto aparte para la respuesta) sobre la
   // misma posicion, duplicando la espera sin necesidad.
   //
-  // Tu piedra se muestra de inmediato al hacer clic, antes de esperar al
-  // solucionador: "Pensando..." solo aparece mientras se calcula la
-  // respuesta del rival, nunca antes de que tu jugada se vea en el tablero.
-  // Si resulta que la jugada no resuelve el problema, se revierte: no queda
-  // permitido dejar una piedra puesta que no sirve, el tablero vuelve a como
-  // estaba antes del clic y solo se explica por que no funciona.
+  // La piedra no se dibuja hasta saber que la jugada es correcta: si no
+  // resuelve el problema, el tablero nunca cambia, solo se explica por que
+  // no funciona y se puede intentar de nuevo de inmediato en otro punto.
   async function handleIntersectionClick(point: number) {
     if (!isUserTurn || thinking || !problem || !game) return
     if (!region.includes(point)) return
@@ -157,12 +155,6 @@ export function ExercisesScreen() {
 
     const client = solverRef.current
     if (!client) return
-
-    const previousGame = game
-    const previousLastMove = lastMove
-
-    setGame(result.state)
-    setLastMove(point)
 
     setThinking(true)
     const check = await client.solve({
@@ -178,22 +170,22 @@ export function ExercisesScreen() {
     setThinking(false)
 
     if (!check.solved) {
-      setGame(previousGame)
-      setLastMove(previousLastMove)
       setStatus('incorrect')
       return
     }
 
     if (isResolved(result.state)) {
+      setGame(result.state)
+      setLastMove(point)
       setStatus('solved')
       return
     }
 
     const applied = applyMove(result.state, check.root.move, { regionPoints: new Set(region) })
-    if (applied.legal && applied.state) {
-      setGame(applied.state)
-      setLastMove(check.root.move ?? point)
-    }
+    const nextGame = applied.legal && applied.state ? applied.state : result.state
+    const nextLastMove = applied.legal && applied.state ? (check.root.move ?? point) : point
+    setGame(nextGame)
+    setLastMove(nextLastMove)
     setStatus('playing')
   }
 
@@ -263,8 +255,8 @@ export function ExercisesScreen() {
 
       <div className="exercises-status" aria-live="polite">
         {status === 'solved' && <p className="exercises-solved">{t('exercises.solved')}</p>}
-        {status === 'incorrect' && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
-        {status === 'playing' && thinking && <p>{t('exercises.thinking')}</p>}
+        {status === 'incorrect' && !thinking && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
+        {thinking && <p>{t('exercises.thinking')}</p>}
       </div>
     </div>
   )
