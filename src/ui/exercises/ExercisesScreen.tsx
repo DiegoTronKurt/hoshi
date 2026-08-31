@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { conceptsThatGenerateExercises } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
 import { gameStateFromBoard, applyMove } from '../../core/rules'
@@ -10,7 +10,8 @@ import type { Problem } from '../../content/problemSgf'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { computeRegion } from '../../solver/region'
-import { isGroupPassAlive, solve } from '../../solver/tsumego'
+import { SolverClient } from '../../solver/client'
+import { isGroupPassAlive } from '../../solver/tsumego'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { minimoTheme } from '../board/themes'
 
@@ -38,6 +39,12 @@ export function ExercisesScreen() {
   const [lastMove, setLastMove] = useState<number | null>(null)
   const [status, setStatus] = useState<Status>('playing')
   const [waitingForOpponent, setWaitingForOpponent] = useState(false)
+
+  const solverRef = useRef<SolverClient | null>(null)
+  useEffect(() => {
+    solverRef.current = new SolverClient()
+    return () => solverRef.current?.terminate()
+  }, [])
 
   useEffect(() => {
     const next = pickEntry(entries)
@@ -69,25 +76,35 @@ export function ExercisesScreen() {
   useEffect(() => {
     if (!problem || !game || status !== 'playing') return
     if (game.toMove === userColor) return
+    const client = solverRef.current
+    if (!client) return
 
+    let cancelled = false
     setWaitingForOpponent(true)
-    const result = solve({
-      board: game.board,
-      region,
-      targetPoints: problem.targetPoints,
-      targetColor: problem.targetColor,
-      toMove: game.toMove,
-      objective: problem.objective,
-      maxDepth: 8,
-    })
 
-    const move = result.root.move
-    const applied = applyMove(game, move, { regionPoints: new Set(region) })
-    setWaitingForOpponent(false)
-    if (!applied.legal || !applied.state) return
+    client
+      .solve({
+        board: game.board,
+        region,
+        targetPoints: problem.targetPoints,
+        targetColor: problem.targetColor,
+        toMove: game.toMove,
+        objective: problem.objective,
+        maxDepth: 8,
+      })
+      .then((result) => {
+        if (cancelled) return
+        setWaitingForOpponent(false)
+        const move = result.root.move
+        const applied = applyMove(game, move, { regionPoints: new Set(region) })
+        if (!applied.legal || !applied.state) return
+        setGame(applied.state)
+        setLastMove(move)
+      })
 
-    setGame(applied.state)
-    setLastMove(move)
+    return () => {
+      cancelled = true
+    }
   }, [game, problem, region, userColor, status])
 
   // Revisa si el objetivo ya quedo definido despues de cada jugada.
@@ -101,14 +118,18 @@ export function ExercisesScreen() {
     }
   }, [game, problem])
 
-  function handleIntersectionClick(point: number) {
-    if (!isUserTurn || !problem || !game) return
+  async function handleIntersectionClick(point: number) {
+    if (!isUserTurn || waitingForOpponent || !problem || !game) return
     if (!region.includes(point)) return
 
     const result = applyMove(game, point, { regionPoints: new Set(region) })
     if (!result.legal || !result.state) return
 
-    const check = solve({
+    const client = solverRef.current
+    if (!client) return
+
+    setWaitingForOpponent(true)
+    const check = await client.solve({
       board: result.state.board,
       region,
       targetPoints: problem.targetPoints,
@@ -117,6 +138,7 @@ export function ExercisesScreen() {
       objective: problem.objective,
       maxDepth: 8,
     })
+    setWaitingForOpponent(false)
 
     if (!check.solved) {
       setStatus('incorrect')

@@ -127,7 +127,12 @@ export function solve(request: SolveRequest): SolveResult {
     }
 
     const liveForDefender = decisive ? decisive.liveForDefender : !defenderToMove
-    const node: RefutationNode = { move: decisive?.move ?? null, liveForDefender, children }
+    // Si ninguna jugada es ganadora (posicion perdida con juego optimo), igual
+    // se recomienda una jugada real en vez de "pasar": pasar en silencio
+    // rompe la ilusion de un rival que responde, aunque el resultado final
+    // sea el mismo con juego perfecto.
+    const move = decisive?.move ?? children[0].move
+    const node: RefutationNode = { move, liveForDefender, children }
     cache.set(key, node)
     return node
   }
