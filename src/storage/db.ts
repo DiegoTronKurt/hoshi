@@ -30,6 +30,8 @@ export interface AttemptRecord {
   solved: boolean
   /** Jugadas incorrectas antes de resolverlo (0 si se acerto a la primera). */
   wrongAttempts: number
+  /** Tiempo hasta la primera resolucion o abandono del problema. Ausente en intentos previos a esta version. */
+  responseTimeMs?: number
 }
 
 /** Una tarjeta FSRS por problema, identificada por problemId (no autoincrement:

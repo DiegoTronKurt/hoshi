@@ -71,6 +71,20 @@ describe('almacenamiento de intentos de ejercicio', () => {
     expect(attempts.length).toBe(2)
     expect(attempts.map((a) => a.solved)).toEqual([true, false])
   })
+
+  it('guarda y recupera el tiempo de respuesta', async () => {
+    await recordAttempt(sampleAttempt({ responseTimeMs: 4200 }))
+
+    const attempts = await listAttempts()
+    expect(attempts[0].responseTimeMs).toBe(4200)
+  })
+
+  it('un intento sin tiempo de respuesta queda sin ese campo', async () => {
+    await recordAttempt(sampleAttempt())
+
+    const attempts = await listAttempts()
+    expect(attempts[0].responseTimeMs).toBeUndefined()
+  })
 })
 
 describe('almacenamiento de tarjetas SRS', () => {

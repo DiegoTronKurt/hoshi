@@ -3,7 +3,7 @@ import type { ConceptId } from '../../src/analysis/concepts'
 import type { BankEntry } from '../../src/content/problemBank'
 import { Rating, createCard, reviewCard } from '../../src/learning/fsrs'
 import type { ConceptProfile } from '../../src/learning/profile'
-import { planSession } from '../../src/learning/session'
+import { planSession } from '../../src/training-policy/session'
 import type { SrsCardRecord } from '../../src/storage/db'
 
 const NOW = new Date('2026-01-10T00:00:00Z')
@@ -14,6 +14,18 @@ function entry(id: string, conceptId: ConceptId): BankEntry {
 
 function emptyProfiles(): Record<ConceptId, ConceptProfile> {
   return {} as Record<ConceptId, ConceptProfile>
+}
+
+function profile(conceptId: ConceptId, score: number, correct: number, incorrect: number): ConceptProfile {
+  return {
+    conceptId,
+    score,
+    observationCount: correct + incorrect,
+    correctCount: correct,
+    incorrectCount: incorrect,
+    lastPracticedAt: null,
+    byContext: { exercise: { correct, incorrect }, game: { correct: 0, incorrect: 0 } },
+  }
 }
 
 describe('planificador de sesion diaria', () => {
@@ -42,7 +54,7 @@ describe('planificador de sesion diaria', () => {
     const entries = [entry('p1', 'AUTOATARI'), entry('p2', 'DOS_OJOS')]
     const profiles: Record<ConceptId, ConceptProfile> = {
       ...emptyProfiles(),
-      AUTOATARI: { conceptId: 'AUTOATARI', score: 10, exerciseAttempts: 5, exerciseAccuracy: 10, gameMistakeCount: 0 },
+      AUTOATARI: profile('AUTOATARI', 10, 1, 4),
     }
     const plan = planSession(entries, [], profiles, NOW, 10)
     const weakItems = plan.items.filter((i) => i.reason === 'weak')
@@ -55,7 +67,7 @@ describe('planificador de sesion diaria', () => {
     const cards: SrsCardRecord[] = [{ problemId: 'p1', conceptId: 'DOS_OJOS', card: overdueCard }]
     const profiles: Record<ConceptId, ConceptProfile> = {
       ...emptyProfiles(),
-      DOS_OJOS: { conceptId: 'DOS_OJOS', score: 5, exerciseAttempts: 5, exerciseAccuracy: 5, gameMistakeCount: 0 },
+      DOS_OJOS: profile('DOS_OJOS', 5, 0, 5),
     }
     const plan = planSession(entries, cards, profiles, NOW, 10)
     const ids = plan.items.map((i) => i.entry.id)

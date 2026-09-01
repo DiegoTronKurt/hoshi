@@ -33,10 +33,19 @@ describe('detectores de errores', () => {
     expect(has(events, 'ATARI_IGNORADO', 7)).toBe(true)
   })
 
-  it('ATARI_IGNORADO: no se reporta si el grupo se defiende', () => {
+  it('ATARI_IGNORADO: no se reporta como incorrecto si el grupo se defiende', () => {
     const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [2, 2])
     const events = analyzeGame(SIZE, 0, m)
-    expect(events.some((e) => e.conceptId === 'ATARI_IGNORADO')).toBe(false)
+    expect(events.some((e) => e.conceptId === 'ATARI_IGNORADO' && e.result === 'incorrect')).toBe(false)
+  })
+
+  it('ATARI_IGNORADO: se reporta como correcto si el grupo se defiende', () => {
+    const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [2, 2])
+    const events = analyzeGame(SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'ATARI_IGNORADO')
+    expect(event?.result).toBe('correct')
+    expect(event?.context).toBe('game')
+    expect(event?.severity).toBeUndefined()
   })
 
   it('AUTOATARI: la jugada deja al propio grupo recien formado en atari sin capturar', () => {
@@ -81,10 +90,18 @@ describe('detectores de errores', () => {
     expect(has(events, 'ESCALERA_FALLIDA', 8)).toBe(true)
   })
 
-  it('ESCALERA_FALLIDA: no se reporta una escalera que si funciona', () => {
+  it('ESCALERA_FALLIDA: no se reporta si la escalera si funciona', () => {
     const m = moves([1, 1], [5, 5], [7, 7], [2, 1], [7, 6], [1, 2], [7, 5], [1, 0])
     const events = analyzeGame(SIZE, 0, m)
     expect(events.some((e) => e.conceptId === 'ESCALERA_FALLIDA')).toBe(false)
+  })
+
+  it('ESCALERA: se reporta como correcta cuando la escalera si funciona', () => {
+    const m = moves([1, 1], [5, 5], [7, 7], [2, 1], [7, 6], [1, 2], [7, 5], [1, 0])
+    const events = analyzeGame(SIZE, 0, m)
+    expect(has(events, 'ESCALERA', 8)).toBe(true)
+    const event = events.find((e) => e.conceptId === 'ESCALERA')
+    expect(event?.result).toBe('correct')
   })
 
   it('TRIANGULO_VACIO: la jugada cierra un triangulo vacio', () => {

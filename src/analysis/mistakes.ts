@@ -11,12 +11,28 @@ import { solveLadder } from '../solver/ladder'
 import { CONCEPTS } from './concepts'
 import type { ConceptId, ConceptSeverity } from './concepts'
 
-export interface MistakeEvent {
+export type OccurrenceContext = 'exercise' | 'game'
+export type OccurrenceResult = 'correct' | 'incorrect' | 'partial'
+
+/**
+ * Un concepto de Go apareciendo en la practica, ya sea en un ejercicio o
+ * dentro de una partida jugada, con el resultado de como se manejo.
+ * Reemplaza a MistakeEvent (que solo registraba errores) para poder
+ * comparar reconocimiento dirigido (ejercicio) contra aplicacion espontanea
+ * (partida). Ningun detector emite 'partial' todavia; queda en el tipo para
+ * conceptos futuros con credito parcial.
+ */
+export interface ConceptOccurrence {
   conceptId: ConceptId
-  /** Numero de jugada, 1-indexado, tal como aparece en la partida guardada. */
-  moveNumber: number
-  color: Color
-  severity: ConceptSeverity
+  context: OccurrenceContext
+  result: OccurrenceResult
+  /** Numero de jugada, 1-indexado, tal como aparece en la partida guardada. Solo context: 'game'. */
+  moveNumber?: number
+  color?: Color
+  /** Solo context: 'exercise'. */
+  responseTimeMs?: number
+  /** Solo si result === 'incorrect'. */
+  severity?: ConceptSeverity
   /** La jugada considerada un error, o null si el error fue pasar. */
   point: number | null
   /** Que jugar en su lugar, cuando el detector puede sugerirla. */
@@ -37,14 +53,32 @@ function colorKey(color: Color): 'black' | 'white' {
   return color === BLACK ? 'black' : 'white'
 }
 
-function makeEvent(ctx: AnalysisContext, conceptId: ConceptId, point: number | null, suggestedPoint?: number): MistakeEvent {
+function makeIncorrect(
+  ctx: AnalysisContext,
+  conceptId: ConceptId,
+  point: number | null,
+  suggestedPoint?: number,
+): ConceptOccurrence {
   return {
     conceptId,
+    context: 'game',
+    result: 'incorrect',
     moveNumber: ctx.moveIndex + 1,
     color: ctx.moves[ctx.moveIndex].color,
     severity: CONCEPTS[conceptId].severity,
     point,
     suggestedPoint,
+  }
+}
+
+function makeCorrect(ctx: AnalysisContext, conceptId: ConceptId, point: number | null): ConceptOccurrence {
+  return {
+    conceptId,
+    context: 'game',
+    result: 'correct',
+    moveNumber: ctx.moveIndex + 1,
+    color: ctx.moves[ctx.moveIndex].color,
+    point,
   }
 }
 
@@ -62,7 +96,7 @@ function survivesToEnd(ctx: AnalysisContext, point: number, color: Color): boole
  * por captura, asi que "no esta al final" equivale a "fue capturada en
  * algun momento posterior", sin necesidad de recorrer jugada por jugada.
  */
-function detectAtariIgnorado(ctx: AnalysisContext): MistakeEvent | null {
+function detectAtariIgnorado(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (ctx.captured[ctx.moveIndex].length > 0) return null
 
@@ -80,17 +114,19 @@ function detectAtariIgnorado(ctx: AnalysisContext): MistakeEvent | null {
     const repStone = group.stones[0]
     const stillThere = after.board.stones[repStone] === move.color
     const rescued = stillThere && (getGroup(after.board, repStone)?.liberties.size ?? 0) > 1
-    if (rescued) continue
+    if (rescued) {
+      return makeCorrect(ctx, 'ATARI_IGNORADO', move.point)
+    }
 
     if (!survivesToEnd(ctx, repStone, move.color)) {
-      return makeEvent(ctx, 'ATARI_IGNORADO', move.point)
+      return makeIncorrect(ctx, 'ATARI_IGNORADO', move.point)
     }
   }
   return null
 }
 
 /** El grupo recien formado por la jugada queda en atari y no capturo nada. */
-function detectAutoatari(ctx: AnalysisContext): MistakeEvent | null {
+function detectAutoatari(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
   if (ctx.captured[ctx.moveIndex].length > 0) return null
@@ -98,7 +134,7 @@ function detectAutoatari(ctx: AnalysisContext): MistakeEvent | null {
   const after = ctx.states[ctx.moveIndex + 1]
   const group = getGroup(after.board, move.point)
   if (group && group.liberties.size === 1) {
-    return makeEvent(ctx, 'AUTOATARI', move.point)
+    return makeIncorrect(ctx, 'AUTOATARI', move.point)
   }
   return null
 }
@@ -108,7 +144,7 @@ function detectAutoatari(ctx: AnalysisContext): MistakeEvent | null {
  * jugo, y ese grupo rival sigue en el tablero al final de la partida
  * registrada. Si hay varios grupos capturables, se reporta el mas grande.
  */
-function detectCapturaPerdida(ctx: AnalysisContext): MistakeEvent | null {
+function detectCapturaPerdida(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   const before = ctx.states[ctx.moveIndex]
   const rival = opponent(move.color)
@@ -129,24 +165,24 @@ function detectCapturaPerdida(ctx: AnalysisContext): MistakeEvent | null {
   if (!best) return null
   if (!survivesToEnd(ctx, best.repStone, rival)) return null
 
-  return makeEvent(ctx, 'CAPTURA_PERDIDA', move.point, best.liberty)
+  return makeIncorrect(ctx, 'CAPTURA_PERDIDA', move.point, best.liberty)
 }
 
 /** La jugada ocupa un ojo simple del propio grupo, sin capturar nada. */
-function detectRellenoOjoPropio(ctx: AnalysisContext): MistakeEvent | null {
+function detectRellenoOjoPropio(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
   if (ctx.captured[ctx.moveIndex].length > 0) return null
 
   const before = ctx.states[ctx.moveIndex]
   if (isSimpleEye(before.board, move.point, move.color)) {
-    return makeEvent(ctx, 'RELLENO_OJO_PROPIO', move.point)
+    return makeIncorrect(ctx, 'RELLENO_OJO_PROPIO', move.point)
   }
   return null
 }
 
 /** La jugada cae en territorio ya cerrado por una cadena propia pass-alive. */
-function detectRellenoTerritorioPropio(ctx: AnalysisContext): MistakeEvent | null {
+function detectRellenoTerritorioPropio(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
   if (ctx.captured[ctx.moveIndex].length > 0) return null
@@ -159,7 +195,7 @@ function detectRellenoTerritorioPropio(ctx: AnalysisContext): MistakeEvent | nul
   // pass-alive real no hay territorio que rellenar.
   if (chains.length === 0) return null
   if (territoryPoints.includes(move.point)) {
-    return makeEvent(ctx, 'RELLENO_TERRITORIO_PROPIO', move.point)
+    return makeIncorrect(ctx, 'RELLENO_TERRITORIO_PROPIO', move.point)
   }
   return null
 }
@@ -170,7 +206,7 @@ function detectRellenoTerritorioPropio(ctx: AnalysisContext): MistakeEvent | nul
  * escaleras determina que el grupo perseguido escapa: la escalera no
  * funciona y la jugada fue un movimiento desperdiciado.
  */
-function detectEscaleraFallida(ctx: AnalysisContext): MistakeEvent | null {
+function detectEscaleraFallida(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
 
@@ -188,8 +224,9 @@ function detectEscaleraFallida(ctx: AnalysisContext): MistakeEvent | null {
 
     const result = solveLadder({ board: before.board, runnerPoint: n, chaserColor: move.color })
     if (!result.captured) {
-      return makeEvent(ctx, 'ESCALERA_FALLIDA', move.point)
+      return makeIncorrect(ctx, 'ESCALERA_FALLIDA', move.point)
     }
+    return makeCorrect(ctx, 'ESCALERA', move.point)
   }
   return null
 }
@@ -204,7 +241,7 @@ function detectEscaleraFallida(ctx: AnalysisContext): MistakeEvent | null {
  * tablero, para no atribuirle a una jugada una debilidad que ya venia de
  * antes.
  */
-function detectCorteNoDefendido(ctx: AnalysisContext): MistakeEvent | null {
+function detectCorteNoDefendido(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
 
@@ -233,11 +270,11 @@ function detectCorteNoDefendido(ctx: AnalysisContext): MistakeEvent | null {
       const finalBoard = ctx.states[ctx.states.length - 1].board
       const stillOwn = finalBoard.stones[move.point] === move.color
       const otherStillOwn = finalBoard.stones[otherStone] === move.color
-      if (!stillOwn || !otherStillOwn) return makeEvent(ctx, 'CORTE_NO_DEFENDIDO', move.point, q)
+      if (!stillOwn || !otherStillOwn) return makeIncorrect(ctx, 'CORTE_NO_DEFENDIDO', move.point, q)
 
       const reconnected = getGroup(finalBoard, move.point)?.stones.includes(otherStone) ?? false
       if (!reconnected) {
-        return makeEvent(ctx, 'CORTE_NO_DEFENDIDO', move.point, q)
+        return makeIncorrect(ctx, 'CORTE_NO_DEFENDIDO', move.point, q)
       }
     }
   }
@@ -252,7 +289,7 @@ function detectCorteNoDefendido(ctx: AnalysisContext): MistakeEvent | null {
  * amenaza directa), para no marcar como error una jugada que en realidad
  * era necesaria.
  */
-function detectTrianguloVacio(ctx: AnalysisContext): MistakeEvent | null {
+function detectTrianguloVacio(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
   if (ctx.captured[ctx.moveIndex].length > 0) return null
@@ -287,13 +324,13 @@ function detectTrianguloVacio(ctx: AnalysisContext): MistakeEvent | null {
     if (before.board.stones[armNearP] !== move.color) continue
     if (before.board.stones[armNearD] !== move.color) continue
     if (before.board.stones[d] !== EMPTY) continue
-    return makeEvent(ctx, 'TRIANGULO_VACIO', move.point)
+    return makeIncorrect(ctx, 'TRIANGULO_VACIO', move.point)
   }
   return null
 }
 
 /** Jugada en primera linea antes de la jugada 15, sin piedras rivales adyacentes. */
-function detectPrimeraLineaTemprana(ctx: AnalysisContext): MistakeEvent | null {
+function detectPrimeraLineaTemprana(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point === null) return null
   if (ctx.moveIndex + 1 >= 15) return null
@@ -309,7 +346,7 @@ function detectPrimeraLineaTemprana(ctx: AnalysisContext): MistakeEvent | null {
   for (const n of neighbors(size, move.point)) {
     if (before.board.stones[n] === rival) return null
   }
-  return makeEvent(ctx, 'PRIMERA_LINEA_TEMPRANA', move.point)
+  return makeIncorrect(ctx, 'PRIMERA_LINEA_TEMPRANA', move.point)
 }
 
 /**
@@ -319,7 +356,7 @@ function detectPrimeraLineaTemprana(ctx: AnalysisContext): MistakeEvent | null {
  * concreta y barata de calcular, no una prueba de que esa jugada gana la
  * partida.
  */
-function detectPasePrematuro(ctx: AnalysisContext): MistakeEvent | null {
+function detectPasePrematuro(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   if (move.point !== null) return null
 
@@ -339,7 +376,7 @@ function detectPasePrematuro(ctx: AnalysisContext): MistakeEvent | null {
     }
   }
   if (!best) return null
-  return makeEvent(ctx, 'PASE_PREMATURO', null, best.point)
+  return makeIncorrect(ctx, 'PASE_PREMATURO', null, best.point)
 }
 
 /**
@@ -351,8 +388,8 @@ function detectPasePrematuro(ctx: AnalysisContext): MistakeEvent | null {
  * (mismo tamano que el grupo encontrado justo antes de la jugada) para no
  * mezclar dos capturas simultaneas distintas en un solo evento.
  */
-function detectGruposMuertosSinOjos(ctx: AnalysisContext): MistakeEvent[] {
-  const results: MistakeEvent[] = []
+function detectGruposMuertosSinOjos(ctx: AnalysisContext): ConceptOccurrence[] {
+  const results: ConceptOccurrence[] = []
 
   for (let i = 0; i < ctx.captured.length; i++) {
     const capturedPoints = ctx.captured[i]
@@ -380,6 +417,8 @@ function detectGruposMuertosSinOjos(ctx: AnalysisContext): MistakeEvent[] {
     if (!hadTwoEyes) {
       results.push({
         conceptId: 'GRUPO_MURIO_SIN_OJOS',
+        context: 'game',
+        result: 'incorrect',
         moveNumber: i + 1,
         color: deadColor,
         severity: CONCEPTS.GRUPO_MURIO_SIN_OJOS.severity,
@@ -391,7 +430,7 @@ function detectGruposMuertosSinOjos(ctx: AnalysisContext): MistakeEvent[] {
   return results
 }
 
-const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => MistakeEvent | null> = [
+const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => ConceptOccurrence | null> = [
   detectAtariIgnorado,
   detectAutoatari,
   detectCapturaPerdida,
@@ -410,7 +449,7 @@ const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => MistakeEvent | null> =
  * implementacion (documento de diseno, seccion 5.4): si un detector no
  * puede afirmar la condicion con certeza, no reporta.
  */
-export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): MistakeEvent[] {
+export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): ConceptOccurrence[] {
   const states: GameState[] = [createGame(size, komi)]
   const captured: number[][] = []
 
@@ -425,7 +464,7 @@ export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): 
   // analizan las jugadas que realmente se pudieron reproducir.
   const playedMoves = moves.slice(0, captured.length)
 
-  const events: MistakeEvent[] = []
+  const events: ConceptOccurrence[] = []
   for (let moveIndex = 0; moveIndex < playedMoves.length; moveIndex++) {
     const ctx: AnalysisContext = { komi, moves: playedMoves, states, captured, moveIndex }
     for (const detector of PER_MOVE_DETECTORS) {
@@ -437,6 +476,6 @@ export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): 
   const aggregateCtx: AnalysisContext = { komi, moves: playedMoves, states, captured, moveIndex: -1 }
   events.push(...detectGruposMuertosSinOjos(aggregateCtx))
 
-  events.sort((a, b) => a.moveNumber - b.moveNumber)
+  events.sort((a, b) => (a.moveNumber ?? 0) - (b.moveNumber ?? 0))
   return events
 }

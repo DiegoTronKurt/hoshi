@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { analyzeGame } from '../../analysis/mistakes'
-import type { MistakeEvent } from '../../analysis/mistakes'
+import type { ConceptOccurrence } from '../../analysis/mistakes'
+import type { ConceptSeverity } from '../../analysis/concepts'
 import { applyMove, createGame } from '../../core/rules'
 import { sgfToGameRecord } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
@@ -23,10 +24,16 @@ function stateAtMove(size: number, komi: number, moves: RecordedMove[], moveNumb
   return state
 }
 
-const SEVERITY_KEY: Record<MistakeEvent['severity'], TranslationKey> = {
+const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
   high: 'review.severity.high',
   medium: 'review.severity.medium',
   low: 'review.severity.low',
+}
+
+type Mistake = ConceptOccurrence & { result: 'incorrect'; severity: ConceptSeverity; moveNumber: number }
+
+function isMistake(occurrence: ConceptOccurrence): occurrence is Mistake {
+  return occurrence.result === 'incorrect'
 }
 
 export function ReviewScreen() {
@@ -51,7 +58,7 @@ export function ReviewScreen() {
 
   const events = useMemo(() => {
     if (!selectedGame) return []
-    return analyzeGame(selectedGame.size, selectedGame.komi, moves)
+    return analyzeGame(selectedGame.size, selectedGame.komi, moves).filter(isMistake)
   }, [selectedGame, moves])
 
   function selectGame(id: number) {

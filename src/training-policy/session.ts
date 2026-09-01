@@ -1,9 +1,9 @@
 import type { ConceptId } from '../analysis/concepts'
 import type { BankEntry } from '../content/problemBank'
+import { isDue } from '../learning/fsrs'
+import { weakestConcepts } from '../learning/profile'
+import type { ConceptProfile } from '../learning/profile'
 import type { SrsCardRecord } from '../storage/db'
-import { isDue } from './fsrs'
-import { weakestConcepts } from './profile'
-import type { ConceptProfile } from './profile'
 
 export const DEFAULT_SESSION_MINUTES = 10
 /** Estimacion de cuanto tarda una persona en resolver un problema de este

@@ -51,6 +51,7 @@ export function useSolvableProblem(
 
   const wrongAttemptsRef = useRef(0)
   const recordedRef = useRef(false)
+  const startTimeRef = useRef<number | null>(null)
 
   const region = useMemo(() => {
     if (!problem) return []
@@ -71,6 +72,7 @@ export function useSolvableProblem(
   useEffect(() => {
     wrongAttemptsRef.current = 0
     recordedRef.current = false
+    startTimeRef.current = null
     if (!problem) {
       setGame(null)
       setLastMove(null)
@@ -80,6 +82,7 @@ export function useSolvableProblem(
     setGame(gameStateFromBoard(problem.board, problem.toMove))
     setLastMove(null)
     setStatus('playing')
+    startTimeRef.current = Date.now()
   }, [problem])
 
   // Simula la linea optima completa una vez, al cargar el problema, solo para
@@ -129,6 +132,7 @@ export function useSolvableProblem(
     async (solved: boolean) => {
       if (!entry) return
       const wrongAttempts = wrongAttemptsRef.current
+      const responseTimeMs = startTimeRef.current !== null ? Date.now() - startTimeRef.current : undefined
       try {
         await recordAttempt({
           problemId: entry.id,
@@ -136,6 +140,7 @@ export function useSolvableProblem(
           createdAt: new Date().toISOString(),
           solved,
           wrongAttempts,
+          responseTimeMs,
         })
         const grade = gradeFromAttempt(solved, wrongAttempts)
         const existing = await getSrsCard(entry.id)

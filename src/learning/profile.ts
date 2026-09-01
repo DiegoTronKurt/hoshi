@@ -1,6 +1,7 @@
 import { ALL_CONCEPT_IDS } from '../analysis/concepts'
 import type { ConceptId } from '../analysis/concepts'
 import { analyzeGame } from '../analysis/mistakes'
+import type { ConceptOccurrence, OccurrenceContext } from '../analysis/mistakes'
 import { sgfToGameRecord } from '../core/sgf'
 import type { AttemptRecord, SavedGameRecord } from '../storage/db'
 
@@ -17,9 +18,43 @@ export interface ConceptProfile {
   conceptId: ConceptId
   /** 0-100, o null si no hay evidencia suficiente todavia ("sin datos"). */
   score: number | null
-  exerciseAttempts: number
-  exerciseAccuracy: number | null
-  gameMistakeCount: number
+  observationCount: number
+  correctCount: number
+  incorrectCount: number
+  lastPracticedAt: string | null
+  byContext: Record<OccurrenceContext, { correct: number; incorrect: number }>
+}
+
+interface ConceptAggregate {
+  observationCount: number
+  correctCount: number
+  incorrectCount: number
+  lastPracticedAt: string | null
+  byContext: Record<OccurrenceContext, { correct: number; incorrect: number }>
+}
+
+function emptyAggregate(): ConceptAggregate {
+  return {
+    observationCount: 0,
+    correctCount: 0,
+    incorrectCount: 0,
+    lastPracticedAt: null,
+    byContext: { exercise: { correct: 0, incorrect: 0 }, game: { correct: 0, incorrect: 0 } },
+  }
+}
+
+function applyOccurrence(agg: ConceptAggregate, occurrence: ConceptOccurrence, at: string) {
+  agg.observationCount++
+  if (occurrence.result === 'correct') {
+    agg.correctCount++
+    agg.byContext[occurrence.context].correct++
+  } else if (occurrence.result === 'incorrect') {
+    agg.incorrectCount++
+    agg.byContext[occurrence.context].incorrect++
+  }
+  if (agg.lastPracticedAt === null || at > agg.lastPracticedAt) {
+    agg.lastPracticedAt = at
+  }
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -32,33 +67,54 @@ function clamp(value: number, min: number, max: number): number {
  * Si falta una de las dos fuentes de evidencia para un concepto (por
  * ejemplo, nunca se genero un ejercicio de ese concepto, o nunca disparo un
  * detector en una partida), se usa solo la fuente disponible en vez de
- * inventarle un valor neutro a la que falta.
+ * inventarle un valor neutro a la que falta. La formula sigue basandose
+ * solo en aciertos/errores, no en el resto de ConceptOccurrence todavia
+ * (tendencia, tiempo de respuesta): esos ejes quedan sin estimador por
+ * ahora, ver seccion 1.2 del roadmap post-v1.
  */
 export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecord[]): Record<ConceptId, ConceptProfile> {
-  const mistakesByConcept = new Map<ConceptId, number>()
-  let totalMoves = 0
+  const aggregates = new Map<ConceptId, ConceptAggregate>()
+  function aggregateFor(conceptId: ConceptId): ConceptAggregate {
+    let agg = aggregates.get(conceptId)
+    if (!agg) {
+      agg = emptyAggregate()
+      aggregates.set(conceptId, agg)
+    }
+    return agg
+  }
 
+  for (const attempt of attempts) {
+    const occurrence: ConceptOccurrence = {
+      conceptId: attempt.conceptId,
+      context: 'exercise',
+      result: attempt.solved ? 'correct' : 'incorrect',
+      responseTimeMs: attempt.responseTimeMs,
+      point: null,
+    }
+    applyOccurrence(aggregateFor(attempt.conceptId), occurrence, attempt.createdAt)
+  }
+
+  let totalMoves = 0
   for (const game of games) {
     const { moves } = sgfToGameRecord(game.sgf)
     totalMoves += moves.length
-    const events = analyzeGame(game.size, game.komi, moves)
-    for (const event of events) {
-      mistakesByConcept.set(event.conceptId, (mistakesByConcept.get(event.conceptId) ?? 0) + 1)
+    const occurrences = analyzeGame(game.size, game.komi, moves)
+    for (const occurrence of occurrences) {
+      applyOccurrence(aggregateFor(occurrence.conceptId), occurrence, game.createdAt)
     }
   }
 
   const profiles = {} as Record<ConceptId, ConceptProfile>
 
   for (const conceptId of ALL_CONCEPT_IDS) {
-    const conceptAttempts = attempts.filter((a) => a.conceptId === conceptId)
-    const exerciseAttempts = conceptAttempts.length
-    const exerciseAccuracy =
-      exerciseAttempts > 0 ? (conceptAttempts.filter((a) => a.solved).length / exerciseAttempts) * 100 : null
-    const gameMistakeCount = mistakesByConcept.get(conceptId) ?? 0
+    const agg = aggregates.get(conceptId) ?? emptyAggregate()
+    const exerciseAttempts = agg.byContext.exercise.correct + agg.byContext.exercise.incorrect
+    const exerciseAccuracy = exerciseAttempts > 0 ? (agg.byContext.exercise.correct / exerciseAttempts) * 100 : null
+    const gameMistakeCount = agg.byContext.game.incorrect
 
     const hasEvidence = exerciseAttempts >= MIN_EXERCISE_ATTEMPTS || games.length >= MIN_GAMES
     if (!hasEvidence) {
-      profiles[conceptId] = { conceptId, score: null, exerciseAttempts, exerciseAccuracy, gameMistakeCount }
+      profiles[conceptId] = { conceptId, score: null, ...agg }
       continue
     }
 
@@ -76,7 +132,7 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
       score = 100 // no debiera pasar: hasEvidence exige uno de los dos, pero se cubre por completitud
     }
 
-    profiles[conceptId] = { conceptId, score, exerciseAttempts, exerciseAccuracy, gameMistakeCount }
+    profiles[conceptId] = { conceptId, score, ...agg }
   }
 
   return profiles

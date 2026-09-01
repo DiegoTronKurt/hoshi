@@ -60,18 +60,32 @@ describe('perfil de habilidad', () => {
       attempt({ solved: false }),
     ]
     const profiles = computeProfiles(attempts, [])
-    expect(profiles.DOS_OJOS.exerciseAttempts).toBe(5)
-    expect(profiles.DOS_OJOS.exerciseAccuracy).toBeCloseTo(60)
+    expect(profiles.DOS_OJOS.byContext.exercise.correct).toBe(3)
+    expect(profiles.DOS_OJOS.byContext.exercise.incorrect).toBe(2)
+    expect(profiles.DOS_OJOS.observationCount).toBe(5)
     expect(profiles.DOS_OJOS.score).toBeCloseTo(60)
   })
 
   it('con suficientes partidas, un concepto sin ejercicios igual saca puntaje de los errores detectados', () => {
     const games = [gameWithAutoatari(), gameWithAutoatari(), gameWithAutoatari()]
     const profiles = computeProfiles([], games)
-    expect(profiles.AUTOATARI.exerciseAttempts).toBe(0)
-    expect(profiles.AUTOATARI.gameMistakeCount).toBe(3)
+    expect(profiles.AUTOATARI.byContext.exercise.correct + profiles.AUTOATARI.byContext.exercise.incorrect).toBe(0)
+    expect(profiles.AUTOATARI.byContext.game.incorrect).toBe(3)
     expect(profiles.AUTOATARI.score).not.toBeNull()
     expect(profiles.AUTOATARI.score as number).toBeLessThan(100)
+  })
+
+  it('mezcla ejercicio y partida para el mismo concepto y agrega observaciones de ambos contextos', () => {
+    const attempts: AttemptRecord[] = [
+      attempt({ conceptId: 'ATARI_IGNORADO', solved: true }),
+      attempt({ conceptId: 'ATARI_IGNORADO', solved: false }),
+    ]
+    const games = [gameWithAutoatari()]
+    const profiles = computeProfiles(attempts, games)
+    expect(profiles.ATARI_IGNORADO.byContext.exercise.correct).toBe(1)
+    expect(profiles.ATARI_IGNORADO.byContext.exercise.incorrect).toBe(1)
+    expect(profiles.ATARI_IGNORADO.observationCount).toBe(2)
+    expect(profiles.ATARI_IGNORADO.lastPracticedAt).toBe('2026-01-01T00:00:00Z')
   })
 
   it('weakestConcepts ordena de peor a mejor y excluye los que no tienen datos', () => {
