@@ -2,14 +2,19 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BOARD_THEMES, getTheme, minimoTheme } from '../board/themes'
 import type { BoardTheme } from '../board/themes'
+import { APP_THEMES, getAppTheme } from '../theme/appThemes'
+import type { AppTheme } from '../theme/appThemes'
 import { playStoneSound } from '../sound'
 
 const THEME_STORAGE_KEY = 'hoshi-theme'
 const SOUND_STORAGE_KEY = 'hoshi-sound-enabled'
 const DAILY_GOAL_STORAGE_KEY = 'hoshi-daily-goal'
+const APP_THEME_STORAGE_KEY = 'hoshi-app-theme'
+const STREAK_STORAGE_KEY = 'hoshi-streak-enabled'
 export const DEFAULT_DAILY_GOAL = 3
 const MIN_DAILY_GOAL = 1
 const MAX_DAILY_GOAL = 20
+const DEFAULT_APP_THEME_ID = 'system'
 
 interface SettingsContextValue {
   themeId: string
@@ -20,6 +25,11 @@ interface SettingsContextValue {
   playStoneSoundIfEnabled: () => void
   dailyGoal: number
   setDailyGoal: (goal: number) => void
+  appThemeId: string
+  setAppThemeId: (id: string) => void
+  appTheme: AppTheme
+  streakEnabled: boolean
+  setStreakEnabled: (enabled: boolean) => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
@@ -40,6 +50,26 @@ function detectInitialSoundEnabled(): boolean {
     if (stored === 'false') return false
   } catch {
     // sin persistencia disponible, el sonido queda activado por defecto para esta sesion
+  }
+  return true
+}
+
+function detectInitialAppThemeId(): string {
+  try {
+    const stored = window.localStorage.getItem(APP_THEME_STORAGE_KEY)
+    if (stored && (stored === 'system' || APP_THEMES.some((theme) => theme.id === stored))) return stored
+  } catch {
+    // localStorage puede fallar en modo privado, se ignora y se usa "system" por defecto
+  }
+  return DEFAULT_APP_THEME_ID
+}
+
+function detectInitialStreakEnabled(): boolean {
+  try {
+    const stored = window.localStorage.getItem(STREAK_STORAGE_KEY)
+    if (stored === 'false') return false
+  } catch {
+    // sin persistencia disponible, la racha queda activada por defecto para esta sesion
   }
   return true
 }
@@ -65,6 +95,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [themeId, setThemeId] = useState<string>(detectInitialThemeId)
   const [soundEnabled, setSoundEnabled] = useState<boolean>(detectInitialSoundEnabled)
   const [dailyGoal, setDailyGoalState] = useState<number>(detectInitialDailyGoal)
+  const [appThemeId, setAppThemeId] = useState<string>(detectInitialAppThemeId)
+  const [streakEnabled, setStreakEnabled] = useState<boolean>(detectInitialStreakEnabled)
 
   useEffect(() => {
     try {
@@ -90,6 +122,22 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [dailyGoal])
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(APP_THEME_STORAGE_KEY, appThemeId)
+    } catch {
+      // sin persistencia disponible, el tema de app sigue funcionando solo para esta sesion
+    }
+  }, [appThemeId])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STREAK_STORAGE_KEY, String(streakEnabled))
+    } catch {
+      // sin persistencia disponible, la preferencia de racha sigue funcionando solo para esta sesion
+    }
+  }, [streakEnabled])
+
   const value = useMemo<SettingsContextValue>(
     () => ({
       themeId,
@@ -102,8 +150,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       },
       dailyGoal,
       setDailyGoal: (goal: number) => setDailyGoalState(clampDailyGoal(goal)),
+      appThemeId,
+      setAppThemeId,
+      appTheme: getAppTheme(appThemeId),
+      streakEnabled,
+      setStreakEnabled,
     }),
-    [themeId, soundEnabled, dailyGoal],
+    [themeId, soundEnabled, dailyGoal, appThemeId, streakEnabled],
   )
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>

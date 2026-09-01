@@ -38,55 +38,74 @@ export function GameControls({
   const { t } = useI18n()
 
   return (
-    <div className="controls">
-      <label htmlFor="board-size">{t('board.size')}</label>
-      <select id="board-size" value={size} onChange={(event) => onSizeChange(Number(event.target.value))}>
-        {BOARD_SIZES.map((s) => (
-          <option key={s} value={s}>
-            {s}x{s}
-          </option>
-        ))}
-      </select>
+    <div className="play-controls-grid">
+      <div className="play-card-group">
+        <span className="play-card-group-label">{t('board.size')}</span>
+        <div className="play-card-row" role="group" aria-label={t('board.size')}>
+          {BOARD_SIZES.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className={`play-size-card ${s === size ? 'active' : ''}`}
+              aria-pressed={s === size}
+              onClick={() => onSizeChange(s)}
+            >
+              {s}x{s}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      <label htmlFor="game-mode">{t('play.mode.label')}</label>
-      <select id="game-mode" value={mode} onChange={(event) => onModeChange(event.target.value as GameMode)}>
-        <option value="local">{t('play.mode.local')}</option>
-        <option value="bot">{t('play.mode.bot')}</option>
-      </select>
+      <div className="controls">
+        <label htmlFor="game-mode">{t('play.mode.label')}</label>
+        <select id="game-mode" value={mode} onChange={(event) => onModeChange(event.target.value as GameMode)}>
+          <option value="local">{t('play.mode.local')}</option>
+          <option value="bot">{t('play.mode.bot')}</option>
+        </select>
+      </div>
 
       {mode === 'bot' && (
         <>
-          <label htmlFor="bot-strength">{t('play.strength.label')}</label>
-          <select
-            id="bot-strength"
-            value={strengthId}
-            onChange={(event) => onStrengthChange(event.target.value as StrengthLevel['id'])}
-          >
-            {STRENGTH_LEVELS.map((level) => (
-              <option key={level.id} value={level.id}>
-                {t(level.labelKey)}
-              </option>
-            ))}
-          </select>
+          <div className="play-card-group">
+            <span className="play-card-group-label">{t('play.strength.label')}</span>
+            <div className="play-card-row" role="group" aria-label={t('play.strength.label')}>
+              {STRENGTH_LEVELS.map((level) => (
+                <button
+                  key={level.id}
+                  type="button"
+                  className={`play-bot-card ${level.id === strengthId ? 'active' : ''}`}
+                  aria-pressed={level.id === strengthId}
+                  onClick={() => onStrengthChange(level.id)}
+                >
+                  <span>{t(level.labelKey)}</span>
+                  <span className="play-bot-card-kyu">~{level.approxKyu} kyu</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
-          <label htmlFor="human-color">{t('play.color.label')}</label>
-          <select
-            id="human-color"
-            value={humanColor}
-            onChange={(event) => onHumanColorChange(Number(event.target.value) as Color)}
-          >
-            <option value={BLACK}>{t('color.black')}</option>
-            <option value={WHITE}>{t('color.white')}</option>
-          </select>
+          <div className="controls">
+            <label htmlFor="human-color">{t('play.color.label')}</label>
+            <select
+              id="human-color"
+              value={humanColor}
+              onChange={(event) => onHumanColorChange(Number(event.target.value) as Color)}
+            >
+              <option value={BLACK}>{t('color.black')}</option>
+              <option value={WHITE}>{t('color.white')}</option>
+            </select>
+          </div>
         </>
       )}
 
-      <button type="button" onClick={onNewGame}>
-        {t('board.newGame')}
-      </button>
-      <button type="button" onClick={onPass} disabled={passDisabled}>
-        {t('board.pass')}
-      </button>
+      <div className="controls">
+        <button type="button" onClick={onNewGame}>
+          {t('board.newGame')}
+        </button>
+        <button type="button" onClick={onPass} disabled={passDisabled}>
+          {t('board.pass')}
+        </button>
+      </div>
     </div>
   )
 }

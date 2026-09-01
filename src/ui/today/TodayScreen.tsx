@@ -4,6 +4,7 @@ import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { computeProfiles, currentLevel } from '../../learning/profile'
+import { computeStreak } from '../../learning/streak'
 import { DEFAULT_SESSION_MINUTES, planSession } from '../../training-policy/session'
 import type { SessionItem, SessionPlan, SessionReason } from '../../training-policy/session'
 import { SolverClient } from '../../solver/client'
@@ -11,6 +12,7 @@ import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
+import { StreakIcon } from '../icons/StreakIcon'
 import { STRENGTH_LEVELS } from '../play/strengthLevels'
 import { useSettings } from '../settings'
 
@@ -43,7 +45,7 @@ interface TodayScreenProps {
 
 export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
   const { t } = useI18n()
-  const { theme, dailyGoal } = useSettings()
+  const { theme, dailyGoal, streakEnabled } = useSettings()
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [srsCards, setSrsCards] = useState<SrsCardRecord[]>([])
@@ -63,6 +65,7 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
 
   const profiles = useMemo(() => computeProfiles(attempts, games), [attempts, games])
   const level = useMemo(() => currentLevel(profiles), [profiles])
+  const streak = useMemo(() => computeStreak(attempts, games), [attempts, games])
 
   const plan: SessionPlan | null = useMemo(() => {
     if (!loaded) return null
@@ -127,6 +130,12 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
       <div className="today">
         <div className="today-header">
           <p className="today-level">{t(LEVEL_TITLE_KEY[level])}</p>
+          {streakEnabled && streak.current > 0 && (
+            <p className="today-streak">
+              <StreakIcon className="today-streak-icon" />
+              {t('today.streak.days', { n: streak.current })}
+            </p>
+          )}
           <h2>{t('today.title')}</h2>
         </div>
 

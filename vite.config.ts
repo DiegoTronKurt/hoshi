@@ -19,7 +19,7 @@ export default defineConfig({
         scope: '/hoshi/',
         display: 'standalone',
         background_color: '#f2eee4',
-        theme_color: '#1a1a1a',
+        theme_color: '#f2eee4',
         orientation: 'portrait',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },

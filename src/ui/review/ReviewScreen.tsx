@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { analyzeGame } from '../../analysis/mistakes'
 import type { ConceptOccurrence } from '../../analysis/mistakes'
-import type { ConceptSeverity } from '../../analysis/concepts'
+import type { ConceptId, ConceptSeverity } from '../../analysis/concepts'
 import { applyMove, createGame } from '../../core/rules'
 import { sgfToGameRecord } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
@@ -30,13 +30,29 @@ const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
   low: 'review.severity.low',
 }
 
+const SEVERITY_ORDER: Record<ConceptSeverity, number> = { high: 0, medium: 1, low: 2 }
+
 type Mistake = ConceptOccurrence & { result: 'incorrect'; severity: ConceptSeverity; moveNumber: number }
 
 function isMistake(occurrence: ConceptOccurrence): occurrence is Mistake {
   return occurrence.result === 'incorrect'
 }
 
-export function ReviewScreen() {
+/** Peor severidad entre los errores de una partida, o null si no tuvo ninguno. */
+function worstSeverity(mistakes: Mistake[]): ConceptSeverity | null {
+  if (mistakes.length === 0) return null
+  return mistakes.reduce<ConceptSeverity>(
+    (worst, m) => (SEVERITY_ORDER[m.severity] < SEVERITY_ORDER[worst] ? m.severity : worst),
+    mistakes[0].severity,
+  )
+}
+
+interface ReviewScreenProps {
+  /** Salta a Ejercicios ya filtrado en el concepto del error principal. */
+  onPracticeConcept: (conceptId: ConceptId) => void
+}
+
+export function ReviewScreen({ onPracticeConcept }: ReviewScreenProps) {
   const { t, language } = useI18n()
   const { theme } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
@@ -48,6 +64,16 @@ export function ReviewScreen() {
       .then(setGames)
       .catch(() => setGames([]))
   }, [])
+
+  const gameMistakes = useMemo(() => {
+    const map = new Map<number, Mistake[]>()
+    for (const g of games) {
+      if (g.id === undefined) continue
+      const gameMoves = sgfToGameRecord(g.sgf).moves
+      map.set(g.id, analyzeGame(g.size, g.komi, gameMoves).filter(isMistake))
+    }
+    return map
+  }, [games])
 
   const selectedGame = games.find((g) => g.id === selectedGameId) ?? null
 
@@ -61,6 +87,15 @@ export function ReviewScreen() {
     return analyzeGame(selectedGame.size, selectedGame.komi, moves).filter(isMistake)
   }, [selectedGame, moves])
 
+  // El evento de mayor severidad primero, en vez del orden cronologico: se
+  // destaca como "error principal" y el resto queda como lista secundaria.
+  const sortedEvents = useMemo(
+    () => [...events].sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]),
+    [events],
+  )
+  const primaryEvent = sortedEvents[0] ?? null
+  const secondaryEvents = sortedEvents.slice(1)
+
   function selectGame(id: number) {
     setSelectedGameId(id)
     setSelectedEventIndex(null)
@@ -71,7 +106,8 @@ export function ReviewScreen() {
     setSelectedEventIndex(null)
   }
 
-  const selectedEvent = selectedEventIndex !== null ? events[selectedEventIndex] : null
+  const activeIndex = selectedEventIndex ?? (sortedEvents.length > 0 ? 0 : null)
+  const selectedEvent = activeIndex !== null ? sortedEvents[activeIndex] : null
   const boardState =
     selectedGame && selectedEvent ? stateAtMove(selectedGame.size, selectedGame.komi, moves, selectedEvent.moveNumber) : null
 
@@ -97,11 +133,19 @@ export function ReviewScreen() {
                 const opponent =
                   game.mode === 'bot' ? `${t('play.savedGames.vsBot')} (${game.botPlayouts})` : t('play.savedGames.local')
                 const winnerLabel = game.result.winner === 'black' ? t('color.black') : t('color.white')
+                const severity = game.id !== undefined ? worstSeverity(gameMistakes.get(game.id) ?? []) : null
                 return (
                   <li key={game.id}>
                     <button type="button" onClick={() => selectGame(game.id as number)}>
-                      {date} · {game.size}x{game.size} · {opponent} · {winnerLabel} {game.result.black} -{' '}
-                      {game.result.white}
+                      <span>
+                        {date} · {game.size}x{game.size} · {opponent} · {winnerLabel} {game.result.black} -{' '}
+                        {game.result.white}
+                      </span>
+                      {severity && (
+                        <span className={`review-severity review-severity-${severity} review-game-severity`}>
+                          {t(SEVERITY_KEY[severity])}
+                        </span>
+                      )}
                     </button>
                   </li>
                 )
@@ -124,43 +168,94 @@ export function ReviewScreen() {
       {events.length === 0 ? (
         <p className="review-empty">{t('review.noMistakes')}</p>
       ) : (
-        <ul className="review-mistakes-list">
-          {events.map((event, index) => {
-            const conceptLabelKey = `concept.${event.conceptId}.label` as TranslationKey
-            const conceptSummaryKey = `concept.${event.conceptId}.summary` as TranslationKey
-            const colorKey = event.color === BLACK ? 'color.black' : 'color.white'
-            return (
-              <li key={index}>
-                <button
-                  type="button"
-                  className={index === selectedEventIndex ? 'active' : ''}
-                  onClick={() => setSelectedEventIndex(index)}
-                >
-                  <span className="review-mistake-move">
-                    {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
-                  </span>
-                  <span className="review-mistake-concept">{t(conceptLabelKey)}</span>
-                  <span className={`review-severity review-severity-${event.severity}`}>{t(SEVERITY_KEY[event.severity])}</span>
-                  <span className="review-mistake-summary">{t(conceptSummaryKey)}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+        <>
+          {primaryEvent && (
+            <section className="review-primary-mistake">
+              <div className="review-primary-mistake-header">
+                <span className="review-primary-mistake-title">{t('review.primaryMistake')}</span>
+                <span className={`review-severity review-severity-${primaryEvent.severity}`}>
+                  {t(SEVERITY_KEY[primaryEvent.severity])}
+                </span>
+              </div>
 
-      {boardState && selectedEvent && (
-        <div className="review-board">
-          <BoardCanvas
-            size={selectedGame.size}
-            stones={boardState.board.stones}
-            lastMove={selectedEvent.point}
-            hintMove={selectedEvent.suggestedPoint ?? null}
-            theme={theme}
-            onIntersectionClick={() => {}}
-          />
-          {selectedEvent.suggestedPoint !== undefined && <p className="review-hint-legend">{t('review.suggestedMove')}</p>}
-        </div>
+              {boardState && selectedEvent && selectedEvent === primaryEvent && (
+                <div className="review-board">
+                  <BoardCanvas
+                    size={selectedGame.size}
+                    stones={boardState.board.stones}
+                    lastMove={selectedEvent.point}
+                    hintMove={selectedEvent.suggestedPoint ?? null}
+                    theme={theme}
+                    onIntersectionClick={() => {}}
+                  />
+                  {selectedEvent.suggestedPoint !== undefined && (
+                    <p className="review-hint-legend">{t('review.suggestedMove')}</p>
+                  )}
+                </div>
+              )}
+
+              <p className="review-mistake-move">
+                {t('review.moveNumber', { n: primaryEvent.moveNumber })} ·{' '}
+                {t(primaryEvent.color === BLACK ? 'color.black' : 'color.white')}
+              </p>
+              <p className="review-mistake-concept">{t(`concept.${primaryEvent.conceptId}.label` as TranslationKey)}</p>
+              <p className="review-mistake-summary">{t(`concept.${primaryEvent.conceptId}.summary` as TranslationKey)}</p>
+              <button
+                type="button"
+                className="review-practice-concept"
+                onClick={() => onPracticeConcept(primaryEvent.conceptId)}
+              >
+                {t('review.practiceConcept')}
+              </button>
+            </section>
+          )}
+
+          {secondaryEvents.length > 0 && (
+            <div className="review-secondary-mistakes">
+              <h3>{t('review.otherMistakes')}</h3>
+              <ul className="review-mistakes-list">
+                {secondaryEvents.map((event) => {
+                  const index = sortedEvents.indexOf(event)
+                  const conceptLabelKey = `concept.${event.conceptId}.label` as TranslationKey
+                  const conceptSummaryKey = `concept.${event.conceptId}.summary` as TranslationKey
+                  const colorKey = event.color === BLACK ? 'color.black' : 'color.white'
+                  return (
+                    <li key={index}>
+                      <button
+                        type="button"
+                        className={index === activeIndex ? 'active' : ''}
+                        onClick={() => setSelectedEventIndex(index)}
+                      >
+                        <span className="review-mistake-move">
+                          {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
+                        </span>
+                        <span className="review-mistake-concept">{t(conceptLabelKey)}</span>
+                        <span className={`review-severity review-severity-${event.severity}`}>
+                          {t(SEVERITY_KEY[event.severity])}
+                        </span>
+                        <span className="review-mistake-summary">{t(conceptSummaryKey)}</span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
+
+          {boardState && selectedEvent && selectedEvent !== primaryEvent && (
+            <div className="review-board">
+              <BoardCanvas
+                size={selectedGame.size}
+                stones={boardState.board.stones}
+                lastMove={selectedEvent.point}
+                hintMove={selectedEvent.suggestedPoint ?? null}
+                theme={theme}
+                onIntersectionClick={() => {}}
+              />
+              {selectedEvent.suggestedPoint !== undefined && <p className="review-hint-legend">{t('review.suggestedMove')}</p>}
+            </div>
+          )}
+        </>
       )}
     </div>
   )

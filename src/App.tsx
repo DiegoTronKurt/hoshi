@@ -1,18 +1,54 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { ComponentType } from 'react'
 import type { ConceptId } from './analysis/concepts'
 import { useI18n } from './i18n'
+import type { TranslationKey } from './i18n'
+import { ExercisesIcon, LearnIcon, PlayIcon, ProfileIcon, ReviewIcon, TodayIcon } from './ui/icons/NavIcons'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
 import { LearnScreen } from './ui/lessons/LearnScreen'
 import { PlayScreen } from './ui/play/PlayScreen'
 import { ProfileScreen } from './ui/profile/ProfileScreen'
 import { ReviewScreen } from './ui/review/ReviewScreen'
+import { useSettings } from './ui/settings'
 import { TodayScreen } from './ui/today/TodayScreen'
 import './App.css'
 
 type Screen = 'today' | 'learn' | 'play' | 'exercises' | 'review' | 'profile'
 
+const NAV_ITEMS: Array<{ id: Screen; labelKey: TranslationKey; Icon: ComponentType<{ className?: string }> }> = [
+  { id: 'today', labelKey: 'nav.today', Icon: TodayIcon },
+  { id: 'learn', labelKey: 'nav.learn', Icon: LearnIcon },
+  { id: 'play', labelKey: 'nav.play', Icon: PlayIcon },
+  { id: 'exercises', labelKey: 'nav.exercises', Icon: ExercisesIcon },
+  { id: 'review', labelKey: 'nav.review', Icon: ReviewIcon },
+  { id: 'profile', labelKey: 'nav.profile', Icon: ProfileIcon },
+]
+
+/** Esquema claro/oscuro efectivo del SO, usado solo cuando el tema de app es
+ * "system" (los demas temas ya traen su propio `scheme` fijo). */
+function useSystemScheme(): 'light' | 'dark' {
+  const [scheme, setScheme] = useState<'light' | 'dark'>(() =>
+    typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light',
+  )
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (event: MediaQueryListEvent) => setScheme(event.matches ? 'dark' : 'light')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  return scheme
+}
+
 function App() {
   const { language, setLanguage, t } = useI18n()
+  const { appThemeId, appTheme } = useSettings()
+  const systemScheme = useSystemScheme()
+  const scheme = appThemeId === 'system' ? systemScheme : appTheme.scheme
   const [screen, setScreen] = useState<Screen>('today')
   const [exercisesConcept, setExercisesConcept] = useState<ConceptId | undefined>(undefined)
 
@@ -22,7 +58,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app" data-app-theme={appThemeId} data-scheme={scheme}>
       <header className="app-header">
         <h1>{t('app.title')}</h1>
         <p className="tagline">{t('app.tagline')}</p>
@@ -38,38 +74,6 @@ function App() {
             </button>
           ))}
         </div>
-        <nav className="screen-nav" role="group" aria-label={t('nav.today')}>
-          <button type="button" className={screen === 'today' ? 'active' : ''} onClick={() => setScreen('today')}>
-            {t('nav.today')}
-          </button>
-          <button type="button" className={screen === 'learn' ? 'active' : ''} onClick={() => setScreen('learn')}>
-            {t('nav.learn')}
-          </button>
-          <button type="button" className={screen === 'play' ? 'active' : ''} onClick={() => setScreen('play')}>
-            {t('nav.play')}
-          </button>
-          <button
-            type="button"
-            className={screen === 'exercises' ? 'active' : ''}
-            onClick={() => goToExercises(undefined)}
-          >
-            {t('nav.exercises')}
-          </button>
-          <button
-            type="button"
-            className={screen === 'review' ? 'active' : ''}
-            onClick={() => setScreen('review')}
-          >
-            {t('nav.review')}
-          </button>
-          <button
-            type="button"
-            className={screen === 'profile' ? 'active' : ''}
-            onClick={() => setScreen('profile')}
-          >
-            {t('nav.profile')}
-          </button>
-        </nav>
       </header>
 
       <main className="app-main">
@@ -82,9 +86,24 @@ function App() {
         )}
         {screen === 'play' && <PlayScreen />}
         {screen === 'exercises' && <ExercisesScreen initialConcept={exercisesConcept} />}
-        {screen === 'review' && <ReviewScreen />}
+        {screen === 'review' && <ReviewScreen onPracticeConcept={goToExercises} />}
         {screen === 'profile' && <ProfileScreen />}
       </main>
+
+      <nav className="bottom-nav" role="navigation" aria-label={t('nav.today')}>
+        {NAV_ITEMS.map(({ id, labelKey, Icon }) => (
+          <button
+            key={id}
+            type="button"
+            className={screen === id ? 'active' : ''}
+            aria-current={screen === id ? 'page' : undefined}
+            onClick={() => (id === 'exercises' ? goToExercises(undefined) : setScreen(id))}
+          >
+            <Icon />
+            <span>{t(labelKey)}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }

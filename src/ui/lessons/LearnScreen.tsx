@@ -1,8 +1,13 @@
 import { useMemo, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
 import { getLesson, lessonsForLevel } from '../../content/lessons'
+import type { Lesson } from '../../content/lessons'
+import { createBoard, toPoint } from '../../core/board'
+import { BLACK, WHITE } from '../../core/types'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
+import { BoardCanvas } from '../board/BoardCanvas'
+import { minimoTheme } from '../board/themes'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
 
@@ -21,6 +26,26 @@ interface LearnScreenProps {
 
 type View = { kind: 'levels' } | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 } | { kind: 'lesson'; lessonId: string }
 
+function fallbackPreview() {
+  const size = 5
+  const board = createBoard(size)
+  board.stones[toPoint(size, 1, 1)] = BLACK
+  board.stones[toPoint(size, 2, 3)] = WHITE
+  return { size, stones: board.stones }
+}
+
+const FALLBACK_PREVIEW = fallbackPreview()
+
+/** Mini-preview de una leccion: usa el tablero inicial de su demo si tiene
+ * una, si no el primer diagrama de sus bloques, y como ultimo recurso un
+ * tablero generico -- nunca inventa una posicion nueva. */
+function lessonPreview(lesson: Lesson): { size: number; stones: Int8Array } {
+  if (lesson.demo) return { size: lesson.demo.size, stones: lesson.demo.initialStones }
+  const diagram = lesson.blocks.find((b) => b.kind === 'diagram')
+  if (diagram && diagram.kind === 'diagram') return { size: diagram.size, stones: diagram.stones }
+  return FALLBACK_PREVIEW
+}
+
 export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnScreenProps) {
   const { t } = useI18n()
   const [view, setView] = useState<View>({ kind: 'levels' })
@@ -29,6 +54,18 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
     () => Object.fromEntries(LEVELS.map((level) => [level, lessonsForLevel(level)])) as Record<number, ReturnType<typeof lessonsForLevel>>,
     [],
   )
+
+  const overallProgress = useMemo(() => {
+    let total = 0
+    let read = 0
+    for (const level of LEVELS) {
+      for (const lesson of lessonsByLevel[level]) {
+        total++
+        if (isLessonRead(lesson.id)) read++
+      }
+    }
+    return { total, read }
+  }, [lessonsByLevel])
 
   if (view.kind === 'lesson') {
     const lesson = getLesson(view.lessonId)
@@ -48,6 +85,8 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
 
   if (view.kind === 'lessonList') {
     const lessons = lessonsByLevel[view.level]
+    const currentLesson = lessons.find((lesson) => !isLessonRead(lesson.id)) ?? null
+    const restLessons = currentLesson ? lessons.filter((lesson) => lesson.id !== currentLesson.id) : lessons
     return (
       <div className="learn">
         <div className="lesson-header">
@@ -59,16 +98,51 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
         {lessons.length === 0 ? (
           <p className="learn-empty">{t('learn.noLessons')}</p>
         ) : (
-          <ul className="learn-lesson-list">
-            {lessons.map((lesson) => (
-              <li key={lesson.id}>
-                <button type="button" onClick={() => setView({ kind: 'lesson', lessonId: lesson.id })}>
-                  <span>{t(lesson.titleKey)}</span>
-                  {isLessonRead(lesson.id) && <span className="learn-read-badge">{t('learn.read')}</span>}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <>
+            {currentLesson && (
+              <section className="learn-current-lesson">
+                <span className="learn-current-lesson-label">{t('learn.current')}</span>
+                <h3 className="learn-current-lesson-title">{t(currentLesson.titleKey)}</h3>
+                <span className="learn-current-lesson-preview">
+                  <BoardCanvas
+                    size={lessonPreview(currentLesson).size}
+                    stones={lessonPreview(currentLesson).stones}
+                    lastMove={null}
+                    theme={minimoTheme}
+                    onIntersectionClick={() => {}}
+                  />
+                </span>
+                <div className="learn-current-lesson-actions">
+                  <button
+                    type="button"
+                    className="primary"
+                    onClick={() => setView({ kind: 'lesson', lessonId: currentLesson.id })}
+                  >
+                    {t('learn.continue')}
+                  </button>
+                  <button type="button" onClick={() => setView({ kind: 'lesson', lessonId: currentLesson.id })}>
+                    {t('learn.viewLesson')}
+                  </button>
+                </div>
+              </section>
+            )}
+            {restLessons.length > 0 && (
+              <ul className="learn-lesson-list">
+                {restLessons.map((lesson) => (
+                  <li key={lesson.id}>
+                    <button
+                      type="button"
+                      className="learn-lesson-card"
+                      onClick={() => setView({ kind: 'lesson', lessonId: lesson.id })}
+                    >
+                      <span>{t(lesson.titleKey)}</span>
+                      {isLessonRead(lesson.id) && <span className="learn-read-badge">{t('learn.read')}</span>}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </div>
     )
@@ -77,14 +151,38 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
   return (
     <div className="learn">
       <h2>{t('learn.title')}</h2>
+      {overallProgress.total > 0 && (
+        <div className="learn-progress-overall">
+          <p className="learn-progress-label">
+            {t('learn.progressOverall', { read: overallProgress.read, total: overallProgress.total })}
+          </p>
+          <div className="learn-progress-track">
+            <div
+              className="learn-progress-fill"
+              style={{ width: `${Math.round((overallProgress.read / overallProgress.total) * 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
       <ul className="learn-level-list">
-        {LEVELS.map((level) => (
-          <li key={level}>
-            <button type="button" onClick={() => setView({ kind: 'lessonList', level })}>
-              {t(LEVEL_TITLE_KEY[level])}
-            </button>
-          </li>
-        ))}
+        {LEVELS.map((level) => {
+          const lessons = lessonsByLevel[level]
+          const readCount = lessons.filter((lesson) => isLessonRead(lesson.id)).length
+          const complete = lessons.length > 0 && readCount === lessons.length
+          return (
+            <li key={level}>
+              <button type="button" className="learn-level-card" onClick={() => setView({ kind: 'lessonList', level })}>
+                <span className="learn-level-badge">{complete ? '✓' : level}</span>
+                <span className="learn-level-info">
+                  <span>{t(LEVEL_TITLE_KEY[level])}</span>
+                  <span className="learn-level-meta">
+                    {t('learn.lessonsCount', { read: readCount, total: lessons.length })}
+                  </span>
+                </span>
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

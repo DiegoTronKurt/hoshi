@@ -1,3 +1,144 @@
+:root {
+  /* Tokens de superficie/texto/acento. Los valores por defecto reproducen
+     exactamente el look actual (paleta "crema" en claro). Cada tema de app
+     (ver src/ui/theme/appThemes.ts) redefine estas variables bajo
+     .app[data-app-theme="X"]; el tema "system" no redefine nada en claro
+     (se queda en estos valores) y solo cambia via la media query mas abajo
+     cuando el SO esta en oscuro. */
+  --hoshi-bg: #f2eee4;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #f4f1e8;
+  --hoshi-border: #dddddd;
+  --hoshi-border-strong: #999999;
+  --hoshi-text: #1a1a1a;
+  --hoshi-text-muted: #555555;
+  --hoshi-text-faint: #999999;
+  --hoshi-accent: #1a1a1a;
+  --hoshi-accent-contrast: #ffffff;
+
+  /* Colores de estado: solo dos variantes (claro/oscuro), gobernadas por
+     [data-scheme], no por tema de app -- no necesitan multiplicarse por
+     cada uno de los 6 temas. */
+  --hoshi-success: #2f7a3d;
+  --hoshi-success-bg: #e4e9e4;
+  --hoshi-danger: #b23b3b;
+  --hoshi-danger-bg: #f6dede;
+  --hoshi-warning: #8a6a1f;
+  --hoshi-warning-bg: #f7ecd6;
+  --hoshi-info: #2f6f9f;
+  --hoshi-info-bg: #e0ecf4;
+}
+
+.app[data-scheme='dark'] {
+  --hoshi-success: #6fce82;
+  --hoshi-success-bg: #2a332c;
+  --hoshi-danger: #e28c8c;
+  --hoshi-danger-bg: #4a2626;
+  --hoshi-warning: #e0c284;
+  --hoshi-warning-bg: #453b22;
+  --hoshi-info: #7fb2d8;
+  --hoshi-info-bg: #22323d;
+}
+
+/* Tema "system": sin override en claro (usa los valores por defecto de
+   arriba); en oscuro reproduce exactamente los literales que ya usaban hoy
+   los usuarios con SO oscuro (bg #16140f, surface #262218, border #55503f,
+   text #ececec) -- cero regresion. El acento se queda monocromo (igual que
+   hoy), no pasa a usar el ambar de "noche": ese es un tema explicito aparte. */
+@media (prefers-color-scheme: dark) {
+  .app[data-app-theme='system'] {
+    --hoshi-bg: #16140f;
+    --hoshi-surface: #262218;
+    --hoshi-surface-alt: #262218;
+    --hoshi-border: #55503f;
+    --hoshi-border-strong: #55503f;
+    --hoshi-text: #ececec;
+    --hoshi-text-muted: #bbbbbb;
+    --hoshi-text-faint: #999999;
+    --hoshi-accent: #ececec;
+    --hoshi-accent-contrast: #1a1a1a;
+  }
+}
+
+.app[data-app-theme='crema'] {
+  --hoshi-bg: #f2eee4;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #f7f3ea;
+  --hoshi-border: #d9d2c0;
+  --hoshi-border-strong: #b8ac8e;
+  --hoshi-text: #1a1a1a;
+  --hoshi-text-muted: #5c584c;
+  --hoshi-text-faint: #8c8672;
+  --hoshi-accent: #8a5a2c;
+  --hoshi-accent-contrast: #ffffff;
+}
+
+.app[data-app-theme='piedra'] {
+  --hoshi-bg: #eceae6;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #f2f0ec;
+  --hoshi-border: #d3d0c8;
+  --hoshi-border-strong: #b0aca2;
+  --hoshi-text: #232220;
+  --hoshi-text-muted: #5c5954;
+  --hoshi-text-faint: #8f8b83;
+  --hoshi-accent: #4a5d52;
+  --hoshi-accent-contrast: #ffffff;
+}
+
+.app[data-app-theme='bambu'] {
+  --hoshi-bg: #eef2e8;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #f3f6ee;
+  --hoshi-border: #cddabc;
+  --hoshi-border-strong: #aac491;
+  --hoshi-text: #1e2417;
+  --hoshi-text-muted: #4d5645;
+  --hoshi-text-faint: #7c8871;
+  --hoshi-accent: #4a7c3f;
+  --hoshi-accent-contrast: #ffffff;
+}
+
+.app[data-app-theme='amanecer'] {
+  --hoshi-bg: #fbeee2;
+  --hoshi-surface: #fffaf5;
+  --hoshi-surface-alt: #fdf3ea;
+  --hoshi-border: #eecdad;
+  --hoshi-border-strong: #d9a76e;
+  --hoshi-text: #2a1e14;
+  --hoshi-text-muted: #5c4a3a;
+  --hoshi-text-faint: #8c7660;
+  --hoshi-accent: #c9752e;
+  /* Blanco sobre este acento da ~3.46:1 (bajo AA); texto oscuro da ~4.69:1. */
+  --hoshi-accent-contrast: #2a1e14;
+}
+
+.app[data-app-theme='noche'] {
+  --hoshi-bg: #16140f;
+  --hoshi-surface: #262218;
+  --hoshi-surface-alt: #302b1e;
+  --hoshi-border: #55503f;
+  --hoshi-border-strong: #6f6952;
+  --hoshi-text: #ececec;
+  --hoshi-text-muted: #bbbbbb;
+  --hoshi-text-faint: #999999;
+  --hoshi-accent: #c99a2e;
+  --hoshi-accent-contrast: #1a1a1a;
+}
+
+.app[data-app-theme='pizarra'] {
+  --hoshi-bg: #1a1e22;
+  --hoshi-surface: #262c31;
+  --hoshi-surface-alt: #20262b;
+  --hoshi-border: #3d454c;
+  --hoshi-border-strong: #57616a;
+  --hoshi-text: #eceef0;
+  --hoshi-text-muted: #b7bec4;
+  --hoshi-text-faint: #8b939a;
+  --hoshi-accent: #5fa8d3;
+  --hoshi-accent-contrast: #10171c;
+}
+
 .app {
   min-height: 100dvh;
   display: flex;
@@ -5,8 +146,8 @@
   align-items: center;
   gap: 1.25rem;
   padding: 1.5rem 1rem 3rem;
-  background: #f2eee4;
-  color: #1a1a1a;
+  background: var(--hoshi-bg);
+  color: var(--hoshi-text);
 }
 
 .app-header {
@@ -21,13 +162,13 @@
 
 .tagline {
   margin: 0.25rem 0 0.75rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .language-switch {
   display: inline-flex;
   gap: 0.25rem;
-  border: 1px solid #cccccc;
+  border: 1px solid var(--hoshi-border);
   border-radius: 999px;
   padding: 0.15rem;
 }
@@ -40,35 +181,12 @@
   font-size: 0.85rem;
   cursor: pointer;
   min-height: 32px;
+  color: inherit;
 }
 
 .language-switch button.active {
-  background: #1a1a1a;
-  color: #ffffff;
-}
-
-.screen-nav {
-  display: inline-flex;
-  gap: 0.25rem;
-  margin-top: 0.6rem;
-  border: 1px solid #cccccc;
-  border-radius: 999px;
-  padding: 0.15rem;
-}
-
-.screen-nav button {
-  border: none;
-  background: transparent;
-  padding: 0.4rem 1.1rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  min-height: 36px;
-}
-
-.screen-nav button.active {
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
 }
 
 .app-main {
@@ -78,6 +196,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .controls {
@@ -94,8 +213,9 @@
   min-height: 44px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.95rem;
   cursor: pointer;
 }
@@ -107,7 +227,7 @@
 
 .controls label {
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .board-container {
@@ -130,19 +250,19 @@
 }
 
 .status .illegal-message {
-  color: #b23b3b;
+  color: var(--hoshi-danger);
   margin: 0 0 0.35rem;
 }
 
 .bot-kyu {
   font-size: 0.8rem;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   margin: 0 0 0.4rem;
 }
 
 .status .captures {
   font-variant-numeric: tabular-nums;
-  color: #444444;
+  color: var(--hoshi-text-muted);
   margin: 0;
 }
 
@@ -152,7 +272,7 @@
 }
 
 .status .saved-note {
-  color: #2f7a3d;
+  color: var(--hoshi-success);
   margin: 0 0 0.35rem;
   font-size: 0.9rem;
 }
@@ -169,7 +289,7 @@
 
 .saved-games-empty {
   text-align: center;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   font-size: 0.9rem;
 }
 
@@ -181,14 +301,14 @@
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.85rem;
-  color: #333333;
+  color: var(--hoshi-text);
 }
 
 .saved-games-list li {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--hoshi-border);
   border-radius: 8px;
   padding: 0.5rem 0.7rem;
-  background: #ffffff;
+  background: var(--hoshi-surface);
 }
 
 .exercises {
@@ -212,21 +332,22 @@
   min-height: 44px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.95rem;
   cursor: pointer;
 }
 
 .exercises-controls label {
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .exercises-meta {
   text-align: center;
   font-size: 0.9rem;
-  color: #444444;
+  color: var(--hoshi-text-muted);
 }
 
 .exercises-status {
@@ -235,18 +356,59 @@
 }
 
 .exercises-solved {
-  color: #2f7a3d;
+  color: var(--hoshi-success);
   font-weight: 600;
 }
 
 .exercises-incorrect {
-  color: #b23b3b;
+  color: var(--hoshi-danger);
 }
 
 .exercises-empty {
   text-align: center;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   padding: 2rem 1rem;
+}
+
+.exercises-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.exercises-concept-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  cursor: pointer;
+  text-align: center;
+}
+
+.exercises-concept-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.exercises-concept-card .board-container {
+  width: 72px;
+  pointer-events: none;
+}
+
+.exercises-concept-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.exercises-concept-meta {
+  font-size: 0.7rem;
+  color: var(--hoshi-text-faint);
 }
 
 .review {
@@ -274,15 +436,16 @@
   min-height: 44px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.9rem;
   cursor: pointer;
 }
 
 .review-empty {
   text-align: center;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   padding: 1.5rem 1rem;
 }
 
@@ -300,7 +463,15 @@
   width: 100%;
   text-align: left;
   font-size: 0.85rem;
-  color: #333333;
+  color: var(--hoshi-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.review-game-severity {
+  margin-left: auto;
 }
 
 .review-mistakes-list {
@@ -321,18 +492,19 @@
   gap: 0.15rem;
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
-  border: 1px solid #dddddd;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   cursor: pointer;
 }
 
 .review-mistakes-list button.active {
-  border-color: #1a1a1a;
+  border-color: var(--hoshi-accent);
 }
 
 .review-mistake-move {
   font-size: 0.8rem;
-  color: #666666;
+  color: var(--hoshi-text-muted);
 }
 
 .review-mistake-concept {
@@ -341,7 +513,7 @@
 
 .review-mistake-summary {
   font-size: 0.85rem;
-  color: #444444;
+  color: var(--hoshi-text-muted);
 }
 
 .review-severity {
@@ -350,23 +522,23 @@
   font-size: 0.75rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: #eeeeee;
-  color: #555555;
+  background: var(--hoshi-surface-alt);
+  color: var(--hoshi-text-muted);
 }
 
 .review-severity-high {
-  background: #f6dede;
-  color: #a12f2f;
+  background: var(--hoshi-danger-bg);
+  color: var(--hoshi-danger);
 }
 
 .review-severity-medium {
-  background: #f7ecd6;
-  color: #8a6a1f;
+  background: var(--hoshi-warning-bg);
+  color: var(--hoshi-warning);
 }
 
 .review-severity-low {
-  background: #e4e9e4;
-  color: #4a6350;
+  background: var(--hoshi-success-bg);
+  color: var(--hoshi-success);
 }
 
 .review-board {
@@ -379,8 +551,58 @@
 
 .review-hint-legend {
   font-size: 0.8rem;
-  color: #2f6f9f;
+  color: var(--hoshi-info);
   margin: 0;
+}
+
+.review-primary-mistake {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+}
+
+.review-primary-mistake-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.review-primary-mistake-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--hoshi-text-faint);
+}
+
+.review-practice-concept {
+  min-height: 40px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.review-secondary-mistakes {
+  width: 100%;
+}
+
+.review-secondary-mistakes h3 {
+  font-size: 0.85rem;
+  color: var(--hoshi-text-faint);
+  margin: 0 0 0.4rem;
 }
 
 .today {
@@ -399,13 +621,13 @@
 
 .today-empty {
   text-align: center;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   padding: 2rem 1rem;
 }
 
 .today-plan-count {
   text-align: center;
-  color: #555555;
+  color: var(--hoshi-text-muted);
   margin: 0;
 }
 
@@ -421,10 +643,10 @@
 }
 
 .today-plan-list li {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--hoshi-border);
   border-radius: 8px;
   padding: 0.5rem 0.7rem;
-  background: #ffffff;
+  background: var(--hoshi-surface);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -433,7 +655,7 @@
 .today-progress {
   text-align: center;
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
   margin: 0;
 }
 
@@ -442,23 +664,23 @@
   font-size: 0.7rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: #eeeeee;
-  color: #555555;
+  background: var(--hoshi-surface-alt);
+  color: var(--hoshi-text-muted);
 }
 
 .today-reason-overdue {
-  background: #f6dede;
-  color: #a12f2f;
+  background: var(--hoshi-danger-bg);
+  color: var(--hoshi-danger);
 }
 
 .today-reason-weak {
-  background: #f7ecd6;
-  color: #8a6a1f;
+  background: var(--hoshi-warning-bg);
+  color: var(--hoshi-warning);
 }
 
 .today-reason-new {
-  background: #e0ecf4;
-  color: #2f6f9f;
+  background: var(--hoshi-info-bg);
+  color: var(--hoshi-info);
 }
 
 .today-header {
@@ -468,16 +690,32 @@
 .today-level {
   margin: 0 0 0.15rem;
   font-size: 0.8rem;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.today-streak {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--hoshi-warning);
+}
+
+.today-streak-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .today-daily-goal {
   text-align: center;
   margin: 0;
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .today-focus-card {
@@ -487,8 +725,8 @@
   gap: 0.35rem;
   padding: 0.9rem 1rem;
   border-radius: 10px;
-  border: 1px solid #dddddd;
-  background: #fbf7ee;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
 }
 
 .today-focus-concept {
@@ -500,15 +738,16 @@
 .today-focus-why {
   margin: 0;
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .today-play-bot {
   min-height: 44px;
   padding: 0 1.2rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.9rem;
   cursor: pointer;
 }
@@ -517,8 +756,9 @@
   min-height: 44px;
   padding: 0 1.2rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.95rem;
   cursor: pointer;
 }
@@ -528,8 +768,8 @@
   padding: 0 1.2rem;
   border-radius: 8px;
   border: none;
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
   font-size: 0.95rem;
   cursor: pointer;
 }
@@ -548,6 +788,33 @@
   text-align: center;
 }
 
+.learn-progress-overall {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.learn-progress-label {
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
+  text-align: center;
+}
+
+.learn-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--hoshi-surface-alt);
+  overflow: hidden;
+}
+
+.learn-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--hoshi-accent);
+}
+
 .learn-level-list,
 .learn-lesson-list {
   list-style: none;
@@ -556,7 +823,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .learn-level-list button,
@@ -564,29 +831,117 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.7rem;
   min-height: 44px;
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
-  border: 1px solid #dddddd;
-  background: #ffffff;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.95rem;
   text-align: left;
   cursor: pointer;
+}
+
+.learn-level-card,
+.learn-lesson-card {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.learn-level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--hoshi-surface-alt);
+  color: var(--hoshi-text-muted);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.learn-level-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.learn-level-meta {
+  font-size: 0.75rem;
+  color: var(--hoshi-text-faint);
+}
+
+.learn-current-lesson {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+}
+
+.learn-current-lesson-label {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--hoshi-text-faint);
+}
+
+.learn-current-lesson-title {
+  align-self: flex-start;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.learn-current-lesson-preview .board-container {
+  width: 140px;
+}
+
+.learn-current-lesson-actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.learn-current-lesson-actions button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.learn-current-lesson-actions button.primary {
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
 }
 
 .learn-read-badge {
   font-size: 0.7rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: #e4e9e4;
-  color: #4a6350;
+  background: var(--hoshi-success-bg);
+  color: var(--hoshi-success);
 }
 
 .learn-empty {
   text-align: center;
-  color: #777777;
+  color: var(--hoshi-text-faint);
   padding: 1.5rem 1rem;
 }
 
@@ -615,8 +970,9 @@
   min-height: 44px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -626,7 +982,7 @@
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 1rem;
   line-height: 1.5;
-  color: #222222;
+  color: var(--hoshi-text);
 }
 
 .lesson-paragraph {
@@ -645,7 +1001,7 @@
 .lesson-diagram figcaption {
   font-family: system-ui, sans-serif;
   font-size: 0.8rem;
-  color: #666666;
+  color: var(--hoshi-text-muted);
   text-align: center;
 }
 
@@ -655,7 +1011,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--hoshi-border);
   padding-top: 1rem;
 }
 
@@ -678,23 +1034,23 @@
   padding: 0 1.2rem;
   border-radius: 8px;
   border: none;
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
   font-size: 0.9rem;
   cursor: pointer;
 }
 
 .lesson-demo-feedback {
-  color: #2f7a3d;
+  color: var(--hoshi-success);
   font-weight: 600;
 }
 
 .lesson-demo-wrong {
-  color: #b23b3b;
+  color: var(--hoshi-danger);
 }
 
 .lesson-demo-done {
-  color: #2f7a3d;
+  color: var(--hoshi-success);
   font-weight: 600;
 }
 
@@ -704,7 +1060,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.6rem;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--hoshi-border);
   padding-top: 1rem;
 }
 
@@ -714,14 +1070,14 @@
 }
 
 .lesson-practice-empty {
-  color: #777777;
+  color: var(--hoshi-text-faint);
   font-size: 0.9rem;
   text-align: center;
 }
 
 .lesson-practice-meta {
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
   margin: 0;
 }
 
@@ -729,8 +1085,9 @@
   min-height: 44px;
   padding: 0 1.2rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.9rem;
   cursor: pointer;
 }
@@ -741,7 +1098,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.6rem;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--hoshi-border);
   padding-top: 1rem;
 }
 
@@ -755,8 +1112,8 @@
   padding: 0 1.2rem;
   border-radius: 8px;
   border: none;
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
   font-size: 0.95rem;
   cursor: pointer;
 }
@@ -807,14 +1164,14 @@
 
 .profile-concept-label {
   flex: 0 0 40%;
-  color: #333333;
+  color: var(--hoshi-text);
 }
 
 .profile-bar-track {
   flex: 1;
   height: 10px;
   border-radius: 999px;
-  background: #eeeeee;
+  background: var(--hoshi-surface-alt);
   overflow: hidden;
 }
 
@@ -824,21 +1181,21 @@
 }
 
 .profile-bar-good {
-  background: #4a9d5c;
+  background: var(--hoshi-success);
 }
 
 .profile-bar-medium {
-  background: #c99a2e;
+  background: var(--hoshi-warning);
 }
 
 .profile-bar-low {
-  background: #b23b3b;
+  background: var(--hoshi-danger);
 }
 
 .profile-no-data {
   flex: 1;
   font-size: 0.8rem;
-  color: #999999;
+  color: var(--hoshi-text-faint);
 }
 
 .profile-header {
@@ -856,8 +1213,9 @@
   min-height: 36px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -875,34 +1233,34 @@
 
 .radar-grid-ring {
   fill: none;
-  stroke: #dddddd;
+  stroke: var(--hoshi-border);
   stroke-width: 1;
 }
 
 .radar-grid-line {
-  stroke: #dddddd;
+  stroke: var(--hoshi-border);
   stroke-width: 1;
 }
 
 .radar-fill {
   fill: rgba(74, 157, 92, 0.35);
-  stroke: #4a9d5c;
+  stroke: var(--hoshi-success);
   stroke-width: 2;
 }
 
 .radar-vertex {
-  fill: #4a9d5c;
+  fill: var(--hoshi-success);
 }
 
 .radar-vertex-empty {
-  fill: #ffffff;
-  stroke: #999999;
+  fill: var(--hoshi-surface);
+  stroke: var(--hoshi-border-strong);
   stroke-width: 1.5;
 }
 
 .radar-label {
   font-size: 9px;
-  fill: #555555;
+  fill: var(--hoshi-text-muted);
 }
 
 .profile-insights ul {
@@ -917,7 +1275,7 @@
 .profile-insight-row {
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
-  background: #f4f1e8;
+  background: var(--hoshi-surface-alt);
 }
 
 .profile-insight-stat {
@@ -929,7 +1287,7 @@
 .profile-insight-detail {
   margin: 0;
   font-size: 0.8rem;
-  color: #555555;
+  color: var(--hoshi-text-muted);
 }
 
 .profile-detail-toggle {
@@ -937,8 +1295,9 @@
   min-height: 36px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -967,8 +1326,9 @@
   min-height: 36px;
   padding: 0 0.9rem;
   border-radius: 8px;
-  border: 1px solid #999999;
-  background: #ffffff;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -992,12 +1352,12 @@
   padding: 0.6rem;
   border-radius: 10px;
   border: 2px solid transparent;
-  background: #ffffff;
+  background: var(--hoshi-surface);
   cursor: pointer;
 }
 
 .settings-theme-option.active {
-  border-color: #1a1a1a;
+  border-color: var(--hoshi-accent);
 }
 
 .settings-theme-preview .board-container {
@@ -1006,6 +1366,51 @@
 
 .settings-theme-name {
   font-size: 0.8rem;
+  color: var(--hoshi-text);
+}
+
+.settings-apptheme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.settings-apptheme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: var(--hoshi-surface);
+  cursor: pointer;
+}
+
+.settings-apptheme-option.active {
+  border-color: var(--hoshi-accent);
+}
+
+.settings-apptheme-swatches {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.settings-apptheme-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.settings-apptheme-swatch-system {
+  background: linear-gradient(135deg, #f2eee4 50%, #16140f 50%);
+}
+
+.settings-apptheme-name {
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--hoshi-text);
 }
 
 .settings-toggle {
@@ -1019,7 +1424,7 @@
 .settings-description {
   margin: 0 0 0.5rem;
   font-size: 0.8rem;
-  color: #666666;
+  color: var(--hoshi-text-muted);
 }
 
 .settings-daily-goal {
@@ -1034,335 +1439,102 @@
   min-height: 40px;
   padding: 0 0.5rem;
   border-radius: 8px;
-  border: 1px solid #999999;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
   font-size: 0.95rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .app {
-    background: #16140f;
-    color: #ececec;
-  }
-
-  .tagline {
-    color: #bbbbbb;
-  }
-
-  .controls select,
-  .controls button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .status .captures {
-    color: #cccccc;
-  }
-
-  .controls label {
-    color: #bbbbbb;
-  }
-
-  .status .saved-note {
-    color: #6fce82;
-  }
-
-  .saved-games-empty {
-    color: #999999;
-  }
-
-  .saved-games-list {
-    color: #dddddd;
-  }
-
-  .saved-games-list li {
-    background: #262218;
-    border-color: #55503f;
-  }
-
-  .screen-nav {
-    border-color: #55503f;
-  }
-
-  .exercises-controls select,
-  .exercises-controls button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .exercises-controls label {
-    color: #bbbbbb;
-  }
-
-  .exercises-meta {
-    color: #cccccc;
-  }
-
-  .exercises-solved {
-    color: #6fce82;
-  }
-
-  .exercises-empty {
-    color: #999999;
-  }
-
-  .review-header button,
-  .review-games-list button,
-  .review-mistakes-list button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .review-mistakes-list button.active {
-    border-color: #ececec;
-  }
-
-  .review-mistake-move {
-    color: #bbbbbb;
-  }
-
-  .review-mistake-summary {
-    color: #cccccc;
-  }
-
-  .review-empty {
-    color: #999999;
-  }
-
-  .review-severity {
-    background: #33302a;
-    color: #cccccc;
-  }
-
-  .review-severity-high {
-    background: #4a2626;
-    color: #e28c8c;
-  }
-
-  .review-severity-medium {
-    background: #453b22;
-    color: #e0c284;
-  }
-
-  .review-severity-low {
-    background: #2a332c;
-    color: #9fc0aa;
-  }
-
-  .review-hint-legend {
-    color: #7fb2d8;
-  }
-
-  .today-empty {
-    color: #999999;
-  }
-
-  .today-plan-count,
-  .today-progress {
-    color: #bbbbbb;
-  }
-
-  .today-plan-list li {
-    background: #262218;
-    border-color: #55503f;
-  }
-
-  .today-reason {
-    background: #33302a;
-    color: #cccccc;
-  }
-
-  .today-reason-overdue {
-    background: #4a2626;
-    color: #e28c8c;
-  }
-
-  .today-reason-weak {
-    background: #453b22;
-    color: #e0c284;
-  }
-
-  .today-reason-new {
-    background: #22323d;
-    color: #7fb2d8;
-  }
-
-  .today-controls button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .today > button {
-    background: #ececec;
-    color: #1a1a1a;
-  }
-
-  .today-level {
-    color: #999999;
-  }
-
-  .today-daily-goal {
-    color: #bbbbbb;
-  }
-
-  .today-focus-card {
-    background: #262218;
-    border-color: #55503f;
-  }
-
-  .today-focus-why {
-    color: #bbbbbb;
-  }
-
-  .today-play-bot {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .bot-kyu {
-    color: #999999;
-  }
-
-  .profile-concept-label {
-    color: #dddddd;
-  }
-
-  .profile-bar-track {
-    background: #33302a;
-  }
-
-  .profile-no-data {
-    color: #999999;
-  }
-
-  .profile-header button,
-  .settings-header button,
-  .profile-detail-toggle,
-  .today-play-bot {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .radar-grid-ring,
-  .radar-grid-line {
-    stroke: #45403a;
-  }
-
-  .radar-fill {
-    fill: rgba(74, 157, 92, 0.3);
-    stroke: #6bc47f;
-  }
-
-  .radar-vertex {
-    fill: #6bc47f;
-  }
-
-  .radar-vertex-empty {
-    fill: #1a1a1a;
-    stroke: #999999;
-  }
-
-  .radar-label {
-    fill: #cccccc;
-  }
-
-  .profile-insight-row {
-    background: #262218;
-  }
-
-  .profile-insight-detail {
-    color: #bbbbbb;
-  }
-
-  .settings-description {
-    color: #aaaaaa;
-  }
-
-  .settings-daily-goal input {
-    background: #1a1a1a;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .settings-theme-option {
-    background: #262218;
-  }
-
-  .settings-theme-option.active {
-    border-color: #ececec;
-  }
-
-  .learn-level-list button,
-  .learn-lesson-list button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .learn-read-badge {
-    background: #2a332c;
-    color: #9fc0aa;
-  }
-
-  .learn-empty {
-    color: #999999;
-  }
-
-  .lesson-header button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .lesson-body {
-    color: #ececec;
-  }
-
-  .lesson-diagram figcaption {
-    color: #bbbbbb;
-  }
-
-  .lesson-demo,
-  .lesson-practice,
-  .lesson-checkgame {
-    border-color: #55503f;
-  }
-
-  .lesson-demo-feedback,
-  .lesson-demo-done {
-    color: #6fce82;
-  }
-
-  .lesson-demo-wrong {
-    color: #e28c8c;
-  }
-
-  .lesson-demo-status button {
-    background: #ececec;
-    color: #1a1a1a;
-  }
-
-  .lesson-practice-empty {
-    color: #999999;
-  }
-
-  .lesson-practice-meta {
-    color: #bbbbbb;
-  }
-
-  .lesson-practice button {
-    background: #262218;
-    color: #ececec;
-    border-color: #55503f;
-  }
-
-  .lesson-checkgame button {
-    background: #ececec;
-    color: #1a1a1a;
-  }
+.play-controls-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.play-card-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.play-card-group-label {
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
+}
+
+.play-card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.play-size-card,
+.play-bot-card {
+  flex: 1;
+  min-width: 72px;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.play-size-card.active,
+.play-bot-card.active {
+  border-color: var(--hoshi-accent);
+  background: var(--hoshi-surface-alt);
+}
+
+.play-bot-card-kyu {
+  font-size: 0.7rem;
+  color: var(--hoshi-text-faint);
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  gap: 0.15rem;
+  background: var(--hoshi-surface);
+  border-top: 1px solid var(--hoshi-border);
+  padding: 0.35rem 0.35rem calc(0.35rem + env(safe-area-inset-bottom, 0px));
+}
+
+.bottom-nav button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 48px;
+  border: none;
+  background: transparent;
+  color: var(--hoshi-text-faint);
+  font-size: 0.65rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.bottom-nav button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.bottom-nav button.active {
+  color: var(--hoshi-accent);
 }
