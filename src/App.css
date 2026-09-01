@@ -1562,6 +1562,18 @@
   color: var(--hoshi-text-faint);
 }
 
+.play-adaptive-status {
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+}
+
+.play-adaptive-current {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
 .bottom-nav {
   position: fixed;
   left: 0;

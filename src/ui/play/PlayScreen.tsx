@@ -7,12 +7,13 @@ import { BLACK } from '../../core/types'
 import type { Color, GameState, IllegalReason } from '../../core/types'
 import { EngineClient } from '../../engine/client'
 import { useI18n } from '../../i18n'
+import { computeAdaptiveStrength } from '../../learning/adaptiveDifficulty'
 import { listGames, saveGame } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
 import { GameControls } from './GameControls'
-import type { GameMode } from './GameControls'
+import type { DifficultyMode, GameMode } from './GameControls'
 import { SavedGamesList } from './SavedGamesList'
 import { STRENGTH_LEVELS } from './strengthLevels'
 import type { StrengthLevel } from './strengthLevels'
@@ -25,6 +26,7 @@ export function PlayScreen() {
 
   const [size, setSize] = useState(9)
   const [mode, setMode] = useState<GameMode>('local')
+  const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>('manual')
   const [strengthId, setStrengthId] = useState<StrengthLevel['id']>('normal')
   const [humanColor, setHumanColor] = useState<Color>(BLACK)
 
@@ -49,6 +51,14 @@ export function PlayScreen() {
       .then(setSavedGames)
       .catch(() => setSavedGames([]))
   }, [])
+
+  const adaptiveResult = useMemo(() => computeAdaptiveStrength(savedGames), [savedGames])
+  const effectiveStrengthId = difficultyMode === 'adaptive' ? adaptiveResult.strengthId : strengthId
+
+  function handleDifficultyModeChange(nextMode: DifficultyMode) {
+    setDifficultyMode(nextMode)
+    resetGame(size)
+  }
 
   function resetGame(nextSize: number) {
     setGame(createGame(nextSize, KOMI))
@@ -110,11 +120,11 @@ export function PlayScreen() {
     const engine = engineRef.current
     if (!engine) return
 
-    const strength = STRENGTH_LEVELS.find((level) => level.id === strengthId) ?? STRENGTH_LEVELS[1]
+    const strength = STRENGTH_LEVELS.find((level) => level.id === effectiveStrengthId) ?? STRENGTH_LEVELS[1]
     let cancelled = false
     setBotThinking(true)
 
-    engine.chooseMove(game, strength.playouts).then((response) => {
+    engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs).then((response) => {
       if (cancelled) return
       setBotThinking(false)
       const color = game.toMove
@@ -129,7 +139,7 @@ export function PlayScreen() {
     return () => {
       cancelled = true
     }
-  }, [game, mode, humanColor, strengthId, playStoneSoundIfEnabled])
+  }, [game, mode, humanColor, effectiveStrengthId, playStoneSoundIfEnabled])
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null
@@ -142,7 +152,7 @@ export function PlayScreen() {
     savedThisGameRef.current = true
 
     const winner: 'black' | 'white' = finalScore.black > finalScore.white ? 'black' : 'white'
-    const strength = STRENGTH_LEVELS.find((level) => level.id === strengthId)
+    const strength = STRENGTH_LEVELS.find((level) => level.id === effectiveStrengthId)
     const sgf = gameRecordToSgf(size, KOMI, moves)
 
     saveGame({
@@ -151,6 +161,8 @@ export function PlayScreen() {
       komi: KOMI,
       mode,
       botPlayouts: mode === 'bot' ? strength?.playouts : undefined,
+      botStrengthId: mode === 'bot' ? strength?.id : undefined,
+      humanColor: mode === 'bot' ? humanColor : undefined,
       result: { black: finalScore.black, white: finalScore.white, winner },
       sgf,
     }).then(() => {
@@ -159,7 +171,7 @@ export function PlayScreen() {
         .then(setSavedGames)
         .catch(() => {})
     })
-  }, [game.gameOver, finalScore, size, mode, strengthId, moves])
+  }, [game.gameOver, finalScore, size, mode, effectiveStrengthId, humanColor, moves])
 
   const turnKey = game.toMove === BLACK ? 'board.turn.black' : 'board.turn.white'
 
@@ -170,8 +182,11 @@ export function PlayScreen() {
         onSizeChange={handleSizeChange}
         mode={mode}
         onModeChange={handleModeChange}
+        difficultyMode={difficultyMode}
+        onDifficultyModeChange={handleDifficultyModeChange}
         strengthId={strengthId}
         onStrengthChange={setStrengthId}
+        adaptiveResult={adaptiveResult}
         humanColor={humanColor}
         onHumanColorChange={handleHumanColorChange}
         onNewGame={() => resetGame(size)}
@@ -190,7 +205,7 @@ export function PlayScreen() {
       <div className="status" aria-live="polite">
         {mode === 'bot' && (
           <p className="bot-kyu">
-            {t('play.bot.label', { kyu: STRENGTH_LEVELS.find((l) => l.id === strengthId)?.approxKyu ?? 0 })}
+            {t('play.bot.label', { kyu: STRENGTH_LEVELS.find((l) => l.id === effectiveStrengthId)?.approxKyu ?? 0 })}
           </p>
         )}
         {game.gameOver ? (

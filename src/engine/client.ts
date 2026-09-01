@@ -20,9 +20,9 @@ export class EngineClient {
     }
   }
 
-  chooseMove(state: GameState, playouts: number, randomSeed?: number): Promise<EngineMoveResult> {
+  chooseMove(state: GameState, playouts: number, randomSeed?: number, maxTimeMs?: number): Promise<EngineMoveResult> {
     const requestId = this.nextRequestId++
-    const request: EngineRequest = { requestId, state, playouts, randomSeed }
+    const request: EngineRequest = { requestId, state, playouts, randomSeed, maxTimeMs }
     return new Promise((resolve) => {
       this.pending.set(requestId, resolve)
       this.worker.postMessage(request)

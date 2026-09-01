@@ -1,5 +1,6 @@
 import type { Card } from 'ts-fsrs'
 import type { ConceptId } from '../analysis/concepts'
+import type { Color } from '../core/types'
 
 const DB_NAME = 'hoshi'
 const DB_VERSION = 2
@@ -14,6 +15,17 @@ export interface SavedGameRecord {
   komi: number
   mode: 'local' | 'bot'
   botPlayouts?: number
+  /** Nivel de fuerza usado para esta partida contra el bot (id de
+   * StrengthLevel en ui/play/strengthLevels.ts). Guardado como string suelto
+   * en vez de importar ese tipo aca para no hacer que storage/ dependa de
+   * ui/: quien interpreta este campo (learning/adaptiveDifficulty.ts) es
+   * quien conoce el tipo real. Ausente en partidas guardadas antes de que
+   * existiera la dificultad adaptativa. */
+  botStrengthId?: string
+  /** Color con el que jugo la persona en una partida contra el bot. Ausente
+   * en partidas guardadas antes de este campo o en partidas locales
+   * (mode: 'local', donde no aplica un solo "color humano"). */
+  humanColor?: Color
   result: { black: number; white: number; winner: 'black' | 'white' }
   sgf: string
 }

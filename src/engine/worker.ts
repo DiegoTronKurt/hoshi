@@ -6,6 +6,7 @@ export interface EngineRequest {
   state: GameState
   playouts: number
   randomSeed?: number
+  maxTimeMs?: number
 }
 
 export interface EngineResponse {
@@ -17,8 +18,8 @@ export interface EngineResponse {
 }
 
 self.onmessage = (event: MessageEvent<EngineRequest>) => {
-  const { requestId, state, playouts, randomSeed } = event.data
-  const result = chooseMove(state, { playouts, randomSeed })
+  const { requestId, state, playouts, randomSeed, maxTimeMs } = event.data
+  const result = chooseMove(state, { playouts, randomSeed, maxTimeMs })
   const response: EngineResponse = { requestId, ...result }
   postMessage(response)
 }
