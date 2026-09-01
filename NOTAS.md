@@ -1,5 +1,77 @@
 # Notas de desarrollo
 
+## Rediseño visual, respaldo de datos y dificultad adaptativa (2026-09-01, sesión posterior)
+
+Cuatro piezas de trabajo separadas, cada una en su propio commit.
+
+### Rediseño visual completo (`670e523`)
+
+A partir de mockups de referencia que trajo el usuario (inspiración, no
+especificación literal): nav inferior fijo con iconos dibujados a mano
+(`src/ui/icons/NavIcons.tsx`, sin librería nueva) reemplazando la barra de
+pestañas superior; `App.css` convertido de hex literales a variables CSS
+(`--hoshi-*`) para soportar 6 temas de color de app seleccionables (Clásico,
+Piedra, Bambú, Amanecer, Noche, Pizarra) más "seguir sistema", separados del
+sistema de temas de *tablero* que ya existía (`minimo`/`sumie`/`kaya`/
+`nocturno`, sin tocar); racha de práctica opcional (toggle en Ajustes,
+`src/learning/streak.ts`, derivada de `attempts`/`games` sin store nueva,
+con período de gracia de un día completo antes de romperse); rediseño en
+tarjetas de Aprender/Ejercicios/Revisar/Jugar, con una función nueva real en
+Revisar ("practicar este concepto" salta a Ejercicios ya filtrado). Sin
+mascota ni imágenes generadas por IA en ningún lado, a pedido explícito.
+
+### Respaldo de datos: exportar/importar JSON (`3dc7b89`)
+
+Subió de prioridad en el roadmap por la publicación inminente en Play
+Store. `src/storage/backup.ts` exporta partidas + intentos + tarjetas SRS +
+preferencias de localStorage a un archivo descargable; importar valida la
+estructura completa antes de tocar cualquier dato (rechaza sin escribir
+nada si la validación falla) y **reemplaza**, no fusiona, con confirmación
+explícita en pantalla (no un `confirm()` nativo del navegador, para no
+depender de que el WebView de Flutter soporte diálogos JS).
+
+### OJO_FALSO: segundo intento, mismo resultado, pero con la razón exacta esta vez
+
+Se retomó el intento con el módulo de validación reutilizable que el
+roadmap pedía como primer paso (`src/content/positionValidation.ts`:
+`isSingleGroup`, `hasNoZeroLibertyGroups`, con tests — commit `5d5d0b3`).
+Con eso puesto, se probaron varias construcciones directamente contra
+`solve()` (no a mano) y se llegó a una prueba rigurosa de por qué la técnica
+actual del banco (`buildEnclosedShape`, llenar todo el tablero de blanco y
+poner la pared negra encima) **no puede representar un ojo falso en
+absoluto**, sin importar cómo se acomoden las piedras: como todo punto que
+no es pared ni espacio de ojo ya está ocupado desde el inicio, el color de
+un punto diagonal nunca cambia la cantidad de libertades del grupo — pared
+negra u blanco de fondo, ese punto nunca es una libertad de cualquier
+forma. Verificado empíricamente: se reconstruyó `dosOjosSeparados` quitándole
+un punto diagonal (sustituido por blanco) y el veredicto de vida/muerte del
+solucionador fue idéntico al de la forma sin el defecto.
+
+La conclusión real (coincide con teoría de Go, no es una limitación del
+proyecto): un ojo falso solo importa cuando la piedra diagonal enemiga
+habilita **capturar una piedra específica de la pared** en una secuencia
+real — eso exige una posición con una piedra de pared genuinamente débil y
+una carrera de captura verificable, un tsumego más avanzado del que
+cualquier plantilla tipo `buildEnclosedShape` puede expresar. Queda en
+stand-by por decisión del usuario. Quien lo retome: no repetir la técnica
+de "llenar todo el tablero"; partir de una posición dispersa (como
+`buildGetaSeed`/`buildSnapbackSeed`) donde la pared tenga una libertad real
+fuera del ojo marcado, capturable en una secuencia de 2+ jugadas.
+
+### Dificultad adaptativa del bot + presupuesto de tiempo (`54cb8b3`)
+
+Cierra la sección 2.4 del roadmap. Modo "Adaptativo" nuevo en Jugar (junto
+al "Manual" existente): ajusta el nivel del bot según la tasa de victoria de
+las últimas 10 partidas contra él (sube un nivel si ≥65%, baja si ≤35%,
+apuntando a ~50%), derivado de `listGames()` sin estado propio nuevo
+(`src/learning/adaptiveDifficulty.ts`). Partidas guardadas antes de este
+cambio no tienen `humanColor`/`botStrengthId` y se ignoran en el cálculo en
+vez de asumírseles un valor. El presupuesto de tiempo (`maxTimeMs`) ya
+existía en el motor MCTS (`src/engine/mcts.ts`) pero nunca se usaba desde la
+UI ni el worker; ahora cada `StrengthLevel` define su propio techo (3s a
+15s) para que un dispositivo lento nunca se cuelgue esperando al bot en vez
+de simplemente correr con menos playouts de los pedidos.
+
 ## Banco de problemas: de 6 a 71 entradas, 8 de 9 conceptos
 
 ### Qué se construyó
