@@ -3,11 +3,23 @@
  * de diseno). Se corre fuera de la app con `npm run problems:generate` y
  * produce SGF versionado en el repo.
  *
- * Pasos: 1) posiciones semilla verificadas a mano, 2) autojuego del bot MCTS
- * a distintas fuerzas para encontrar posiciones candidatas (grupos chicos
- * con pocas libertades), 3) recortar la region y correr el solucionador,
- * 4) aceptar solo si la solucion existe, la primera jugada es unica, y la
- * profundidad esta entre 3 y 9 jugadas, 5) etiquetar y guardar.
+ * Pasos: 1) posiciones semilla verificadas a mano (`content/seeds.ts`, ya
+ * cubre NAKADE/DOS_OJOS/RED_GETA/SNAPBACK multiplicadas por simetria),
+ * 2) autojuego del bot MCTS a fuerzas distintas (negro y blanco con
+ * presupuestos de playouts diferentes, para producir posiciones con errores
+ * explotables, no solo autojuego parejo) para encontrar posiciones
+ * candidatas (grupos chicos con pocas libertades), 3) recortar la region y
+ * correr el solucionador, 4) aceptar solo si la solucion existe, la primera
+ * jugada es unica, y la profundidad esta entre 1 y 9 jugadas, 5) etiquetar
+ * (CAPTURA_SIMPLE si la captura no necesito lectura real, PUNTO_VITAL si
+ * si) y guardar.
+ *
+ * OJO_FALSO, DOBLE_ATARI y ESCALERA quedan fuera de esta pasada: OJO_FALSO
+ * porque construir una plantilla valida a mano resulto mas fragil de lo
+ * esperado (varios intentos de conectividad rotos, documentado, pendiente
+ * una busqueda parametrica propia); DOBLE_ATARI y ESCALERA porque no
+ * encajan en el formato Problem/solve() de vida-muerte (ver el plan de esta
+ * fase) y necesitan su propio tipo de dato y mecanismo de verificacion.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
@@ -15,7 +27,7 @@ import { fileURLToPath } from 'node:url'
 
 import { getGroup } from '../src/core/groups'
 import { createGame, applyMove } from '../src/core/rules'
-import { EMPTY, opponent } from '../src/core/types'
+import { BLACK, EMPTY, opponent } from '../src/core/types'
 import type { BoardState, Color, GameState } from '../src/core/types'
 import { chooseMove } from '../src/engine/mcts'
 import { computeRegion, countEmptyPoints } from '../src/solver/region'
@@ -27,21 +39,31 @@ import type { Problem } from '../src/content/problemSgf'
 import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
-const SELF_PLAY_GAMES = 3
-const PLAYOUT_LEVELS = [100]
+const SELF_PLAY_GAMES = 8
+// Documento de diseno, seccion 5.6: "100 vs 2000 produce posiciones con
+// errores explotables". Cada partida de autojuego alterna quien de los dos
+// colores juega fuerte, para no sesgar los errores encontrados a un solo
+// lado.
+const WEAK_PLAYOUTS = 100
+const STRONG_PLAYOUTS = 800
+const MAX_MOVE_TIME_MS = 3000
 const MAX_REGION_EMPTY = 14
 const MIN_SOLUTION_DEPTH = 1
 const MAX_SOLUTION_DEPTH = 9
+// Depth a partir de la cual una captura deja de ser "ya estaba en atari,
+// solo hay que cerrarla" (CAPTURA_SIMPLE) para pasar a ser lectura real
+// (PUNTO_VITAL).
+const CAPTURA_SIMPLE_MAX_DEPTH = 1
 
-function playSelfPlayGame(randomSeed: number): BoardState[] {
+function playSelfPlayGame(randomSeed: number, blackPlayouts: number, whitePlayouts: number): BoardState[] {
   let state: GameState = createGame(BOARD_SIZE, 6.5)
   const positions: BoardState[] = []
   const maxMoves = BOARD_SIZE * BOARD_SIZE * 3
   let played = 0
 
   while (!state.gameOver && played < maxMoves) {
-    const strength = PLAYOUT_LEVELS[played % PLAYOUT_LEVELS.length]
-    const choice = chooseMove(state, { playouts: strength, randomSeed: randomSeed + played })
+    const playouts = state.toMove === BLACK ? blackPlayouts : whitePlayouts
+    const choice = chooseMove(state, { playouts, randomSeed: randomSeed + played, maxTimeMs: MAX_MOVE_TIME_MS })
     const result = applyMove(state, choice.move)
     if (!result.legal || !result.state) break
     state = result.state
@@ -108,7 +130,13 @@ function tryBuildProblem(
   const depth = solutionDepth(result.root, wantLive, toMove === targetColor)
   if (depth === null || depth < MIN_SOLUTION_DEPTH || depth > MAX_SOLUTION_DEPTH) return null
 
-  const conceptId: ConceptId = objective === 'kill' ? 'PUNTO_VITAL' : 'DOS_OJOS'
+  let conceptId: ConceptId
+  if (objective === 'live') {
+    conceptId = 'DOS_OJOS'
+  } else {
+    conceptId = depth <= CAPTURA_SIMPLE_MAX_DEPTH ? 'CAPTURA_SIMPLE' : 'PUNTO_VITAL'
+  }
+
   return { conceptId, board, targetPoints: groupPoints, targetColor, toMove, objective, tree: result.root }
 }
 
@@ -117,7 +145,10 @@ async function main() {
   const seenBoards = new Set<string>()
 
   for (let g = 0; g < SELF_PLAY_GAMES; g++) {
-    const positions = playSelfPlayGame(1000 + g)
+    const blackStrong = g % 2 === 0
+    const blackPlayouts = blackStrong ? STRONG_PLAYOUTS : WEAK_PLAYOUTS
+    const whitePlayouts = blackStrong ? WEAK_PLAYOUTS : STRONG_PLAYOUTS
+    const positions = playSelfPlayGame(1000 + g, blackPlayouts, whitePlayouts)
     const lastPositions = positions.slice(-8) // los finales de partida son los que producen mas peleas locales resueltas
 
     for (const board of lastPositions) {
@@ -134,6 +165,7 @@ async function main() {
         if (asLive) problems.push(asLive)
       }
     }
+    console.log(`Partida de autojuego ${g + 1}/${SELF_PLAY_GAMES} (negro=${blackPlayouts}, blanco=${whitePlayouts}) lista. Problemas acumulados: ${problems.length}`)
   }
 
   const root = dirname(fileURLToPath(import.meta.url))
@@ -147,7 +179,10 @@ async function main() {
   }))
 
   await writeFile(join(outDir, 'bank.json'), JSON.stringify(bank, null, 2))
-  console.log(`Generados ${bank.length} problemas (${buildSeedProblems().length} semilla, ${bank.length - buildSeedProblems().length} de autojuego).`)
+
+  const byConcept: Record<string, number> = {}
+  for (const p of bank) byConcept[p.conceptId] = (byConcept[p.conceptId] ?? 0) + 1
+  console.log(`Generados ${bank.length} problemas:`, byConcept)
 }
 
 main()

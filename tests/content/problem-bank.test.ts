@@ -14,7 +14,16 @@ describe('banco de problemas: invariante del generador', () => {
     '%s se vuelve a resolver igual que cuando se genero',
     (_id, entry) => {
       const problem = loadProblem(entry)
-      const region = computeRegion(problem.board, problem.targetPoints, 1)
+      // RED_GETA y SNAPBACK (content/seeds.ts) parten de un tablero
+      // mayormente vacio: su region no tiene un relleno que la acote, asi
+      // que una profundidad de 8 ahi explota combinatoriamente (probado y
+      // revertido: del orden de minutos, no segundos, para una sola
+      // entrada). El resto de los conceptos usa regiones chicas por
+      // construccion (formas de ojo con fondo relleno, o candidatos de
+      // autojuego recortados a un grupo real) y sí soportan la profundidad
+      // completa.
+      const maxDepth = problem.conceptId === 'RED_GETA' || problem.conceptId === 'SNAPBACK' ? 5 : 8
+      const region = computeRegion(problem.board, problem.targetPoints, 2)
 
       const result = solve({
         board: problem.board,
@@ -23,7 +32,7 @@ describe('banco de problemas: invariante del generador', () => {
         targetColor: problem.targetColor,
         toMove: problem.toMove,
         objective: problem.objective,
-        maxDepth: 8,
+        maxDepth,
       })
 
       expect(result.solved).toBe(true)

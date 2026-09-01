@@ -50,3 +50,39 @@ export function diagonals(size: number, point: number): number[] {
   }
   return result
 }
+
+/**
+ * Las 8 transformaciones diedrales de un tablero cuadrado (identidad, 3
+ * rotaciones, y sus 4 espejos). Se usan para multiplicar una posicion
+ * plantilla ya verificada por el solucionador (p.ej. un geta o un snapback
+ * hallado a mano) en varias posiciones distintas del banco de problemas sin
+ * derivar geometria nueva cada vez. La transformacion no cambia la
+ * legalidad de Go, pero cada variante igual se re-verifica con el
+ * solucionador antes de aceptarse en el banco, nunca se asume.
+ */
+export type BoardTransform = (x: number, y: number, size: number) => [number, number]
+
+export const BOARD_TRANSFORMS: BoardTransform[] = [
+  (x, y) => [x, y],
+  (x, y, size) => [size - 1 - y, x],
+  (x, y, size) => [size - 1 - x, size - 1 - y],
+  (x, y, size) => [y, size - 1 - x],
+  (x, y, size) => [size - 1 - x, y],
+  (x, y, size) => [x, size - 1 - y],
+  (x, y) => [y, x],
+  (x, y, size) => [size - 1 - y, size - 1 - x],
+]
+
+export function transformPoint(size: number, point: number, transform: BoardTransform): number {
+  const [x, y] = toXY(size, point)
+  const [tx, ty] = transform(x, y, size)
+  return toPoint(size, tx, ty)
+}
+
+export function transformBoard(board: BoardState, transform: BoardTransform): BoardState {
+  const result = createBoard(board.size)
+  for (let p = 0; p < board.stones.length; p++) {
+    result.stones[transformPoint(board.size, p, transform)] = board.stones[p]
+  }
+  return result
+}

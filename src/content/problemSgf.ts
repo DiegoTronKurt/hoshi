@@ -31,18 +31,26 @@ function boardSetupProperties(board: BoardState): Record<string, string[]> {
 }
 
 const MAX_ATTACKER_REPLIES_STORED = 2
+// Sin este limite, una forma muerta sin importar quien juegue primero (p.ej.
+// cuadrado de cuatro) registra CADA intento de defensa del color objetivo,
+// porque todos "cumplen el objetivo" (todos refutan igual) — eso hacia
+// crecer una sola entrada del banco a mas de 200KB. Recortar tambien aca no
+// le quita cobertura al ejercicio interactivo: la app valida cualquier
+// jugada del usuario en vivo con el solucionador, no contra este arbol
+// guardado (ver comentario mas abajo).
+const MAX_DEFENDER_REPLIES_STORED = 2
 
 /**
  * Serializa el arbol de refutaciones como variaciones SGF, usando las
  * propiedades estandar GB/GW ("good for black/white") para marcar si esa
  * jugada mantiene vivo al color objetivo. Se recorta para que quepa en un
- * archivo razonable: en los nodos del defensor solo se guardan las jugadas
- * que efectivamente cumplen el objetivo (cualquiera de ellas es una
- * respuesta valida durante el ejercicio), y en los nodos del atacante como
- * mucho un par de respuestas representativas. La app valida cualquier otra
- * jugada correcta en el momento con el solucionador en vivo, asi que este
- * recorte no le quita cobertura al ejercicio interactivo, solo al archivo
- * guardado.
+ * archivo razonable: en los nodos del defensor solo se guardan como mucho
+ * un par de las jugadas que efectivamente cumplen el objetivo (cualquiera
+ * de ellas es una respuesta valida durante el ejercicio), y en los nodos
+ * del atacante como mucho un par de respuestas representativas. La app
+ * valida cualquier otra jugada correcta en el momento con el solucionador
+ * en vivo, asi que este recorte no le quita cobertura al ejercicio
+ * interactivo, solo al archivo guardado.
  */
 function childrenToSgf(
   children: RefutationNode[],
@@ -53,7 +61,7 @@ function childrenToSgf(
 ): SgfNode[] {
   const defenderToMove = mover === targetColor
   const kept = defenderToMove
-    ? children.filter((c) => c.liveForDefender === wantLive)
+    ? children.filter((c) => c.liveForDefender === wantLive).slice(0, MAX_DEFENDER_REPLIES_STORED)
     : children.slice(0, MAX_ATTACKER_REPLIES_STORED)
 
   return kept.map((child) => {

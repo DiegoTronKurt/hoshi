@@ -1,6 +1,7 @@
-import { createBoard, toPoint } from '../core/board'
+import { BOARD_TRANSFORMS, createBoard, toPoint, transformBoard, transformPoint } from '../core/board'
 import { BLACK, WHITE } from '../core/types'
 import type { BoardState, Color } from '../core/types'
+import type { ConceptId } from '../analysis/concepts'
 import { computeRegion } from '../solver/region'
 import { solve } from '../solver/tsumego'
 import type { Objective } from '../solver/tsumego'
@@ -87,50 +88,125 @@ export const dosOjosSeparados = buildEnclosedShape(
   [[3, 4], [5, 4]],
 )
 
-interface SeedSpec {
-  board: BoardState
-  wallPoints: number[]
-  toMove: Color
-  objective: Objective
+/**
+ * Red (geta) verificada en la leccion n3-l4: blanco en (1,1) queda sin
+ * escapatoria una vez que negro juega (0,0), sin necesidad de perseguirlo
+ * como en una escalera. Reutilizada tal cual (mismo tablero, mismas
+ * piedras) para el banco en vez de derivar una geometria nueva.
+ */
+function buildGetaSeed(): { board: BoardState; targetPoints: number[] } {
+  const board = createBoard(5)
+  board.stones[toPoint(5, 1, 2)] = BLACK
+  board.stones[toPoint(5, 2, 1)] = BLACK
+  board.stones[toPoint(5, 1, 1)] = WHITE
+  return { board, targetPoints: [toPoint(5, 1, 1)] }
 }
 
+/**
+ * Snapback verificado en la leccion n3-l5: negro sacrifica en (4,3), blanco
+ * captura jugando (4,4) (unica forma de capturar esa piedra), y esa misma
+ * jugada blanca deja al grupo {(3,3),(3,4),(4,4)} con una sola libertad:
+ * el mismo punto (4,3) que negro recupera para recapturar las tres piedras
+ * de una vez. El objetivo del problema apunta solo a (3,3)/(3,4), el nucleo
+ * del grupo antes de que blanco se sume el mismo a la trampa.
+ */
+function buildSnapbackSeed(): { board: BoardState; targetPoints: number[] } {
+  const board = createBoard(7)
+  const black: Array<[number, number]> = [
+    [2, 3], [3, 2], [2, 4], [3, 5], [5, 4], [4, 5],
+  ]
+  const white: Array<[number, number]> = [
+    [3, 3], [3, 4], [5, 3], [4, 2],
+  ]
+  for (const [x, y] of black) board.stones[toPoint(7, x, y)] = BLACK
+  for (const [x, y] of white) board.stones[toPoint(7, x, y)] = WHITE
+  return { board, targetPoints: [toPoint(7, 3, 3), toPoint(7, 3, 4)] }
+}
+
+interface SeedSpec {
+  conceptId: ConceptId
+  board: BoardState
+  targetPoints: number[]
+  targetColor: Color
+  toMove: Color
+  objective: Objective
+  /** Margen de la region alrededor de targetPoints. Chico a proposito en
+   * todos los casos: el limite de MAX_REGION_EMPTY_POINTS de solve() existe
+   * para que la busqueda exhaustiva siga siendo viable, y un margen que
+   * cubra el tablero entero (probado y revertido) lo vuelve intratable. */
+  regionMargin: number
+  /** Profundidad maxima de busqueda. Las formas de ojo (fondo relleno de
+   * blanco, region siempre chica) usan la profundidad estandar de 8. Geta y
+   * snapback parten de un tablero mayormente vacio (sin relleno que acote
+   * la busqueda), asi que una profundidad de 8 ahi explota
+   * combinatoriamente (probado y revertido: minutos, no segundos, para una
+   * secuencia que en la practica dura 1 a 3 jugadas). 4-5 alcanza de sobra
+   * para confirmar la misma secuencia ya verificada en la leccion de Fase 6
+   * y sigue siendo una demostracion real del solucionador, no un atajo. */
+  maxDepth: number
+}
+
+const getaSeed = buildGetaSeed()
+const snapbackSeed = buildSnapbackSeed()
+
 const SEED_SPECS: SeedSpec[] = [
-  { board: rectaDeTres.board, wallPoints: rectaDeTres.wallPoints, toMove: BLACK, objective: 'live' },
-  { board: rectaDeTres.board, wallPoints: rectaDeTres.wallPoints, toMove: WHITE, objective: 'kill' },
-  { board: cuadradoDeCuatro.board, wallPoints: cuadradoDeCuatro.wallPoints, toMove: WHITE, objective: 'kill' },
-  // piramideDeCuatro no se agrega aca a proposito: el banco de problemas
-  // generado (src/content/problems/bank.json) es un pendiente conocido y
-  // fuera de alcance de esta fase (ver NOTAS.md). La forma queda exportada
-  // y verificada con test propio para que las lecciones de la Fase 6 la
-  // usen directo como diagrama, sin pasar por el generador.
+  // Vive: jugar el punto vital separa el espacio en dos ojos reales.
+  { conceptId: 'DOS_OJOS', board: rectaDeTres.board, targetPoints: rectaDeTres.wallPoints, targetColor: BLACK, toMove: BLACK, objective: 'live', regionMargin: 1, maxDepth: 8 },
+  { conceptId: 'DOS_OJOS', board: piramideDeCuatro.board, targetPoints: piramideDeCuatro.wallPoints, targetColor: BLACK, toMove: BLACK, objective: 'live', regionMargin: 1, maxDepth: 8 },
+  // Mata: el atacante juega adentro del espacio para reducirlo a un ojo, nakade.
+  { conceptId: 'NAKADE', board: rectaDeTres.board, targetPoints: rectaDeTres.wallPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
+  { conceptId: 'NAKADE', board: cuadradoDeCuatro.board, targetPoints: cuadradoDeCuatro.wallPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
+  { conceptId: 'NAKADE', board: piramideDeCuatro.board, targetPoints: piramideDeCuatro.wallPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
+  // Red y snapback: posiciones ya verificadas en las lecciones de Fase 6.
+  { conceptId: 'RED_GETA', board: getaSeed.board, targetPoints: getaSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 4 },
+  { conceptId: 'SNAPBACK', board: snapbackSeed.board, targetPoints: snapbackSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 5 },
 ]
 
+/**
+ * Cada plantilla verificada se multiplica por las 8 transformaciones
+ * diedrales (identidad, 3 rotaciones, 4 espejos) para dar variedad real al
+ * banco sin derivar geometria nueva a mano por cada problema. La
+ * transformacion no cambia la legalidad de Go, pero cada variante igual se
+ * vuelve a verificar con el solucionador antes de aceptarse — nunca se
+ * asume que una transformacion geometrica preserva un resultado de vida o
+ * muerte sin confirmarlo de nuevo.
+ */
 export function buildSeedProblems(): Problem[] {
   const problems: Problem[] = []
+  const seen = new Set<string>()
 
   for (const spec of SEED_SPECS) {
-    const region = computeRegion(spec.board, spec.wallPoints, 1)
-    const result = solve({
-      board: spec.board,
-      region,
-      targetPoints: spec.wallPoints,
-      targetColor: BLACK,
-      toMove: spec.toMove,
-      objective: spec.objective,
-      maxDepth: 6,
-    })
+    for (const transform of BOARD_TRANSFORMS) {
+      const board = transformBoard(spec.board, transform)
+      const targetPoints = spec.targetPoints.map((p) => transformPoint(spec.board.size, p, transform))
 
-    if (!result.solved) continue // por diseno no deberia pasar para estas formas, pero nunca se acepta sin verificar
+      const key = `${spec.conceptId}:${board.stones.join('')}`
+      if (seen.has(key)) continue
+      seen.add(key)
 
-    problems.push({
-      conceptId: 'DOS_OJOS',
-      board: spec.board,
-      targetPoints: spec.wallPoints,
-      targetColor: BLACK,
-      toMove: spec.toMove,
-      objective: spec.objective,
-      tree: result.root,
-    })
+      const region = computeRegion(board, targetPoints, spec.regionMargin)
+      const result = solve({
+        board,
+        region,
+        targetPoints,
+        targetColor: spec.targetColor,
+        toMove: spec.toMove,
+        objective: spec.objective,
+        maxDepth: spec.maxDepth,
+      })
+
+      if (!result.solved) continue // nunca se acepta una variante sin que el solucionador la reconfirme
+
+      problems.push({
+        conceptId: spec.conceptId,
+        board,
+        targetPoints,
+        targetColor: spec.targetColor,
+        toMove: spec.toMove,
+        objective: spec.objective,
+        tree: result.root,
+      })
+    }
   }
 
   return problems
