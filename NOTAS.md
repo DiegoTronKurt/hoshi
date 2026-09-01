@@ -130,14 +130,48 @@ para que la re-verificación en CI no vuelva a colgarse.
 
 ---
 
-## Estado general del proyecto (2026-08-31)
+## Estado general del proyecto (2026-09-01)
 
-Análisis completo pedido por el usuario antes de empezar la sección 2 del
-roadmap post-v1 (v1.1 — bots avanzados e insights), comparando lo construido
-contra `go-trainer-v1-diseno.md` y `go-trainer-post-v1-roadmap.md` completos,
-no solo la última fase. A diferencia de las entradas de fase de más abajo,
-esta sección se actualiza cada vez que valga la pena repetir este ejercicio,
-no queda congelada en una fecha.
+Análisis completo pedido por el usuario, comparando lo construido contra
+`go-trainer-v1-diseno.md` y `go-trainer-post-v1-roadmap.md` completos (no
+solo la última fase) y, nuevo en esta pasada, también contra
+`go-trainer-especificacion-pantallas.md` (vive en `Go_app/`, fuera de este
+repo — documento de maquetas de UI, con su propia numeración de secciones,
+independiente de la del documento de diseño principal). A diferencia de las
+entradas de fase de más abajo, esta sección se actualiza cada vez que valga
+la pena repetir este ejercicio, no queda congelada en una fecha; esta
+versión reemplaza a la de 2026-08-31.
+
+### Qué cambió desde el 31 de agosto
+
+- **Banco de problemas: de 6 a 71 entradas, 8 de 9 conceptos con
+  ejercicios.** Ver la entrada de arriba en este mismo archivo para el
+  detalle completo (simetría diedral, el bug de SGF de 232KB, y por qué
+  `OJO_FALSO` sigue en cero). Cambia el punto 3 más abajo: la brecha de
+  contenido más grande del proyecto ya no es "6 problemas", es "falta un
+  concepto entero".
+- **TWA verificada de punta a punta.** El bloqueo de `assetlinks.json` que
+  esta sección anterior dejaba abierto ("falta que el usuario complete la
+  publicación... y me pase el fingerprint de Play App Signing") está
+  cerrado: existe el repo `diegotronkurt/diegotronkurt.github.io` sirviendo
+  `assetlinks.json` en la raíz del dominio (GitHub Pages solo sirve un repo
+  de proyecto bajo `/hoshi/`, nunca en la raíz — de ahí el repo aparte), con
+  ambos fingerprints (upload key local y Play App Signing). Verificado no
+  solo con `curl` sino instalando el APK firmado en un emulador Android
+  recién armado en esta máquina (SDK solo traía platform-tools/build-tools,
+  sin emulator ni system-image) y confirmando en el logcat real
+  `SingleHostAsyncVerifier: ... --> true`, con la app abriendo a pantalla
+  completa sin barra de navegador.
+- **Pista 2 (ESCALERA y DOBLE_ATARI) conectada a Ejercicios y Hoy.** La
+  capa de datos que esta sección anterior marcaba "sin UI todavía" ya es
+  jugable en ambas pantallas. De paso, verificar la escalera jugando a mano
+  en el navegador (no solo con tests) encontró un bug real en
+  `solveLadder`: cuando la única libertad que le queda al que huye sería
+  suicidio para él (acorralado en una esquina), la recursión de una sola
+  llamada lo daba por capturado sin que el perseguidor jugara esa última
+  piedra — el ejercicio quedaba en "resuelto" con las piedras todavía
+  dibujadas. Corregido con `simulateLadder()`, cubierto con tests sobre las
+  12 escaleras del banco. Detalle completo en el commit `5ecae9b`.
 
 ### Qué está completo y coincide con el documento de diseño
 
@@ -158,6 +192,12 @@ no queda congelada en una fecha.
   capturas — cumple la sección 6.2.
 - "Hoy" es la pantalla de inicio (`screen` por defecto en `App.tsx`), como
   pide la sección 6.1.
+- Los 4 temas de tablero (Mínimo, Sumi-e, Kaya, Nocturno OLED) coinciden en
+  nombre y descripción con `go-trainer-especificacion-pantallas.md` sección
+  3, palabra por palabra.
+- ESCALERA y DOBLE_ATARI ya son ejercicios jugables (no solo datos), en
+  Ejercicios y Hoy, con FSRS registrando el intento igual que cualquier
+  tsumego.
 
 ### Desviaciones deliberadas frente al documento (ya decididas y documentadas)
 
@@ -185,12 +225,15 @@ no queda congelada en una fecha.
 
 ### Brechas reales, no decididas a propósito
 
-- **Banco de problemas: 6 entradas, no 300.** Cubre solo 2 conceptos
-  (`DOS_OJOS`: 4, `PUNTO_VITAL`: 2) de los ~15 que admiten ejercicios. Es la
-  brecha de contenido más grande del proyecto: la mayoría de las lecciones
-  con "practicar más" y buena parte del planificador de Hoy tienen muy poco
-  con qué trabajar. Ya estaba señalado como pendiente desde Fase 3/6, pero
-  vale la pena decirlo con el número real en vez de dejarlo implícito.
+- **Banco de problemas: 71 entradas, no 300, y `OJO_FALSO` en cero.** Mejoró
+  mucho frente a las 6 entradas de la sección anterior (ver arriba), pero
+  sigue lejos del objetivo del documento, y ahora la brecha más visible no es
+  el número sino que un concepto entero de nivel 2 no tiene ni un solo
+  ejercicio — cualquier lección u "Hoy" que necesite `OJO_FALSO` no tiene
+  nada que ofrecer. Intentos previos de construirlo a mano fallaron
+  repetidamente por un bug de conectividad, no de teoría de Go; diagnóstico
+  completo y estrategia sugerida para el próximo intento en la entrada
+  "OJO_FALSO: por qué quedó pendiente" más arriba en este archivo.
 - **Sin exportación/importación JSON** (documento, sección 7). No existe
   ninguna función de exportar ni importar en `storage/db.ts`. Hoy toda la
   persistencia vive solo en el IndexedDB de un único navegador/dispositivo —
@@ -211,6 +254,57 @@ no queda congelada en una fecha.
   derivan del paso de la retícula del goban). Bajo impacto, pero es una
   desviación real, no decidida explícitamente con el usuario.
 
+### Comparación contra go-trainer-especificacion-pantallas.md (nuevo, 2026-09-01)
+
+Documento de maquetas de UI (vive en `Go_app/`, fuera de este repo) con
+tablas y nombres exactos que las pantallas deberían usar — más específico en
+algunos puntos que `go-trainer-v1-diseno.md`. Auditoría pedida por el
+usuario como posible base para un próximo trabajo de interfaz; cubre Hoy,
+Aprender, Jugar y Perfil con algo de detalle, Revisar y Ajustes solo
+parcialmente (no se llegó a revisar cada bullet de la sección 6.4/6.5 contra
+`ReviewScreen.tsx` a fondo).
+
+- **Sin patrones prohibidos (sección 0), buena noticia.** Se buscó
+  explícitamente racha/streak/insignia/badge/XP/confeti/mascota en `src/` y
+  no aparece nada — el único "badge" real es un indicador de "lección leída"
+  en Aprender, no gamificación.
+- **Aprender solo muestra niveles 0-3.** `LearnScreen.tsx` tiene
+  `const LEVELS = [0, 1, 2, 3]`. La sección 5/6.2 del documento pide listar
+  los 11 niveles completos, con el 4 al 10 bloqueados pero con su nombre y
+  tamaño de tablero reales (Forma/9x13, Apertura/13x13, Joseki/13x13, Medio
+  juego/Vida y muerte intermedia/Yose/Tablero completo, los seis en 19x19).
+  Tampoco existe la barra "N de M lecciones completadas" de la sección 6.2.
+- **Perfil no tiene el radar de 6 ejes.** La sección 4/6.5 pide un radar
+  fijo (Lectura, Vida y muerte, Forma, Dirección, Ataque/defensa, Yose).
+  `ProfileScreen.tsx` muestra en cambio una lista de barras por cada uno de
+  los ~28 `ConceptId` individuales, agrupados por nivel — una arquitectura
+  de información distinta, no solo un componente visual distinto. Es la
+  brecha más grande de esta comparación: hace falta decidir el mapeo de
+  concepto a eje (no existe hoy) y construir un componente de radar desde
+  cero (no hay librería de gráficos en el proyecto).
+- **Jugar no usa escala kyu.** `strengthLevels.ts` etiqueta la fuerza del
+  bot por nivel interno + cantidad de *playouts* ("Normal", 500), no como
+  "Bot 15 kyu" (secciones 6.3 y 7 del documento, texto solamente, sin
+  avatar). Hace falta una tabla de playouts → etiqueta kyu.
+- **Hoy tiene una estructura distinta a la sección 6.1.** Sin encabezado
+  "Nivel X · nombre del nivel", sin "tarjeta de foco del día" (el copy tipo
+  "hoy entrenas atari porque ayer..." necesita lógica real de razonamiento,
+  no solo maquetado), sin meta diaria como texto, sin botón "Jugar contra el
+  bot" con el kyu visible. `TodayScreen.tsx` hoy es: lista de sesión con
+  motivo (vencido/débil/nuevo) + progreso N de M + tablero del ejercicio
+  actual — funcionalmente sólido, pero no sigue el layout del documento.
+- **Ajustes no tiene meta diaria editable.** La sección 6.5 la pide como
+  campo numérico con valor por defecto modesto (ej. 3); `SettingsScreen.tsx`
+  solo tiene tema visual y sonido. (La accesibilidad avanzada de la misma
+  sección ya estaba documentada como decisión explícita más arriba, en
+  "Desviaciones deliberadas" — esto es distinto, nadie decidió no tener meta
+  diaria editable, simplemente no se construyó.)
+- **Estimación de esfuerzo dada al usuario en la conversación**: 4-7 horas,
+  dominado por el radar de Perfil (~1.5-2.5h, incluye la decisión de diseño
+  del mapeo a ejes) y el rediseño de Hoy con copy de razonamiento real
+  (~1.5-2h); Aprender y Jugar son menos de una hora cada uno. Sin plan
+  todavía, el usuario no pidió empezar a implementar esta pasada.
+
 ### Estado de los 4 criterios de salida de v1 (roadmap post-v1, sección 0)
 
 Ninguno de los cuatro está cumplido. El usuario decidió explícitamente
@@ -220,25 +314,25 @@ registrado acá para que la decisión sea explícita, no implícita:
 1. 20-30 partidas jugadas por el usuario, terminadas y revisadas: no hecho.
 2. Tiempo hasta la primera partida ganada, medido: no instrumentado.
 3. Revisión de un jugador dan sobre lecciones de niveles 0-2 y 20 problemas
-   del banco: no hecho (y con el banco en 6 entradas, tampoco hay 20 para
-   mostrarle de la mayoría de los conceptos).
-4. Cero problemas fallando el invariante del generador en CI: esto sí se
-   puede verificar hoy mismo corriendo la suite — con solo 6 problemas en el
-   banco, la superficie de riesgo real es chica todavía.
+   del banco: no hecho. Con el banco en 71 entradas esto ya es viable para
+   la mayoría de los conceptos cubiertos (DOBLE_ATARI tiene 16, DOS_OJOS 12,
+   ESCALERA 12), pero `OJO_FALSO` sigue en cero y no habría nada que
+   mostrarle de ese concepto en particular.
+4. Cero problemas fallando el invariante del generador en CI: se sigue
+   verificando en cada push (`tests/content/problem-bank.test.ts`); con 71
+   problemas en el banco la superficie de riesgo ya es real, no solo
+   teórica, y sigue en verde.
 
 ### Trabajo post-v1 de esta sesión (Fase A y Fase B del roadmap)
 
-- **Fase A (en curso, gestionada en gran parte por el usuario en Play
-  Console)**: la PWA está desplegada en GitHub Pages
+- **Fase A (cerrada).** La PWA está desplegada en GitHub Pages
   (`https://diegotronkurt.github.io/hoshi/`) vía GitHub Actions, empaquetada
   como TWA con Bubblewrap (`applicationId: com.hoshi.app`), con AAB firmado
-  generado y assets de la ficha de Play Store (ícono, gráfico de
-  característica, 4 capturas) listos. Falta: que el usuario complete la
-  publicación en Play Console y me pase el fingerprint SHA-256 de la clave
-  de firma de Play App Signing (distinto del upload key local) para
-  terminar de verificar `assetlinks.json` — sin eso, la TWA instalada desde
-  Play Store se va a abrir con barra de navegador en vez de pantalla
-  completa.
+  generado (`versionCode 2`) y assets de la ficha de Play Store (ícono,
+  gráfico de característica, 4 capturas) listos. `assetlinks.json` quedó
+  verificado de punta a punta (ver "Qué cambió desde el 31 de agosto" más
+  arriba) — falta solo que el usuario complete la publicación en Play
+  Console, ya no hay ningún pendiente técnico de mi lado para eso.
 - **Fase B (cerrada)**: `MistakeEvent` reemplazado por `ConceptOccurrence`
   en toda la base, con el detalle completo más abajo en su propia entrada de
   fase.
@@ -247,11 +341,17 @@ registrado acá para que la decisión sea explícita, no implícita:
 
 Con el gate de v1 saltado a propósito, lo siguiente según el roadmap es la
 sección 2 (v1.1 — bots avanzados e insights), que depende de que la sección
-1 (ya cerrada) esté lista. Antes de eso valdría la pena, aunque no es un
-bloqueo técnico: decidir qué hacer con la brecha del banco de problemas,
-porque varias features de v1.1 (comparar reconocimiento dirigido vs.
-espontáneo, por ejemplo) van a tener muy poca señal de "ejercicio" mientras
-el banco siga en 6 entradas.
+1 (ya cerrada) esté lista. La brecha del banco de problemas que antes hacía
+esto poco viable mejoró mucho (6 → 71); lo que queda pendiente ahí es
+puntual (`OJO_FALSO`), no estructural.
+
+Del lado del usuario: terminar la publicación en Play Console (sin
+pendientes técnicos de mi lado). Del lado de contenido/interfaz, dos
+frentes quedaron abiertos en esta sesión sin que el usuario haya elegido
+todavía por cuál seguir: cerrar `OJO_FALSO` (30-90 min, geometría incierta,
+ver su propia entrada más arriba) o alinear la interfaz contra
+`go-trainer-especificacion-pantallas.md` (4-7h, ver la comparación de
+arriba, dominado por el radar de Perfil).
 
 ---
 
