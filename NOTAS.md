@@ -248,6 +248,13 @@ que la verificación de TWA ya daba por resuelto.
   `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`
   (42.4MB, `versionCode 3`, firmado con la upload key de siempre). Todavía
   no subido a Play Console — eso queda del lado del usuario.
+- **`versionCode 3` rechazado por Play Console** al intentar subirlo (sin
+  detalle adicional del error de parte del usuario). Sin ningún cambio de
+  código de por medio, se subió `pubspec.yaml` a `1.1.1+4` (`versionCode
+  4`) y se regeneró el AAB de release con `flutter build appbundle
+  --release` — mismo `app-release.aab`, ahora de 44.5MB, mismo firmado.
+  Sigue sin subirse a Play Console; ese intento queda pendiente de
+  confirmar del lado del usuario.
 - **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
   ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
   tampoco se generó un APK de debug para probar por sideload en el
