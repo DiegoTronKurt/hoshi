@@ -4,17 +4,19 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/hoshi/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        id: '/',
+        id: '/hoshi/',
         name: 'Hoshi',
         short_name: 'Hoshi',
         description: 'Aprende Go (weiqi/baduk) desde cero. Learn Go from scratch.',
-        start_url: '/',
+        start_url: '/hoshi/',
+        scope: '/hoshi/',
         display: 'standalone',
         background_color: '#f2eee4',
         theme_color: '#1a1a1a',
