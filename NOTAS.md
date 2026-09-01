@@ -302,8 +302,13 @@ estado sin conexión. Resuelto:
   minor por ser un cambio funcional real, no un parche), 43.0MB, mismo
   firmado de siempre. Todavía no subido a Play Console — queda del lado
   del usuario, igual que antes.
-- Sigue pendiente, sin resolver en esta pasada: `git init` en
-  `hoshi-flutter/` (roadmap maestro, sección 4.3).
+- **`git init` hecho en `hoshi-flutter/`** (roadmap maestro, sección 4.3),
+  commit inicial `aaa16f0` con los 49 archivos del proyecto (incluye
+  `assets/webapp/`, ya que sin eso el proyecto no reproduce el build
+  offline). Sin remoto todavía, solo historial local. Confirmado antes del
+  commit que `key.properties`, `**/*.keystore`, `.idea/` y `build/` quedan
+  fuera vía los `.gitignore` (raíz y `android/`) que trae la plantilla de
+  Flutter por defecto.
 - **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
   ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
   tampoco se generó un APK de debug para probar por sideload en el
