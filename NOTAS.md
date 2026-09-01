@@ -173,6 +173,88 @@ versión reemplaza a la de 2026-08-31.
   dibujadas. Corregido con `simulateLadder()`, cubierto con tests sobre las
   12 escaleras del banco. Detalle completo en el commit `5ecae9b`.
 
+### Qué cambió más tarde el mismo día: empaquetado Android, de TWA a WebView en Flutter
+
+Después de cerrar lo de arriba, el usuario instaló la app desde Play Store
+en su teléfono real (no el emulador) y la abrió tocando el ícono: se veía
+con barra de navegador de Brave (URL, ícono compartir, menú de tres
+puntos, X para cerrar) en vez de a pantalla completa — el mismo síntoma
+que la verificación de TWA ya daba por resuelto.
+
+- **Diagnóstico.** Brave, no Chrome, es el navegador predeterminado del
+  teléfono. La verificación de Digital Asset Links para una TWA la hace en
+  tiempo de ejecución el navegador que Android elige para renderizarla —
+  en las pruebas anteriores de esta sesión ese navegador fue Chrome (de
+  ahí el `SingleHostAsyncVerifier` en el logcat), nunca se probó con
+  Brave. Se confirmó paso a paso que `assetlinks.json` en sí no era el
+  problema: el fingerprint de la upload key coincide con
+  `keytool -list -v` sobre `android.keystore`, y el usuario confirmó desde
+  Play Console que el fingerprint de Play App Signing en el archivo
+  también es el correcto. Limpiar caché y datos tanto de Hoshi como de
+  Brave no cambió nada. Conclusión: es una limitación de soporte de Brave
+  para TWA, no algo corregible desde `assetlinks.json` ni desde el APK.
+- **Decisión (pedida explícitamente por el usuario, comparando con una app
+  Flutter suya anterior sin este problema): reemplazar el empaquetado TWA
+  de Bubblewrap por un shell nativo en Flutter con un WebView embebido.**
+  Se evaluaron dos alcances — reescribir toda la app en Dart (semanas,
+  descartado, no se justifica por un bug de empaquetado) versus un shell
+  delgado que solo envuelve la PWA existente en un WebView propio (sin
+  navegador de por medio, sin verificación de Digital Asset Links posible
+  porque no aplica). Se eligió el shell delgado explícitamente para no
+  duplicar el trabajo de interfaz/contenido que sigue pendiente (ver más
+  abajo): toda mejora futura de UI, banco de problemas o rendimiento sigue
+  viviendo una sola vez, en el código React/TS de siempre.
+- **Qué se construyó, en `hoshi-flutter/` (proyecto nuevo, hermano de
+  `hoshi-android/`, todavía sin `git init`):**
+  - Flutter SDK 3.47.2 (canal stable) instalado desde cero en
+    `C:\flutter` (clonado del repo oficial); reutiliza el Android SDK y el
+    JDK 17 ya configurados para Bubblewrap. `flutter doctor` en verde para
+    Android (Chrome/Visual Studio quedan en rojo a propósito, son para web
+    de escritorio, no aplican).
+  - Proyecto creado con `--org com.hoshi --project-name app` para que el
+    `applicationId` generado sea exactamente `com.hoshi.app`, igual que la
+    ficha de Play Store ya publicada.
+  - `lib/main.dart`: un único `WebViewController` (paquete
+    `webview_flutter`) apuntando a `https://diegotronkurt.github.io/hoshi/`
+    (el `startUrl` que ya tenía `twa-manifest.json`), JavaScript sin
+    restricciones, color de fondo `#F2EEE4` y de status bar `#1A1A1A`
+    (los mismos de `twa-manifest.json`), orientación fija a portrait,
+    manejo del botón atrás de Android delegado al historial del WebView
+    (`PopScope` + `controller.canGoBack()`), pantalla de carga y de error
+    de red con botón reintentar.
+  - `AndroidManifest.xml`: se agregó `INTERNET` a mano — la plantilla por
+    defecto de Flutter no lo declara y sin eso el WebView no tiene acceso
+    a red.
+  - Íconos del launcher (`mipmap-*`, ícono adaptativo) copiados tal cual
+    desde `hoshi-android/app/src/main/res/`, no regenerados, para que la
+    ficha de Play Store no cambie de ícono.
+  - Firma configurada para reusar la **misma** `android.keystore`/alias
+    `upload` que ya usaba Bubblewrap, vía `android/key.properties` (ya
+    ignorado por `.gitignore` por defecto de Flutter, junto con
+    `**/*.keystore`) — necesario para poder actualizar la ficha existente
+    en vez de crear una nueva.
+  - Versión subida a `1.1.0+3` (`versionCode 3`) en `pubspec.yaml`, por
+    encima del `versionCode 2` que ya estaba en Play Store.
+- **Verificado en el emulador `hoshi_test`** (no solo compilado):
+  `flutter run --release` instaló la build de verdad (la primera corrida
+  bajó el NDK r28c completo, unos cientos de MB) y, por captura de
+  pantalla, la app abre sin ninguna barra de navegador, ícono ni menú —
+  solo la barra de estado de Android y el contenido de la PWA. Un tap
+  dentro de la app navegó correctamente dentro del WebView (cayó en la
+  pestaña Revisar), y `adb shell dumpsys window` confirmó que la ventana
+  en foco es `com.hoshi.app/.MainActivity`, la actividad nativa real, no
+  una pestaña de navegador.
+- **AAB de release generado**:
+  `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`
+  (42.4MB, `versionCode 3`, firmado con la upload key de siempre). Todavía
+  no subido a Play Console — eso queda del lado del usuario.
+- **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
+  ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
+  tampoco se generó un APK de debug para probar por sideload en el
+  teléfono real antes de gastar una publicación de Play Console. El
+  proyecto `hoshi-android/` (Bubblewrap) sigue existiendo tal cual, sin
+  borrar, pero queda superado como método de empaquetado para Play Store.
+
 ### Qué está completo y coincide con el documento de diseño
 
 - Las 6 fases de v1 (F1-F6) están cerradas, commiteadas y con tests en verde:
@@ -325,14 +407,19 @@ registrado acá para que la decisión sea explícita, no implícita:
 
 ### Trabajo post-v1 de esta sesión (Fase A y Fase B del roadmap)
 
-- **Fase A (cerrada).** La PWA está desplegada en GitHub Pages
-  (`https://diegotronkurt.github.io/hoshi/`) vía GitHub Actions, empaquetada
-  como TWA con Bubblewrap (`applicationId: com.hoshi.app`), con AAB firmado
-  generado (`versionCode 2`) y assets de la ficha de Play Store (ícono,
-  gráfico de característica, 4 capturas) listos. `assetlinks.json` quedó
-  verificado de punta a punta (ver "Qué cambió desde el 31 de agosto" más
-  arriba) — falta solo que el usuario complete la publicación en Play
-  Console, ya no hay ningún pendiente técnico de mi lado para eso.
+- **Fase A (cerrada, pero el método de empaquetado cambió después).** La
+  PWA está desplegada en GitHub Pages (`https://diegotronkurt.github.io/hoshi/`)
+  vía GitHub Actions. La ficha de Play Store (ícono, gráfico de
+  característica, 4 capturas) sigue lista y no cambió. El empaquetado
+  Android sí cambió: se armó y verificó por completo la TWA con Bubblewrap
+  (`assetlinks.json` de punta a punta, ver "Qué cambió desde el 31 de
+  agosto"), pero una prueba posterior en el teléfono real del usuario
+  encontró que Brave (su navegador predeterminado) no verifica Digital
+  Asset Links de forma confiable, así que esa vía quedó reemplazada por un
+  shell en Flutter con WebView — ver "Qué cambió más tarde el mismo día"
+  más arriba para el detalle completo y por qué. El AAB vigente para subir
+  a Play Console ya no es el de Bubblewrap (`hoshi-android/`,
+  `versionCode 2`) sino el de Flutter (`hoshi-flutter/`, `versionCode 3`).
 - **Fase B (cerrada)**: `MistakeEvent` reemplazado por `ConceptOccurrence`
   en toda la base, con el detalle completo más abajo en su propia entrada de
   fase.
@@ -345,11 +432,18 @@ sección 2 (v1.1 — bots avanzados e insights), que depende de que la sección
 esto poco viable mejoró mucho (6 → 71); lo que queda pendiente ahí es
 puntual (`OJO_FALSO`), no estructural.
 
-Del lado del usuario: terminar la publicación en Play Console (sin
-pendientes técnicos de mi lado). Del lado de contenido/interfaz, dos
-frentes quedaron abiertos en esta sesión sin que el usuario haya elegido
-todavía por cuál seguir: cerrar `OJO_FALSO` (30-90 min, geometría incierta,
-ver su propia entrada más arriba) o alinear la interfaz contra
+Del lado del usuario: subir `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`
+a Play Console (mismo `applicationId` y misma upload key que la ficha ya
+publicada, así que actualiza en el lugar). Quedan además dos decisiones
+puntuales sin tomar sobre el propio `hoshi-flutter/`, ofrecidas y
+explícitamente pospuestas por el usuario en esta sesión: si darle control
+de versiones (`git init`, repo remoto) y si vale la pena un APK de debug
+para probar por sideload en el teléfono real antes de publicar.
+
+Del lado de contenido/interfaz, dos frentes quedaron abiertos en esta
+sesión sin que el usuario haya elegido todavía por cuál seguir: cerrar
+`OJO_FALSO` (30-90 min, geometría incierta, ver su propia entrada más
+arriba) o alinear la interfaz contra
 `go-trainer-especificacion-pantallas.md` (4-7h, ver la comparación de
 arriba, dominado por el radar de Perfil).
 
