@@ -309,12 +309,71 @@ estado sin conexión. Resuelto:
   commit que `key.properties`, `**/*.keystore`, `.idea/` y `build/` quedan
   fuera vía los `.gitignore` (raíz y `android/`) que trae la plantilla de
   Flutter por defecto.
-- **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
-  ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
-  tampoco se generó un APK de debug para probar por sideload en el
-  teléfono real antes de gastar una publicación de Play Console. El
-  proyecto `hoshi-android/` (Bubblewrap) sigue existiendo tal cual, sin
-  borrar, pero queda superado como método de empaquetado para Play Store.
+- **A propósito, sigue sin hacerse**: no se generó un APK de debug para
+  probar por sideload en el teléfono real antes de gastar una publicación
+  de Play Console (el flujo real terminó siendo publicar directo y
+  confirmar después, ver más abajo). El proyecto `hoshi-android/`
+  (Bubblewrap) sigue existiendo tal cual, sin borrar, pero queda superado
+  como método de empaquetado para Play Store.
+
+### v1.1: radar de 6 ejes, insight conocimiento vs aplicación, rediseño de Hoy
+
+Primera pasada sobre la sección 2 del roadmap maestro (`v1.1 = alinear la
+interfaz con la especificación de pantallas`), después de terminar el
+empaquetado offline de Android y el `git init` de `hoshi-flutter/` de más
+arriba. Commit `64379ae`.
+
+- **Radar de 6 ejes** (`src/analysis/axes.ts`, `src/ui/profile/RadarChart.tsx`,
+  SVG a mano, sin librería nueva). Los 26 `ConceptId` se agrupan en Reglas y
+  conteo, Captura, Vida y muerte, Lectura, Forma y Juicio — una agrupación
+  temática propia (el documento nunca especificó cuáles 6 ejes), documentada
+  en el propio archivo. Es la vista principal de Perfil ahora; la lista de
+  barras por concepto que ya existía sigue ahí, detrás de un botón "ver
+  detalle" (roadmap sección 2.3: coexisten, no se reemplaza una por otra).
+  Un eje sin datos se grafica en el centro con un punto hueco en vez de
+  ocultarse, para no cambiar la forma del polígono cada vez que un eje
+  arranca a tener datos.
+- **Insight de conocimiento vs. aplicación** (`src/learning/insights.ts`)
+  sobre `ConceptProfile.byContext`, que ya traía correcto/incorrecto por
+  contexto desde la Fase B — esto fue agregación y presentación, no datos
+  nuevos. Exige mínimo 3 observaciones en cada contexto antes de mostrar una
+  comparación. Cobertura real: como la mayoría de los detectores de partida
+  solo emiten el caso "incorrecto" (documentado ya en Fase B), hoy esto sale
+  significativo sobre todo para `ATARI_IGNORADO` y `ESCALERA`, los únicos
+  con caso "correcto" implementado — no es un bug nuevo, es la misma
+  cobertura parcial ya conocida.
+- **Hoy, rediseñada**: encabezado con el nivel actual (`currentLevel()` en
+  `learning/profile.ts` — heurística nueva, el nivel más bajo con algún
+  concepto todavía no dominado; no existe ningún registro de "nivel
+  completado" en la app, así que se deriva del perfil en vez de inventar un
+  estado nuevo que persistir), tarjeta de foco con el motivo real (
+  `training-policy/session.ts` ahora expone `SessionReasonDetail`: días de
+  atraso si es repaso vencido, puntaje del concepto si es área débil), meta
+  diaria como texto simple, botón "Jugar contra el bot" con el kyu visible.
+- **Escala kyu para la fuerza del bot**, reemplazando "Weak (100)" /
+  "Normal (500)" etc. en `strengthLevels.ts` y en el selector de Jugar.
+  Los valores (~25/20/15/10 kyu para 100/500/2000/8000 playouts) son un
+  **estimado sin calibrar jugando partidas reales** — el roadmap lo pide
+  explícitamente calibrado a mano, no de memoria, y no había tiempo para
+  jugar suficientes partidas contra cada nivel en esta pasada. Por eso la
+  UI dice literalmente "estimated"/"estimado" en vez de mostrar una
+  precisión que no existe. **Pendiente: el usuario debería jugar contra
+  cada uno de los 4 niveles y ajustar `approxKyu` en `strengthLevels.ts`
+  si el kyu mostrado no coincide con la fuerza real percibida.**
+- **Meta diaria editable en Ajustes** (`ui/settings/index.tsx`,
+  `hoshi-daily-goal` en localStorage, default 3, rango 1-20).
+- Verificado con Playwright contra el dev server (no solo `tsc`/tests):
+  capturas de Hoy, Perfil (vacío y con datos sembrados a mano en
+  IndexedDB para ver el radar y la lista de más débiles con contenido
+  real), detalle por concepto, Ajustes y Jugar, en inglés y español, sin
+  errores de consola. Los 179 tests existentes siguieron en verde
+  (`session.test.ts` no se rompió con el nuevo campo opcional
+  `reasonDetail`).
+- **No se tocó en esta pasada** (roadmap sección 2.4, quedan para la
+  siguiente): dificultad adaptativa + presupuesto de tiempo para el bot
+  (requiere tocar el motor MCTS en `engine/`, no solo la UI), y estilos de
+  bot manuales (opcional, el roadmap ya lo marca como lo primero a
+  recortar si falta tiempo).
 
 ### Qué está completo y coincide con el documento de diseño
 
