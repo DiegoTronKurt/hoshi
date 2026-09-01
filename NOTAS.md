@@ -1,5 +1,169 @@
 # Notas de desarrollo
 
+## Fase 6: lecciones, temas y ajustes visuales — v1 cerrada
+
+### Qué se construyó
+
+- **`src/content/lessons/`**: modelo de datos (`types.ts`: `Lesson`, `LessonBlock`
+  con `paragraph`/`diagram`, `DemoScript`/`DemoStep`) y las 29 lecciones de los
+  niveles 0 a 3 (`n0.ts`…`n3.ts`, 6+7+8+8, exactamente la lista de la sección 3
+  del documento de diseño), como objetos de datos TypeScript con prosa vía el
+  sistema i18n ya existente, no MDX (decisión tomada con el usuario: cero
+  dependencias nuevas, uniforme con el resto del proyecto). `concepts.ts` ya
+  traía el `lessonId` de cada concepto desde la Fase 3, así que la lista de
+  lecciones no fue una decisión nueva, solo había que llenarla de contenido.
+  Se agregó `conceptsForLesson(lessonId)` a `concepts.ts` en vez de duplicar a
+  mano qué conceptos toca cada lección.
+- **`src/ui/lessons/`**: `LearnScreen` (mapa de niveles → lista de lecciones,
+  progreso de lectura en `localStorage`, no en IndexedDB porque no es dato de
+  aprendizaje evaluable), `LessonScreen` (renderiza bloques de prosa/diagrama,
+  la demo si existe, la práctica embebida y el CTA a Jugar), `GuidedDemo` (el
+  "ejemplo interactivo" de cada lección) y `LessonPractice` (el "problema
+  guiado", reutilizando `useSolvableProblem` igual que Ejercicios).
+- **`GuidedDemo`**: secuencia guionada de jugadas validadas contra el motor de
+  reglas real (`core/rules.applyMove`), no un ejercicio evaluado por el
+  solucionador ni registrado en FSRS — esto es enseñanza, no evaluación. Cada
+  paso lo juega quien le toca el turno en la posición real; un paso puede
+  marcarse `auto` (pasa en silencio, o juega una jugada concreta) para narrar
+  la respuesta forzada del otro bando sin pedirle un click a la persona — así
+  se armó, por ejemplo, la escalera completa de n3-l2 (5 jugadas, 3 de la
+  persona y 2 automáticas) y el snapback de n3-l5.
+- **Temas nuevos**: `sumieTheme`, `kayaTheme`, `nocturnoTheme` en
+  `src/ui/board/themes.ts`, junto al `minimoTheme` ya existente. `StoneStyle`
+  gana dos campos opcionales, `highlight` (gradiente radial para dar volumen)
+  y `dropShadow` (sombra proyectada), que `BoardCanvas` usa si están
+  presentes. Mínimo y Kaya los usan (piedras "físicas", pedido explícito del
+  usuario); Sumi-e no usa ninguno (tinta plana, como pide el documento);
+  Nocturno OLED usa solo `dropShadow` (silueta con contorno, sin brillo).
+- **Sonido**: `src/ui/sound.ts` sintetiza un "clac" corto (ráfaga de ruido
+  filtrada paso-bajo con envolvente rápida) vía Web Audio API, sin archivos de
+  audio. Se llama tras cualquier colocación real de piedra (Jugar, Ejercicios,
+  Hoy, demos de lecciones), nunca en pase ni jugada ilegal.
+- **`src/ui/settings/`**: `SettingsProvider`/`useSettings()` (mismo patrón que
+  `i18n/index.tsx`: contexto en React con persistencia en `localStorage`) para
+  tema y sonido, más `SettingsScreen`, la pantalla de Ajustes nueva. No es una
+  pestaña de la barra inferior: se abre con un botón "Ajustes" desde Perfil,
+  que cambia una vista local del mismo contenedor (mismo truco que ya usa
+  Revisar para el detalle de una partida).
+- **Pestaña "Aprender"** nueva en `App.tsx`, entre Hoy y Jugar.
+- **`src/content/lessons/helpers.ts`**: `cropShape`/`cropPoint`, para recortar
+  a una vista local cuadrada los tableros grandes de `seeds.ts` (pensados para
+  el solucionador, con todo el resto del tablero relleno de un color). Ver
+  more abajo, en decisiones.
+- `src/content/seeds.ts` gana `piramideDeCuatro` (derivada y verificada con el
+  solucionador, pendiente desde la Fase 3) y `dosOjosSeparados` (misma
+  posición que ya verificaba `tests/solver/tsumego.test.ts` a mano, ahora
+  exportada para reuso). `tests/content/lessons.test.ts` es la verificación
+  nueva que exige el principio 1 del documento para el contenido de Nivel 2.
+- 4 tests nuevos en `tests/solver/tsumego.test.ts` (pirámide de cuatro) y 4 en
+  `tests/content/lessons.test.ts` (reverificación de las formas reutilizadas
+  por las lecciones), 96/96 en total.
+
+### Decisiones técnicas con alternativas (qué elegí y qué sacrifiqué)
+
+- **Formato de lecciones: TS + componentes React, no MDX.** Decidido con el
+  usuario explícitamente para mantener uniformidad con el resto del proyecto
+  (mismo criterio que evitó react-i18next en la Fase 1) y evitar duplicar
+  archivos `.mdx` por idioma.
+- **El "ejemplo interactivo" es una demo jugable nueva (`GuidedDemo`), no el
+  solucionador ni un diagrama estático.** También decidido con el usuario.
+  Sacrifica reutilizar directamente la infraestructura de Ejercicios para esta
+  parte, a cambio de secuencias con guión (útiles para enseñar, donde a veces
+  hace falta narrar una jugada del rival que el estudiante no debería tener
+  que "adivinar").
+- **Bug real encontrado con una captura de pantalla, no con los tests**: las
+  formas de `seeds.ts` (`rectaDeTres`, `cuadradoDeCuatro`, `piramideDeCuatro`,
+  `dosOjosSeparados`) están pensadas para el solucionador, con todo el resto
+  del tablero de 9x9 relleno de un color para acotar la región de análisis.
+  Usadas tal cual como diagrama de lección, eso se traduce en un tablero casi
+  entero cubierto de piedras blancas alrededor de una pequeña forma negra:
+  ilegible para alguien aprendiendo. La captura de pantalla de verificación en
+  navegador lo mostró de inmediato. Se agregó `cropShape`/`cropPoint` en vez
+  de tocar `seeds.ts`: recorta a una vista cuadrada local con margen,
+  centrada en el muro de piedras. Es seguro para las demos jugables (no solo
+  para diagramas estáticos) porque las piedras "de relleno" fuera del
+  recorte son funcionalmente idénticas a que esas celdas queden fuera del
+  tablero — ninguna de las dos cuenta como libertad — así que recortar no
+  cambia libertades ni capturas, solo la vista. La pantalla de Ejercicios
+  sigue mostrando estos mismos problemas sin recortar (ya lo hacía desde la
+  Fase 3); no se tocó, es un patrón ya aceptado ahí y fuera del alcance de
+  esta fase.
+- **`piramideDeCuatro` resultó condicional, no muerta sin más**, confirmando
+  lo que la Fase 3 ya sospechaba al descartarla de las semillas. Se derivó y
+  verificó con el solucionador (igual que la recta de tres: vive si el dueño
+  juega primero el punto vital, muere si lo juega el rival primero) antes de
+  usarla en la lección N2-L7. No se agregó a `SEED_SPECS` (el banco de
+  problemas generado): eso tocaría el pipeline de generación, que quedó
+  fuera de alcance explícito de esta fase por pedido del usuario. Queda
+  exportada y verificada con test propio para que las lecciones la usen
+  directo, sin pasar por el generador.
+- **Red (geta) y snapback se encontraron por fuerza bruta / derivación y
+  verificación con código, no de memoria.** Para la geta, un script probó
+  combinaciones de piedras negras cerca de una esquina hasta encontrar una
+  que cumpliera la propiedad exacta ("para cualquier extensión de blanco,
+  negro tiene una jugada que la vuelve a dejar en atari"). Para el snapback,
+  la posición se derivó a mano con cuidado y se verificó reproduciendo la
+  secuencia completa (sacrificio, captura, recaptura) con `applyMove` real
+  antes de aceptarla. Mismo criterio que ya dejó registrado la Fase 4 sobre
+  las escaleras: no asumir la geometría de una posición táctica, verificarla
+  con el motor.
+- **La escalera de N3-L2 y el rompedor de N3-L3 reutilizan exactamente las
+  posiciones ya verificadas en `tests/solver/ladder.test.ts`**, reproducidas
+  en un tablero de 5x5 en vez de 9x9 (se confirmó con un script que
+  `solveLadder` da el mismo resultado exacto en ambos tamaños, ya que toda la
+  secuencia ocurre lejos de los otros bordes) para que el diagrama sea más
+  legible sin sacrificar nada de la verificación.
+- **Ojo falso (N2-L4) se queda en la regla general, sin resolver una posición
+  táctica específica.** A diferencia de las formas de vida y muerte
+  (recta de tres, cuadrado de cuatro, pirámide de cuatro), verificar que un
+  ojo falso concreto realmente muere requeriría leer una captura de la
+  piedra diagonal que puede necesitar más tablero del que cabe en una región
+  acotada simple. El principio 1 exige verificación para afirmaciones sobre
+  una posición concreta, no para la definición general de la regla (mismo
+  criterio que ya se aplicó a komi o al fin de la partida): la lección
+  enseña cómo reconocer el patrón por las diagonales, con un diagrama que
+  solo muestra la geometría, sin afirmar el destino de esa piedra rival en
+  particular.
+- **Navegación: se agregó "Aprender" y se mantuvo "Ejercicios"**, quedando 6
+  pestañas en vez de las 5 que lista la sección 6.1 del documento
+  ("Hoy, Aprender, Jugar, Revisar, Perfil"). Perder Ejercicios como entrada
+  independiente habría sido peor para quien ya lo usa como práctica libre
+  fuera de una lección puntual; además "practicar más" desde una lección
+  necesita a dónde ir. Decisión explícita, no un olvido del documento.
+- **Accesibilidad avanzada (modo daltónico, doble toque, navegación por
+  teclado, objetivo táctil de 44px) quedó en stand-by por pedido explícito
+  del usuario**, a cambio de dos pedidos concretos que sí se hicieron: piedras
+  con volumen/sombra y sonido al colocar. Ver "Qué quedó pendiente".
+- **Progreso de lectura de lecciones en `localStorage`, no en IndexedDB.** No
+  es un dato de aprendizaje evaluable (no alimenta perfil ni FSRS), así que no
+  necesitaba un almacén nuevo.
+- **Ajustes vive dentro de Perfil, sin pestaña propia.** Documento de diseño,
+  sección 6.1: Perfil incluye "ajustes y temas". Decidido con el usuario.
+
+### Qué quedó pendiente
+
+- **Accesibilidad avanzada de la sección 6.4 del documento** (modo daltónico,
+  confirmación de doble toque, navegación por teclado, objetivo táctil de
+  44px en pantallas angostas): explícitamente diferida por el usuario en esta
+  entrega, no construida.
+- El circuito "si un concepto acumula 3 errores en 5 partidas, se reabre su
+  lección" (documento, sección 5.5) seguía bloqueado por falta de lecciones
+  hasta ahora; ahora que existen, queda disponible para una fase futura, pero
+  no se pidió como parte de esta.
+- El banco de problemas sigue chico (6 entradas, sin contar las semillas
+  nuevas que no se agregaron a él a propósito): la mayoría de las secciones
+  "Problema guiado" de las lecciones de Nivel 0, 1 y 3 muestran el estado
+  vacío en vez de un ejercicio real. Nivel 2 (`DOS_OJOS`, `PUNTO_VITAL`) sí
+  tiene contenido real porque esos son los conceptos que ya cubrían las
+  semillas de la Fase 3.
+- `PASE_PREMATURO` (Fase 4) sigue siendo una comparación de un solo paso, sin
+  cambios en esta fase.
+- Recién llegaron documentos nuevos post-v1 (`go-trainer-post-v1-roadmap.md` y
+  relacionados) con un gate explícito de 4 criterios de salida de v1 a
+  verificar con el usuario antes de tocar código de esa etapa. No se tocó
+  nada de eso en esta fase; queda para cuando el usuario confirme que
+  arrancamos esa etapa.
+
 ## Fase 5: FSRS, perfil de habilidad, planificador y pantalla Hoy
 
 ### Qué se construyó

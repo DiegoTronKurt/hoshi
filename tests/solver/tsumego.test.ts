@@ -116,6 +116,55 @@ describe('solucionador de vida y muerte: formas clasicas verificadas', () => {
     })
   })
 
+  // Piramide de cuatro: fila de tres puntos vacios mas un cuarto punto
+  // pegado al del medio (T-tetromino). Se descarto de las semillas en la
+  // Fase 3 por no estar segura su clasificacion a mano; resulta condicional,
+  // igual que la recta de tres: el punto vital es el que esta pegado a los
+  // otros tres (el "brazo" de la T). Si el defensor lo juega primero, separa
+  // el espacio en dos ojos reales (el brazo mas un extremo, el otro extremo
+  // solo). Si el rival lo juega primero, el espacio restante queda reducido
+  // a una recta de tres ya con el turno del defensor sobre una forma que de
+  // todas formas no le alcanza para dos ojos reales.
+  describe('piramide de cuatro', () => {
+    const { board, wallPoints } = buildEnclosedShape(
+      9,
+      [
+        [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
+        [2, 4], [6, 4],
+        [2, 5], [3, 5], [4, 5], [5, 5], [6, 5],
+        [2, 6], [3, 6], [4, 6], [5, 6], [6, 6],
+      ],
+      [[3, 4], [4, 4], [5, 4], [4, 5]],
+    )
+    const region = computeRegion(board, wallPoints, 1)
+
+    it('negro vive si juega primero el punto vital', () => {
+      const result = solve({
+        board,
+        region,
+        targetPoints: wallPoints,
+        targetColor: BLACK,
+        toMove: BLACK,
+        objective: 'live',
+        maxDepth: 8,
+      })
+      expect(result.solved).toBe(true)
+    })
+
+    it('blanco mata si juega primero el punto vital', () => {
+      const result = solve({
+        board,
+        region,
+        targetPoints: wallPoints,
+        targetColor: BLACK,
+        toMove: WHITE,
+        objective: 'kill',
+        maxDepth: 8,
+      })
+      expect(result.solved).toBe(true)
+    })
+  })
+
   it('un grupo con dos ojos separados ya formados vive sin necesidad de jugar', () => {
     const { board, wallPoints } = buildEnclosedShape(
       9,

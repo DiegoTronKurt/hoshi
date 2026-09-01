@@ -339,3 +339,11 @@ export function conceptsThatGenerateExercises(): Concept[] {
 export function conceptsWithEvidence(): Concept[] {
   return ALL_CONCEPT_IDS.map((id) => CONCEPTS[id]).filter((c) => c.hasDetector || c.generatesExercises)
 }
+
+/** Conceptos cuyo lessonId apunta a una leccion dada. Se deriva de CONCEPTS
+ * en vez de duplicar la lista a mano en cada leccion, para que un solo
+ * enumerado siga siendo la unica fuente de verdad (principio 2 del
+ * documento de diseno). */
+export function conceptsForLesson(lessonId: string): Concept[] {
+  return ALL_CONCEPT_IDS.map((id) => CONCEPTS[id]).filter((c) => c.lessonId === lessonId)
+}

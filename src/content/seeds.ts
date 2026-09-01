@@ -20,7 +20,7 @@ function place(board: BoardState, color: Color, points: Array<[number, number]>)
  * tests/solver/tsumego.test.ts para la derivacion completa razonada de cada
  * forma).
  */
-function buildEnclosedShape(size: number, wall: Array<[number, number]>, eyespace: Array<[number, number]>) {
+export function buildEnclosedShape(size: number, wall: Array<[number, number]>, eyespace: Array<[number, number]>) {
   const board = createBoard(size)
   for (let p = 0; p < board.stones.length; p++) board.stones[p] = WHITE
   place(board, BLACK, wall)
@@ -28,7 +28,7 @@ function buildEnclosedShape(size: number, wall: Array<[number, number]>, eyespac
   return { board, wallPoints: wall.map(([x, y]) => toPoint(size, x, y)) }
 }
 
-const rectaDeTres = buildEnclosedShape(
+export const rectaDeTres = buildEnclosedShape(
   9,
   [
     [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
@@ -38,7 +38,7 @@ const rectaDeTres = buildEnclosedShape(
   [[3, 4], [4, 4], [5, 4]],
 )
 
-const cuadradoDeCuatro = buildEnclosedShape(
+export const cuadradoDeCuatro = buildEnclosedShape(
   9,
   [
     [2, 3], [3, 3], [4, 3], [5, 3],
@@ -47,6 +47,44 @@ const cuadradoDeCuatro = buildEnclosedShape(
     [2, 6], [3, 6], [4, 6], [5, 6],
   ],
   [[3, 4], [4, 4], [3, 5], [4, 5]],
+)
+
+/**
+ * Piramide de cuatro (T-tetromino: fila de 3 mas un punto pegado al del
+ * medio). La Fase 3 la habia descartado de las semillas porque a mano
+ * parecia "muerta sin mas" y en realidad resulto condicional: se verifico
+ * con el solucionador (ver tests/solver/tsumego.test.ts) que, igual que la
+ * recta de tres, vive si el dueno juega primero el punto vital (el punto
+ * pegado, el que toca a los otros tres) y muere si lo juega el rival
+ * primero. No es "muerta sin mas" como las tablas de formas suelen resumirla
+ * quitando la variable de turno.
+ */
+export const piramideDeCuatro = buildEnclosedShape(
+  9,
+  [
+    [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
+    [2, 4], [6, 4],
+    [2, 5], [3, 5], [4, 5], [5, 5], [6, 5],
+    [2, 6], [3, 6], [4, 6], [5, 6], [6, 6],
+  ],
+  [[3, 4], [4, 4], [5, 4], [4, 5]],
+)
+
+/**
+ * Dos ojos separados ya formados: vida incondicional. Misma posicion que
+ * tests/solver/tsumego.test.ts verifica de forma independiente (construida
+ * a mano ahi mismo); se exporta aca tambien para que las lecciones de la
+ * Fase 6 la reutilicen sin duplicar la posicion, con su propia verificacion
+ * en tests/content/lessons.test.ts.
+ */
+export const dosOjosSeparados = buildEnclosedShape(
+  9,
+  [
+    [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
+    [2, 4], [4, 4], [6, 4],
+    [2, 5], [3, 5], [4, 5], [5, 5], [6, 5],
+  ],
+  [[3, 4], [5, 4]],
 )
 
 interface SeedSpec {
@@ -60,6 +98,11 @@ const SEED_SPECS: SeedSpec[] = [
   { board: rectaDeTres.board, wallPoints: rectaDeTres.wallPoints, toMove: BLACK, objective: 'live' },
   { board: rectaDeTres.board, wallPoints: rectaDeTres.wallPoints, toMove: WHITE, objective: 'kill' },
   { board: cuadradoDeCuatro.board, wallPoints: cuadradoDeCuatro.wallPoints, toMove: WHITE, objective: 'kill' },
+  // piramideDeCuatro no se agrega aca a proposito: el banco de problemas
+  // generado (src/content/problems/bank.json) es un pendiente conocido y
+  // fuera de alcance de esta fase (ver NOTAS.md). La forma queda exportada
+  // y verificada con test propio para que las lecciones de la Fase 6 la
+  // usen directo como diagrama, sin pasar por el generador.
 ]
 
 export function buildSeedProblems(): Problem[] {

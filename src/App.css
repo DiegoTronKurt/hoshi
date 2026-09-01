@@ -476,6 +476,233 @@
   cursor: pointer;
 }
 
+.learn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.learn h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.learn-level-list,
+.learn-lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.learn-level-list button,
+.learn-lesson-list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  background: #ffffff;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.learn-read-badge {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #e4e9e4;
+  color: #4a6350;
+}
+
+.learn-empty {
+  text-align: center;
+  color: #777777;
+  padding: 1.5rem 1rem;
+}
+
+.lesson {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.lesson-header h2 {
+  flex: 1;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.lesson-header button {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.lesson-body {
+  width: 100%;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #222222;
+}
+
+.lesson-paragraph {
+  margin: 0 0 0.9rem;
+}
+
+.lesson-diagram {
+  width: 100%;
+  margin: 0 0 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lesson-diagram figcaption {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: #666666;
+  text-align: center;
+}
+
+.lesson-demo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid #dddddd;
+  padding-top: 1rem;
+}
+
+.lesson-demo h3 {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.lesson-demo-status {
+  text-align: center;
+  min-height: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lesson-demo-status button {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.lesson-demo-feedback {
+  color: #2f7a3d;
+  font-weight: 600;
+}
+
+.lesson-demo-wrong {
+  color: #b23b3b;
+}
+
+.lesson-demo-done {
+  color: #2f7a3d;
+  font-weight: 600;
+}
+
+.lesson-practice {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  border-top: 1px solid #dddddd;
+  padding-top: 1rem;
+}
+
+.lesson-practice h3 {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.lesson-practice-empty {
+  color: #777777;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.lesson-practice-meta {
+  font-size: 0.85rem;
+  color: #555555;
+  margin: 0;
+}
+
+.lesson-practice button {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.lesson-checkgame {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  border-top: 1px solid #dddddd;
+  padding-top: 1rem;
+}
+
+.lesson-checkgame h3 {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.lesson-checkgame button {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
 .profile {
   width: 100%;
   display: flex;
@@ -837,5 +1064,74 @@
 
   .settings-theme-option.active {
     border-color: #ececec;
+  }
+
+  .learn-level-list button,
+  .learn-lesson-list button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .learn-read-badge {
+    background: #2a332c;
+    color: #9fc0aa;
+  }
+
+  .learn-empty {
+    color: #999999;
+  }
+
+  .lesson-header button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .lesson-body {
+    color: #ececec;
+  }
+
+  .lesson-diagram figcaption {
+    color: #bbbbbb;
+  }
+
+  .lesson-demo,
+  .lesson-practice,
+  .lesson-checkgame {
+    border-color: #55503f;
+  }
+
+  .lesson-demo-feedback,
+  .lesson-demo-done {
+    color: #6fce82;
+  }
+
+  .lesson-demo-wrong {
+    color: #e28c8c;
+  }
+
+  .lesson-demo-status button {
+    background: #ececec;
+    color: #1a1a1a;
+  }
+
+  .lesson-practice-empty {
+    color: #999999;
+  }
+
+  .lesson-practice-meta {
+    color: #bbbbbb;
+  }
+
+  .lesson-practice button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .lesson-checkgame button {
+    background: #ececec;
+    color: #1a1a1a;
   }
 }
