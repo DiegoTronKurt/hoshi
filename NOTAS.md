@@ -1,5 +1,135 @@
 # Notas de desarrollo
 
+## Banco de problemas: de 6 a 71 entradas, 8 de 9 conceptos
+
+### Qué se construyó
+
+Fase C había encontrado que el banco (`src/content/problems/bank.json`)
+tenía solo 6 entradas cubriendo 2 de los 9 conceptos con
+`generatesExercises: true`. Investigando `tools/generate-problems.ts`
+resultó ser una brecha más profunda que volumen: el generador solo sabía
+etiquetar `kill`→`PUNTO_VITAL` y `live`→`DOS_OJOS`, sin ninguna lógica para
+los otros 7. Se dividió el trabajo en dos pistas según si el concepto encaja
+en el formato `Problem`/`solve()` existente (región acotada, árbol de
+vida-muerte) o no.
+
+- **Utilidad nueva, `core/board.ts`**: `BOARD_TRANSFORMS` (las 8
+  transformaciones diedrales de un tablero cuadrado), `transformBoard`,
+  `transformPoint`. Multiplica una plantilla verificada una vez en hasta 8
+  posiciones reales del banco sin derivar geometría nueva a mano cada vez;
+  cada variante igual se re-verifica con el solucionador antes de
+  aceptarse, la transformación nunca se asume que preserva el resultado.
+- **`content/seeds.ts` reescrito**: `piramideDeCuatro` (pendiente desde
+  Fase 3) entra al generador. Las formas semilla ahora llevan un
+  `conceptId` explícito por espectro en vez de un `DOS_OJOS` genérico:
+  objetivo `live` → `DOS_OJOS` (el defensor logra dos ojos separados),
+  objetivo `kill` sobre un espacio de ojo → `NAKADE` (el atacante juega
+  adentro para reducirlo a un ojo, calza con la definición del concepto
+  sin importar si la forma es condicional o muerta sin más). Se agregan
+  plantillas nuevas de geta y snapback, reutilizando exactamente las
+  posiciones ya verificadas en las lecciones n3-l4/n3-l5 de Fase 6 (mismo
+  tablero, mismas piedras), en vez de derivar geometría nueva.
+- **`tools/generate-problems.ts` reescrito**: autojuego con presupuestos de
+  playouts distintos por color (documento, sección 5.6: "100 vs 2000
+  produce posiciones con errores explotables"; en la práctica 100 vs 800,
+  ver nota de rendimiento abajo), alternando cuál color juega fuerte por
+  partida. `CAPTURA_SIMPLE` se distingue de `PUNTO_VITAL` por profundidad
+  de la solución (una captura resuelta en 1 jugada no necesitó lectura
+  real).
+- **Pista 2, capa de datos (sin UI todavía)**: `ESCALERA` y `DOBLE_ATARI`
+  no encajan en `Problem`/`solve()` — una escalera corre por todo el
+  tablero (por eso existe `solver/ladder.ts` aparte, con la región acotada
+  rota ese supuesto), y un doble atari es reconocimiento de una sola
+  jugada, no una lectura. Cada uno tiene su propio tipo de dato nuevo
+  (`content/ladderProblem.ts`, `content/doubleAtariProblem.ts`, con su
+  propia serialización SGF vía propiedades `ZKIND`/`ZRUNNER`/`ZCHASER` o
+  `ZCOLOR`/`ZEXPECTED`) y su propio generador
+  (`tools/generate-ladder-problems.ts`,
+  `tools/generate-double-atari-problems.ts`), verificados con
+  `solver/ladder.ts` y el nuevo `solver/doubleAtari.ts` respectivamente, no
+  con `solve()`. `solver/doubleAtari.ts` reutiliza `getGroup` directo,
+  mismo patrón que ya usan varios detectores de `analysis/mistakes.ts`.
+  **Falta la pantalla**: `ExercisesScreen`/`TodayScreen` todavía solo saben
+  renderizar `Problem` vía `useSolvableProblem`; conectar estos dos bancos
+  nuevos (`ladders.json`, `double-atari.json`) a la interfaz queda
+  pendiente a propósito, para no mezclar el trabajo de generación de
+  contenido con un rediseño de pantalla en la misma pasada.
+
+### Resultado
+
+| Concepto | Antes | Ahora | Fuente |
+|---|---|---|---|
+| DOS_OJOS | 4 | 12 | semillas + autojuego |
+| PUNTO_VITAL | 2 | 4 | autojuego |
+| NAKADE | 0 | 10 | semillas |
+| RED_GETA | 0 | 4 | semilla (n3-l4) × simetría |
+| SNAPBACK | 0 | 8 | semilla (n3-l5) × simetría |
+| CAPTURA_SIMPLE | 0 | 5 | autojuego |
+| ESCALERA | 0 | 12 | plantillas × simetría (banco aparte, sin UI) |
+| DOBLE_ATARI | 0 | 16 | plantillas × simetría (banco aparte, sin UI) |
+| OJO_FALSO | 0 | 0 | pendiente, ver abajo |
+
+71 problemas verificados en total (antes 6), 8 de 9 conceptos con contenido
+real (antes 2). Todos re-verificados por `tests/content/problem-bank.test.ts`
+en CI, ninguno aceptado sin que el solucionador lo confirme.
+
+### Un bug real encontrado y corregido: SGF de 232KB por entrada
+
+`problemSgf.ts` limitaba a 2 las variaciones guardadas del atacante, pero no
+las del defensor: en una forma muerta sin importar quién juega primero
+(cuadrado de cuatro, y cualquier `NAKADE`/`PUNTO_VITAL` con la misma
+propiedad), *todos* los intentos de defensa "cumplen el objetivo" (todos
+refutan igual), así que se guardaban todos, recursivamente. Dos entradas de
+`NAKADE` llegaron a 232KB cada una; el `bank.json` completo pesaba 1.1MB
+para 43 problemas, e inflaba el bundle principal de ~360KB a ~1.46MB.
+Corregido acotando también las respuestas del defensor a un par
+representativo (`MAX_DEFENDER_REPLIES_STORED`), con el mismo razonamiento
+que ya justificaba el límite del atacante: la app valida cualquier jugada
+del usuario en vivo con el solucionador, nunca contra el árbol guardado, así
+que el recorte no le quita cobertura al ejercicio. Test de regresión en
+`tests/content/problemSgf.test.ts`.
+
+### OJO_FALSO: por qué quedó pendiente, y qué se aprendió
+
+Construir a mano una posición de ojo falso que el solucionador confirme
+matable resultó mucho más frágil de lo esperado — varios intentos
+sucesivos rotos por el mismo tipo de error de conectividad, no por teoría
+de Go incorrecta:
+
+- Con la técnica de `buildEnclosedShape` (rellenar todo el tablero de
+  blanco), remover las piedras del muro que forman las diagonales "falsas"
+  de un ojo repetidamente aislaba una piedra vecina o dejaba un bolsillo
+  de blanco encerrado sin conexión al exterior — posiciones ilegales, no
+  detectadas hasta correr el solucionador (o, en un caso, hasta escribir un
+  chequeo explícito de conectividad).
+- La causa raíz: las diagonales de un punto son siempre vecinas
+  ortogonales de sus propias piedras de anillo, así que "quitar una
+  diagonal" casi siempre le quita a esa piedra de anillo su único camino de
+  vuelta al resto del grupo. Un bloque **sólido** de negro con dos
+  agujeros (en vez de un anillo hueco) evita el bolsillo interior por
+  construcción, pero el mismo problema de conectividad reaparece en el
+  borde entre el agujero y el resto.
+- Quedan escritas (y luego descartadas del repo, no vale la pena
+  conservar el script) funciones de verificación reutilizables para el
+  próximo intento: chequeo de "un solo grupo conectado" y de "fondo blanco
+  sin bolsillos aislados", ambas con `getGroup` directo — el próximo
+  intento debería usarlas desde el principio en vez de razonar la
+  geometría a mano primero.
+
+### Nota de rendimiento: por qué geta y snapback no pueden usar profundidad 8
+
+Las formas de ojo (semillas con `buildEnclosedShape`) acotan la región a
+pocos puntos vacíos porque el resto del tablero ya está relleno de blanco.
+Geta y snapback parten de un tablero casi vacío (3 a 10 piedras nada más):
+sin relleno que acote la búsqueda, una región abierta con profundidad 8
+explota combinatoriamente (probado y revertido: más de 15 minutos sin
+terminar, contra menos de 4 segundos a profundidad 4-5). Se usa profundidad
+4 para geta y 5 para snapback en la generación, y el mismo criterio se
+replicó en `tests/content/seeds.test.ts` y `tests/content/problem-bank.test.ts`
+para que la re-verificación en CI no vuelva a colgarse.
+
+---
+
 ## Estado general del proyecto (2026-08-31)
 
 Análisis completo pedido por el usuario antes de empezar la sección 2 del

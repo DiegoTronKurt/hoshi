@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ladder1",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bb]ZCHASER[W]AB[bb]AW[cb][bc])"
+  },
+  {
+    "id": "ladder2",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hb]ZCHASER[W]AB[hb]AW[gb][hc])"
+  },
+  {
+    "id": "ladder3",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hh]ZCHASER[W]AB[hh]AW[hg][gh])"
+  },
+  {
+    "id": "ladder4",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bh]ZCHASER[W]AB[bh]AW[bg][ch])"
+  },
+  {
+    "id": "ladder5",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bb]ZCHASER[W]AB[ba][bb]AW[ca][cb][bc])"
+  },
+  {
+    "id": "ladder6",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hb]ZCHASER[W]AB[hb][ib]AW[gb][hc][ic])"
+  },
+  {
+    "id": "ladder7",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hh]ZCHASER[W]AB[hh][hi]AW[hg][gh][gi])"
+  },
+  {
+    "id": "ladder8",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bh]ZCHASER[W]AB[ah][bh]AW[ag][bg][ch])"
+  },
+  {
+    "id": "ladder9",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hb]ZCHASER[W]AB[ha][hb]AW[ga][gb][hc])"
+  },
+  {
+    "id": "ladder10",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bh]ZCHASER[W]AB[bh][bi]AW[bg][ch][ci])"
+  },
+  {
+    "id": "ladder11",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[bb]ZCHASER[W]AB[ab][bb]AW[cb][ac][bc])"
+  },
+  {
+    "id": "ladder12",
+    "conceptId": "ESCALERA",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[ladder]ZRUNNER[hh]ZCHASER[W]AB[hh][ih]AW[hg][ig][gh])"
+  }
+]
