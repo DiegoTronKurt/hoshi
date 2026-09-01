@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { listBankEntries, loadProblem } from '../../content/problemBank'
-import type { BankEntry } from '../../content/problemBank'
-import type { Problem } from '../../content/problemSgf'
-import { BLACK } from '../../core/types'
+import { listBankEntries, loadEntry } from '../../content/problemBank'
+import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { computeProfiles } from '../../learning/profile'
@@ -11,8 +9,8 @@ import type { SessionPlan, SessionReason } from '../../training-policy/session'
 import { SolverClient } from '../../solver/client'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
-import { BoardCanvas } from '../board/BoardCanvas'
-import { useSolvableProblem } from '../exercises/useSolvableProblem'
+import { ExerciseView } from '../exercises/ExerciseView'
+import { useSolvableExercise } from '../exercises/useSolvableExercise'
 import { useSettings } from '../settings'
 
 const REASON_KEY: Record<SessionReason, TranslationKey> = {
@@ -28,7 +26,7 @@ export function TodayScreen() {
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [srsCards, setSrsCards] = useState<SrsCardRecord[]>([])
   const [entries] = useState<BankEntry[]>(() => listBankEntries())
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoadedState] = useState(false)
 
   useEffect(() => {
     Promise.all([listAttempts(), listGames(), listSrsCards()])
@@ -36,9 +34,9 @@ export function TodayScreen() {
         setAttempts(a)
         setGames(g)
         setSrsCards(s)
-        setLoaded(true)
+        setLoadedState(true)
       })
-      .catch(() => setLoaded(true))
+      .catch(() => setLoadedState(true))
   }, [])
 
   const plan: SessionPlan | null = useMemo(() => {
@@ -61,14 +59,14 @@ export function TodayScreen() {
   const currentItem = sessionStarted && plan ? (plan.items[currentIndex] ?? null) : null
   const currentEntry = currentItem?.entry ?? null
 
-  const [problem, setProblem] = useState<Problem | null>(null)
+  const [loadedProblem, setLoadedProblem] = useState<LoadedProblem | null>(null)
   useEffect(() => {
-    setProblem(currentEntry ? loadProblem(currentEntry) : null)
+    setLoadedProblem(currentEntry ? loadEntry(currentEntry) : null)
   }, [currentEntry])
 
-  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, giveUp } = useSolvableProblem(
+  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, giveUp } = useSolvableExercise(
     currentEntry,
-    problem,
+    loadedProblem,
     solverClient,
   )
 
@@ -118,7 +116,7 @@ export function TodayScreen() {
     )
   }
 
-  if (!currentItem || !problem || !game) {
+  if (!currentItem || !loadedProblem || !game) {
     return (
       <div className="today">
         <h2>{t('today.complete.title')}</h2>
@@ -127,10 +125,6 @@ export function TodayScreen() {
     )
   }
 
-  const userColor = problem.toMove
-  const objectiveKey: TranslationKey = problem.objective === 'live' ? 'exercises.objective.live' : 'exercises.objective.kill'
-  const toMoveKey: TranslationKey = userColor === BLACK ? 'color.black' : 'color.white'
-
   return (
     <div className="today">
       <p className="today-progress">
@@ -138,27 +132,16 @@ export function TodayScreen() {
         <span className={`today-reason today-reason-${currentItem.reason}`}>{t(REASON_KEY[currentItem.reason])}</span>
       </p>
 
-      <p className="exercises-meta">
-        {t('exercises.concept')}: {t(`concept.${problem.conceptId}.label` as TranslationKey)} · {t('exercises.toMove')}{' '}
-        {t(toMoveKey)} · {t(objectiveKey)}
-        {solutionMoves !== null && (
-          <> · {solutionMoves === 1 ? t('exercises.solvesInOne') : t('exercises.solvesInMany', { count: solutionMoves })}</>
-        )}
-      </p>
-
-      <BoardCanvas
-        size={problem.board.size}
-        stones={game.board.stones}
+      <ExerciseView
+        loaded={loadedProblem}
+        game={game}
         lastMove={lastMove}
+        status={status}
+        thinking={thinking}
+        solutionMoves={solutionMoves}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
-
-      <div className="exercises-status" aria-live="polite">
-        {status === 'solved' && <p className="exercises-solved">{t('exercises.solved')}</p>}
-        {status === 'incorrect' && !thinking && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
-        {thinking && <p>{t('exercises.thinking')}</p>}
-      </div>
 
       <div className="today-controls">
         {status === 'solved' ? (
