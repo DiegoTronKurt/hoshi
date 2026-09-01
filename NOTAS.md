@@ -253,8 +253,12 @@ que la verificación de TWA ya daba por resuelto.
   código de por medio, se subió `pubspec.yaml` a `1.1.1+4` (`versionCode
   4`) y se regeneró el AAB de release con `flutter build appbundle
   --release` — mismo `app-release.aab`, ahora de 44.5MB, mismo firmado.
-  Sigue sin subirse a Play Console; ese intento queda pendiente de
-  confirmar del lado del usuario.
+- **`versionCode 4` subido a Play Console y publicado.** El usuario
+  actualizó la app en su teléfono real (el mismo con Brave como navegador
+  predeterminado que mostraba la barra de navegador con la TWA) y confirmó
+  que ahora abre a pantalla completa como corresponde. Con esto el shell
+  Flutter con WebView queda validado en el escenario real que motivó el
+  cambio, no solo en el emulador — episodio cerrado.
 - **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
   ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
   tampoco se generó un APK de debug para probar por sideload en el
