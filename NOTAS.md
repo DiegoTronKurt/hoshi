@@ -1,5 +1,206 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-08-31)
+
+Análisis completo pedido por el usuario antes de empezar la sección 2 del
+roadmap post-v1 (v1.1 — bots avanzados e insights), comparando lo construido
+contra `go-trainer-v1-diseno.md` y `go-trainer-post-v1-roadmap.md` completos,
+no solo la última fase. A diferencia de las entradas de fase de más abajo,
+esta sección se actualiza cada vez que valga la pena repetir este ejercicio,
+no queda congelada en una fecha.
+
+### Qué está completo y coincide con el documento de diseño
+
+- Las 6 fases de v1 (F1-F6) están cerradas, commiteadas y con tests en verde:
+  núcleo de reglas + SGF + tablero en canvas (F1), bot MCTS en Web Worker +
+  pantalla Jugar (F2), solucionador exhaustivo + pantalla Ejercicios (F3),
+  detectores de errores + pantalla Revisar (F4), FSRS + perfil + pantalla Hoy
+  (F5), 29 lecciones + 3 temas nuevos + sonido + Ajustes (F6).
+- Zobrist incremental (`core/zobrist.ts`), algoritmo de Benson
+  (`core/benson.ts`), lector/escritor SGF, todo tal como especifica la
+  sección 5.1.
+- El invariante del generador de problemas (documento, sección 8, punto 3) sí
+  está implementado y corre en CI: `tests/content/problem-bank.test.ts`
+  reverifica con el solucionador cada entrada del banco en cada push.
+- Bot con los 4 niveles de fuerza exactos del documento (100/500/2000/8000
+  playouts), corriendo en Web Worker, UI nunca bloqueada.
+- Tipografía: serif para prosa de lección, cifras tabulares en el panel de
+  capturas — cumple la sección 6.2.
+- "Hoy" es la pantalla de inicio (`screen` por defecto en `App.tsx`), como
+  pide la sección 6.1.
+
+### Desviaciones deliberadas frente al documento (ya decididas y documentadas)
+
+- **Navegación de 6 pestañas, no 5**: se mantiene "Ejercicios" separado de
+  "Aprender" (el documento solo listaba 5 rutas). Decisión de Fase 6, con su
+  motivo ya registrado en esa entrada.
+- **Lecciones como datos TypeScript, no MDX** (sección 5, `content/`).
+  Decisión de Fase 6.
+- **Nombres de campo en inglés** en `MistakeEvent`/`ConceptOccurrence` y en
+  `Concept`, en vez del español del boceto del documento (`conceptoId`,
+  `numeroJugada`, etc.). Consistente con el resto del código desde la Fase 4;
+  el español queda para prosa y texto de UI, nunca para identificadores.
+- **Perfil no es un store propio de IndexedDB.** El documento (sección 7)
+  lista `perfil` como cuarto almacén; en la práctica `computeProfiles()`
+  recalcula todo on-demand desde `intentos` y `partidas` en cada carga, sin
+  persistir un estado derivado. Es más simple y evita que el perfil quede
+  desincronizado del origen de verdad; se reafirmó esta misma decisión al
+  diseñar `ConceptOccurrence` en la sección 1 del roadmap post-v1.
+- **Accesibilidad avanzada en stand-by** (sección 6.4 completa: modo
+  daltónico, confirmación en dos toques, navegación por teclado). Decisión
+  explícita del usuario en Fase 6, a cambio de piedras con volumen/sombra y
+  sonido al jugar. El objetivo táctil de 44px se cumple en los controles de
+  la interfaz, pero no se diseñó a propósito para cada intersección del
+  tablero (el tablero es canvas, no elementos DOM individuales).
+
+### Brechas reales, no decididas a propósito
+
+- **Banco de problemas: 6 entradas, no 300.** Cubre solo 2 conceptos
+  (`DOS_OJOS`: 4, `PUNTO_VITAL`: 2) de los ~15 que admiten ejercicios. Es la
+  brecha de contenido más grande del proyecto: la mayoría de las lecciones
+  con "practicar más" y buena parte del planificador de Hoy tienen muy poco
+  con qué trabajar. Ya estaba señalado como pendiente desde Fase 3/6, pero
+  vale la pena decirlo con el número real en vez de dejarlo implícito.
+- **Sin exportación/importación JSON** (documento, sección 7). No existe
+  ninguna función de exportar ni importar en `storage/db.ts`. Hoy toda la
+  persistencia vive solo en el IndexedDB de un único navegador/dispositivo —
+  perder ese perfil de navegador pierde todo el progreso, sin respaldo
+  posible.
+- **Sin animaciones** (documento, sección 6.2: asentamiento de piedra 120ms,
+  revelación de territorio al terminar la partida). No hay ninguna regla
+  `transition`/`animation`/`@keyframes` en `App.css`; las piedras aparecen
+  de golpe.
+- **Circuito de personalización de la sección 5.5 sin construir**: cuando un
+  detector dispara en una partida real, el documento pide inyectar 3
+  problemas de ese concepto con prioridad alta al día siguiente, y reabrir
+  la lección de un concepto que acumula 3 errores en 5 partidas.
+  `training-policy/session.ts` hoy solo hace la mezcla 60/25/15 basada en
+  vencidos/débiles/nuevo; ninguno de esos dos mecanismos específicos existe.
+- **Retícula tipográfica alineada al tablero** (sección 6.2): detalle sutil
+  de diseño que nunca se implementó a propósito (los espaciados de la app no
+  derivan del paso de la retícula del goban). Bajo impacto, pero es una
+  desviación real, no decidida explícitamente con el usuario.
+
+### Estado de los 4 criterios de salida de v1 (roadmap post-v1, sección 0)
+
+Ninguno de los cuatro está cumplido. El usuario decidió explícitamente
+saltarse este gate por ahora para avanzar a la sección 1 del roadmap; queda
+registrado acá para que la decisión sea explícita, no implícita:
+
+1. 20-30 partidas jugadas por el usuario, terminadas y revisadas: no hecho.
+2. Tiempo hasta la primera partida ganada, medido: no instrumentado.
+3. Revisión de un jugador dan sobre lecciones de niveles 0-2 y 20 problemas
+   del banco: no hecho (y con el banco en 6 entradas, tampoco hay 20 para
+   mostrarle de la mayoría de los conceptos).
+4. Cero problemas fallando el invariante del generador en CI: esto sí se
+   puede verificar hoy mismo corriendo la suite — con solo 6 problemas en el
+   banco, la superficie de riesgo real es chica todavía.
+
+### Trabajo post-v1 de esta sesión (Fase A y Fase B del roadmap)
+
+- **Fase A (en curso, gestionada en gran parte por el usuario en Play
+  Console)**: la PWA está desplegada en GitHub Pages
+  (`https://diegotronkurt.github.io/hoshi/`) vía GitHub Actions, empaquetada
+  como TWA con Bubblewrap (`applicationId: com.hoshi.app`), con AAB firmado
+  generado y assets de la ficha de Play Store (ícono, gráfico de
+  característica, 4 capturas) listos. Falta: que el usuario complete la
+  publicación en Play Console y me pase el fingerprint SHA-256 de la clave
+  de firma de Play App Signing (distinto del upload key local) para
+  terminar de verificar `assetlinks.json` — sin eso, la TWA instalada desde
+  Play Store se va a abrir con barra de navegador en vez de pantalla
+  completa.
+- **Fase B (cerrada)**: `MistakeEvent` reemplazado por `ConceptOccurrence`
+  en toda la base, con el detalle completo más abajo en su propia entrada de
+  fase.
+
+### Qué sigue
+
+Con el gate de v1 saltado a propósito, lo siguiente según el roadmap es la
+sección 2 (v1.1 — bots avanzados e insights), que depende de que la sección
+1 (ya cerrada) esté lista. Antes de eso valdría la pena, aunque no es un
+bloqueo técnico: decidir qué hacer con la brecha del banco de problemas,
+porque varias features de v1.1 (comparar reconocimiento dirigido vs.
+espontáneo, por ejemplo) van a tener muy poca señal de "ejercicio" mientras
+el banco siga en 6 entradas.
+
+---
+
+## Post-v1, Fase A y Fase B: Play Store y ConceptOccurrence
+
+### Qué se construyó
+
+- **Despliegue continuo**: `vite.config.ts` con `base: '/hoshi/'` y el
+  manifest de la PWA (`start_url`/`scope`) ajustados al subpath de GitHub
+  Pages; `.github/workflows/deploy.yml` compila, corre la suite completa y
+  despliega `dist/` en cada push a `master` vía `actions/deploy-pages`. Sitio
+  vivo en `https://diegotronkurt.github.io/hoshi/`.
+- **Empaquetado Android (TWA)**: proyecto generado con Bubblewrap fuera del
+  repo de la app (`hoshi-android/`, sin mezclar el build de Android con el
+  código fuente web), `applicationId: com.hoshi.app`, ícono reutilizado de
+  `public/icons/`. AAB firmado con un upload keystore generado localmente
+  (contraseñas guardadas fuera del repo). `public/.well-known/assetlinks.json`
+  publicado con el fingerprint del upload key; falta agregar el fingerprint
+  del App Signing key de Play Console una vez el usuario suba el AAB.
+- **Página de política de privacidad** (`public/privacy.html`): la app no
+  tiene backend ni recolecta datos, así que el contenido es una declaración
+  directa de eso, sin necesidad de plantillas legales genéricas.
+- **`ConceptOccurrence` reemplaza a `MistakeEvent`** (`src/analysis/
+  mistakes.ts`): cada ocurrencia de un concepto trae `context`
+  (`'exercise' | 'game'`) y `result` (`'correct' | 'incorrect' | 'partial'`),
+  no solo el caso de error. `ATARI_IGNORADO` y `ESCALERA` ganaron detección
+  del caso correcto (grupo rescatado, escalera que sí funciona) porque era
+  simétrico y barato con la lógica que ya existía; el resto de los
+  detectores se queda emitiendo solo `'incorrect'` por ahora, documentado
+  como pendiente, no como olvido.
+- **`AttemptRecord` mide tiempo de respuesta** (`responseTimeMs`, opcional):
+  un timestamp al cargar el problema, otro en la primera resolución o
+  abandono, en `useSolvableProblem.ts`. Sin migración de esquema: es un
+  campo nuevo sobre un object store que ya existía.
+- **`ConceptProfile` extendido** (`src/learning/profile.ts`):
+  `observationCount`/`correctCount`/`incorrectCount`/`lastPracticedAt`/
+  `byContext` (desglosado por `exercise`/`game`), construido agregando
+  `ConceptOccurrence`s de ambas fuentes. La fórmula de `score` no cambió.
+- **`training-policy/` nuevo módulo**: `planSession` se mudó ahí desde
+  `learning/`, que ahora solo contiene estado (`fsrs.ts`, `profile.ts`), tal
+  como pide la sección 1.3 del roadmap.
+
+### Decisiones técnicas con alternativas
+
+- **Sin store nuevo de IndexedDB ni cambio de `DB_VERSION`** para
+  `ConceptOccurrence`: las ocurrencias de partida se recalculan on-demand
+  desde el SGF guardado (como ya hacía `analyzeGame`), y `responseTimeMs` es
+  un campo opcional agregado a un store existente. Evita el riesgo de una
+  migración real sin perder nada de lo que pide el roadmap.
+- **Nombres de campo en inglés** (`context`/`result`/`'correct'`/
+  `'incorrect'`) en vez del boceto en español del roadmap, para no romper la
+  convención ya establecida en el resto del código.
+- **Cobertura parcial de "correcto" a propósito**: `RELLENO_OJO_PROPIO` y
+  `CORTE_NO_DEFENDIDO` (los otros dos detectores que el roadmap prioriza)
+  quedaron sin su branch de "correcto" porque una señal honesta ahí necesita
+  mirar hacia adelante desde la jugada rival, no solo hacia atrás desde la
+  jugada propia — más riesgo de una señal engañosa que lo que valía la pena
+  resolver en esta fase.
+- **`gradlew.bat` necesitó el directorio del proyecto agregado a `PATH`**:
+  esta máquina tiene `NoDefaultCurrentDirectoryInExePath=1` (endurecimiento
+  de seguridad de Windows), así que `cmd.exe` invocado sin interfaz por
+  Node no busca el ejecutable en el directorio actual. Bubblewrap tampoco
+  citaba entre comillas la ruta al JDK al firmar (falla si `JAVA_HOME` tiene
+  espacios, como `Program Files`); se resolvió con una junction sin espacios
+  (`C:\jdk17`) en vez de tocar la variable de entorno de seguridad del
+  sistema.
+
+### Qué quedó pendiente
+
+- Fingerprint SHA-256 del App Signing key de Play Console, para completar
+  `assetlinks.json` (ver sección "Estado general" arriba).
+- Publicación real en Play Console (ficha completa, revisión, track de
+  pruebas internas) — al usuario.
+- Los 4 criterios de salida de v1 del roadmap (sección 0), saltados a
+  propósito por decisión del usuario.
+- `RELLENO_OJO_PROPIO`/`CORTE_NO_DEFENDIDO` sin branch de "correcto".
+
+---
+
 ## Fase 6: lecciones, temas y ajustes visuales — v1 cerrada
 
 ### Qué se construyó
