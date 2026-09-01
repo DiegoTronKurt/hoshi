@@ -1445,6 +1445,69 @@
   font-size: 0.95rem;
 }
 
+.settings-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.settings-backup-actions button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-backup-file-input {
+  display: none;
+}
+
+.settings-backup-error {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-danger);
+}
+
+.settings-backup-confirm {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--hoshi-danger);
+  background: var(--hoshi-danger-bg);
+}
+
+.settings-backup-confirm p {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--hoshi-text);
+}
+
+.settings-backup-warning {
+  font-weight: 600;
+  color: var(--hoshi-danger);
+}
+
+.settings-backup-confirm-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.settings-backup-confirm-actions button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 .play-controls-grid {
   width: 100%;
   display: flex;

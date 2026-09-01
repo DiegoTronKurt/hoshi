@@ -131,3 +131,44 @@ export async function listSrsCards(): Promise<SrsCardRecord[]> {
     request.onerror = () => reject(request.error)
   })
 }
+
+/** Datos crudos de las tres stores, usados por el respaldo (src/storage/backup.ts).
+ * Los ids de partidas/intentos no se preservan al restaurar (se reasignan por
+ * autoincrement): nada en la app depende de que sean estables entre sesiones. */
+export interface AllStoresData {
+  partidas: SavedGameRecord[]
+  intentos: AttemptRecord[]
+  srs: SrsCardRecord[]
+}
+
+/** Vacia y repuebla las tres stores en una sola transaccion (todo o nada):
+ * si algo falla a mitad de camino, IndexedDB revierte la transaccion completa
+ * en vez de dejar la base a medio restaurar. */
+export async function restoreAllStores(data: AllStoresData): Promise<void> {
+  const db = await openDb()
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([STORE_GAMES, STORE_ATTEMPTS, STORE_SRS], 'readwrite')
+    tx.oncomplete = () => resolve()
+    tx.onerror = () => reject(tx.error)
+
+    const games = tx.objectStore(STORE_GAMES)
+    const attempts = tx.objectStore(STORE_ATTEMPTS)
+    const srs = tx.objectStore(STORE_SRS)
+
+    games.clear()
+    attempts.clear()
+    srs.clear()
+
+    for (const record of data.partidas) {
+      const { id: _id, ...rest } = record
+      games.add(rest)
+    }
+    for (const record of data.intentos) {
+      const { id: _id, ...rest } = record
+      attempts.add(rest)
+    }
+    for (const record of data.srs) {
+      srs.put(record)
+    }
+  })
+}
