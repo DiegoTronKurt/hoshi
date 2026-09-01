@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.hoshi.app",
+    "sha256_cert_fingerprints": [
+      "C6:5D:B8:81:A0:F4:BE:D4:32:77:E8:F6:6C:D9:92:22:EB:59:88:A9:D7:6F:22:BD:51:A3:1D:84:A8:68:D3:84"
+    ]
+  }
+}]
