@@ -10,7 +10,7 @@ import { useI18n } from '../../i18n'
 import { listGames, saveGame } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
-import { minimoTheme } from '../board/themes'
+import { useSettings } from '../settings'
 import { GameControls } from './GameControls'
 import type { GameMode } from './GameControls'
 import { SavedGamesList } from './SavedGamesList'
@@ -21,6 +21,7 @@ const KOMI = 6.5
 
 export function PlayScreen() {
   const { t } = useI18n()
+  const { theme, playStoneSoundIfEnabled } = useSettings()
 
   const [size, setSize] = useState(9)
   const [mode, setMode] = useState<GameMode>('local')
@@ -90,6 +91,7 @@ export function PlayScreen() {
     setGame(result.state)
     setLastMove(point)
     setMessage(null)
+    if (point !== null) playStoneSoundIfEnabled()
   }
 
   function handleIntersectionClick(point: number) {
@@ -121,12 +123,13 @@ export function PlayScreen() {
       setMoves((prev) => [...prev, { color, point: response.move }])
       setGame(result.state)
       setLastMove(response.move)
+      if (response.move !== null) playStoneSoundIfEnabled()
     })
 
     return () => {
       cancelled = true
     }
-  }, [game, mode, humanColor, strengthId])
+  }, [game, mode, humanColor, strengthId, playStoneSoundIfEnabled])
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null
@@ -180,7 +183,7 @@ export function PlayScreen() {
         size={size}
         stones={game.board.stones}
         lastMove={lastMove}
-        theme={minimoTheme}
+        theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
 

@@ -91,6 +91,17 @@
   "profile.weakest": "Áreas más débiles",
   "profile.noData": "Sin datos",
   "profile.level": "Nivel {{n}}",
+  "profile.settings": "Ajustes",
+
+  "settings.title": "Ajustes",
+  "settings.back": "Volver a Perfil",
+  "settings.theme.label": "Tema del tablero",
+  "settings.theme.minimo": "Mínimo",
+  "settings.theme.sumie": "Sumi-e",
+  "settings.theme.kaya": "Kaya",
+  "settings.theme.nocturno": "Nocturno OLED",
+  "settings.sound.label": "Sonido",
+  "settings.sound.enabled": "Sonido al colocar una piedra",
 
   "concept.LIBERTADES.label": "Libertades",
   "concept.LIBERTADES.summary": "Los puntos vacíos junto a una piedra o grupo.",

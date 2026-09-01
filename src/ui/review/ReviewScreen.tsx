@@ -11,7 +11,7 @@ import type { TranslationKey } from '../../i18n'
 import { listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
-import { minimoTheme } from '../board/themes'
+import { useSettings } from '../settings'
 
 function stateAtMove(size: number, komi: number, moves: RecordedMove[], moveNumber: number): GameState {
   let state = createGame(size, komi)
@@ -31,6 +31,7 @@ const SEVERITY_KEY: Record<MistakeEvent['severity'], TranslationKey> = {
 
 export function ReviewScreen() {
   const { t, language } = useI18n()
+  const { theme } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(null)
   const [selectedEventIndex, setSelectedEventIndex] = useState<number | null>(null)
@@ -148,7 +149,7 @@ export function ReviewScreen() {
             stones={boardState.board.stones}
             lastMove={selectedEvent.point}
             hintMove={selectedEvent.suggestedPoint ?? null}
-            theme={minimoTheme}
+            theme={theme}
             onIntersectionClick={() => {}}
           />
           {selectedEvent.suggestedPoint !== undefined && <p className="review-hint-legend">{t('review.suggestedMove')}</p>}

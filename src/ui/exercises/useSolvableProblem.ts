@@ -8,6 +8,7 @@ import { computeRegion } from '../../solver/region'
 import type { SolverClient } from '../../solver/client'
 import { isGroupPassAlive } from '../../solver/tsumego'
 import { getSrsCard, recordAttempt, saveSrsCard } from '../../storage/db'
+import { useSettings } from '../settings'
 
 export type ProblemStatus = 'playing' | 'incorrect' | 'solved'
 
@@ -41,6 +42,7 @@ export function useSolvableProblem(
   problem: Problem | null,
   solverClient: SolverClient | null,
 ): SolvableProblemState {
+  const { playStoneSoundIfEnabled } = useSettings()
   const [game, setGame] = useState<GameState | null>(null)
   const [lastMove, setLastMove] = useState<number | null>(null)
   const [status, setStatus] = useState<ProblemStatus>('playing')
@@ -166,6 +168,7 @@ export function useSolvableProblem(
 
     const result = applyMove(game, point, { regionPoints: new Set(region) })
     if (!result.legal || !result.state) return
+    playStoneSoundIfEnabled()
 
     const client = solverClient
     if (!client) return
@@ -199,6 +202,7 @@ export function useSolvableProblem(
     const applied = applyMove(result.state, check.root.move, { regionPoints: new Set(region) })
     const nextGame = applied.legal && applied.state ? applied.state : result.state
     const nextLastMove = applied.legal && applied.state ? (check.root.move ?? point) : point
+    if (applied.legal && applied.state) playStoneSoundIfEnabled()
     setGame(nextGame)
     setLastMove(nextLastMove)
     setStatus('playing')

@@ -556,6 +556,100 @@
   color: #999999;
 }
 
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.profile-header h2 {
+  flex: 1;
+}
+
+.profile-header button {
+  min-height: 36px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.settings {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.settings-header h2 {
+  flex: 1;
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.settings-header button {
+  min-height: 36px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.settings-section h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.6rem;
+}
+
+.settings-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.settings-theme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.settings-theme-option.active {
+  border-color: #1a1a1a;
+}
+
+.settings-theme-preview .board-container {
+  width: 88px;
+}
+
+.settings-theme-name {
+  font-size: 0.8rem;
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: dark) {
   .app {
     background: #16140f;
@@ -728,5 +822,20 @@
 
   .profile-no-data {
     color: #999999;
+  }
+
+  .profile-header button,
+  .settings-header button {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .settings-theme-option {
+    background: #262218;
+  }
+
+  .settings-theme-option.active {
+    border-color: #ececec;
   }
 }

@@ -72,9 +72,31 @@ export function BoardCanvas({ size, stones, lastMove, hintMove = null, theme, on
       const cx = margin + x * cell
       const cy = margin + y * cell
       const style = value === BLACK ? theme.blackStone : theme.whiteStone
+
+      if (style.dropShadow) {
+        ctx.beginPath()
+        ctx.ellipse(cx + stoneRadius * 0.12, cy + stoneRadius * 0.18, stoneRadius * 0.98, stoneRadius * 0.9, 0, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)'
+        ctx.fill()
+      }
+
       ctx.beginPath()
       ctx.arc(cx, cy, stoneRadius, 0, Math.PI * 2)
-      ctx.fillStyle = style.fill
+      if (style.highlight) {
+        const gradient = ctx.createRadialGradient(
+          cx - stoneRadius * 0.35,
+          cy - stoneRadius * 0.4,
+          stoneRadius * 0.05,
+          cx,
+          cy,
+          stoneRadius,
+        )
+        gradient.addColorStop(0, style.highlight)
+        gradient.addColorStop(1, style.fill)
+        ctx.fillStyle = gradient
+      } else {
+        ctx.fillStyle = style.fill
+      }
       ctx.fill()
       ctx.lineWidth = style.strokeWidth
       ctx.strokeStyle = style.stroke

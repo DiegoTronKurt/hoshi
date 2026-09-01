@@ -6,6 +6,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { listAttempts, listGames } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord } from '../../storage/db'
+import { SettingsScreen } from '../settings/SettingsScreen'
 
 const LEVELS = [0, 1, 2, 3] as const
 
@@ -17,6 +18,7 @@ function scoreClass(score: number): string {
 
 export function ProfileScreen() {
   const { t } = useI18n()
+  const [view, setView] = useState<'profile' | 'settings'>('profile')
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [loaded, setLoaded] = useState(false)
@@ -37,9 +39,18 @@ export function ProfileScreen() {
 
   if (!loaded) return null
 
+  if (view === 'settings') {
+    return <SettingsScreen onBack={() => setView('profile')} />
+  }
+
   return (
     <div className="profile">
-      <h2>{t('profile.title')}</h2>
+      <div className="profile-header">
+        <h2>{t('profile.title')}</h2>
+        <button type="button" onClick={() => setView('settings')}>
+          {t('profile.settings')}
+        </button>
+      </div>
 
       {weakest.length > 0 && (
         <section className="profile-weakest">

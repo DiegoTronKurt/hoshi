@@ -9,7 +9,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { SolverClient } from '../../solver/client'
 import { BoardCanvas } from '../board/BoardCanvas'
-import { minimoTheme } from '../board/themes'
+import { useSettings } from '../settings'
 import { useSolvableProblem } from './useSolvableProblem'
 
 function pickEntry(entries: BankEntry[], excludeId?: string): BankEntry | null {
@@ -18,11 +18,17 @@ function pickEntry(entries: BankEntry[], excludeId?: string): BankEntry | null {
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
-export function ExercisesScreen() {
+interface ExercisesScreenProps {
+  /** Concepto preseleccionado al entrar (p.ej. desde el enlace "practicar mas" de una leccion). */
+  initialConcept?: ConceptId
+}
+
+export function ExercisesScreen({ initialConcept }: ExercisesScreenProps = {}) {
   const { t } = useI18n()
+  const { theme } = useSettings()
   const concepts = useMemo(() => conceptsThatGenerateExercises(), [])
 
-  const [conceptFilter, setConceptFilter] = useState<ConceptId | 'all'>('all')
+  const [conceptFilter, setConceptFilter] = useState<ConceptId | 'all'>(initialConcept ?? 'all')
   const entries = useMemo(
     () => listBankEntries(conceptFilter === 'all' ? undefined : conceptFilter),
     [conceptFilter],
@@ -107,7 +113,7 @@ export function ExercisesScreen() {
         size={problem.board.size}
         stones={game.board.stones}
         lastMove={lastMove}
-        theme={minimoTheme}
+        theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
 

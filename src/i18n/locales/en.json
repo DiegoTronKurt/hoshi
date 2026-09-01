@@ -91,6 +91,17 @@
   "profile.weakest": "Weakest areas",
   "profile.noData": "No data yet",
   "profile.level": "Level {{n}}",
+  "profile.settings": "Settings",
+
+  "settings.title": "Settings",
+  "settings.back": "Back to Profile",
+  "settings.theme.label": "Board theme",
+  "settings.theme.minimo": "Minimal",
+  "settings.theme.sumie": "Sumi-e",
+  "settings.theme.kaya": "Kaya",
+  "settings.theme.nocturno": "Nocturnal OLED",
+  "settings.sound.label": "Sound",
+  "settings.sound.enabled": "Sound when placing a stone",
 
   "concept.LIBERTADES.label": "Liberties",
   "concept.LIBERTADES.summary": "The empty points next to a stone or group.",

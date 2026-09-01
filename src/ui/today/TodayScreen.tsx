@@ -12,8 +12,8 @@ import { SolverClient } from '../../solver/client'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
-import { minimoTheme } from '../board/themes'
 import { useSolvableProblem } from '../exercises/useSolvableProblem'
+import { useSettings } from '../settings'
 
 const REASON_KEY: Record<SessionReason, TranslationKey> = {
   overdue: 'today.reason.overdue',
@@ -23,6 +23,7 @@ const REASON_KEY: Record<SessionReason, TranslationKey> = {
 
 export function TodayScreen() {
   const { t } = useI18n()
+  const { theme } = useSettings()
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [srsCards, setSrsCards] = useState<SrsCardRecord[]>([])
@@ -149,7 +150,7 @@ export function TodayScreen() {
         size={problem.board.size}
         stones={game.board.stones}
         lastMove={lastMove}
-        theme={minimoTheme}
+        theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
 
