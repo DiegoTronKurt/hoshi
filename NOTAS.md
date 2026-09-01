@@ -259,6 +259,51 @@ que la verificación de TWA ya daba por resuelto.
   que ahora abre a pantalla completa como corresponde. Con esto el shell
   Flutter con WebView queda validado en el escenario real que motivó el
   cambio, no solo en el emulador — episodio cerrado.
+
+### Empaquetado offline (2026-09-01, más tarde): la app ya no depende de red
+
+El roadmap maestro (`go-trainer-roadmap-maestro.md`, sección 4.2) marcaba
+como riesgo real y bloqueante-antes-de-publicar que el shell de Flutter
+cargaba la PWA desde `https://diegotronkurt.github.io/hoshi/` en cada
+apertura: sin conexión, pantalla de error. Contradice el principio de "la
+app corre en el dispositivo" y es una causa de rechazo activa en la
+política 4.3 de Play Store para apps que envuelven una URL sin manejo de
+estado sin conexión. Resuelto:
+
+- **`hoshi/dist/` (el build de producción de la PWA, 504KB) se copia a
+  `hoshi-flutter/assets/webapp/`** y se declara como asset de Flutter en
+  `pubspec.yaml`. Script `hoshi-flutter/sync-webapp.ps1` para repetir la
+  copia cada vez que `hoshi/` cambie, antes de un nuevo build — necesario
+  porque `hoshi-flutter/` sigue sin `git init`, así que nada de esto queda
+  versionado ahí, solo reproducible por script.
+- **Servidor HTTP embebido en Dart** (`hoshi-flutter/lib/local_web_server.dart`),
+  sin dependencias nuevas: `dart:io HttpServer` en loopback
+  (`127.0.0.1`, puerto efímero) que resuelve cada request contra
+  `rootBundle` (el asset bundle de Flutter), despojando el prefijo
+  `/hoshi` antes de mapear a `assets/webapp/`. Se eligió esto en vez de
+  `WebViewController.loadFlutterAsset` porque el build de la PWA usa rutas
+  absolutas (`base: '/hoshi/'` en `vite.config.ts`, mismo build que sirve
+  GitHub Pages) y el mapeo interno de `loadFlutterAsset` no da control
+  sobre esa estructura de rutas; el servidor propio sí.
+- **`network_security_config.xml` nuevo**, permitiendo tráfico cleartext
+  (`http://`) solo para `localhost`/`127.0.0.1` — Android bloquea
+  cleartext por defecto desde API 28, incluso hacia loopback. Sin esto el
+  WebView tira `ERR_CLEARTEXT_NOT_PERMITTED` en silencio.
+- **Verificado en el emulador con la red realmente cortada**
+  (`svc wifi disable` + `svc data disable`, confirmado con
+  `adb shell ping` fallando con "Network is unreachable" y
+  `dumpsys` mostrando "not connected"), no solo con el argumento de que
+  "debería funcionar": la app se forzó a cerrar y reabrir desde cero en
+  ese estado, la pantalla Hoy cargó con sus problemas, y se jugó una
+  partida contra el bot completa (el Web Worker del MCTS, un chunk JS
+  aparte del bundle principal, también se sirve local y respondió sin
+  error). Cero errores en el log de Flutter durante toda la prueba.
+- **AAB de release regenerado**: `versionCode 5` (`1.2.0+5`, subido de
+  minor por ser un cambio funcional real, no un parche), 43.0MB, mismo
+  firmado de siempre. Todavía no subido a Play Console — queda del lado
+  del usuario, igual que antes.
+- Sigue pendiente, sin resolver en esta pasada: `git init` en
+  `hoshi-flutter/` (roadmap maestro, sección 4.3).
 - **A propósito, no se hizo todavía** (el usuario lo descartó cuando se le
   ofreció): `git init` en `hoshi-flutter/` (ni menos un repo remoto), y
   tampoco se generó un APK de debug para probar por sideload en el
