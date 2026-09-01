@@ -73,7 +73,7 @@ function App() {
       </header>
 
       <main className="app-main">
-        {screen === 'today' && <TodayScreen />}
+        {screen === 'today' && <TodayScreen onNavigateToPlay={() => setScreen('play')} />}
         {screen === 'learn' && (
           <LearnScreen
             onNavigateToExercises={(conceptId) => goToExercises(conceptId)}

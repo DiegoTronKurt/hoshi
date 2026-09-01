@@ -15,9 +15,17 @@ const SECONDS_PER_PROBLEM = 45
 
 export type SessionReason = 'overdue' | 'weak' | 'new'
 
+export interface SessionReasonDetail {
+  /** Solo si reason === 'overdue': dias desde que la tarjeta SRS vencio. */
+  overdueDays?: number
+  /** Solo si reason === 'weak': puntaje 0-100 del concepto en el perfil. */
+  conceptScore?: number
+}
+
 export interface SessionItem {
   entry: BankEntry
   reason: SessionReason
+  reasonDetail?: SessionReasonDetail
 }
 
 export interface SessionPlan {
@@ -49,10 +57,10 @@ export function planSession(
   const chosen = new Set<string>()
   const items: SessionItem[] = []
 
-  function take(entry: BankEntry, reason: SessionReason) {
+  function take(entry: BankEntry, reason: SessionReason, reasonDetail?: SessionReasonDetail) {
     if (chosen.has(entry.id)) return
     chosen.add(entry.id)
-    items.push({ entry, reason })
+    items.push({ entry, reason, reasonDetail })
   }
 
   // 1. Vencidos: los mas atrasados primero.
@@ -62,14 +70,19 @@ export function planSession(
   for (const card of overdue) {
     if (items.filter((i) => i.reason === 'overdue').length >= overdueQuota) break
     const entry = entryById.get(card.problemId)
-    if (entry) take(entry, 'overdue')
+    if (entry) {
+      const overdueDays = Math.max(0, Math.floor((now.getTime() - card.card.due.getTime()) / 86_400_000))
+      take(entry, 'overdue', { overdueDays })
+    }
   }
 
   // 2. Conceptos mas debiles del perfil.
-  const weak = new Set(weakestConcepts(profiles).map((p) => p.conceptId))
+  const weakConcepts = weakestConcepts(profiles)
+  const weakScoreById = new Map(weakConcepts.map((p) => [p.conceptId, p.score]))
   for (const entry of entries) {
     if (items.filter((i) => i.reason === 'weak').length >= weakQuota) break
-    if (weak.has(entry.conceptId)) take(entry, 'weak')
+    const conceptScore = weakScoreById.get(entry.conceptId)
+    if (conceptScore !== undefined) take(entry, 'weak', { conceptScore })
   }
 
   // 3. Contenido nuevo: problemas sin tarjeta SRS todavia (nunca intentados).

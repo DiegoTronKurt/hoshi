@@ -134,6 +134,12 @@
   margin: 0 0 0.35rem;
 }
 
+.bot-kyu {
+  font-size: 0.8rem;
+  color: #777777;
+  margin: 0 0 0.4rem;
+}
+
 .status .captures {
   font-variant-numeric: tabular-nums;
   color: #444444;
@@ -453,6 +459,58 @@
 .today-reason-new {
   background: #e0ecf4;
   color: #2f6f9f;
+}
+
+.today-header {
+  text-align: center;
+}
+
+.today-level {
+  margin: 0 0 0.15rem;
+  font-size: 0.8rem;
+  color: #777777;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.today-daily-goal {
+  text-align: center;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #555555;
+}
+
+.today-focus-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #dddddd;
+  background: #fbf7ee;
+}
+
+.today-focus-concept {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.today-focus-why {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #555555;
+}
+
+.today-play-bot {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 
 .today-controls button {
@@ -804,6 +862,87 @@
   cursor: pointer;
 }
 
+.profile-radar {
+  display: flex;
+  justify-content: center;
+}
+
+.radar-chart {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+.radar-grid-ring {
+  fill: none;
+  stroke: #dddddd;
+  stroke-width: 1;
+}
+
+.radar-grid-line {
+  stroke: #dddddd;
+  stroke-width: 1;
+}
+
+.radar-fill {
+  fill: rgba(74, 157, 92, 0.35);
+  stroke: #4a9d5c;
+  stroke-width: 2;
+}
+
+.radar-vertex {
+  fill: #4a9d5c;
+}
+
+.radar-vertex-empty {
+  fill: #ffffff;
+  stroke: #999999;
+  stroke-width: 1.5;
+}
+
+.radar-label {
+  font-size: 9px;
+  fill: #555555;
+}
+
+.profile-insights ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.profile-insight-row {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: #f4f1e8;
+}
+
+.profile-insight-stat {
+  margin: 0 0 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.profile-insight-detail {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.profile-detail-toggle {
+  align-self: center;
+  min-height: 36px;
+  padding: 0 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  background: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
 .settings {
   width: 100%;
   display: flex;
@@ -875,6 +1014,28 @@
   gap: 0.5rem;
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+.settings-description {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: #666666;
+}
+
+.settings-daily-goal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.settings-daily-goal input {
+  width: 4rem;
+  min-height: 40px;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  font-size: 0.95rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1039,6 +1200,33 @@
     color: #1a1a1a;
   }
 
+  .today-level {
+    color: #999999;
+  }
+
+  .today-daily-goal {
+    color: #bbbbbb;
+  }
+
+  .today-focus-card {
+    background: #262218;
+    border-color: #55503f;
+  }
+
+  .today-focus-why {
+    color: #bbbbbb;
+  }
+
+  .today-play-bot {
+    background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .bot-kyu {
+    color: #999999;
+  }
+
   .profile-concept-label {
     color: #dddddd;
   }
@@ -1052,8 +1240,51 @@
   }
 
   .profile-header button,
-  .settings-header button {
+  .settings-header button,
+  .profile-detail-toggle,
+  .today-play-bot {
     background: #262218;
+    color: #ececec;
+    border-color: #55503f;
+  }
+
+  .radar-grid-ring,
+  .radar-grid-line {
+    stroke: #45403a;
+  }
+
+  .radar-fill {
+    fill: rgba(74, 157, 92, 0.3);
+    stroke: #6bc47f;
+  }
+
+  .radar-vertex {
+    fill: #6bc47f;
+  }
+
+  .radar-vertex-empty {
+    fill: #1a1a1a;
+    stroke: #999999;
+  }
+
+  .radar-label {
+    fill: #cccccc;
+  }
+
+  .profile-insight-row {
+    background: #262218;
+  }
+
+  .profile-insight-detail {
+    color: #bbbbbb;
+  }
+
+  .settings-description {
+    color: #aaaaaa;
+  }
+
+  .settings-daily-goal input {
+    background: #1a1a1a;
     color: #ececec;
     border-color: #55503f;
   }

@@ -3,14 +3,15 @@ import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
-import { computeProfiles } from '../../learning/profile'
+import { computeProfiles, currentLevel } from '../../learning/profile'
 import { DEFAULT_SESSION_MINUTES, planSession } from '../../training-policy/session'
-import type { SessionPlan, SessionReason } from '../../training-policy/session'
+import type { SessionItem, SessionPlan, SessionReason } from '../../training-policy/session'
 import { SolverClient } from '../../solver/client'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
+import { STRENGTH_LEVELS } from '../play/strengthLevels'
 import { useSettings } from '../settings'
 
 const REASON_KEY: Record<SessionReason, TranslationKey> = {
@@ -19,9 +20,30 @@ const REASON_KEY: Record<SessionReason, TranslationKey> = {
   new: 'today.reason.new',
 }
 
-export function TodayScreen() {
+const LEVEL_TITLE_KEY: Record<0 | 1 | 2 | 3, TranslationKey> = {
+  0: 'learn.level.0',
+  1: 'learn.level.1',
+  2: 'learn.level.2',
+  3: 'learn.level.3',
+}
+
+const NORMAL_STRENGTH = STRENGTH_LEVELS.find((l) => l.id === 'normal') ?? STRENGTH_LEVELS[0]
+
+function focusReasonKey(item: SessionItem): TranslationKey {
+  if (item.reason === 'overdue') {
+    return (item.reasonDetail?.overdueDays ?? 0) > 0 ? 'today.focus.reason.overdueDays' : 'today.focus.reason.overdueToday'
+  }
+  if (item.reason === 'weak') return 'today.focus.reason.weak'
+  return 'today.focus.reason.new'
+}
+
+interface TodayScreenProps {
+  onNavigateToPlay: () => void
+}
+
+export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
   const { t } = useI18n()
-  const { theme } = useSettings()
+  const { theme, dailyGoal } = useSettings()
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [srsCards, setSrsCards] = useState<SrsCardRecord[]>([])
@@ -39,11 +61,13 @@ export function TodayScreen() {
       .catch(() => setLoadedState(true))
   }, [])
 
+  const profiles = useMemo(() => computeProfiles(attempts, games), [attempts, games])
+  const level = useMemo(() => currentLevel(profiles), [profiles])
+
   const plan: SessionPlan | null = useMemo(() => {
     if (!loaded) return null
-    const profiles = computeProfiles(attempts, games)
     return planSession(entries, srsCards, profiles, new Date(), DEFAULT_SESSION_MINUTES)
-  }, [loaded, attempts, games, srsCards, entries])
+  }, [loaded, profiles, srsCards, entries])
 
   const [sessionStarted, setSessionStarted] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -97,20 +121,46 @@ export function TodayScreen() {
   }
 
   if (!sessionStarted) {
+    const focus = plan.items[0] ?? null
+    const rest = plan.items.slice(1)
     return (
       <div className="today">
-        <h2>{t('today.title')}</h2>
+        <div className="today-header">
+          <p className="today-level">{t(LEVEL_TITLE_KEY[level])}</p>
+          <h2>{t('today.title')}</h2>
+        </div>
+
+        <p className="today-daily-goal">{t('today.dailyGoal', { n: dailyGoal })}</p>
+
+        {focus && (
+          <section className="today-focus-card">
+            <span className={`today-reason today-reason-${focus.reason}`}>{t(REASON_KEY[focus.reason])}</span>
+            <p className="today-focus-concept">{t(`concept.${focus.entry.conceptId}.label` as TranslationKey)}</p>
+            <p className="today-focus-why">
+              {t(focusReasonKey(focus), {
+                days: focus.reasonDetail?.overdueDays ?? 0,
+                score: Math.round(focus.reasonDetail?.conceptScore ?? 0),
+              })}
+            </p>
+          </section>
+        )}
+
         <p className="today-plan-count">{t('today.planOverview.count', { n: plan.items.length })}</p>
-        <ul className="today-plan-list">
-          {plan.items.map((item, index) => (
-            <li key={`${item.entry.id}-${index}`}>
-              <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
-              {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
-            </li>
-          ))}
-        </ul>
+        {rest.length > 0 && (
+          <ul className="today-plan-list">
+            {rest.map((item, index) => (
+              <li key={`${item.entry.id}-${index}`}>
+                <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
+                {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+              </li>
+            ))}
+          </ul>
+        )}
         <button type="button" onClick={handleStart}>
           {t('today.start')}
+        </button>
+        <button type="button" className="today-play-bot" onClick={onNavigateToPlay}>
+          {t('today.playBot', { kyu: NORMAL_STRENGTH.approxKyu })}
         </button>
       </div>
     )

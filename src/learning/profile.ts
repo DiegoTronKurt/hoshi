@@ -1,4 +1,4 @@
-import { ALL_CONCEPT_IDS } from '../analysis/concepts'
+import { ALL_CONCEPT_IDS, conceptsWithEvidence } from '../analysis/concepts'
 import type { ConceptId } from '../analysis/concepts'
 import { analyzeGame } from '../analysis/mistakes'
 import type { ConceptOccurrence, OccurrenceContext } from '../analysis/mistakes'
@@ -136,6 +136,32 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
   }
 
   return profiles
+}
+
+const MASTERY_THRESHOLD = 70
+
+/**
+ * Nivel actual del jugador (encabezado de Hoy, roadmap maestro seccion 2.2):
+ * el nivel mas bajo (0-3) que todavia tiene algun concepto con evidencia por
+ * debajo del umbral de dominio. No hay ningun registro explicito de "nivel
+ * completado" en la app (las lecciones no marcan progreso), asi que esto se
+ * deriva del mismo perfil de habilidad que ya existe, en vez de inventar un
+ * estado nuevo para persistir. Si los 4 niveles ya estan dominados, o si
+ * ninguno tiene evidencia todavia, cae en el nivel 0 o 3 segun corresponda
+ * (ver casos limite abajo) en vez de fallar.
+ */
+export function currentLevel(profiles: Record<ConceptId, ConceptProfile>): 0 | 1 | 2 | 3 {
+  const concepts = conceptsWithEvidence()
+  for (const level of [0, 1, 2, 3] as const) {
+    const levelConcepts = concepts.filter((c) => c.level === level)
+    if (levelConcepts.length === 0) continue
+    const hasUnmastered = levelConcepts.some((c) => {
+      const score = profiles[c.id]?.score
+      return score === null || score === undefined || score < MASTERY_THRESHOLD
+    })
+    if (hasUnmastered) return level
+  }
+  return 3
 }
 
 /** Los conceptos con peor puntaje, dejando afuera los que todavia no tienen datos. */

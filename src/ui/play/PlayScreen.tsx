@@ -188,6 +188,11 @@ export function PlayScreen() {
       />
 
       <div className="status" aria-live="polite">
+        {mode === 'bot' && (
+          <p className="bot-kyu">
+            {t('play.bot.label', { kyu: STRENGTH_LEVELS.find((l) => l.id === strengthId)?.approxKyu ?? 0 })}
+          </p>
+        )}
         {game.gameOver ? (
           <>
             <p className="turn">{t('board.gameOver')}</p>

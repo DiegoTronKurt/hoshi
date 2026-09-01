@@ -32,7 +32,7 @@ interface SettingsScreenProps {
 
 export function SettingsScreen({ onBack }: SettingsScreenProps) {
   const { t } = useI18n()
-  const { themeId, setThemeId, soundEnabled, setSoundEnabled } = useSettings()
+  const { themeId, setThemeId, soundEnabled, setSoundEnabled, dailyGoal, setDailyGoal } = useSettings()
   const previewThemes = useMemo(() => BOARD_THEMES.map((theme) => getTheme(theme.id)), [])
 
   return (
@@ -79,6 +79,21 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             onChange={(event) => setSoundEnabled(event.target.checked)}
           />
           {t('settings.sound.enabled')}
+        </label>
+      </section>
+
+      <section className="settings-section">
+        <h3>{t('settings.dailyGoal.label')}</h3>
+        <p className="settings-description">{t('settings.dailyGoal.description')}</p>
+        <label className="settings-daily-goal">
+          <input
+            type="number"
+            min={1}
+            max={20}
+            value={dailyGoal}
+            onChange={(event) => setDailyGoal(Number(event.target.value))}
+          />
+          {t('settings.dailyGoal.unit')}
         </label>
       </section>
     </div>

@@ -6,6 +6,10 @@ import { playStoneSound } from '../sound'
 
 const THEME_STORAGE_KEY = 'hoshi-theme'
 const SOUND_STORAGE_KEY = 'hoshi-sound-enabled'
+const DAILY_GOAL_STORAGE_KEY = 'hoshi-daily-goal'
+export const DEFAULT_DAILY_GOAL = 3
+const MIN_DAILY_GOAL = 1
+const MAX_DAILY_GOAL = 20
 
 interface SettingsContextValue {
   themeId: string
@@ -14,6 +18,8 @@ interface SettingsContextValue {
   soundEnabled: boolean
   setSoundEnabled: (enabled: boolean) => void
   playStoneSoundIfEnabled: () => void
+  dailyGoal: number
+  setDailyGoal: (goal: number) => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
@@ -38,9 +44,27 @@ function detectInitialSoundEnabled(): boolean {
   return true
 }
 
+function clampDailyGoal(value: number): number {
+  return Math.max(MIN_DAILY_GOAL, Math.min(MAX_DAILY_GOAL, Math.round(value)))
+}
+
+function detectInitialDailyGoal(): number {
+  try {
+    const stored = window.localStorage.getItem(DAILY_GOAL_STORAGE_KEY)
+    if (stored) {
+      const parsed = Number(stored)
+      if (Number.isFinite(parsed)) return clampDailyGoal(parsed)
+    }
+  } catch {
+    // sin persistencia disponible, se usa el valor por defecto para esta sesion
+  }
+  return DEFAULT_DAILY_GOAL
+}
+
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [themeId, setThemeId] = useState<string>(detectInitialThemeId)
   const [soundEnabled, setSoundEnabled] = useState<boolean>(detectInitialSoundEnabled)
+  const [dailyGoal, setDailyGoalState] = useState<number>(detectInitialDailyGoal)
 
   useEffect(() => {
     try {
@@ -58,6 +82,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [soundEnabled])
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(DAILY_GOAL_STORAGE_KEY, String(dailyGoal))
+    } catch {
+      // sin persistencia disponible, la meta diaria sigue funcionando solo para esta sesion
+    }
+  }, [dailyGoal])
+
   const value = useMemo<SettingsContextValue>(
     () => ({
       themeId,
@@ -68,8 +100,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       playStoneSoundIfEnabled: () => {
         if (soundEnabled) playStoneSound()
       },
+      dailyGoal,
+      setDailyGoal: (goal: number) => setDailyGoalState(clampDailyGoal(goal)),
     }),
-    [themeId, soundEnabled],
+    [themeId, soundEnabled, dailyGoal],
   )
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>
