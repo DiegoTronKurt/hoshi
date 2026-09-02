@@ -8,26 +8,22 @@ export interface AreaScore {
 }
 
 /**
- * Conteo de área (reglas chinas): piedras propias en el tablero más puntos
- * vacíos rodeados exclusivamente por un color. Un punto vacío bordeado por
- * ambos colores (dame) no cuenta para nadie.
+ * Dueño de cada punto bajo conteo de área (reglas chinas): piedras propias
+ * quedan como su color; un punto vacío rodeado exclusivamente por un color
+ * pasa a ser de ese color; un punto vacío bordeado por ambos colores (dame)
+ * queda neutral (EMPTY). Compartido por computeAreaScore (agregado) y por
+ * el estimador de evaluación posicional (src/eval/features.ts), que
+ * necesita el dueño punto por punto, no solo el total.
  */
-export function computeAreaScore(board: BoardState, komi: number, deadStones: ReadonlySet<number> = new Set()): AreaScore {
+export function computeAreaOwnership(board: BoardState, deadStones: ReadonlySet<number> = new Set()): Int8Array {
   const width = board.width
   const height = board.height
-  const effective = board.stones.slice()
-  for (const p of deadStones) effective[p] = EMPTY
+  const owner = board.stones.slice()
+  for (const p of deadStones) owner[p] = EMPTY
 
-  let black = 0
-  let white = 0
-  for (let p = 0; p < effective.length; p++) {
-    if (effective[p] === BLACK) black++
-    else if (effective[p] === WHITE) white++
-  }
-
-  const visited = new Uint8Array(effective.length)
-  for (let p = 0; p < effective.length; p++) {
-    if (effective[p] !== EMPTY || visited[p]) continue
+  const visited = new Uint8Array(owner.length)
+  for (let p = 0; p < owner.length; p++) {
+    if (owner[p] !== EMPTY || visited[p]) continue
 
     const region: number[] = []
     const borderColors = new Set<number>()
@@ -37,7 +33,7 @@ export function computeAreaScore(board: BoardState, komi: number, deadStones: Re
       const q = stack.pop() as number
       region.push(q)
       for (const n of neighbors(width, height, q)) {
-        const value = effective[n]
+        const value = owner[n]
         if (value === EMPTY) {
           if (!visited[n]) {
             visited[n] = 1
@@ -51,9 +47,26 @@ export function computeAreaScore(board: BoardState, komi: number, deadStones: Re
 
     if (borderColors.size === 1) {
       const [color] = borderColors
-      if (color === BLACK) black += region.length
-      else white += region.length
+      for (const q of region) owner[q] = color
     }
+  }
+
+  return owner
+}
+
+/**
+ * Conteo de área (reglas chinas): piedras propias en el tablero más puntos
+ * vacíos rodeados exclusivamente por un color. Un punto vacío bordeado por
+ * ambos colores (dame) no cuenta para nadie.
+ */
+export function computeAreaScore(board: BoardState, komi: number, deadStones: ReadonlySet<number> = new Set()): AreaScore {
+  const owner = computeAreaOwnership(board, deadStones)
+
+  let black = 0
+  let white = 0
+  for (let p = 0; p < owner.length; p++) {
+    if (owner[p] === BLACK) black++
+    else if (owner[p] === WHITE) white++
   }
 
   return { black, white: white + komi }

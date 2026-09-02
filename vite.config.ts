@@ -9,7 +9,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'models/**/*'],
+      workbox: {
+        // Default de Workbox es 2MB por archivo; el modelo de evaluacion
+        // posicional (src/eval/, vendorizado en public/models/) trae
+        // fragmentos de pesos de ~4MB cada uno.
+        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
+      },
       manifest: {
         id: '/hoshi/',
         name: 'Hoshi',

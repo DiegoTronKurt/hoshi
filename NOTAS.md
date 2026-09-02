@@ -1,5 +1,164 @@
 # Notas de desarrollo
 
+## v2 punto 2, track 2: red de KataGo (b10c128) integrada de verdad (2026-09-02)
+
+Segunda mitad del punto 2 de v2. A diferencia del track 1 (heuristica sin
+dependencias), esto es una red neuronal real corriendo en el dispositivo.
+Sesion larga, con dos correcciones de rumbo reales a mitad de camino —
+documentadas aca tal como pasaron, no prolijas en retrospectiva.
+
+### Primera correccion: los pesos no necesitaban Python
+
+El punto de partida del roadmap (`kaya-go/katago-onnx`) ya se habia
+descartado en la comparacion de motores (75-293MB, la red equivocada). La
+alternativa (convertir `g170 b6c96` a mano) necesitaba Python + ONNX, que
+no existe en este entorno. Antes de aceptar eso como bloqueo, se investigo
+si habia pesos ya convertidos y descargables directo: si los hay.
+`maksimKorzh/kata-model-js` tiene la red `g170 b10c128-s1141046784-
+d204142634` ya convertida a TensorFlow.js por Yuji Ichikawa
+(`y-ich/KataGo`), pesos + topologia listos para bajar sin ninguna
+conversion local (`model.json` + 3 fragmentos `.bin`, ~11.4MB reales,
+confirmado byte a byte contra el tamano declarado). Vendorizados en
+`public/models/kata-b10c128/`, con `ATTRIBUTION.md` explicando la
+procedencia: los pesos son CC0 (licencia de redes de KataGo), el codigo
+JS de esos dos repos **no** se copio (ninguno declara licencia para su
+codigo) — toda la logica de inferencia de este proyecto es propia.
+
+Confirmado con un script de humo antes de construir nada mas: el modelo
+carga y corre una pasada real (`model.executeAsync`, no `execute` — el
+grafo tiene un nodo `Merge` dinamico) en ~1.25s en la maquina de
+desarrollo (backend JS puro de Node, sin aceleracion; en un navegador real
+tf.js usa WebGL, deberia ser mejor, pero eso sigue sin medirse en un
+telefono real).
+
+### Segunda correccion: el alcance real de las features de entrada
+
+Primer intento de estimar la dificultad leyo la rama de reglas japonesas
+(`encorePhase`) del codigo fuente real de KataGo (`cpp/neuralnet/
+nninputs.cpp`, MIT) sin registrar que esa rama nunca se activa en Hoshi
+(que solo tiene conteo de area chino). Eso llevo a sobreestimar el trabajo
+como "varias semanas" y a proponerle al usuario abandonar el track. El
+usuario, correctamente, pidio releer el alcance real en vez de aceptar la
+primera estimacion.
+
+Al releer con cuidado, con la configuracion de reglas fija de Hoshi
+(conteo de area chino, superko posicional, sin suicidio, sin handicap con
+sesgo, sin encore, sin boton), la mayoria de los 19 canales globales y
+varios de los 22 espaciales de la version 7 de entrada de KataGo
+colapsan a una constante fija en vez de logica condicional — no es un
+feature recortado, es un feature que en esta app nunca varia. Lo que
+realmente hacia falta construir:
+
+- **Canales 0-5** (tablero, piedra propia/rival, libertades 1-3): trivial.
+- **Canal 6** (puntos vetados por superko): se resuelve simulando cada
+  jugada vacia contra el historial real de posiciones — Hoshi ya lo hace
+  para validar jugadas (`core/rules.ts`), solo hacia falta exponerlo.
+- **Canales 9-13 + globales 0-4** (ultimas 5 jugadas): el usuario tenia
+  razon en que esto no era dificil — una partida real ya tiene la lista de
+  jugadas a mano.
+- **Canales 14-17** (escaleras activas en el tablero actual y en los dos
+  anteriores): Hoshi ya tiene un solucionador de escaleras real
+  (`solver/ladder.ts`); solo hacia falta recorrer los grupos de 1-2
+  libertades del tablero y preguntarle al solucionador si estan
+  atrapados.
+- **Canales 18-19** (territorio bajo conteo de area): resulto ser,
+  leyendo `Board::calculateArea` en el propio codigo de KataGo, *casi
+  exactamente* el mismo calculo que ya hacia `core/scoring.ts
+  ::computeAreaScore` (regiones vacias rodeadas por un solo color).
+  Se extrajo `computeAreaOwnership` (dueño punto por punto, no solo el
+  conteo agregado) de ese archivo, reutilizada por ambos.
+- **Global 18** (onda de paridad tablero/komi): formula matematica pura,
+  sin dependencia de reglas variables.
+- Todo lo demas (canales 7,8,20,21 y globales 8,9,10,11,12,13,15,16,17):
+  constante fija (0, o el valor correspondiente a la configuracion fija de
+  Hoshi), documentado canal por canal en `src/eval/features.ts`.
+
+### Un bug real encontrado por el mismo habito de verificar antes de confiar
+
+Un script de depuracion contra casos ya conocidos de otros tests (la misma
+posicion de ko de `tests/core/ko-superko.test.ts`, la misma escalera de
+`tests/solver/ladder.test.ts`) encontro que el canal 6 (superko) nunca se
+activaba. Causa: la primera version arrancaba un historial sintetico de
+un solo hash (`gameStateFromBoard`) para simular las jugadas candidatas,
+que nunca puede detectar un ko real (la posicion que se recrearia es
+anterior a la actual, no la actual misma). Arreglo: `EvalPosition` pasa a
+pedir el `GameState` real completo (con su `history: bigint[]` real) en
+vez de reconstruir uno sintetico — el mismo patron que ya establecio el
+canal de escaleras historicas (`priorBoards`, tableros de 1-2 jugadas
+atras: si el motor de reglas no tiene "deshacer", se piden directo al
+llamador en vez de intentar reconstruirlos).
+
+### Verificado antes de confiar, no solo documentado
+
+`tests/eval/features.test.ts` (10 tests) verifica cada grupo de canales
+contra posiciones conocidas de otros tests del proyecto (no inventadas
+para la ocasion): la piedra en atari, el ko real, la escalera activa
+verificada por el solucionador, el territorio de `scoring.test.ts`,
+ademas de un caso 9x13 confirmando que la codificacion generaliza al
+tablero rectangular del punto 1.
+
+`tests/eval/model.test.ts` (5 tests) es integracion real contra el modelo
+vendorizado (no mockeado): carga los mismos archivos de
+`public/models/kata-b10c128/` y corre inferencia de verdad. Verifica que
+la politica y el valor son distribuciones de probabilidad validas (suman
+1, todo en [0,1]) y que el ownership queda en [-1,1] -- y, el test mas
+importante, que **el modelo distingue una posicion claramente ganada de
+la misma posicion claramente perdida** (mismo tablero, evaluado una vez
+desde la perspectiva de quien domina y otra desde la del que no):
+`asWinner.value[0] > asLoser.value[0]`. Este test tambien confirma, de
+forma empirica y no solo por convencion citada, que el canal 0 de la
+cabeza de valor realmente corresponde a "gana" y no a "pierde" — si
+estuviera al reves, el test habria fallado.
+
+Lo que **no** se puede verificar sin una instalacion real de KataGo para
+comparar: si un juicio posicional puntual de la red ("esta jugada es
+mejor") es correcto segun teoria de Go real. Eso es una limitacion
+inherente de integrar un modelo de caja negra, no algo que estos tests
+puedan cerrar — coherente con por que este motor esta pensado como
+filtro adicional barato (punto 4 del pedido de v2), no como reemplazo del
+gate de contenido por un jugador real.
+
+### Arquitectura
+
+`src/eval/features.ts` (codificador, puro, sin dependencias de tf.js),
+`src/eval/model.ts` (carga del modelo + `executeAsync` + softmax/tanh
+manual, ya que el grafo exportado no incluye la activacion final),
+`src/eval/worker.ts` + `src/eval/client.ts` (mismo patron que
+`engine/worker.ts`/`client.ts`: un Worker, un mapa de promesas por
+requestId). Cero conexion a ninguna pantalla todavia.
+
+### Excepcion a la regla de cero dependencias nuevas
+
+`@tensorflow/tfjs` (^4.22.0) se agrega como dependencia real de
+`package.json` -- confirmado explicitamente con el usuario como excepcion
+puntual, no como cambio de la regla general del proyecto: no hay forma de
+correr inferencia de una red convolucional real en el navegador sin
+alguna libreria de este tipo.
+
+### Empaquetado
+
+`vite.config.ts`: `workbox.maximumFileSizeToCacheInBytes` subido a 12MB
+(el default de Workbox es 2MB, los fragmentos de pesos son de ~4MB cada
+uno) y `models/**/*` agregado a `includeAssets` para que el service
+worker los precachee aunque todavia ninguna pantalla los importe
+(confirmado leyendo el manifest de precache generado: los 6 archivos
+aparecen con su hash de revision real). Para el empaquetado Android esto
+no cambia nada -- Flutter ya sirve `dist/` completo como asset local
+(seccion 4.2 de este archivo), sin depender del precache del service
+worker.
+
+### Todavia pendiente, con riesgo abierto explicito
+
+No medido en este entorno (sin Python, sin telefono conectado por adb):
+latencia real dentro de la WebView de Flutter en un telefono de gama
+media. La unica medicion real es ~1.25s en Node sobre la maquina de
+desarrollo, backend JS puro sin aceleracion -- un limite superior
+conservador, no una medicion representativa del dispositivo real.
+
+Sin conectar a ninguna pantalla. Eso, mas la investigacion del punto 4
+(si el motor aporta a la verificacion cruzada del banco y a la
+calibracion de dificultad), queda para la proxima pasada.
+
 ## v2 punto 2, track 1: estimador de influencia (Bouzy, reconstruido) (2026-09-02)
 
 Primera mitad del punto 2 de v2 (motor de evaluacion posicional). El plan

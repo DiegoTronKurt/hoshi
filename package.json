@@ -15,6 +15,7 @@
     "problems:generate": "vite-node tools/generate-problems.ts"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "ts-fsrs": "^5.4.1"

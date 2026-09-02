@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createBoard, toPoint } from '../../src/core/board'
-import { computeAreaScore } from '../../src/core/scoring'
-import { BLACK, WHITE } from '../../src/core/types'
+import { computeAreaOwnership, computeAreaScore } from '../../src/core/scoring'
+import { BLACK, EMPTY, WHITE } from '../../src/core/types'
 import type { BoardState, Color } from '../../src/core/types'
 
 function place(board: BoardState, color: Color, points: Array<[number, number]>): void {
@@ -47,5 +47,22 @@ describe('conteo de area', () => {
     const withMarking = computeAreaScore(board, 0, deadStones)
     expect(withMarking.black).toBe(25) // anillo (16) mas todo el interior (9)
     expect(withMarking.white).toBe(0)
+  })
+})
+
+describe('computeAreaOwnership', () => {
+  it('devuelve el dueno punto por punto, coherente con computeAreaScore agregado', () => {
+    const board = createBoard(5)
+    place(board, BLACK, [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [0, 1], [1, 1], [2, 1], [3, 1], [4, 1]])
+    place(board, WHITE, [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [0, 4], [1, 4], [2, 4], [3, 4], [4, 4]])
+
+    const owner = computeAreaOwnership(board)
+    for (let x = 0; x < 5; x++) {
+      expect(owner[toPoint(5, x, 0)]).toBe(BLACK)
+      expect(owner[toPoint(5, x, 1)]).toBe(BLACK)
+      expect(owner[toPoint(5, x, 2)]).toBe(EMPTY) // fila neutral (dame)
+      expect(owner[toPoint(5, x, 3)]).toBe(WHITE)
+      expect(owner[toPoint(5, x, 4)]).toBe(WHITE)
+    }
   })
 })
