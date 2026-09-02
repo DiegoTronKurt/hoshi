@@ -1,5 +1,42 @@
 # Notas de desarrollo
 
+## Estilos de bot, bug critico de persistencia, y pulido de Hoy (2026-09-01, sesión aun más posterior)
+
+### Estilos de juego del bot (`30961b3`)
+
+`src/engine/botStyles.ts`: territorial/influencia/combativo sesgan la
+elección de jugada en los playouts de MCTS con un peso simple sobre
+distancia a borde/piedras propias o rivales (BFS multi-fuente, una vez por
+jugada, no por candidato). "Estándar" es el mismo camino de código de
+siempre sin ningún peso, así que sigue siendo el bot de referencia si no se
+elige otro estilo — incluido a pedido explícito del usuario junto con los
+otros tres.
+
+### Bug crítico: el puerto efímero del servidor local borraba todo al reabrir la app
+
+Al investigar por qué el usuario sentía que "no se guardaban" tema/tablero,
+la causa no estaba en `localStorage` (`src/ui/settings/index.tsx` ya
+persistía todo correctamente) sino en `hoshi-flutter/lib/local_web_server.dart`:
+el servidor HTTP que sirve la PWA dentro del WebView hacía
+`HttpServer.bind(loopback, 0)`, puerto efímero, distinto en cada arranque.
+El WebView particiona `localStorage`/IndexedDB por origen
+(esquema+host+**puerto**), así que cada apertura de la app era, para
+efectos de almacenamiento, un sitio nuevo: se perdían configuración,
+partidas guardadas y calendario SRS cada vez que se cerraba la app. Arreglado
+fijando el puerto (`51823`, con fallback a uno efímero solo si estuviera
+ocupado). Subida versión a 1.4.0+7 y regenerado `app-release.aab` con este
+fix más todo lo de esta sesión.
+
+### Tema Bambú (verde) removido, tarjetas de "Hoy" rediseñadas
+
+A pedido explícito, se sacó el tema de color "Bambú" de Ajustes (quedan 5 +
+"seguir sistema"). La lista de desafíos del día en Hoy pasó de filas planas
+de una sola línea a tarjetas con insignia numerada coloreada según el
+motivo (repaso/área débil/nuevo), mismo lenguaje visual que ya usan las
+tarjetas de nivel en Aprender — hecho sin poder ver de nuevo el mockup
+original que inspiró el pedido, así que vale la pena que el usuario lo
+revise y redirija si no es lo que tenía en mente.
+
 ## Rediseño visual, respaldo de datos y dificultad adaptativa (2026-09-01, sesión posterior)
 
 Cuatro piezas de trabajo separadas, cada una en su propio commit.
