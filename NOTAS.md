@@ -1,5 +1,44 @@
 # Notas de desarrollo
 
+## Ejercicios: dividido en dos pantallas (2026-09-02)
+
+Cerraba el pendiente que la entrada "Estado general del proyecto
+(2026-09-02)" dejaba marcado como "pendiente de decisión explícita del
+usuario, no como olvido" — decisión ya tomada, implementado.
+
+Verificación primero (a pedido explícito, para no asumir contra las notas):
+`git log --oneline -- src/ui/exercises/` confirmó que ninguna sesión no
+documentada había tocado esto — el último commit ahí (`cb68581`, de esta
+misma sesión) solo agregó la explicación "por qué funciona" a
+`ExerciseView.tsx`, compartido con Hoy. De paso, una corrección de detalle
+sobre esa misma entrada: el deep-link "practicar este concepto" **no** llega
+desde Hoy (Hoy corre su propia sesión embebida con `useSolvableExercise`
+directo en `TodayScreen.tsx`, nunca navega a Ejercicios) — solo desde
+Aprender (`LessonPractice`, "Practicar más en Ejercicios") y Revisar
+(`ReviewScreen`, "practicar este concepto").
+
+Mismo patrón que ya usan Aprender/Jugar/Revisar: `ExercisesScreen.tsx` pasa
+a ser un router chico (`{ kind: 'concept' } | { kind: 'practice';
+conceptFilter }`) entre dos componentes nuevos — `ExercisesConceptScreen.tsx`
+(la grilla de conceptos, sin ninguna lógica de resolución) y
+`ExercisePracticeScreen.tsx` (tablero + validación, con toda la
+orquestación de estado que antes vivía en el archivo único: `entry`/
+`loaded`, ciclo de vida del `SolverClient`, `pickEntry`/`handleNext`). El
+deep-link no cambió de mecanismo, solo de dónde se resuelve: `initialConcept`
+sigue siendo la única prop pública de `ExercisesScreen`, y el `useState<View>`
+inicializador decide si montar directo en `{ kind: 'practice', conceptFilter:
+initialConcept }` (saltando la grilla) o en `{ kind: 'concept' }` — mismo
+mecanismo que `PlayScreen.initialSeed`/`ReviewScreen.initialGameId`. Cero
+cambios en `App.tsx` ni en los dos llamadores reales (Aprender, Revisar).
+
+Verificado con Playwright contra `npm run dev`: entrar por el nav cae en la
+grilla, elegir un concepto cae en la práctica, "volver a conceptos" vuelve a
+la grilla, y el deep-link desde Aprender ("Practicar más en Ejercicios" en
+la lección de captura simple) salta directo a la práctica sin pasar por la
+grilla — el de Revisar se verificó por código (mismo mecanismo exacto, sin
+poder generarlo en vivo sin datos de partidas guardadas en una sesión de
+navegador nueva). Cero errores de consola.
+
 ## Rediseño de Jugar y Hoy, heurísticas reales del bot, y banco a 120 problemas (2026-09-02)
 
 Sesión larga, todavía sin commitear al cerrarla (queda para confirmar con el
@@ -560,17 +599,114 @@ para que la re-verificación en CI no vuelva a colgarse.
 
 ---
 
-## Estado general del proyecto (2026-09-01)
+## Estado general del proyecto (2026-09-02)
 
-Análisis completo pedido por el usuario, comparando lo construido contra
-`go-trainer-v1-diseno.md` y `go-trainer-post-v1-roadmap.md` completos (no
-solo la última fase) y, nuevo en esta pasada, también contra
-`go-trainer-especificacion-pantallas.md` (vive en `Go_app/`, fuera de este
-repo — documento de maquetas de UI, con su propia numeración de secciones,
-independiente de la del documento de diseño principal). A diferencia de las
-entradas de fase de más abajo, esta sección se actualiza cada vez que valga
-la pena repetir este ejercicio, no queda congelada en una fecha; esta
-versión reemplaza a la de 2026-08-31.
+Reemplaza la versión de 2026-09-01 de más abajo (dejada tal cual, como
+registro histórico, en vez de borrada — quedó desactualizada casi de
+inmediato: buena parte de sus "brechas" listadas se cerraron esa misma
+sesión y las siguientes). Esta versión es deliberadamente un resumen de
+dónde está el proyecto hoy, no una re-derivación línea por línea contra los
+documentos de diseño: ese análisis completo ya se hizo una vez (ver abajo)
+y la mayoría de sus hallazgos ya están resueltos; el detalle narrativo de
+cómo se llegó a cada punto vive en las entradas de fase, en orden
+cronológico, más arriba en este archivo.
+
+### v1 y post-v1: cerrado
+
+F1-F6 (núcleo de reglas, bot MCTS, solucionador, detectores de errores,
+FSRS/Hoy, lecciones/temas/ajustes) y Fase A/B post-v1 (empaquetado Android,
+`ConceptOccurrence`) siguen cerrados tal como los describe la sección
+"Fotografía del proyecto" del roadmap maestro.
+
+### v1.1 (alinear la interfaz con la especificación de pantallas): cerrado
+
+Todas las brechas que la comparación de 2026-09-01 (más abajo) había
+encontrado ya se cerraron, en esta sesión o en las anteriores del mismo
+día: radar de 6 ejes en Perfil, escala kyu del bot + dificultad adaptativa
++ estilos de juego, meta diaria editable, Hoy rediseñado (encabezado con
+anillo de progreso, tarjeta de foco, fila de estadísticas, insight,
+plan del día colapsado detrás de un botón en vez de mostrar los 12+
+ejercicios de una sola vez), Aprender mostrando los niveles 4-10 bloqueados
+con nombre y tablero reales, Jugar mostrando 13x13/19x19 bloqueados con el
+mismo criterio. Jugar además se separó en dos pantallas (configurar →
+partida, mismo patrón que Aprender) con deshacer real, conteo en vivo y
+confirmación en pantalla antes de abandonar una partida sin terminar desde
+cualquier pestaña. Revisar abre la partida exacta recién jugada por
+deep-link. Nueva sección "Sobre el Go" dentro de Aprender (historia,
+glosario, comparación de reglas de conteo) — no estaba en ningún documento
+de diseño anterior, es contenido de referencia agregado a pedido explícito.
+
+**Sigue sin alinear**: Ejercicios continúa siendo una sola pantalla
+(selección de concepto y práctica mezcladas), a diferencia de Aprender/
+Jugar/Revisar que ya usan el patrón de dos pantallas. Marcado como
+pendiente de decisión explícita del usuario, no como olvido.
+
+### Empaquetado Android
+
+`hoshi-flutter/` en `1.6.0+9` (`versionCode 9`), AAB regenerado con todo lo
+de esta sesión y subido de version respecto al `1.5.0+8` que menciona la
+comparación de 2026-09-01 más abajo. Sigue el mismo mecanismo desde el
+cambio de TWA a WebView en Flutter (ver esa entrada): `npm run build` en
+`hoshi/` → `sync-webapp.ps1` → `flutter build appbundle --release`, mismo
+firmado (`android.keystore`, alias `upload`). Subir a Play Console sigue
+del lado del usuario en cada sesión.
+
+### Banco de problemas
+
+Creció de 71 (estado al 2026-09-01) a 120 en la sesión siguiente
+(heurísticas reales del bot en el autojuego, RED_GETA/SNAPBACK portados a
+9x9, más plantillas de ESCALERA/DOBLE_ATARI), y esta sesión suma etiqueta
+de dificultad (fácil/medio/difícil, derivada de cuántas jugadas hace falta
+leer, dato interno todavía — sin filtro visible en Ejercicios) más
+crecimiento adicional en curso (más autojuego, una escalera genuinamente
+más larga verificada a 6 jugadas del perseguidor, un doble atari con
+relleno visual). Números finales de esta pasada, una vez termine de correr
+el generador, quedan en la entrada de sesión correspondiente más arriba.
+`OJO_FALSO` se mantiene deliberadamente en 4 (ver su propia entrada): ya
+está en el tablero máximo desbloqueado y una forma nueva necesitaría
+geometría de Go genuinamente distinta, la misma categoría de riesgo que
+costó varias sesiones fallidas la primera vez.
+
+### v1.5 (deuda técnica de tamaño de tablero)
+
+Versión barata hecha, refactor completo deliberadamente pospuesto (ver su
+propia entrada de sesión): casi todo el núcleo ya generaliza por tamaño de
+tablero sin tocarlo (confirmado, no solo asumido, con tests nuevos a 13x13/
+19x19). El único gap real es tablero no cuadrado (`BoardState.size` es un
+solo número), que no tiene consumidor real todavía — el único nivel
+bloqueado no cuadrado (Nivel 4, "9x13") depende del motor de evaluación de
+v2, que tampoco existe.
+
+### El gate de v1 saltado: sigue siendo el mayor riesgo abierto
+
+Ninguno de los 4 criterios de salida de v1 (roadmap maestro, sección 1.4)
+se cumplió todavía — en particular, nadie que sepa Go de verdad revisó
+todavía ni una lección ni un problema del banco. Esto no cambió desde la
+comparación de 2026-09-01, pero la urgencia sí: el banco pasó de 71 a 120+
+problemas sin ninguna revisión externa de contenido. El roadmap lo marca
+explícito: "se vuelve más urgente, no menos, a medida que el banco crece."
+Sigue siendo, con diferencia, el pendiente más importante del proyecto que
+no es código.
+
+### Qué sigue
+
+En orden de valor, no de facilidad: (1) la versión liviana del gate de v1
+(alguien con experiencia real revisando una muestra de lecciones y
+problemas) — no es código, pero es el único chequeo de contenido que
+existe; (2) decidir si Ejercicios pasa al mismo patrón de dos pantallas que
+el resto de la app; (3) v2 (motor de evaluación posicional, niveles 4-6,
+13x13) sigue siendo el próximo hito grande de verdad, sin empezar todavía.
+
+---
+
+## Estado general del proyecto — version anterior, historica (2026-09-01)
+
+Analisis completo pedido por el usuario en su momento, comparando lo
+construido contra `go-trainer-v1-diseno.md`, `go-trainer-post-v1-roadmap.md`
+y `go-trainer-especificacion-pantallas.md` linea por linea. Se deja tal cual
+como registro (no se borra), pero quedo desactualizada casi de inmediato:
+la seccion de arriba ("Estado general del proyecto (2026-09-02)") es la
+version vigente.
 
 ### Qué cambió desde el 31 de agosto
 
