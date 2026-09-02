@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { createBoard, toPoint } from '../../src/core/board'
-import { applyMove, createGame } from '../../src/core/rules'
+import { applyMove, createGame, gameStateFromBoard } from '../../src/core/rules'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { BoardState, Color, GameState } from '../../src/core/types'
-import { findAtariSavingMoves, isSimpleEye } from '../../src/engine/playoutPolicy'
+import { findAtariSavingMoves, findCapturingMoves, isSimpleEye, resultsInSelfAtari } from '../../src/engine/playoutPolicy'
 
 function place(board: BoardState, color: Color, points: Array<[number, number]>): void {
   for (const [x, y] of points) {
@@ -65,5 +65,36 @@ describe('findAtariSavingMoves', () => {
   it('no reporta nada si ningun grupo propio esta en atari', () => {
     const state = createGame(5, 0)
     expect(findAtariSavingMoves(state)).toEqual([])
+  })
+})
+
+describe('findCapturingMoves', () => {
+  it('encuentra el punto que capturaria un grupo rival en atari', () => {
+    const board = createBoard(5)
+    place(board, WHITE, [[2, 2]])
+    place(board, BLACK, [[1, 2], [3, 2], [2, 1]])
+    const state = gameStateFromBoard(board, BLACK)
+
+    expect(findCapturingMoves(state)).toEqual([toPoint(5, 2, 3)])
+  })
+
+  it('no reporta nada si ningun grupo rival esta en atari', () => {
+    const state = createGame(5, 0)
+    expect(findCapturingMoves(state)).toEqual([])
+  })
+})
+
+describe('resultsInSelfAtari', () => {
+  it('detecta que jugar en un punto deja al grupo propio con una sola libertad', () => {
+    const board = createBoard(5)
+    place(board, WHITE, [[1, 2], [3, 2], [2, 1]])
+    board.stones[toPoint(5, 2, 2)] = BLACK
+    expect(resultsInSelfAtari(board, toPoint(5, 2, 2))).toBe(true)
+  })
+
+  it('no reporta auto-atari cuando el grupo tiene mas de una libertad', () => {
+    const board = createBoard(5)
+    board.stones[toPoint(5, 2, 2)] = BLACK
+    expect(resultsInSelfAtari(board, toPoint(5, 2, 2))).toBe(false)
   })
 })

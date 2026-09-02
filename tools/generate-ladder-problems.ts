@@ -56,8 +56,31 @@ function template3(): Template {
   return { board, runnerPoint: toPoint(SIZE, 1, 1), chaserColor: WHITE }
 }
 
+/** Mismo patron de contacto que template1, corrido una columna mas lejos de
+ * la esquina: variedad de posicion real, no solo una transformacion diedral
+ * de una plantilla ya existente. */
+function template4(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 2, 1)] = BLACK
+  board.stones[toPoint(SIZE, 3, 1)] = WHITE
+  board.stones[toPoint(SIZE, 2, 2)] = WHITE
+  return { board, runnerPoint: toPoint(SIZE, 2, 1), chaserColor: WHITE }
+}
+
+/** Grupo de 2 que huye, mismo patron que template3, corrido una columna
+ * hacia la esquina opuesta del tablero para dar una posicion final distinta. */
+function template5(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 2, 0)] = BLACK
+  board.stones[toPoint(SIZE, 2, 1)] = BLACK
+  board.stones[toPoint(SIZE, 3, 1)] = WHITE
+  board.stones[toPoint(SIZE, 2, 2)] = WHITE
+  board.stones[toPoint(SIZE, 3, 0)] = WHITE
+  return { board, runnerPoint: toPoint(SIZE, 2, 0), chaserColor: WHITE }
+}
+
 async function main() {
-  const templates = [template1(), template2(), template3()]
+  const templates = [template1(), template2(), template3(), template4(), template5()]
   const problems: LadderProblem[] = []
   const seen = new Set<string>()
 

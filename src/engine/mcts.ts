@@ -6,10 +6,11 @@ import { prepareStyleContext, styleWeight } from './botStyles'
 import type { BotStyleId, StyleContext } from './botStyles'
 import { createRng, shuffle, shuffledIndices } from './random'
 import type { RandomFn } from './random'
-import { findAtariSavingMoves, isSimpleEye } from './playoutPolicy'
+import { findAtariSavingMoves, findCapturingMoves, isSimpleEye, resultsInSelfAtari } from './playoutPolicy'
 
 const EXPLORATION_CONSTANT = 1.4
 const ATARI_RESPONSE_PROBABILITY = 0.9
+const CAPTURE_PROBABILITY = 0.9
 const DEFAULT_MAX_TIME_MS = 15000
 
 interface MctsNode {
@@ -53,10 +54,16 @@ function selectUctChild(node: MctsNode, random: RandomFn): MctsNode {
  * `styleWeight` (sin reemplazo: si el elegido resulta ilegal, se descarta y
  * se reintenta entre el resto). Casi siempre acierta a la primera, ya que
  * las unicas jugadas ilegales entre puntos vacios sin ojo simple son
- * superko o suicidio real, ambos poco frecuentes. */
+ * superko o suicidio real, ambos poco frecuentes.
+ *
+ * Ademas evita auto-atari cuando hay alternativa: si el candidato elegido
+ * deja a su propio grupo con una sola libertad y no capturo nada, se
+ * recuerda como respaldo y se reintenta entre el resto en vez de jugarlo de
+ * una -- el mismo applyMove ya calculado se reutiliza, sin costo extra. */
 function pickWeightedMove(state: GameState, points: number[], ctx: StyleContext, random: RandomFn): GameState | null {
   let remaining = points
   let weights = points.map((p) => styleWeight(ctx, state.board, p))
+  let fallback: GameState | null = null
 
   while (remaining.length > 0) {
     const total = weights.reduce((sum, w) => sum + w, 0)
@@ -72,16 +79,29 @@ function pickWeightedMove(state: GameState, points: number[], ctx: StyleContext,
 
     const point = remaining[index]
     const result = applyMove(state, point)
-    if (result.legal) return result.state as GameState
+    if (result.legal && result.state) {
+      const selfAtari = result.captured.length === 0 && resultsInSelfAtari(result.state.board, point)
+      if (!selfAtari) return result.state
+      if (!fallback) fallback = result.state
+      if (remaining.length === 1) return fallback
+    }
 
     remaining = remaining.filter((_, i) => i !== index)
     weights = weights.filter((_, i) => i !== index)
   }
 
-  return null
+  return fallback
 }
 
 function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId): GameState {
+  const capturingMoves = findCapturingMoves(state)
+  if (capturingMoves.length > 0 && random() < CAPTURE_PROBABILITY) {
+    for (const point of shuffle(capturingMoves, random)) {
+      const result = applyMove(state, point)
+      if (result.legal) return result.state as GameState
+    }
+  }
+
   const atariSaves = findAtariSavingMoves(state)
   if (atariSaves.length > 0 && random() < ATARI_RESPONSE_PROBABILITY) {
     for (const point of shuffle(atariSaves, random)) {
@@ -95,14 +115,19 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
   if (style === 'standard') {
     // Ruta identica a la de siempre, sin el costo de preparar un contexto de
     // estilo: el bot "Estandar" debe comportarse exactamente como antes de
-    // que existieran los estilos.
+    // que existieran los estilos. Recorre las candidatas en orden al azar y
+    // prefiere la primera que no sea auto-atari, pero guarda la primera
+    // legal como respaldo por si todas lo fueran (jugada forzada).
+    let fallback: GameState | null = null
     for (const point of shuffledIndices(size * size, random)) {
       if (state.board.stones[point] !== EMPTY) continue
       if (isSimpleEye(state.board, point, state.toMove)) continue
       const result = applyMove(state, point)
-      if (result.legal) return result.state as GameState
+      if (!result.legal || !result.state) continue
+      if (!fallback) fallback = result.state
+      if (result.captured.length > 0 || !resultsInSelfAtari(result.state.board, point)) return result.state
     }
-    return applyMove(state, null).state as GameState
+    return fallback ?? (applyMove(state, null).state as GameState)
   }
 
   const candidates: number[] = []

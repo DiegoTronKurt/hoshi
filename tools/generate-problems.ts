@@ -40,7 +40,14 @@ import type { Problem } from '../src/content/problemSgf'
 import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
-const SELF_PLAY_GAMES = 8
+// Subido de 8 a 32 para hacer crecer el banco (75 -> 108 problemas, sumando
+// tambien las plantillas nuevas de escalera/doble atari). Retornos
+// decrecientes: la corrida de 32 partidas tardo ~62 minutos reales en vez de
+// escalar linealmente x4, porque el set de deduplicacion de candidatos
+// (`seenBoards`) descarta cada vez mas posiciones repetidas a medida que se
+// acumulan partidas. Subir mas alla de esto para ganar pocos problemas mas
+// no vale el tiempo de computo.
+const SELF_PLAY_GAMES = 32
 // Documento de diseno, seccion 5.6: "100 vs 2000 produce posiciones con
 // errores explotables". Cada partida de autojuego alterna quien de los dos
 // colores juega fuerte, para no sesgar los errores encontrados a un solo

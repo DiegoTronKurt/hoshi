@@ -72,8 +72,36 @@ function template3(): Template {
   return { board, color: BLACK }
 }
 
+/** Dos grupos de una piedra, separados verticalmente por el punto compartido
+ * (mismo mecanismo que template1, pero orientado vertical y en otra zona del
+ * tablero, para dar una posicion final realmente distinta). */
+function template4(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 6, 3)] = WHITE
+  board.stones[toPoint(SIZE, 6, 5)] = WHITE
+  board.stones[toPoint(SIZE, 5, 3)] = BLACK
+  board.stones[toPoint(SIZE, 7, 3)] = BLACK
+  board.stones[toPoint(SIZE, 5, 5)] = BLACK
+  board.stones[toPoint(SIZE, 7, 5)] = BLACK
+  return { board, color: BLACK }
+}
+
+/** Corte en angulo recto: un grupo arriba del punto compartido, el otro a la
+ * derecha -- la forma de doble atari mas comun en una partida real, en vez
+ * de dos grupos enfrentados en linea recta como en las plantillas 1 y 4. */
+function template5(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 2, 5)] = WHITE
+  board.stones[toPoint(SIZE, 3, 6)] = WHITE
+  board.stones[toPoint(SIZE, 1, 5)] = BLACK
+  board.stones[toPoint(SIZE, 2, 4)] = BLACK
+  board.stones[toPoint(SIZE, 4, 6)] = BLACK
+  board.stones[toPoint(SIZE, 3, 7)] = BLACK
+  return { board, color: BLACK }
+}
+
 async function main() {
-  const templates = [template1(), template2(), template3()]
+  const templates = [template1(), template2(), template3(), template4(), template5()]
   const problems: DoubleAtariProblem[] = []
   const seen = new Set<string>()
 

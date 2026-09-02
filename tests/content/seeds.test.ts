@@ -13,7 +13,7 @@ import type { Problem } from '../../src/content/problemSgf'
 let problems: Problem[]
 beforeAll(() => {
   problems = buildSeedProblems()
-}, 60000)
+}, 120000)
 
 describe('posiciones semilla', () => {
   it('produce al menos una posicion semilla verificada por el solucionador', () => {
@@ -49,5 +49,5 @@ describe('posiciones semilla', () => {
 
       expect(result.solved).toBe(true)
     }
-  }, 60000)
+  }, 180000)
 })

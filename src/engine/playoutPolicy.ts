@@ -3,6 +3,24 @@ import { getGroup } from '../core/groups'
 import { EMPTY, opponent } from '../core/types'
 import type { BoardState, Color, GameState } from '../core/types'
 
+function groupsWithOneLiberty(board: BoardState, color: Color): number[] {
+  const seen = new Set<number>()
+  const points: number[] = []
+
+  for (let p = 0; p < board.stones.length; p++) {
+    if (board.stones[p] !== color || seen.has(p)) continue
+    const group = getGroup(board, p)
+    if (!group) continue
+    for (const stone of group.stones) seen.add(stone)
+    if (group.liberties.size === 1) {
+      const [liberty] = group.liberties
+      points.push(liberty)
+    }
+  }
+
+  return points
+}
+
 /**
  * Heuristica de "ojo simple" para la politica de playout del bot: un punto
  * vacio rodeado ortogonalmente por piedras propias, con como maximo una
@@ -34,21 +52,29 @@ export function isSimpleEye(board: BoardState, point: number, color: Color): boo
  * ignorarlo por completo.
  */
 export function findAtariSavingMoves(state: GameState): number[] {
-  const board = state.board
-  const color = state.toMove
-  const seen = new Set<number>()
-  const saves: number[] = []
+  return groupsWithOneLiberty(state.board, state.toMove)
+}
 
-  for (let p = 0; p < board.stones.length; p++) {
-    if (board.stones[p] !== color || seen.has(p)) continue
-    const group = getGroup(board, p)
-    if (!group) continue
-    for (const stone of group.stones) seen.add(stone)
-    if (group.liberties.size === 1) {
-      const [liberty] = group.liberties
-      saves.push(liberty)
-    }
-  }
+/**
+ * Puntos donde jugar ahora capturaria al menos un grupo rival (le quitaria
+ * su ultima libertad), usados para que la politica de playout aproveche
+ * capturas gratis en vez de ignorarlas por completo -- mismo patron que
+ * findAtariSavingMoves, pero mirando los grupos del rival en vez de los
+ * propios.
+ */
+export function findCapturingMoves(state: GameState): number[] {
+  return groupsWithOneLiberty(state.board, opponent(state.toMove))
+}
 
-  return saves
+/**
+ * True si, despues de jugar en `point`, el grupo propio recien formado ahi
+ * queda en atari (una sola libertad). Se usa para que la politica de
+ * playout evite auto-atarearse sin necesidad -- no es una lectura real, solo
+ * evita el error mas obvio de una jugada verdaderamente al azar. `afterBoard`
+ * es el tablero YA jugado (post-captura incluida), para no repetir el costo
+ * de aplicar la jugada una segunda vez.
+ */
+export function resultsInSelfAtari(afterBoard: BoardState, point: number): boolean {
+  const group = getGroup(afterBoard, point)
+  return !!group && group.liberties.size === 1
 }
