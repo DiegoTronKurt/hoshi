@@ -97,6 +97,7 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
   const [sessionStarted, setSessionStarted] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [solvedCount, setSolvedCount] = useState(0)
+  const [planExpanded, setPlanExpanded] = useState(false)
 
   const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
   useEffect(() => {
@@ -215,20 +216,31 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
 
         {rest.length > 0 && (
           <>
-            <h3 className="today-plan-title">{t('today.planOverview.title')}</h3>
-            <ul className="today-plan-list">
-              {rest.map((item, index) => (
-                <li key={`${item.entry.id}-${index}`}>
-                  <span className={`today-plan-badge today-reason-${item.reason}`}>{index + 2}</span>
-                  <span className="today-plan-info">
-                    <span className="today-plan-concept">
-                      {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+            <button
+              type="button"
+              className="today-plan-toggle"
+              aria-expanded={planExpanded}
+              onClick={() => setPlanExpanded((v) => !v)}
+            >
+              {planExpanded
+                ? t('today.planOverview.collapse')
+                : t('today.planOverview.expand', { count: rest.length })}
+            </button>
+            {planExpanded && (
+              <ul className="today-plan-list">
+                {rest.map((item, index) => (
+                  <li key={`${item.entry.id}-${index}`}>
+                    <span className={`today-plan-badge today-reason-${item.reason}`}>{index + 2}</span>
+                    <span className="today-plan-info">
+                      <span className="today-plan-concept">
+                        {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+                      </span>
+                      <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
                     </span>
-                    <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
           </>
         )}
 
