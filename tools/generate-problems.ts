@@ -14,12 +14,13 @@
  * (CAPTURA_SIMPLE si la captura no necesito lectura real, PUNTO_VITAL si
  * si) y guardar.
  *
- * OJO_FALSO, DOBLE_ATARI y ESCALERA quedan fuera de esta pasada: OJO_FALSO
- * porque construir una plantilla valida a mano resulto mas fragil de lo
- * esperado (varios intentos de conectividad rotos, documentado, pendiente
- * una busqueda parametrica propia); DOBLE_ATARI y ESCALERA porque no
- * encajan en el formato Problem/solve() de vida-muerte (ver el plan de esta
- * fase) y necesitan su propio tipo de dato y mecanismo de verificacion.
+ * OJO_FALSO ya se resolvio (`content/seeds.ts`, `buildOjoFalsoSeed`): los
+ * intentos anteriores fallaban por construir la forma con relleno total de
+ * blanco, tecnica que no puede representar una diagonal que le quita una
+ * libertad real a una piedra (ver comentario de esa funcion). DOBLE_ATARI y
+ * ESCALERA siguen fuera de esta pasada porque no encajan en el formato
+ * Problem/solve() de vida-muerte (ver el plan de esta fase) y necesitan su
+ * propio tipo de dato y mecanismo de verificacion.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'

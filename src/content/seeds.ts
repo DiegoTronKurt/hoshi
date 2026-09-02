@@ -103,6 +103,38 @@ function buildGetaSeed(): { board: BoardState; targetPoints: number[] } {
 }
 
 /**
+ * Ojo falso de esquina: el punto (0,0) parece un ojo (sus dos vecinos
+ * ortogonales, unico requisito posible en una esquina, son negros), pero la
+ * diagonal (1,1) es blanca. Esa piedra blanca no esta ahi de adorno: al ser
+ * vecina ortogonal directa de AMBAS piedras del "anillo" (A y B), les quita
+ * a cada una la libertad que tendrian hacia ese lado, dejandolas con una
+ * sola libertad real (la esquina misma, compartida). Por eso blanco puede
+ * jugar directo en la esquina y capturar las dos de una: el "ojo" nunca fue
+ * un punto seguro, era la unica libertad de dos piedras ya debilitadas por
+ * la diagonal.
+ *
+ * A proposito NO se construye con la tecnica de `buildEnclosedShape` (llenar
+ * todo el tablero de blanco): bajo ese relleno total, las piedras del
+ * anillo ya tienen cero libertades "hacia afuera" desde el principio (todo
+ * alrededor es blanco, este u otro punto), asi que ninguna diagonal puede
+ * quitarles una libertad que nunca tuvieron: recolorear una diagonal ahi no
+ * cambia nada (confirmado con el solucionador, ver NOTAS.md). El mecanismo
+ * real de un ojo falso solo existe en una construccion dispersa como esta,
+ * donde la diagonal SI le quita una libertad real a una piedra que de otro
+ * modo la tendria.
+ */
+function buildOjoFalsoSeed(): { board: BoardState; targetPoints: number[] } {
+  const size = 9
+  const board = createBoard(size)
+  board.stones[toPoint(size, 1, 0)] = BLACK // A, anillo del ojo (0,0)
+  board.stones[toPoint(size, 0, 1)] = BLACK // B, anillo del ojo (0,0)
+  board.stones[toPoint(size, 1, 1)] = WHITE // diagonal de la esquina: hace falso el ojo
+  board.stones[toPoint(size, 2, 0)] = WHITE // sella la otra libertad de A
+  board.stones[toPoint(size, 0, 2)] = WHITE // sella la otra libertad de B
+  return { board, targetPoints: [toPoint(size, 1, 0), toPoint(size, 0, 1)] }
+}
+
+/**
  * Snapback verificado en la leccion n3-l5: negro sacrifica en (4,3), blanco
  * captura jugando (4,4) (unica forma de capturar esa piedra), y esa misma
  * jugada blanca deja al grupo {(3,3),(3,4),(4,4)} con una sola libertad:
@@ -148,6 +180,7 @@ interface SeedSpec {
 
 const getaSeed = buildGetaSeed()
 const snapbackSeed = buildSnapbackSeed()
+const ojoFalsoSeed = buildOjoFalsoSeed()
 
 const SEED_SPECS: SeedSpec[] = [
   // Vive: jugar el punto vital separa el espacio en dos ojos reales.
@@ -160,6 +193,10 @@ const SEED_SPECS: SeedSpec[] = [
   // Red y snapback: posiciones ya verificadas en las lecciones de Fase 6.
   { conceptId: 'RED_GETA', board: getaSeed.board, targetPoints: getaSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 4 },
   { conceptId: 'SNAPBACK', board: snapbackSeed.board, targetPoints: snapbackSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 5 },
+  // Ojo falso de esquina: blanco captura las dos piedras del "anillo" jugando
+  // directo en la esquina, porque la diagonal ya les habia quitado su otra
+  // libertad a cada una (ver comentario de buildOjoFalsoSeed).
+  { conceptId: 'OJO_FALSO', board: ojoFalsoSeed.board, targetPoints: ojoFalsoSeed.targetPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
 ]
 
 /**
