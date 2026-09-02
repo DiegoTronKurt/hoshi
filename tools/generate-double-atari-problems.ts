@@ -100,8 +100,30 @@ function template5(): Template {
   return { board, color: BLACK }
 }
 
+/** Mismo mecanismo de contacto que template1 (una piedra blanca con 2
+ * libertades compartiendo el punto con otra igual), mas piedras sueltas
+ * lejos de ahi, cada una aislada con 4 libertades propias -- no participan
+ * de ningun atari, solo hacen mas dificil ubicar a simple vista cual es el
+ * punto real. A pedido explicito de mas dificultad: hasta ahora ningun
+ * tablero de doble atari tenia relleno alrededor de la jugada. */
+function template6(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 4, 4)] = WHITE
+  board.stones[toPoint(SIZE, 3, 4)] = BLACK
+  board.stones[toPoint(SIZE, 4, 3)] = BLACK
+  board.stones[toPoint(SIZE, 6, 4)] = WHITE
+  board.stones[toPoint(SIZE, 7, 4)] = BLACK
+  board.stones[toPoint(SIZE, 6, 3)] = BLACK
+  // Piedras sueltas, cada una aislada (4 libertades, sin ningun vecino):
+  // ruido visual, verificado abajo que no agregan otro punto de doble atari.
+  board.stones[toPoint(SIZE, 1, 1)] = BLACK
+  board.stones[toPoint(SIZE, 7, 1)] = WHITE
+  board.stones[toPoint(SIZE, 1, 7)] = WHITE
+  return { board, color: BLACK }
+}
+
 async function main() {
-  const templates = [template1(), template2(), template3(), template4(), template5()]
+  const templates = [template1(), template2(), template3(), template4(), template5(), template6()]
   const problems: DoubleAtariProblem[] = []
   const seen = new Set<string>()
 
@@ -128,6 +150,10 @@ async function main() {
     id: `doubleatari${index + 1}`,
     conceptId: problem.conceptId,
     sgf: doubleAtariProblemToSgf(problem),
+    // Reconocimiento de una sola jugada, siempre "facil" en el mismo sentido
+    // que CAPTURA_SIMPLE: la dificultad de template6 es visual (mas piedras
+    // en el tablero), no de lectura, y esta etiqueta mide lectura.
+    difficulty: 'easy' as const,
   }))
 
   await writeFile(join(outDir, 'double-atari.json'), JSON.stringify(bank, null, 2))

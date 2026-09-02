@@ -1,5 +1,111 @@
 # Notas de desarrollo
 
+## Banco de problemas: de 120 a 142, con etiqueta de dificultad (2026-09-02)
+
+Cierra el pedido "añadir más ejercicios, incrementando dificultad", con las
+opciones 1 (más variedad dentro de la generación segura ya existente, más
+dificultad derivada de la profundidad de lectura, sin cambio de UI) y 3
+(formas tácticas nuevas y genuinamente más difíciles para ESCALERA, con el
+riesgo de fallo aceptado explícitamente) de la pregunta que se hizo antes de
+empezar.
+
+### Números, antes → después
+
+| Fuente | Antes | Después |
+|---|---|---|
+| Autojuego (tsumego) | 68 | 78 |
+| Escaleras | 28 | 32 |
+| Doble atari | 24 | 32 |
+| **Total** | **120** | **142** |
+
+Por concepto (autojuego): `DOS_OJOS` 10→14, `PUNTO_VITAL` 13→14,
+`CAPTURA_SIMPLE` 7→12, `NAKADE` y `OJO_FALSO` sin cambio (10 y 4). El
+crecimiento de autojuego vino de subir `SELF_PLAY_GAMES` de 32 a 48 en
+`tools/generate-problems.ts`, no de plantillas nuevas — más partidas, más
+posiciones candidatas por concepto.
+
+`RED_GETA` y `SNAPBACK` **sin cambio** (8 y 16) — ver más abajo por qué,
+reportado explícito en vez de forzado.
+
+### Etiqueta de dificultad (`src/content/difficulty.ts`)
+
+`Difficulty = 'easy' | 'medium' | 'hard'`, calculada una sola vez al generar
+contenido (no en el cliente), agregada como campo obligatorio de `BankEntry`.
+Para tsumego, deriva de `solutionDepth()` (recorrido recursivo del árbol de
+refutaciones del solucionador, ya existía disperso en `tools/generate-
+problems.ts`, ahora centralizado en este módulo nuevo): ≤1 jugada = fácil,
+2-4 = media, ≥5 = difícil, umbrales calibrados contra la distribución real
+observada en el banco de 120, no elegidos a ojo. Para escaleras, la
+profundidad es `simulateLadder(...).chaserMoves.length`. Para doble atari no
+hay árbol que recorrer (`isDoubleAtariMove` es reconocimiento de una sola
+jugada, sin búsqueda) — dificultad `'easy'` fija por construcción, no un caso
+degenerado del mismo cálculo.
+
+Distribución resultante: autojuego `{easy: 18, medium: 19, hard: 41}`,
+escaleras `{medium: 28, hard: 4}`, doble atari `{easy: 32}` (los 32, por
+construcción). No expuesta como filtro en Ejercicios todavía — decisión
+explícita (opción 1, no 2, de la pregunta previa), queda como dato para más
+adelante, no como trabajo pendiente por olvido.
+
+### ESCALERA: el hallazgo real de esta sesión
+
+Primer intento (trasladar la plantilla mínima de 2 piedras a distancia 3 y 5
+de la esquina, asumiendo que una escalera diagonal real "simplemente
+funciona" más lejos de la esquina) **falló las dos veces**: `solveLadder`
+devolvía `{captured: false, reason: 'escaped'}` a los 2 plies. Verificado con
+un script de depuración antes de descartar el enfoque, no a mano.
+
+Causa raíz: `ESCAPE_LIBERTY_THRESHOLD = 3` en `solver/ladder.ts` declara al
+grupo que corre como escapado apenas llega a 3 libertades, revisado *antes*
+de considerar la siguiente respuesta del perseguidor. Una piedra recién
+extendida en tablero abierto siempre gana exactamente 3 libertades frescas
+(un vecino es la piedra previa propia, los otros 3 están vacíos), salvo que
+algo le bloquee una de antemano — cerca de la esquina, el borde del tablero
+da ese bloqueo gratis (un punto de esquina/borde tiene menos de 4 vecinos
+para empezar); en medio del tablero no hay nada que lo bloquee.
+
+Arreglo: `template6()` en `tools/generate-ladder-problems.ts` agrega dos
+piedras auxiliares en (2,4) y (4,2) — las libertades "laterales" que la
+primera extensión abriría — además del pinzamiento original en (3,3)/(4,3)/
+(3,4). Verificado con el mismo script: captura en 6 jugadas del perseguidor
+(el máximo anterior era 4). Un segundo template a distancia 5 quedó
+descartado tras el éxito de este: la simetría diedral (8 orientaciones) ya
+da suficiente variedad de una sola plantilla que funciona, no hacía falta
+forzar una segunda.
+
+### DOBLE_ATARI: plantilla de contacto más cargada
+
+`template6()` en `tools/generate-double-atari-problems.ts` — patrón de
+contacto en (4,4)/(3,4)/(4,3)/(6,4)/(7,4)/(6,3) más 3 piedras aisladas de
+relleno en (1,1)/(7,1)/(1,7), para que la jugada correcta no sea obvia por
+ser la única piedra blanca del tablero. Sigue siendo dificultad fácil por
+construcción (una sola jugada), el objetivo era variedad visual y de
+lectura, no profundidad.
+
+### RED_GETA / SNAPBACK: intento y abandono honesto
+
+Se construyó un candidato de geta en medio del tablero (piedras blancas en
+(4,4)/(5,5), pinza y red de negro alrededor) y se corrió `solve()` con
+`computeRegion(..., margin=2)` y `maxDepth=6`. **Timeout a los 30s, sin
+resultado.** Coincide con el riesgo ya documentado: una región sin esquina
+ni borde que la acote explota combinatoriamente (la misma razón por la que
+geta/snapback ya generaban con `maxDepth` reducido a 4-5 en vez de 8).
+
+Decisión explícita, no fallo silencioso: no se reintentó con región más chica
+ni timeout más largo. Se abandonó la variante más difícil de RED_GETA/
+SNAPBACK en esta pasada — el riesgo de producir contenido de Go sutilmente
+incorrecto (la lección de `OJO_FALSO`) pesa más que tener una variante extra.
+Reportado así al usuario en el momento, no descubierto después.
+
+### Verificación
+
+`npx tsc -b` limpio, `npx vitest run` 313/313 verdes en 33 archivos, `npx
+oxlint` sin warnings nuevos (los existentes son de antes, ninguno toca los
+archivos de esta sesión), paridad de claves i18n intacta (no se tocó, se
+confirmó igual). Playwright contra `npm run dev`: Ejercicios → "Todos" marca
+142 problemas, ciclo de "Siguiente ejercicio" renderiza formas nuevas sin
+errores de consola.
+
 ## Ejercicios: dividido en dos pantallas (2026-09-02)
 
 Cerraba el pendiente que la entrada "Estado general del proyecto

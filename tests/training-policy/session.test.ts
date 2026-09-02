@@ -9,7 +9,7 @@ import type { SrsCardRecord } from '../../src/storage/db'
 const NOW = new Date('2026-01-10T00:00:00Z')
 
 function entry(id: string, conceptId: ConceptId): BankEntry {
-  return { id, conceptId, sgf: '' }
+  return { id, conceptId, sgf: '', difficulty: 'easy' }
 }
 
 function emptyProfiles(): Record<ConceptId, ConceptProfile> {

@@ -13,9 +13,10 @@ import { fileURLToPath } from 'node:url'
 import { BOARD_TRANSFORMS, createBoard, toPoint, transformBoard, transformPoint } from '../src/core/board'
 import { BLACK, WHITE } from '../src/core/types'
 import type { BoardState, Color } from '../src/core/types'
-import { solveLadder } from '../src/solver/ladder'
+import { simulateLadder, solveLadder } from '../src/solver/ladder'
 import { ladderProblemToSgf } from '../src/content/ladderProblem'
 import type { LadderProblem } from '../src/content/ladderProblem'
+import { difficultyFromDepth } from '../src/content/difficulty'
 
 const SIZE = 9
 
@@ -79,8 +80,35 @@ function template5(): Template {
   return { board, runnerPoint: toPoint(SIZE, 2, 0), chaserColor: WHITE }
 }
 
+/**
+ * Escalera mas larga, a pedido explicito (hasta ahora ninguna del banco
+ * pasaba de 4 jugadas del perseguidor). Primer intento (trasladar el
+ * contacto minimo de template1 lejos de la esquina, sin nada mas) fallo: el
+ * solucionador de este proyecto declara "escapado" apenas el grupo llega a
+ * 3 libertades (ver ESCAPE_LIBERTY_THRESHOLD en solver/ladder.ts, una
+ * simplificacion documentada de "escalera simple"), y una piedra recien
+ * extendida en medio de un tablero vacio siempre gana una tercera libertad
+ * de inmediato -- por eso template1 solo funciona porque a un paso de la
+ * esquina el propio borde ya le quita esa tercera libertad gratis. Lejos
+ * del borde hace falta reponer esa funcion a mano: dos piedras blancas mas,
+ * puestas de entrada en las libertades "de costado" que la primera
+ * extension abriria, cumplen el mismo papel que el borde cumple en la
+ * esquina. Verificado con solveLadder antes de aceptar esta explicacion:
+ * sin las dos piedras extra escapa a los 2 movimientos, con ellas captura
+ * en 6.
+ */
+function template6(): Template {
+  const board = createBoard(SIZE)
+  board.stones[toPoint(SIZE, 3, 3)] = BLACK
+  board.stones[toPoint(SIZE, 4, 3)] = WHITE
+  board.stones[toPoint(SIZE, 3, 4)] = WHITE
+  board.stones[toPoint(SIZE, 2, 4)] = WHITE
+  board.stones[toPoint(SIZE, 4, 2)] = WHITE
+  return { board, runnerPoint: toPoint(SIZE, 3, 3), chaserColor: WHITE }
+}
+
 async function main() {
-  const templates = [template1(), template2(), template3(), template4(), template5()]
+  const templates = [template1(), template2(), template3(), template4(), template5(), template6()]
   const problems: LadderProblem[] = []
   const seen = new Set<string>()
 
@@ -104,14 +132,22 @@ async function main() {
   const outDir = join(root, '..', 'src', 'content', 'problems')
   await mkdir(outDir, { recursive: true })
 
-  const bank = problems.map((problem, index) => ({
-    id: `ladder${index + 1}`,
-    conceptId: problem.conceptId,
-    sgf: ladderProblemToSgf(problem),
-  }))
+  const bank = problems.map((problem, index) => {
+    const step = simulateLadder({ board: problem.board, runnerPoint: problem.runnerPoint, chaserColor: problem.chaserColor })
+    return {
+      id: `ladder${index + 1}`,
+      conceptId: problem.conceptId,
+      sgf: ladderProblemToSgf(problem),
+      difficulty: difficultyFromDepth(step.captured ? step.chaserMoves.length : null),
+    }
+  })
 
   await writeFile(join(outDir, 'ladders.json'), JSON.stringify(bank, null, 2))
   console.log(`Generados ${bank.length} problemas de escalera.`)
+
+  const byDifficulty: Record<string, number> = {}
+  for (const p of bank) byDifficulty[p.difficulty] = (byDifficulty[p.difficulty] ?? 0) + 1
+  console.log('Por dificultad:', byDifficulty)
 }
 
 main()

@@ -2,121 +2,193 @@
   {
     "id": "doubleatari1",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dc]AB[cb][eb][bc][fc]AW[cc][ec])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dc]AB[cb][eb][bc][fc]AW[cc][ec])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari2",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gd]AB[gb][hc][he][gf]AW[gc][ge])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gd]AB[gb][hc][he][gf]AW[gc][ge])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari3",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fg]AB[dg][hg][eh][gh]AW[eg][gg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fg]AB[dg][hg][eh][gh]AW[eg][gg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari4",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cf]AB[cd][be][bg][ch]AW[ce][cg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cf]AB[cd][be][bg][ch]AW[ce][cg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari5",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fc]AB[eb][gb][dc][hc]AW[ec][gc])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fc]AB[eb][gb][dc][hc]AW[ec][gc])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari6",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dg]AB[bg][fg][ch][eh]AW[cg][eg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dg]AB[bg][fg][ch][eh]AW[cg][eg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari7",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cd]AB[cb][bc][be][cf]AW[cc][ce])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cd]AB[cb][bc][be][cf]AW[cc][ce])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari8",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gf]AB[gd][he][hg][gh]AW[ge][gg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gf]AB[gd][he][hg][gh]AW[ge][gg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari9",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dc][dd]AB[cb][eb][bc][fc][bd][fd][ce][ee]AW[cc][ec][cd][ed])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[dc][dd]AB[cb][eb][bc][fc][bd][fd][ce][ee]AW[cc][ec][cd][ed])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari10",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fd][gd]AB[fb][gb][ec][hc][ee][he][ff][gf]AW[fc][gc][fe][ge])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fd][gd]AB[fb][gb][ec][hc][ee][he][ff][gf]AW[fc][gc][fe][ge])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari11",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][fg]AB[ee][ge][df][hf][dg][hg][eh][gh]AW[ef][gf][eg][gg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][fg]AB[ee][ge][df][hf][dg][hg][eh][gh]AW[ef][gf][eg][gg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari12",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cf][df]AB[cd][dd][be][ee][bg][eg][ch][dh]AW[ce][de][cg][dg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cf][df]AB[cd][dd][be][ee][bg][eg][ch][dh]AW[ce][de][cg][dg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari13",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fc][fd]AB[eb][gb][dc][hc][dd][hd][ee][ge]AW[ec][gc][ed][gd])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fc][fd]AB[eb][gb][dc][hc][dd][hd][ee][ge]AW[ec][gc][ed][gd])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari14",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[df][dg]AB[ce][ee][bf][ff][bg][fg][ch][eh]AW[cf][ef][cg][eg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[df][dg]AB[ce][ee][bf][ff][bg][fg][ch][eh]AW[cf][ef][cg][eg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari15",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cd][dd]AB[cb][db][bc][ec][be][ee][cf][df]AW[cc][dc][ce][de])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cd][dd]AB[cb][db][bc][ec][be][ee][cf][df]AW[cc][dc][ce][de])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari16",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][gf]AB[fd][gd][ee][he][eg][hg][fh][gh]AW[fe][ge][fg][gg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][gf]AB[fd][gd][ee][he][eg][hg][fh][gh]AW[fe][ge][fg][gg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari17",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ge]AB[fd][hd][ff][hf]AW[gd][gf])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ge]AB[fd][hd][ff][hf]AW[gd][gf])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari18",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[eg]AB[df][ff][dh][fh]AW[dg][fg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[eg]AB[df][ff][dh][fh]AW[dg][fg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari19",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ce]AB[bd][dd][bf][df]AW[cd][cf])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ce]AB[bd][dd][bf][df]AW[cd][cf])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari20",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ec]AB[db][fb][dd][fd]AW[dc][fc])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ec]AB[db][fb][dd][fd]AW[dc][fc])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari21",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[df][cg]AB[ce][bf][eg][dh]AW[cf][dg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[df][cg]AB[ce][bf][eg][dh]AW[cf][dg])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari22",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cc][dd]AB[db][ec][bd][ce]AW[dc][cd])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[cc][dd]AB[db][ec][bd][ce]AW[dc][cd])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari23",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gc][fd]AB[fb][ec][hd][ge]AW[fc][gd])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[gc][fd]AB[fb][ec][hd][ge]AW[fc][gd])",
+    "difficulty": "easy"
   },
   {
     "id": "doubleatari24",
     "conceptId": "DOBLE_ATARI",
-    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][gg]AB[ge][hf][eg][fh]AW[gf][fg])"
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ff][gg]AB[ge][hf][eg][fh]AW[gf][fg])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari25",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fe]AB[bb][ed][gd][de][he]AW[hb][ee][ge][bh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari26",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ef]AB[hb][ed][fe][fg][eh]AW[bb][ee][eg][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari27",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[de]AB[be][fe][cf][ef][hh]AW[hb][ce][ee][bh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari28",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ed]AB[eb][dc][de][ef][bh]AW[bb][ec][ee][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari29",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[de]AB[hb][cd][ed][be][fe]AW[bb][ce][ee][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari30",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[fe]AB[de][he][ef][gf][bh]AW[bb][ee][ge][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari31",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ef]AB[bb][ed][de][dg][eh]AW[hb][ee][eg][bh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "doubleatari32",
+    "conceptId": "DOBLE_ATARI",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[doubleAtari]ZCOLOR[B]ZEXPECTED[ed]AB[eb][fc][fe][ef][hh]AW[hb][ec][ee][bh])",
+    "difficulty": "easy"
   }
 ]

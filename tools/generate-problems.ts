@@ -33,21 +33,23 @@ import type { BoardState, Color, GameState } from '../src/core/types'
 import { chooseMove } from '../src/engine/mcts'
 import { computeRegion, countEmptyPoints } from '../src/solver/region'
 import { solve } from '../src/solver/tsumego'
-import type { Objective, RefutationNode } from '../src/solver/tsumego'
+import type { Objective } from '../src/solver/tsumego'
 import { buildSeedProblems } from '../src/content/seeds'
 import { problemToSgf } from '../src/content/problemSgf'
 import type { Problem } from '../src/content/problemSgf'
+import { difficultyFromDepth, solutionDepth } from '../src/content/difficulty'
 import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
-// Subido de 8 a 32 para hacer crecer el banco (75 -> 108 problemas, sumando
-// tambien las plantillas nuevas de escalera/doble atari). Retornos
-// decrecientes: la corrida de 32 partidas tardo ~62 minutos reales en vez de
-// escalar linealmente x4, porque el set de deduplicacion de candidatos
-// (`seenBoards`) descarta cada vez mas posiciones repetidas a medida que se
-// acumulan partidas. Subir mas alla de esto para ganar pocos problemas mas
-// no vale el tiempo de computo.
-const SELF_PLAY_GAMES = 32
+// Subido de 8 a 32 (75 -> 108 problemas) y despues de 32 a 48, a pedido
+// explicito de mas variedad/dificultad en PUNTO_VITAL/DOS_OJOS/NAKADE/
+// CAPTURA_SIMPLE. Retornos decrecientes documentados: la corrida de 32
+// partidas tardo ~62 minutos reales en vez de escalar linealmente x4,
+// porque el set de deduplicacion de candidatos (`seenBoards`) descarta cada
+// vez mas posiciones repetidas a medida que se acumulan partidas. Subir
+// mucho mas alla de 48 para ganar pocos problemas mas no vale el tiempo de
+// computo.
+const SELF_PLAY_GAMES = 48
 // Documento de diseno, seccion 5.6: "100 vs 2000 produce posiciones con
 // errores explotables". Cada partida de autojuego alterna quien de los dos
 // colores juega fuerte, para no sesgar los errores encontrados a un solo
@@ -98,24 +100,6 @@ function findCandidateGroups(board: BoardState): Array<{ points: number[]; color
   }
 
   return candidates
-}
-
-function solutionDepth(node: RefutationNode, wantLive: boolean, forDefender: boolean): number | null {
-  if (node.children.length === 0) return 0
-  let best: number | null = null
-  for (const child of node.children) {
-    const childIsWin = forDefender ? child.liveForDefender === wantLive : child.liveForDefender !== wantLive
-    if (!forDefender) {
-      // en un nodo del atacante cualquier respuesta cuenta para la profundidad principal
-      const depth = solutionDepth(child, wantLive, !forDefender)
-      if (depth !== null && (best === null || depth + 1 > best)) best = depth + 1
-      continue
-    }
-    if (!childIsWin) continue
-    const depth = solutionDepth(child, wantLive, !forDefender)
-    if (depth !== null && (best === null || depth + 1 < best)) best = depth + 1
-  }
-  return best
 }
 
 function tryBuildProblem(
@@ -180,17 +164,27 @@ async function main() {
   const outDir = join(root, '..', 'src', 'content', 'problems')
   await mkdir(outDir, { recursive: true })
 
-  const bank = problems.map((problem, index) => ({
-    id: `p${index + 1}`,
-    conceptId: problem.conceptId,
-    sgf: problemToSgf(problem),
-  }))
+  const bank = problems.map((problem, index) => {
+    const wantLive = problem.objective === 'live'
+    const forDefender = problem.toMove === problem.targetColor
+    const depth = solutionDepth(problem.tree, wantLive, forDefender)
+    return {
+      id: `p${index + 1}`,
+      conceptId: problem.conceptId,
+      sgf: problemToSgf(problem),
+      difficulty: difficultyFromDepth(depth),
+    }
+  })
 
   await writeFile(join(outDir, 'bank.json'), JSON.stringify(bank, null, 2))
 
   const byConcept: Record<string, number> = {}
   for (const p of bank) byConcept[p.conceptId] = (byConcept[p.conceptId] ?? 0) + 1
   console.log(`Generados ${bank.length} problemas:`, byConcept)
+
+  const byDifficulty: Record<string, number> = {}
+  for (const p of bank) byDifficulty[p.difficulty] = (byDifficulty[p.difficulty] ?? 0) + 1
+  console.log('Por dificultad:', byDifficulty)
 }
 
 main()

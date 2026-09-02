@@ -8,11 +8,17 @@ import type { LadderProblem } from './ladderProblem'
 import { sgfToDoubleAtariProblem } from './doubleAtariProblem'
 import type { DoubleAtariProblem } from './doubleAtariProblem'
 import type { ConceptId } from '../analysis/concepts'
+import type { Difficulty } from './difficulty'
 
 export interface BankEntry {
   id: string
   conceptId: ConceptId
   sgf: string
+  /** Calculada una vez en el generador (ver content/difficulty.ts), a partir
+   * de cuantas jugadas de lectura hace falta para resolver el problema. No
+   * se recalcula en el cliente, no cambia el mecanismo de Ejercicios: por
+   * ahora es un dato interno, no un filtro visible en la interfaz. */
+  difficulty: Difficulty
 }
 
 export type BankEntryKind = 'tsumego' | 'ladder' | 'doubleAtari'
