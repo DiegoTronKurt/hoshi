@@ -2,7 +2,8 @@ import { BLACK, EMPTY } from './types'
 import type { BoardState, Color } from './types'
 
 export interface ZobristTable {
-  size: number
+  width: number
+  height: number
   black: bigint[]
   white: bigint[]
 }
@@ -27,20 +28,21 @@ function randomBigint64(random: () => number): bigint {
 }
 
 const ZOBRIST_SEED = 0x9e3779b9
-const tableCache = new Map<number, ZobristTable>()
+const tableCache = new Map<string, ZobristTable>()
 
-export function getZobristTable(size: number): ZobristTable {
-  let table = tableCache.get(size)
+export function getZobristTable(width: number, height: number = width): ZobristTable {
+  const key = `${width}x${height}`
+  let table = tableCache.get(key)
   if (!table) {
-    const random = mulberry32(ZOBRIST_SEED + size)
+    const random = mulberry32(ZOBRIST_SEED + width * 31 + height)
     const black: bigint[] = []
     const white: bigint[] = []
-    for (let p = 0; p < size * size; p++) {
+    for (let p = 0; p < width * height; p++) {
       black.push(randomBigint64(random))
       white.push(randomBigint64(random))
     }
-    table = { size, black, white }
-    tableCache.set(size, table)
+    table = { width, height, black, white }
+    tableCache.set(key, table)
   }
   return table
 }

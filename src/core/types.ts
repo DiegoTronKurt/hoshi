@@ -10,7 +10,8 @@ export function opponent(color: Color): Color {
 }
 
 export interface BoardState {
-  size: number
+  width: number
+  height: number
   stones: Int8Array
 }
 

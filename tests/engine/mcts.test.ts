@@ -5,7 +5,7 @@ import { chooseMove } from '../../src/engine/mcts'
 
 describe('MCTS', () => {
   it('elige siempre una jugada legal en una posicion inicial', () => {
-    const state = createGame(5, 6.5)
+    const state = createGame(5, 5, 6.5)
     const result = chooseMove(state, { playouts: 60, randomSeed: 1 })
 
     expect(result.playoutsRun).toBe(60)
@@ -15,7 +15,7 @@ describe('MCTS', () => {
   })
 
   it('con la misma semilla y la misma posicion elige siempre la misma jugada', () => {
-    const state = createGame(5, 6.5)
+    const state = createGame(5, 5, 6.5)
     const first = chooseMove(state, { playouts: 80, randomSeed: 123 })
     const second = chooseMove(state, { playouts: 80, randomSeed: 123 })
 
@@ -24,7 +24,7 @@ describe('MCTS', () => {
   })
 
   it('no juega mas alla del final de la partida', () => {
-    let state = createGame(5, 6.5)
+    let state = createGame(5, 5, 6.5)
     state = applyMove(state, null).state! // B pasa
     state = applyMove(state, null).state! // W pasa, partida terminada
 
@@ -35,7 +35,7 @@ describe('MCTS', () => {
   })
 
   it('respeta el limite de tiempo si se agota antes de correr todas las simulaciones', () => {
-    const state = createGame(9, 6.5)
+    const state = createGame(9, 9, 6.5)
     const result = chooseMove(state, { playouts: 1_000_000, randomSeed: 1, maxTimeMs: 200 })
 
     expect(result.playoutsRun).toBeLessThan(1_000_000)

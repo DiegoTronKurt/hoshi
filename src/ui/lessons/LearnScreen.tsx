@@ -133,7 +133,8 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
                 <h3 className="learn-current-lesson-title">{t(currentLesson.titleKey)}</h3>
                 <span className="learn-current-lesson-preview">
                   <BoardCanvas
-                    size={lessonPreview(currentLesson).size}
+                    width={lessonPreview(currentLesson).size}
+                    height={lessonPreview(currentLesson).size}
                     stones={lessonPreview(currentLesson).stones}
                     lastMove={null}
                     theme={minimoTheme}

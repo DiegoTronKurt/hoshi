@@ -15,7 +15,7 @@ import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
 
 function stateAtMove(size: number, komi: number, moves: RecordedMove[], moveNumber: number): GameState {
-  let state = createGame(size, komi)
+  let state = createGame(size, size, komi)
   for (let i = 0; i < moveNumber && i < moves.length; i++) {
     const result = applyMove(state, moves[i].point)
     if (!result.legal || !result.state) break
@@ -186,7 +186,8 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
               {boardState && selectedEvent && selectedEvent === primaryEvent && (
                 <div className="review-board">
                   <BoardCanvas
-                    size={selectedGame.size}
+                    width={selectedGame.size}
+                    height={selectedGame.size}
                     stones={boardState.board.stones}
                     lastMove={selectedEvent.point}
                     hintMove={selectedEvent.suggestedPoint ?? null}
@@ -250,7 +251,8 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
           {boardState && selectedEvent && selectedEvent !== primaryEvent && (
             <div className="review-board">
               <BoardCanvas
-                size={selectedGame.size}
+                width={selectedGame.size}
+                height={selectedGame.size}
                 stones={boardState.board.stones}
                 lastMove={selectedEvent.point}
                 hintMove={selectedEvent.suggestedPoint ?? null}

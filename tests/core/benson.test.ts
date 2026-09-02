@@ -6,7 +6,7 @@ import type { BoardState, Color } from '../../src/core/types'
 
 function place(board: BoardState, color: Color, points: Array<[number, number]>): void {
   for (const [x, y] of points) {
-    board.stones[toPoint(board.size, x, y)] = color
+    board.stones[toPoint(board.width, x, y)] = color
   }
 }
 

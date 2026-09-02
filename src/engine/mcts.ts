@@ -110,8 +110,6 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
     }
   }
 
-  const size = state.board.size
-
   if (style === 'standard') {
     // Ruta identica a la de siempre, sin el costo de preparar un contexto de
     // estilo: el bot "Estandar" debe comportarse exactamente como antes de
@@ -119,7 +117,7 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
     // prefiere la primera que no sea auto-atari, pero guarda la primera
     // legal como respaldo por si todas lo fueran (jugada forzada).
     let fallback: GameState | null = null
-    for (const point of shuffledIndices(size * size, random)) {
+    for (const point of shuffledIndices(state.board.stones.length, random)) {
       if (state.board.stones[point] !== EMPTY) continue
       if (isSimpleEye(state.board, point, state.toMove)) continue
       const result = applyMove(state, point)
@@ -131,7 +129,7 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
   }
 
   const candidates: number[] = []
-  for (const point of shuffledIndices(size * size, random)) {
+  for (const point of shuffledIndices(state.board.stones.length, random)) {
     if (state.board.stones[point] !== EMPTY) continue
     if (isSimpleEye(state.board, point, state.toMove)) continue
     candidates.push(point)
@@ -148,7 +146,7 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
 
 function simulatePlayout(initialState: GameState, random: RandomFn, style: BotStyleId): GameState {
   let state = initialState
-  const maxMoves = state.board.size * state.board.size * 3
+  const maxMoves = state.board.stones.length * 3
   let played = 0
   while (!state.gameOver && played < maxMoves) {
     state = choosePlayoutMove(state, random, style)

@@ -4,7 +4,7 @@ import { applyMove, createGame } from '../../src/core/rules'
 import type { GameState } from '../../src/core/types'
 
 function play(state: GameState, x: number, y: number): GameState {
-  const result = applyMove(state, toPoint(state.board.size, x, y))
+  const result = applyMove(state, toPoint(state.board.width, x, y))
   if (!result.legal || !result.state) {
     throw new Error(`Jugada ilegal en (${x},${y}): ${result.reason}`)
   }
@@ -15,7 +15,7 @@ function play(state: GameState, x: number, y: number): GameState {
 // capturada por negro, deja una piedra negra tambien en atari sobre el mismo
 // punto que acaba de vaciarse.
 function setUpKo(): GameState {
-  let state = createGame(5, 0)
+  let state = createGame(5, 5, 0)
   state = play(state, 1, 2) // B, reduce libertades de Y
   state = play(state, 2, 2) // W = Y, la piedra que quedara en atari
   state = play(state, 2, 1) // B, reduce libertades de Y

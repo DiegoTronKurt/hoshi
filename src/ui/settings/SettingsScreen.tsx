@@ -171,7 +171,8 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             >
               <span className="settings-theme-preview">
                 <BoardCanvas
-                  size={PREVIEW.size}
+                  width={PREVIEW.size}
+                  height={PREVIEW.size}
                   stones={PREVIEW.stones}
                   lastMove={null}
                   theme={theme}

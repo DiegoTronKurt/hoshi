@@ -23,7 +23,7 @@ export function isDoubleAtariMove(board: BoardState, point: number, color: Color
   const seen = new Set<number>()
   let newAtaris = 0
 
-  for (const n of neighbors(afterBoard.size, point)) {
+  for (const n of neighbors(afterBoard.width, afterBoard.height, point)) {
     if (afterBoard.stones[n] !== rival || seen.has(n)) continue
     const groupAfter = getGroup(afterBoard, n)
     if (!groupAfter) continue

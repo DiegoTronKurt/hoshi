@@ -6,9 +6,9 @@ export type BotStyleId = 'standard' | 'territorial' | 'influence' | 'combative'
 
 export const BOT_STYLES: BotStyleId[] = ['standard', 'territorial', 'influence', 'combative']
 
-function distanceToEdge(size: number, point: number): number {
-  const [x, y] = toXY(size, point)
-  return Math.min(x, y, size - 1 - x, size - 1 - y)
+function distanceToEdge(width: number, height: number, point: number): number {
+  const [x, y] = toXY(width, point)
+  return Math.min(x, y, width - 1 - x, height - 1 - y)
 }
 
 /**
@@ -33,7 +33,7 @@ function bfsDistanceField(board: BoardState, matches: (stoneValue: number) => bo
   while (head < queue.length) {
     const p = queue[head]
     head++
-    for (const n2 of neighbors(board.size, p)) {
+    for (const n2 of neighbors(board.width, board.height, p)) {
       if (dist[n2] === -1) {
         dist[n2] = dist[p] + 1
         queue.push(n2)
@@ -79,7 +79,7 @@ export function styleWeight(ctx: StyleContext, board: BoardState, point: number)
     case 'territorial': {
       // Prefiere segunda y tercera linea (borde solido); evita la primera
       // linea (demasiado bajo) y el centro profundo (demasiado ambicioso).
-      const edge = distanceToEdge(board.size, point)
+      const edge = distanceToEdge(board.width, board.height, point)
       if (edge === 0) return 1
       if (edge <= 2) return 4
       return 1
@@ -88,7 +88,7 @@ export function styleWeight(ctx: StyleContext, board: BoardState, point: number)
     case 'influence': {
       // Prefiere puntos centrales y alejados de piedras existentes: marcos
       // amplios en vez de peleas locales inmediatas.
-      const edge = distanceToEdge(board.size, point)
+      const edge = distanceToEdge(board.width, board.height, point)
       const stoneDistance = ctx.anyStoneDistance ? ctx.anyStoneDistance[point] : -1
       const openBonus = stoneDistance === -1 || stoneDistance >= 3 ? 2 : 1
       return (1 + edge) * openBonus

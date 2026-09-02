@@ -1,4 +1,4 @@
-import { parseSgf, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
+import { formatSize, parseSgf, parseSize, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
 import { createBoard } from '../core/board'
 import { BLACK, WHITE } from '../core/types'
 import type { BoardState, Color } from '../core/types'
@@ -25,15 +25,15 @@ export function ladderProblemToSgf(problem: LadderProblem): string {
   const ab: string[] = []
   const aw: string[] = []
   for (let p = 0; p < board.stones.length; p++) {
-    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.size, p))
-    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.size, p))
+    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.width, p))
+    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.width, p))
   }
   const properties: Record<string, string[]> = {
     GM: ['1'],
     FF: ['4'],
-    SZ: [String(board.size)],
+    SZ: [formatSize(board.width, board.height)],
     ZKIND: ['ladder'],
-    ZRUNNER: [pointToSgf(board.size, runnerPoint)],
+    ZRUNNER: [pointToSgf(board.width, runnerPoint)],
     ZCHASER: [chaserColor === BLACK ? 'B' : 'W'],
   }
   if (ab.length > 0) properties.AB = ab
@@ -44,20 +44,20 @@ export function ladderProblemToSgf(problem: LadderProblem): string {
 
 export function sgfToLadderProblem(text: string): LadderProblem {
   const { root } = parseSgf(text)
-  const size = Number(root.properties.SZ?.[0] ?? '9')
-  const board = createBoard(size)
+  const { width, height } = parseSize(root.properties.SZ?.[0] ?? '9')
+  const board = createBoard(width, height)
 
   for (const coord of root.properties.AB ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = BLACK
   }
   for (const coord of root.properties.AW ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = WHITE
   }
 
   const runnerCoord = root.properties.ZRUNNER?.[0] ?? ''
-  const runnerPoint = sgfToPoint(size, runnerCoord) ?? 0
+  const runnerPoint = sgfToPoint(width, runnerCoord) ?? 0
   const chaserColor: Color = root.properties.ZCHASER?.[0] === 'B' ? BLACK : WHITE
 
   return { conceptId: 'ESCALERA', board, runnerPoint, chaserColor }

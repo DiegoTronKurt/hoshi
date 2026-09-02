@@ -183,7 +183,8 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
             {focusPreview && (
               <div className="today-focus-diagram">
                 <BoardCanvas
-                  size={focusPreview.size}
+                  width={focusPreview.width}
+                  height={focusPreview.height}
                   stones={focusPreview.stones}
                   lastMove={null}
                   theme={theme}
@@ -251,7 +252,8 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
             </p>
             <h3>{t(`concept.${focus.entry.conceptId}.label` as TranslationKey)}</h3>
             <BoardCanvas
-              size={focusPreview.size}
+              width={focusPreview.width}
+              height={focusPreview.height}
               stones={focusPreview.stones}
               lastMove={null}
               theme={theme}

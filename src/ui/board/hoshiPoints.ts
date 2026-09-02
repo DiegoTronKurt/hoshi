@@ -2,23 +2,29 @@ import { toPoint } from '../../core/board'
 
 /**
  * Puntos hoshi (marcadores de estrella) segun el tamano del tablero.
- * Son una convencion visual del goban, no una regla del juego.
+ * Son una convencion visual del goban, no una regla del juego. Un tablero
+ * rectangular (9x13, nivel Forma) no reutiliza el layout de ningun tablero
+ * cuadrado existente -- necesita su propia convencion, agregada cuando se
+ * autora ese contenido, no antes.
  */
-export function getHoshiPoints(size: number): number[] {
-  const center = Math.floor(size / 2)
+export function getHoshiPoints(width: number, height: number = width): number[] {
+  const centerX = Math.floor(width / 2)
+  const centerY = Math.floor(height / 2)
+  if (width !== height) return []
+  const size = width
   if (size === 9) {
-    return [2, 6].flatMap((y) => [2, 6].map((x) => toPoint(size, x, y))).concat(toPoint(size, center, center))
+    return [2, 6].flatMap((y) => [2, 6].map((x) => toPoint(size, x, y))).concat(toPoint(size, centerX, centerY))
   }
   if (size === 13) {
     // Convencion estandar de goban: 4 esquinas mas tengen, sin los 4 puntos
     // intermedios de borde que si lleva un tablero de 19 (ver mas abajo).
-    return [3, 9].flatMap((y) => [3, 9].map((x) => toPoint(size, x, y))).concat(toPoint(size, center, center))
+    return [3, 9].flatMap((y) => [3, 9].map((x) => toPoint(size, x, y))).concat(toPoint(size, centerX, centerY))
   }
   if (size === 19) {
     return [3, 9, 15].flatMap((y) => [3, 9, 15].map((x) => toPoint(size, x, y)))
   }
   if (size === 5 || size === 7) {
-    return [toPoint(size, center, center)]
+    return [toPoint(size, centerX, centerY)]
   }
   return []
 }

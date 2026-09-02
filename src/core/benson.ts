@@ -22,7 +22,8 @@ export interface BensonResult {
  */
 export function bensonPassAlive(board: BoardState, color: Color): BensonResult {
   const opp = opponent(color)
-  const size = board.size
+  const width = board.width
+  const height = board.height
   const chainOf = new Int32Array(board.stones.length).fill(-1)
   const chains: number[][] = []
 
@@ -35,7 +36,7 @@ export function bensonPassAlive(board: BoardState, color: Color): BensonResult {
       while (stack.length > 0) {
         const q = stack.pop() as number
         stones.push(q)
-        for (const n of neighbors(size, q)) {
+        for (const n of neighbors(width, height, q)) {
           if (board.stones[n] === color && chainOf[n] === -1) {
             chainOf[n] = id
             stack.push(n)
@@ -60,7 +61,7 @@ export function bensonPassAlive(board: BoardState, color: Color): BensonResult {
       while (stack.length > 0) {
         const q = stack.pop() as number
         points.push(q)
-        for (const n of neighbors(size, q)) {
+        for (const n of neighbors(width, height, q)) {
           const value = board.stones[n]
           if (value === EMPTY) {
             if (regionOf[n] === -1) {

@@ -40,7 +40,7 @@ function gameWithAutoatari(): SavedGameRecord {
     komi: 0,
     mode: 'local',
     result: { black: 0, white: 0, winner: 'white' },
-    sgf: gameRecordToSgf(SIZE, 0, moves),
+    sgf: gameRecordToSgf(SIZE, SIZE, 0, moves),
   }
 }
 

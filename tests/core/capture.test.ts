@@ -5,7 +5,7 @@ import { EMPTY } from '../../src/core/types'
 import type { GameState } from '../../src/core/types'
 
 function play(state: GameState, x: number, y: number): GameState {
-  const result = applyMove(state, toPoint(state.board.size, x, y))
+  const result = applyMove(state, toPoint(state.board.width, x, y))
   if (!result.legal || !result.state) {
     throw new Error(`Jugada ilegal en (${x},${y}): ${result.reason}`)
   }
@@ -14,7 +14,7 @@ function play(state: GameState, x: number, y: number): GameState {
 
 describe('captura simple', () => {
   it('retira una piedra rival sin libertades', () => {
-    let state = createGame(5, 0)
+    let state = createGame(5, 5, 0)
     state = play(state, 1, 2) // B
     state = play(state, 2, 2) // W, piedra que sera capturada
     state = play(state, 3, 2) // B
@@ -34,7 +34,7 @@ describe('captura simple', () => {
 
 describe('captura multiple', () => {
   it('retira un grupo de dos piedras conectadas cuando pierde su ultima libertad', () => {
-    let state = createGame(5, 0)
+    let state = createGame(5, 5, 0)
     state = play(state, 1, 1) // B
     state = play(state, 2, 1) // W, primera piedra del grupo
     state = play(state, 3, 1) // B

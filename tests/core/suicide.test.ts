@@ -4,7 +4,7 @@ import { applyMove, createGame } from '../../src/core/rules'
 import type { GameState } from '../../src/core/types'
 
 function play(state: GameState, x: number, y: number): GameState {
-  const result = applyMove(state, toPoint(state.board.size, x, y))
+  const result = applyMove(state, toPoint(state.board.width, x, y))
   if (!result.legal || !result.state) {
     throw new Error(`Jugada ilegal en (${x},${y}): ${result.reason}`)
   }
@@ -13,7 +13,7 @@ function play(state: GameState, x: number, y: number): GameState {
 
 describe('suicidio', () => {
   it('prohibe jugar en un punto que quedaria sin libertades y no captura nada', () => {
-    let state = createGame(5, 0)
+    let state = createGame(5, 5, 0)
     state = play(state, 0, 0) // B filler
     state = play(state, 1, 2) // W
     state = play(state, 4, 4) // B filler
@@ -33,7 +33,7 @@ describe('suicidio', () => {
   })
 
   it('permite una jugada que parece suicida si primero captura y libera una libertad', () => {
-    let state = createGame(5, 0)
+    let state = createGame(5, 5, 0)
     state = play(state, 0, 2) // B, quita una libertad a la futura piedra blanca (1,2)
     state = play(state, 1, 2) // W, unica libertad restante sera (2,2)
     state = play(state, 1, 1) // B, quita otra libertad a (1,2)

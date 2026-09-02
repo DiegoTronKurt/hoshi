@@ -115,7 +115,7 @@ async function main() {
   for (const template of templates) {
     for (const transform of BOARD_TRANSFORMS) {
       const board = transformBoard(template.board, transform)
-      const runnerPoint = transformPoint(SIZE, template.runnerPoint, transform)
+      const runnerPoint = transformPoint(SIZE, SIZE, template.runnerPoint, transform)
 
       const key = board.stones.join('')
       if (seen.has(key)) continue

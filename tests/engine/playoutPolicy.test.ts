@@ -7,12 +7,12 @@ import { findAtariSavingMoves, findCapturingMoves, isSimpleEye, resultsInSelfAta
 
 function place(board: BoardState, color: Color, points: Array<[number, number]>): void {
   for (const [x, y] of points) {
-    board.stones[toPoint(board.size, x, y)] = color
+    board.stones[toPoint(board.width, x, y)] = color
   }
 }
 
 function play(state: GameState, x: number, y: number): GameState {
-  const result = applyMove(state, toPoint(state.board.size, x, y))
+  const result = applyMove(state, toPoint(state.board.width, x, y))
   if (!result.legal || !result.state) {
     throw new Error(`Jugada ilegal en (${x},${y}): ${result.reason}`)
   }
@@ -51,7 +51,7 @@ describe('isSimpleEye', () => {
 
 describe('findAtariSavingMoves', () => {
   it('encuentra la unica libertad de un grupo propio en atari', () => {
-    let state = createGame(5, 0)
+    let state = createGame(5, 5, 0)
     state = play(state, 2, 2) // B
     state = play(state, 1, 2) // W
     state = play(state, 4, 4) // B filler
@@ -63,7 +63,7 @@ describe('findAtariSavingMoves', () => {
   })
 
   it('no reporta nada si ningun grupo propio esta en atari', () => {
-    const state = createGame(5, 0)
+    const state = createGame(5, 5, 0)
     expect(findAtariSavingMoves(state)).toEqual([])
   })
 })
@@ -79,7 +79,7 @@ describe('findCapturingMoves', () => {
   })
 
   it('no reporta nada si ningun grupo rival esta en atari', () => {
-    const state = createGame(5, 0)
+    const state = createGame(5, 5, 0)
     expect(findCapturingMoves(state)).toEqual([])
   })
 })

@@ -214,7 +214,7 @@ function detectEscaleraFallida(ctx: AnalysisContext): ConceptOccurrence | null {
   const rival = opponent(move.color)
   const seenStones = new Set<number>()
 
-  for (const n of neighbors(before.board.size, move.point)) {
+  for (const n of neighbors(before.board.width, before.board.height, move.point)) {
     if (before.board.stones[n] !== rival || seenStones.has(n)) continue
     const group = getGroup(before.board, n)
     if (!group) continue
@@ -249,12 +249,12 @@ function detectCorteNoDefendido(ctx: AnalysisContext): ConceptOccurrence | null 
   const board = after.board
   const ownGroup = getGroup(board, move.point)
 
-  for (const q of neighbors(board.size, move.point)) {
+  for (const q of neighbors(board.width, board.height, move.point)) {
     if (board.stones[q] !== EMPTY) continue
 
     let touchesOwnGroup = false
     let otherStone: number | null = null
-    for (const n of neighbors(board.size, q)) {
+    for (const n of neighbors(board.width, board.height, q)) {
       if (board.stones[n] !== move.color) continue
       if (ownGroup?.stones.includes(n)) {
         touchesOwnGroup = true
@@ -296,31 +296,32 @@ function detectTrianguloVacio(ctx: AnalysisContext): ConceptOccurrence | null {
 
   const before = ctx.states[ctx.moveIndex]
   const after = ctx.states[ctx.moveIndex + 1]
-  const size = before.board.size
+  const width = before.board.width
+  const height = before.board.height
   const rival = opponent(move.color)
 
   // Ninguna piedra rival pegada antes de jugar: descarta el caso de una
   // conexion forzada bajo amenaza directa.
-  for (const n of neighbors(size, move.point)) {
+  for (const n of neighbors(width, height, move.point)) {
     if (before.board.stones[n] === rival) return null
   }
   // La jugada no debe dejar a ningun grupo rival vecino en atari.
-  for (const n of neighbors(size, move.point)) {
+  for (const n of neighbors(width, height, move.point)) {
     if (after.board.stones[n] === rival && (getGroup(after.board, n)?.liberties.size ?? 99) === 1) {
       return null
     }
   }
 
-  const x = move.point % size
-  const y = Math.floor(move.point / size)
-  for (const d of diagonals(size, move.point)) {
-    const dx = d % size
-    const dy = Math.floor(d / size)
+  const x = move.point % width
+  const y = Math.floor(move.point / width)
+  for (const d of diagonals(width, height, move.point)) {
+    const dx = d % width
+    const dy = Math.floor(d / width)
     // Las dos esquinas del cuadrado 2x2 ortogonalmente pegadas a la jugada y
     // a la diagonal (los "brazos" de la L); la diagonal misma es la cuarta
     // esquina, que debe estar vacia.
-    const armNearP = y * size + dx
-    const armNearD = dy * size + x
+    const armNearP = y * width + dx
+    const armNearD = dy * width + x
     if (before.board.stones[armNearP] !== move.color) continue
     if (before.board.stones[armNearD] !== move.color) continue
     if (before.board.stones[d] !== EMPTY) continue
@@ -336,14 +337,15 @@ function detectPrimeraLineaTemprana(ctx: AnalysisContext): ConceptOccurrence | n
   if (ctx.moveIndex + 1 >= 15) return null
 
   const before = ctx.states[ctx.moveIndex]
-  const size = before.board.size
-  const x = move.point % size
-  const y = Math.floor(move.point / size)
-  const onFirstLine = x === 0 || y === 0 || x === size - 1 || y === size - 1
+  const width = before.board.width
+  const height = before.board.height
+  const x = move.point % width
+  const y = Math.floor(move.point / width)
+  const onFirstLine = x === 0 || y === 0 || x === width - 1 || y === height - 1
   if (!onFirstLine) return null
 
   const rival = opponent(move.color)
-  for (const n of neighbors(size, move.point)) {
+  for (const n of neighbors(width, height, move.point)) {
     if (before.board.stones[n] === rival) return null
   }
   return makeIncorrect(ctx, 'PRIMERA_LINEA_TEMPRANA', move.point)
@@ -450,7 +452,7 @@ const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => ConceptOccurrence | nu
  * puede afirmar la condicion con certeza, no reporta.
  */
 export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): ConceptOccurrence[] {
-  const states: GameState[] = [createGame(size, komi)]
+  const states: GameState[] = [createGame(size, size, komi)]
   const captured: number[][] = []
 
   for (const move of moves) {

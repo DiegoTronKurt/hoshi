@@ -31,11 +31,11 @@ function groupsWithOneLiberty(board: BoardState, color: Color): number[] {
 export function isSimpleEye(board: BoardState, point: number, color: Color): boolean {
   if (board.stones[point] !== EMPTY) return false
 
-  for (const n of neighbors(board.size, point)) {
+  for (const n of neighbors(board.width, board.height, point)) {
     if (board.stones[n] !== color) return false
   }
 
-  const diags = diagonals(board.size, point)
+  const diags = diagonals(board.width, board.height, point)
   const opp = opponent(color)
   let oppDiagonalCount = 0
   for (const d of diags) {

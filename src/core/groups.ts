@@ -12,7 +12,7 @@ export function getGroup(board: BoardState, point: number): Group | null {
 
   while (stack.length > 0) {
     const current = stack.pop() as number
-    for (const n of neighbors(board.size, current)) {
+    for (const n of neighbors(board.width, board.height, current)) {
       const value = board.stones[n]
       if (value === EMPTY) {
         liberties.add(n)

@@ -1,4 +1,4 @@
-import { BOARD_TRANSFORMS, createBoard, toPoint, transformBoard, transformPoint } from '../core/board'
+import { applicableTransforms, createBoard, toPoint, transformBoard, transformPoint } from '../core/board'
 import { BLACK, WHITE } from '../core/types'
 import type { BoardState, Color } from '../core/types'
 import type { ConceptId } from '../analysis/concepts'
@@ -9,7 +9,7 @@ import type { Problem } from './problemSgf'
 
 function place(board: BoardState, color: Color, points: Array<[number, number]>): void {
   for (const [x, y] of points) {
-    board.stones[toPoint(board.size, x, y)] = color
+    board.stones[toPoint(board.width, x, y)] = color
   }
 }
 
@@ -258,9 +258,9 @@ export function buildSeedProblems(): Problem[] {
   const seen = new Set<string>()
 
   for (const spec of SEED_SPECS) {
-    for (const transform of BOARD_TRANSFORMS) {
+    for (const transform of applicableTransforms(spec.board.width, spec.board.height)) {
       const board = transformBoard(spec.board, transform)
-      const targetPoints = spec.targetPoints.map((p) => transformPoint(spec.board.size, p, transform))
+      const targetPoints = spec.targetPoints.map((p) => transformPoint(spec.board.width, spec.board.height, p, transform))
 
       const key = `${spec.conceptId}:${board.stones.join('')}`
       if (seen.has(key)) continue

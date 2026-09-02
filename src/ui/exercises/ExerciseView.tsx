@@ -65,7 +65,8 @@ export function ExerciseView({
       </p>
 
       <BoardCanvas
-        size={loaded.problem.board.size}
+        width={loaded.problem.board.width}
+        height={loaded.problem.board.height}
         stones={game.board.stones}
         lastMove={lastMove}
         theme={theme}

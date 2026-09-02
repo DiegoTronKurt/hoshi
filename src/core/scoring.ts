@@ -13,7 +13,8 @@ export interface AreaScore {
  * ambos colores (dame) no cuenta para nadie.
  */
 export function computeAreaScore(board: BoardState, komi: number, deadStones: ReadonlySet<number> = new Set()): AreaScore {
-  const size = board.size
+  const width = board.width
+  const height = board.height
   const effective = board.stones.slice()
   for (const p of deadStones) effective[p] = EMPTY
 
@@ -35,7 +36,7 @@ export function computeAreaScore(board: BoardState, komi: number, deadStones: Re
     while (stack.length > 0) {
       const q = stack.pop() as number
       region.push(q)
-      for (const n of neighbors(size, q)) {
+      for (const n of neighbors(width, height, q)) {
         const value = effective[n]
         if (value === EMPTY) {
           if (!visited[n]) {

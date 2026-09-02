@@ -1,4 +1,4 @@
-import { parseSgf, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
+import { formatSize, parseSgf, parseSize, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
 import { createBoard } from '../core/board'
 import { BLACK, WHITE } from '../core/types'
 import type { BoardState, Color } from '../core/types'
@@ -22,16 +22,16 @@ export function doubleAtariProblemToSgf(problem: DoubleAtariProblem): string {
   const ab: string[] = []
   const aw: string[] = []
   for (let p = 0; p < board.stones.length; p++) {
-    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.size, p))
-    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.size, p))
+    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.width, p))
+    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.width, p))
   }
   const properties: Record<string, string[]> = {
     GM: ['1'],
     FF: ['4'],
-    SZ: [String(board.size)],
+    SZ: [formatSize(board.width, board.height)],
     ZKIND: ['doubleAtari'],
     ZCOLOR: [color === BLACK ? 'B' : 'W'],
-    ZEXPECTED: expectedPoints.map((p) => pointToSgf(board.size, p)),
+    ZEXPECTED: expectedPoints.map((p) => pointToSgf(board.width, p)),
   }
   if (ab.length > 0) properties.AB = ab
   if (aw.length > 0) properties.AW = aw
@@ -41,21 +41,21 @@ export function doubleAtariProblemToSgf(problem: DoubleAtariProblem): string {
 
 export function sgfToDoubleAtariProblem(text: string): DoubleAtariProblem {
   const { root } = parseSgf(text)
-  const size = Number(root.properties.SZ?.[0] ?? '9')
-  const board = createBoard(size)
+  const { width, height } = parseSize(root.properties.SZ?.[0] ?? '9')
+  const board = createBoard(width, height)
 
   for (const coord of root.properties.AB ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = BLACK
   }
   for (const coord of root.properties.AW ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = WHITE
   }
 
   const color: Color = root.properties.ZCOLOR?.[0] === 'B' ? BLACK : WHITE
   const expectedPoints = (root.properties.ZEXPECTED ?? [])
-    .map((coord) => sgfToPoint(size, coord))
+    .map((coord) => sgfToPoint(width, coord))
     .filter((p): p is number => p !== null)
 
   return { conceptId: 'DOBLE_ATARI', board, color, expectedPoints }

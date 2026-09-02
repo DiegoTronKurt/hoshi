@@ -54,7 +54,8 @@ export function ExercisesConceptScreen({ onPickConcept }: ExercisesConceptScreen
             >
               <span className="exercises-concept-preview">
                 <BoardCanvas
-                  size={ABSTRACT_PREVIEW.size}
+                  width={ABSTRACT_PREVIEW.size}
+                  height={ABSTRACT_PREVIEW.size}
                   stones={ABSTRACT_PREVIEW.stones}
                   lastMove={null}
                   theme={minimoTheme}

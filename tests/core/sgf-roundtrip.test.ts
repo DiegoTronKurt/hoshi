@@ -26,7 +26,7 @@ describe('SGF', () => {
   })
 
   it('una partida jugada, guardada en SGF y vuelta a leer reproduce la misma posicion', () => {
-    let state = createGame(9, 6.5)
+    let state = createGame(9, 9, 6.5)
     const moves: RecordedMove[] = []
 
     function play(point: number | null): void {
@@ -45,14 +45,15 @@ describe('SGF', () => {
     play(null) // blanco pasa
     play(toPoint(9, 3, 2))
 
-    const sgfText = gameRecordToSgf(9, 6.5, moves)
+    const sgfText = gameRecordToSgf(9, 9, 6.5, moves)
     const parsed = sgfToGameRecord(sgfText)
 
-    expect(parsed.size).toBe(9)
+    expect(parsed.width).toBe(9)
+    expect(parsed.height).toBe(9)
     expect(parsed.komi).toBe(6.5)
     expect(parsed.moves).toEqual(moves)
 
-    let replay: GameState = createGame(parsed.size, parsed.komi)
+    let replay: GameState = createGame(parsed.width, parsed.height, parsed.komi)
     for (const move of parsed.moves) {
       const result = applyMove(replay, move.point)
       if (!result.legal || !result.state) {

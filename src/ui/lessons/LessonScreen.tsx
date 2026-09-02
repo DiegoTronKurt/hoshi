@@ -44,7 +44,8 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
           ) : (
             <figure key={index} className="lesson-diagram">
               <BoardCanvas
-                size={block.size}
+                width={block.size}
+                height={block.size}
                 stones={block.stones}
                 lastMove={block.highlightPoint ?? null}
                 theme={theme}

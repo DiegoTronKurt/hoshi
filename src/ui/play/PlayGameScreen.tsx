@@ -45,8 +45,12 @@ export function PlayGameScreen({
 
   const [history, setHistory] = useState<GameState[]>(() => [
     config.initialStones
-      ? gameStateFromBoard({ size: config.size, stones: config.initialStones }, config.initialToMove ?? BLACK, KOMI)
-      : createGame(config.size, KOMI),
+      ? gameStateFromBoard(
+          { width: config.size, height: config.size, stones: config.initialStones },
+          config.initialToMove ?? BLACK,
+          KOMI,
+        )
+      : createGame(config.size, config.size, KOMI),
   ])
   const [moves, setMoves] = useState<RecordedMove[]>([])
   const [message, setMessage] = useState<IllegalReason | null>(null)
@@ -155,7 +159,7 @@ export function PlayGameScreen({
 
     const winner: 'black' | 'white' = finalScore.black > finalScore.white ? 'black' : 'white'
     const strength = STRENGTH_LEVELS.find((level) => level.id === config.strengthId)
-    const sgf = gameRecordToSgf(config.size, KOMI, moves)
+    const sgf = gameRecordToSgf(config.size, config.size, KOMI, moves)
 
     saveGame({
       createdAt: new Date().toISOString(),
@@ -188,7 +192,8 @@ export function PlayGameScreen({
       </p>
 
       <BoardCanvas
-        size={config.size}
+        width={config.size}
+        height={config.size}
         stones={game.board.stones}
         lastMove={lastMove}
         theme={theme}

@@ -17,7 +17,7 @@ function areaDiagram() {
     white.push([4, y])
   }
   const stones = board(size, black, white)
-  const score = computeAreaScore({ size, stones }, 0)
+  const score = computeAreaScore({ width: size, height: size, stones }, 0)
   return { size, stones, score }
 }
 
@@ -30,13 +30,13 @@ const AREA_DIAGRAM = areaDiagram()
  * verificar y esta leccion se mantiene correcta sin tocarla.
  */
 function playKo(state: GameState, x: number, y: number): GameState {
-  const result = applyMove(state, toPoint(state.board.size, x, y))
+  const result = applyMove(state, toPoint(state.board.width, x, y))
   if (!result.legal || !result.state) throw new Error(`Jugada ilegal en (${x},${y}): ${result.reason}`)
   return result.state
 }
 
 function buildKoPosition() {
-  let state = createGame(5, 0)
+  let state = createGame(5, 5, 0)
   state = playKo(state, 1, 2)
   state = playKo(state, 2, 2)
   state = playKo(state, 2, 1)

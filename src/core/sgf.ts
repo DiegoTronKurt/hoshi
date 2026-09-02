@@ -3,18 +3,39 @@ import type { Color } from './types'
 
 const COORDINATE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
 
-export function pointToSgf(size: number, point: number | null): string {
+export function pointToSgf(width: number, point: number | null): string {
   if (point === null) return ''
-  const x = point % size
-  const y = Math.floor(point / size)
+  const x = point % width
+  const y = Math.floor(point / width)
   return COORDINATE_LETTERS[x] + COORDINATE_LETTERS[y]
 }
 
-export function sgfToPoint(size: number, coord: string): number | null {
+export function sgfToPoint(width: number, coord: string): number | null {
   if (!coord) return null
   const x = COORDINATE_LETTERS.indexOf(coord[0])
   const y = COORDINATE_LETTERS.indexOf(coord[1])
-  return y * size + x
+  return y * width + x
+}
+
+/**
+ * Formatea la propiedad SZ segun el espec FF4: un solo numero para tablero
+ * cuadrado, "ancho:alto" para rectangular (p.ej. el 9x13 de "Forma").
+ */
+export function formatSize(width: number, height: number): string {
+  return width === height ? String(width) : `${width}:${height}`
+}
+
+/**
+ * Inverso de `formatSize`. `SZ[9]` -> cuadrado 9x9; `SZ[9:13]` -> 9 de ancho,
+ * 13 de alto. Antes de este arreglo, un `SZ` rectangular real (o escrito por
+ * otra herramienta SGF) se leia con `Number("9:13")` -> `NaN`, corrompiendo
+ * en silencio cualquier `sgfToPoint` posterior.
+ */
+export function parseSize(value: string): { width: number; height: number } {
+  const [w, h] = value.split(':')
+  const width = Number(w)
+  const height = h !== undefined ? Number(h) : width
+  return { width, height }
 }
 
 export interface SgfNode {
@@ -148,12 +169,12 @@ export interface RecordedMove {
  * Suficiente para guardar partidas propias; el arbol de refutaciones del
  * solucionador (con variaciones) se agrega en la fase del solucionador.
  */
-export function gameRecordToSgf(size: number, komi: number, moves: RecordedMove[]): string {
+export function gameRecordToSgf(width: number, height: number, komi: number, moves: RecordedMove[]): string {
   const root: SgfNode = {
     properties: {
       GM: ['1'],
       FF: ['4'],
-      SZ: [String(size)],
+      SZ: [formatSize(width, height)],
       KM: [String(komi)],
       RU: ['Chinese'],
     },
@@ -163,7 +184,7 @@ export function gameRecordToSgf(size: number, komi: number, moves: RecordedMove[
   let current = root
   for (const move of moves) {
     const key = move.color === BLACK ? 'B' : 'W'
-    const node: SgfNode = { properties: { [key]: [pointToSgf(size, move.point)] }, children: [] }
+    const node: SgfNode = { properties: { [key]: [pointToSgf(width, move.point)] }, children: [] }
     current.children = [node]
     current = node
   }
@@ -171,18 +192,18 @@ export function gameRecordToSgf(size: number, komi: number, moves: RecordedMove[
   return writeSgf({ root })
 }
 
-export function sgfToGameRecord(text: string): { size: number; komi: number; moves: RecordedMove[] } {
+export function sgfToGameRecord(text: string): { width: number; height: number; komi: number; moves: RecordedMove[] } {
   const { root } = parseSgf(text)
-  const size = Number(root.properties.SZ?.[0] ?? '19')
+  const { width, height } = parseSize(root.properties.SZ?.[0] ?? '19')
   const komi = Number(root.properties.KM?.[0] ?? '0')
   const moves: RecordedMove[] = []
 
   let node: SgfNode | undefined = root
   while (node) {
-    if (node.properties.B) moves.push({ color: BLACK, point: sgfToPoint(size, node.properties.B[0]) })
-    if (node.properties.W) moves.push({ color: WHITE, point: sgfToPoint(size, node.properties.W[0]) })
+    if (node.properties.B) moves.push({ color: BLACK, point: sgfToPoint(width, node.properties.B[0]) })
+    if (node.properties.W) moves.push({ color: WHITE, point: sgfToPoint(width, node.properties.W[0]) })
     node = node.children[0]
   }
 
-  return { size, komi, moves }
+  return { width, height, komi, moves }
 }

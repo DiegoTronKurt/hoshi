@@ -13,7 +13,7 @@ interface GuidedDemoProps {
 type DemoStatus = 'awaiting-move' | 'wrong' | 'feedback' | 'done'
 
 function buildInitialGame(script: DemoScript): GameState {
-  return gameStateFromBoard({ size: script.size, stones: script.initialStones }, script.toMove)
+  return gameStateFromBoard({ width: script.size, height: script.size, stones: script.initialStones }, script.toMove)
 }
 
 /**
@@ -90,7 +90,8 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
     <div className="lesson-demo">
       <h3>{t('learn.demo.title')}</h3>
       <BoardCanvas
-        size={script.size}
+        width={script.size}
+        height={script.size}
         stones={game.board.stones}
         lastMove={null}
         theme={theme}

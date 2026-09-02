@@ -4,8 +4,8 @@ import { BLACK, EMPTY, opponent } from './types'
 import type { BoardState, Color, GameState, MoveResult } from './types'
 import { getZobristTable, hashBoard, toggleStone } from './zobrist'
 
-export function createGame(size: number, komi: number): GameState {
-  return gameStateFromBoard(createBoard(size), BLACK, komi)
+export function createGame(width: number, height: number, komi: number): GameState {
+  return gameStateFromBoard(createBoard(width, height), BLACK, komi)
 }
 
 /**
@@ -14,7 +14,7 @@ export function createGame(size: number, komi: number): GameState {
  * historial arranca solo con esa posicion.
  */
 export function gameStateFromBoard(board: BoardState, toMove: Color, komi = 0): GameState {
-  const table = getZobristTable(board.size)
+  const table = getZobristTable(board.width, board.height)
   return {
     board: cloneBoard(board),
     toMove,
@@ -50,7 +50,7 @@ function removeDeadNeighborGroups(
 ): number[] {
   const opp = opponent(own)
   const removed: number[] = []
-  for (const n of neighbors(board.size, point)) {
+  for (const n of neighbors(board.width, board.height, point)) {
     if (board.stones[n] !== opp) continue
     const group = getGroup(board, n)
     if (!group || group.liberties.size !== 0) continue
@@ -101,7 +101,7 @@ export function applyMove(state: GameState, point: number | null, local?: LocalS
     return { legal: false, reason: 'suicide', captured: [] }
   }
 
-  const table = getZobristTable(board.size)
+  const table = getZobristTable(board.width, board.height)
   let hash = toggleStone(table, state.history[state.history.length - 1], point, color)
   for (const stone of captured) {
     hash = toggleStone(table, hash, stone, opponent(color))

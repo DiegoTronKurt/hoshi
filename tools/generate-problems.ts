@@ -66,7 +66,7 @@ const MAX_SOLUTION_DEPTH = 9
 const CAPTURA_SIMPLE_MAX_DEPTH = 1
 
 function playSelfPlayGame(randomSeed: number, blackPlayouts: number, whitePlayouts: number): BoardState[] {
-  let state: GameState = createGame(BOARD_SIZE, 6.5)
+  let state: GameState = createGame(BOARD_SIZE, BOARD_SIZE, 6.5)
   const positions: BoardState[] = []
   const maxMoves = BOARD_SIZE * BOARD_SIZE * 3
   let played = 0

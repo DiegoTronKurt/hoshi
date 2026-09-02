@@ -1,4 +1,4 @@
-import { parseSgf, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
+import { formatSize, parseSgf, parseSize, pointToSgf, sgfToPoint, writeSgf } from '../core/sgf'
 import type { SgfNode } from '../core/sgf'
 import { createBoard } from '../core/board'
 import { BLACK, WHITE, opponent } from '../core/types'
@@ -21,8 +21,8 @@ function boardSetupProperties(board: BoardState): Record<string, string[]> {
   const ab: string[] = []
   const aw: string[] = []
   for (let p = 0; p < board.stones.length; p++) {
-    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.size, p))
-    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.size, p))
+    if (board.stones[p] === BLACK) ab.push(pointToSgf(board.width, p))
+    else if (board.stones[p] === WHITE) aw.push(pointToSgf(board.width, p))
   }
   const properties: Record<string, string[]> = {}
   if (ab.length > 0) properties.AB = ab
@@ -54,7 +54,7 @@ const MAX_DEFENDER_REPLIES_STORED = 2
  */
 function childrenToSgf(
   children: RefutationNode[],
-  size: number,
+  width: number,
   mover: Color,
   targetColor: Color,
   wantLive: boolean,
@@ -66,12 +66,12 @@ function childrenToSgf(
 
   return kept.map((child) => {
     const key = mover === BLACK ? 'B' : 'W'
-    const properties: Record<string, string[]> = { [key]: [pointToSgf(size, child.move)] }
+    const properties: Record<string, string[]> = { [key]: [pointToSgf(width, child.move)] }
     const goodKey = targetColor === BLACK ? 'GB' : 'GW'
     properties[goodKey] = [child.liveForDefender ? '1' : '0']
     return {
       properties,
-      children: childrenToSgf(child.children, size, opponent(mover), targetColor, wantLive),
+      children: childrenToSgf(child.children, width, opponent(mover), targetColor, wantLive),
     }
   })
 }
@@ -83,42 +83,42 @@ export function problemToSgf(problem: Problem): string {
     properties: {
       GM: ['1'],
       FF: ['4'],
-      SZ: [String(board.size)],
+      SZ: [formatSize(board.width, board.height)],
       ...boardSetupProperties(board),
-      TR: targetPoints.map((p) => pointToSgf(board.size, p)),
+      TR: targetPoints.map((p) => pointToSgf(board.width, p)),
       ZCONCEPT: [conceptId],
       ZOBJECTIVE: [objective],
       ZTARGET: [targetColor === BLACK ? 'B' : 'W'],
       PL: [toMove === BLACK ? 'B' : 'W'],
     },
-    children: childrenToSgf(tree.children, board.size, toMove, targetColor, wantLive),
+    children: childrenToSgf(tree.children, board.width, toMove, targetColor, wantLive),
   }
   return writeSgf({ root })
 }
 
-function sgfToChildren(nodes: SgfNode[], size: number): RefutationNode[] {
+function sgfToChildren(nodes: SgfNode[], width: number): RefutationNode[] {
   return nodes.map((node) => {
     const moveValue = node.properties.B?.[0] ?? node.properties.W?.[0] ?? ''
     const good = node.properties.GB?.[0] ?? node.properties.GW?.[0] ?? '0'
     return {
-      move: sgfToPoint(size, moveValue),
+      move: sgfToPoint(width, moveValue),
       liveForDefender: good === '1',
-      children: sgfToChildren(node.children, size),
+      children: sgfToChildren(node.children, width),
     }
   })
 }
 
 export function sgfToProblem(text: string): Problem {
   const { root } = parseSgf(text)
-  const size = Number(root.properties.SZ?.[0] ?? '9')
-  const board = createBoard(size)
+  const { width, height } = parseSize(root.properties.SZ?.[0] ?? '9')
+  const board = createBoard(width, height)
 
   for (const coord of root.properties.AB ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = BLACK
   }
   for (const coord of root.properties.AW ?? []) {
-    const point = sgfToPoint(size, coord)
+    const point = sgfToPoint(width, coord)
     if (point !== null) board.stones[point] = WHITE
   }
 
@@ -127,13 +127,13 @@ export function sgfToProblem(text: string): Problem {
   const targetColor: Color = root.properties.ZTARGET?.[0] === 'B' ? BLACK : WHITE
   const toMove: Color = root.properties.PL?.[0] === 'B' ? BLACK : WHITE
   const targetPoints = (root.properties.TR ?? [])
-    .map((coord) => sgfToPoint(size, coord))
+    .map((coord) => sgfToPoint(width, coord))
     .filter((p): p is number => p !== null)
 
   const tree: RefutationNode = {
     move: null,
     liveForDefender: objective === 'live',
-    children: sgfToChildren(root.children, size),
+    children: sgfToChildren(root.children, width),
   }
 
   return { conceptId, board, targetPoints, targetColor, toMove, objective, tree }
