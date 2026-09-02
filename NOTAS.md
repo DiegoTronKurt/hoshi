@@ -1,5 +1,239 @@
 # Notas de desarrollo
 
+## Rediseño de Jugar y Hoy, heurísticas reales del bot, y banco a 120 problemas (2026-09-02)
+
+Sesión larga, todavía sin commitear al cerrarla (queda para confirmar con el
+usuario). Cubre el bloque 6 de `go-trainer-flujo-pantallas.md` ("Bloque para
+pegar en Claude Code") más pedidos explícitos del usuario que lo extienden.
+
+### Jugar: de una pantalla a dos (config → partida)
+
+Mismo patrón de dos pantallas que ya usaba Aprender (niveles → lista →
+lección): `PlayConfigScreen` (formulario) y `PlayGameScreen` (tablero, nada
+editable) son vistas separadas, con `PlayScreen` como router chico entre
+ambas (reemplaza `GameControls.tsx`, borrado). Tres piezas que el documento
+daba por existentes pero no estaban en el código:
+
+- **Deshacer real**, incluida la respuesta del bot: `PlayGameScreen` guarda
+  `history: GameState[]` en vez de un solo `GameState`: deshacer saca 2
+  jugadas si la última fue del bot, 1 si fue de la persona.
+- **Contar en vivo**: toggle "Contar" durante la partida (no solo al
+  final), reutilizando `computeAreaScore` sobre el tablero actual.
+- **Confirmación en pantalla antes de abandonar una partida sin terminar**,
+  no un `confirm()` nativo: cubre tanto "Salir" dentro de Jugar como
+  cualquier cambio de pestaña del nav inferior mientras hay una partida
+  activa. `App.tsx` ahora enruta toda navegación entre pestañas por
+  `attemptNav`/`applyNav`, que intercepta con `ConfirmDialog` si
+  `screen === 'play' && playGameActive`.
+
+A propósito, **no** se agregó un selector de "tiempo de respuesta del bot"
+separado del kyu — se mantiene `strengthLevels.ts` con su `maxTimeMs` fijo
+por nivel, tal como pidió el usuario explícitamente.
+
+Un gap que yo mismo introduje y corregí en la misma pasada: `PlayConfigScreen`
+no mostraba 13x13/19x19 bloqueados como sí hace Aprender con sus niveles
+4-10 (`go-trainer-flujo-pantallas.md`, sección 3.1, lo exige explícitamente).
+Agregado `LOCKED_BOARD_SIZES` con el mismo `LockIcon` que ya usa Aprender.
+
+### Heurísticas reales del bot, no jugada casi aleatoria
+
+Pedido explícito: "que el bot use distintas heurísticas de Go, para que sea
+una app buena, no jugar random". Encima de los estilos ya existentes
+(`botStyles.ts`: territorial/influencia/combativo), `playoutPolicy.ts` y
+`mcts.ts` ahora priorizan capturas reales durante el rollout
+(`findCapturingMoves`, 90% de probabilidad de tomarlas si existen antes de
+cualquier otra lógica) y evitan activamente jugar en autoatari
+(`resultsInSelfAtari`) cuando hay alternativa legal. Cambia el autojuego que
+alimenta el generador de problemas (ver más abajo, por qué DOS_OJOS bajó de
+12 a 10 entradas).
+
+### Revisar: deep-link real desde el fin de una partida
+
+Permiso explícito del usuario para tocar `ReviewScreen.tsx` (revierte la
+instrucción original de no tocarlo). `ReviewScreen` acepta `initialGameId`
+opcional; el botón "Revisar esta partida" al terminar un juego en Jugar
+abre esa partida exacta en Revisar, no la pantalla general.
+
+### Hoy: rediseño completo, misma pasada
+
+A pedido explícito, sumado al plan de Jugar en vez de en sesión aparte
+("sumarlo ahora, en la misma pasada"), a partir de un mockup de referencia
+que trajo el usuario. Encabezado con anillo de progreso del nivel
+(`ProgressRing`, SVG, sin librería nueva); tarjeta de foco con diagrama del
+primer ejercicio del plan; fila de estadísticas (ejercicios totales, racha
+con ícono de fuego si está activada, meta diaria); tarjeta de previsualización
+del primer ejercicio con botón "Practicar"; tarjeta de insight (conocimiento
+vs. aplicación) cuando hay una brecha notable; botón final "Jugar" en texto
+plano (nunca "jugar contra el bot"), sin copy dirigido. Decisiones explícitas
+del usuario que lo acotan: **sin mascota ni avatar** ("sacar el avatar
+definitivamente"), y **sin la idea de "partida recomendada"** con copy
+dirigido a una debilidad (coincide con `go-trainer-especificacion-pantallas.md`
+sección 0 y con la sección 12 del roadmap maestro, que prohíbe sparring
+dirigido antes del motor de evaluación de v2).
+
+### Aprender: niveles 4-10 bloqueados, con nombre y tablero reales
+
+A pedido explícito ("bloqueados, con nombre y tablero reales"), no ocultos:
+`LOCKED_LEVELS` en `LearnScreen.tsx`, con los nombres y tamaños de tablero
+reales de la tabla de `go-trainer-especificacion-pantallas.md` sección 5,
+mismo `LockIcon` que ahora también usa Jugar.
+
+### Banco de problemas: de 75 a 120 entradas
+
+Continuación de la expansión de Fase C. Autojuego regenerado (32 partidas en
+vez de 8, ~62 min reales, retornos decrecientes documentados en
+`generate-problems.ts`) más plantillas nuevas para ESCALERA/DOBLE_ATARI y,
+a pedido explícito del usuario ("dale con lo de red geta snapback etc"),
+RED_GETA y SNAPBACK portados a 9x9 (`buildGetaSeed2`/`buildSnapbackSeed2`
+en `content/seeds.ts`, misma posición ya verificada de las lecciones n3-l4/
+n3-l5, solo en un tablero más grande — la región que recorta el
+solucionador no cambia porque ninguna de las dos toca un borde distinto a
+9x9 que a su tamaño original).
+
+| Concepto | Antes | Ahora |
+|---|---|---|
+| ESCALERA | 12 | 28 |
+| DOBLE_ATARI | 16 | 24 |
+| DOS_OJOS | 12 | 10 |
+| PUNTO_VITAL | 4 | 13 |
+| CAPTURA_SIMPLE | 5 | 7 |
+| RED_GETA | 4 | 8 |
+| SNAPBACK | 8 | 16 |
+| OJO_FALSO | 4 | 4 (sin cambio, ver abajo) |
+| NAKADE | 10 | 10 (sin cambio) |
+
+DOS_OJOS bajó de 12 a 10 con el mismo autojuego reescrito: no es una
+regresión, es una trayectoria distinta del autojuego por el cambio de
+heurísticas del bot (arriba). **OJO_FALSO se dejó deliberadamente en 4**:
+a diferencia de geta/snapback, ya está en el tablero máximo desbloqueado
+hoy (9x9) y las 8 transformaciones diedrales ya cubren sus 4 esquinas
+posibles, así que no hay "mismo truco, tablero más grande" disponible sin
+sumar un tablero bloqueado (13x13+) a contenido en vivo. Una forma de ojo
+falso genuinamente nueva (de borde en vez de esquina, con 3 piedras de
+anillo) requiere geometría de Go nueva a mano, la misma categoría de
+trabajo que costó varias sesiones fallidas antes de resolver la versión de
+esquina — se deja fuera de esta pasada a propósito.
+
+`tests/content/seeds.test.ts` necesitó subir dos timeouts (`beforeAll`
+60000→120000ms, segundo `it()` 60000→180000ms) por el trabajo adicional de
+reverificar las semillas nuevas.
+
+### Aprender: la partida de comprobación ahora arranca en la posición del ejemplo
+
+Pedido explícito: "que la partida ejemplo te lleve a una partida donde
+estén las fichas dispuestas de forma tal de poder hacer el ejemplo". Antes,
+el botón "Jugar una partida de comprobación" al final de una lección llevaba
+siempre a un tablero vacío en Jugar, desconectado del ejemplo interactivo de
+esa misma lección. Ahora, si la lección tiene `demo` (posición inicial +
+piedras), `PlayConfig` viaja con un `initialStones`/`initialToMove` opcional
+(mismo shape que `DemoScript`, nuevo tipo `PlaySeed` en `playConfig.ts`) y
+`PlayScreen` salta directo a una partida local en esa posición, sin pasar
+por la pantalla de configuración. Sin lección con `demo`, sigue igual que
+antes (tablero vacío). Verificado en vivo: la posición de tres negras
+rodeando una blanca de la lección de captura simple aparece intacta al
+entrar a la partida de comprobación.
+
+### Ejercicios: mensaje de jugada incorrecta (ya existía) + explicación al resolver (nuevo)
+
+Pedido explícito: revisar que un click en un punto legal pero incorrecto
+muestre un mensaje, y agregar una explicación de por qué la jugada correcta
+lo era. Lo primero ya funcionaba (`useSolvableExercise` valida contra el
+solucionador antes de aplicar visualmente la piedra; si no resuelve, no
+dibuja la jugada y `ExerciseView` muestra "Eso no lo resuelve, intenta de
+nuevo." en rojo) — confirmado en vivo con un problema de Nakade, no solo
+leyendo el código. Lo nuevo: al resolver, `ExerciseView` ahora muestra
+también una línea "Por qué funciona" con el resumen de una frase del
+concepto (`CONCEPTS[conceptId].summaryKey`, ya existía y ya tenía paridad
+i18n) — explicación a nivel de concepto, no de la jugada puntual, porque el
+banco no guarda razonamiento posición-por-posición.
+
+### Verificación
+
+`tsc -b` limpio; 282/282 tests (31/31 archivos); `oxlint` sin warnings
+nuevos fuera de las categorías `set-state-in-effect`/`only-export-components`
+ya preexistentes; paridad i18n 436/436 claves; pase visual con Playwright
+contra `npm run dev` en cada pieza (Jugar, Hoy, niveles bloqueados,
+partida de comprobación con posición del ejemplo, mensaje de incorrecto,
+explicación al resolver), sin errores de consola.
+
+### Empaquetado Android: AAB regenerado
+
+`hoshi-flutter` subido de `1.5.0+8` a `1.6.0+9` (minor, por ser cambios
+funcionales reales de esta sesión, no un parche). `npm run build` en
+`hoshi/` → `sync-webapp.ps1` → `flutter build appbundle --release`:
+`app-release.aab` de 43.0MB, mismo firmado de siempre (`android.keystore`,
+alias `upload`, vía `android/key.properties`). Todavía no subido a Play
+Console — queda del lado del usuario, igual que en cada sesión anterior.
+Regenerado una segunda vez al final de la sesión (mismo `1.6.0+9`, no hacía
+falta subir de versión otra vez) para que incluya también las dos piezas de
+abajo (red de seguridad de tamaño de tablero y "Sobre el Go").
+
+### v1.5, versión barata: red de seguridad de tamaño de tablero, sin refactor todavía
+
+Investigación primero, código después: casi todo el núcleo (`rules.ts`,
+`groups.ts`, `benson.ts`, `scoring.ts`, el solucionador, y hasta las tablas
+Zobrist) ya recibe `size` como parámetro y ya genera/cachea dinámicamente
+por tamaño — no hay nada fijo a 9x9 ahí, contrario a lo que el roadmap
+maestro sección 8 daba a entender. El gap real es uno solo: `BoardState`
+guarda un único `size` (no `width`/`height`), así que `BOARD_TRANSFORMS`
+(las 8 transformaciones diedrales), el recorte de región del solucionador y
+el `SZ` de SGF son estructuralmente solo para tablero cuadrado. Eso importa
+nada más para el Nivel 4 bloqueado ("9x13", el único tamaño no cuadrado de
+toda la lista) — y ese nivel ya depende del motor de evaluación de v2 según
+la sección 7 del propio roadmap, así que no hay ningún consumidor real de
+esa generalización todavía. Decisión (con el usuario): no hacer el refactor
+"cualquier tamaño" ahora, solo la parte barata:
+
+- `getHoshiPoints()` (`ui/board/hoshiPoints.ts`) devolvía `[]` para
+  cualquier tamaño que no fuera 5, 7 o 9 — un tablero 13x13/19x19 se
+  hubiera dibujado sin ningún punto hoshi el día que se desbloqueen.
+  Agregados los patrones estándar (13x13: 4 esquinas + tengen, sin puntos
+  de borde intermedio; 19x19: 9 puntos, esquinas + bordes + tengen).
+- Cobertura de tests que nunca se había ejercitado más allá de 9: las 8
+  transformaciones diedrales (`board.test.ts`), el recorte de región del
+  solucionador (`solver/region.test.ts`, archivo nuevo) y el ida-y-vuelta
+  de coordenadas SGF (`sgf-roundtrip.test.ts`) ahora también corren a
+  tamaño 13 y 19, más un test nuevo para `getHoshiPoints`. Todo pasa limpio
+  a esos tamaños, confirmando que el resto del núcleo de verdad ya
+  generaliza — la inversión fue barata porque casi no había nada que
+  arreglar, solo que confirmar.
+
+### Aprender: nueva sección "Sobre el Go" (historia, glosario, reglas)
+
+Roadmap maestro, sección 6, primera pasada. Vive dentro de Aprender (no una
+séptima pestaña), como una sub-pantalla más del mismo router que ya usa
+`LearnScreen` para niveles/lecciones (`AboutGoScreen.tsx`, entrada nueva
+`{ kind: 'about' }` en el `View` de `LearnScreen`, botón "Sobre el Go" antes
+de la lista de niveles).
+
+- **Historia**: origen en China (más de 2500 años, sin fecha exacta
+  inventada), difusión a Corea y Japón, las cuatro escuelas oficiales del
+  período Edo, la Nihon Ki-in en 1924, y el gancho narrativo de AlphaGo
+  contra Lee Sedol en 2016 — el propio bot de Hoshi usa una versión mucho
+  más simple de la misma familia de técnicas (MCTS). Fechas conservadoras
+  a propósito donde la evidencia histórica no da un año preciso (origen,
+  llegada a Japón), con la misma cautela que pide el roadmap para contenido
+  factual.
+- **Glosario** (`content/glossary.ts`): a propósito, más chico que lo que
+  sugería el roadmap. Revisé las 29 lecciones reales antes de escribir
+  nada: términos como "hane", "sente", "gote", "tenuki" o hasta "tsumego"
+  **no están enseñados en ninguna lección todavía** (joseki es solo el
+  nombre de un nivel bloqueado). Los 6 términos que sí están verificados y
+  enseñados — atari, ko, nakade, escalera (shicho), red/geta, snapback
+  (uttegaeshi) — reusan directamente la definición ya existente de su
+  lección o de `concept.X.summary`, cero texto nuevo duplicado.
+- **Comparación de reglas de conteo**: chino (el que usa esta app,
+  descripción verificada contra la implementación real de
+  `computeAreaScore` en `core/scoring.ts`, no un texto de manual genérico),
+  japonés, AGA y neozelandés, con ko (reusa `concept.KO.summary`) y seki
+  explicados aparte. Seki es contenido genuinamente nuevo (no hay concepto
+  `SEKI` en la app), escrito con cuidado por ser una regla bien establecida
+  y no controvertida.
+
+Verificado con Playwright contra `npm run dev`: las tres secciones
+renderizan, el glosario trae los 6 términos, "volver a los niveles"
+funciona, cero errores de consola.
+
 ## Canal de feedback y tiempo hasta la primera victoria (2026-09-01, sesión todavía más posterior, cont.)
 
 Dos ítems chicos del roadmap (secciones 11.2 y 11.3), en un solo commit
