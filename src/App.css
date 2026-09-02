@@ -625,18 +625,59 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   font-size: 0.9rem;
 }
 
 .today-plan-list li {
   border: 1px solid var(--hoshi-border);
-  border-radius: 8px;
-  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  padding: 0.6rem 0.8rem;
   background: var(--hoshi-surface);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.7rem;
+}
+
+.today-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--hoshi-surface-alt);
+  color: var(--hoshi-text-muted);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.today-plan-badge.today-reason-overdue {
+  background: var(--hoshi-danger-bg);
+  color: var(--hoshi-danger);
+}
+
+.today-plan-badge.today-reason-weak {
+  background: var(--hoshi-warning-bg);
+  color: var(--hoshi-warning);
+}
+
+.today-plan-badge.today-reason-new {
+  background: var(--hoshi-info-bg);
+  color: var(--hoshi-info);
+}
+
+.today-plan-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.today-plan-concept {
+  font-weight: 600;
 }
 
 .today-progress {
@@ -711,9 +752,15 @@
   flex-direction: column;
   gap: 0.35rem;
   padding: 0.9rem 1rem;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--hoshi-border);
   background: var(--hoshi-surface-alt);
+}
+
+.today-focus-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .today-focus-concept {

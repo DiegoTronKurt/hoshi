@@ -143,7 +143,10 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
 
         {focus && (
           <section className="today-focus-card">
-            <span className={`today-reason today-reason-${focus.reason}`}>{t(REASON_KEY[focus.reason])}</span>
+            <div className="today-focus-top">
+              <span className={`today-plan-badge today-reason-${focus.reason}`}>1</span>
+              <span className={`today-reason today-reason-${focus.reason}`}>{t(REASON_KEY[focus.reason])}</span>
+            </div>
             <p className="today-focus-concept">{t(`concept.${focus.entry.conceptId}.label` as TranslationKey)}</p>
             <p className="today-focus-why">
               {t(focusReasonKey(focus), {
@@ -159,8 +162,13 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
           <ul className="today-plan-list">
             {rest.map((item, index) => (
               <li key={`${item.entry.id}-${index}`}>
-                <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
-                {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+                <span className={`today-plan-badge today-reason-${item.reason}`}>{index + 2}</span>
+                <span className="today-plan-info">
+                  <span className="today-plan-concept">
+                    {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+                  </span>
+                  <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
+                </span>
               </li>
             ))}
           </ul>
