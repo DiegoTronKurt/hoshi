@@ -24,6 +24,10 @@ const APP_THEME_NAME_KEY: Record<string, TranslationKey> = {
   amanecer: 'settings.appTheme.amanecer',
   noche: 'settings.appTheme.noche',
   pizarra: 'settings.appTheme.pizarra',
+  madera: 'settings.appTheme.madera',
+  oceano: 'settings.appTheme.oceano',
+  lavanda: 'settings.appTheme.lavanda',
+  carbon: 'settings.appTheme.carbon',
 }
 
 const APP_THEME_OPTION_IDS = ['system', ...APP_THEMES.map((theme) => theme.id)]

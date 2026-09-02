@@ -111,7 +111,87 @@ export const pizarraTheme: AppTheme = {
   },
 }
 
-export const APP_THEMES: AppTheme[] = [cremaTheme, piedraTheme, amanecerTheme, nocheTheme, pizarraTheme]
+export const maderaTheme: AppTheme = {
+  id: 'madera',
+  scheme: 'light',
+  colors: {
+    bg: '#f1e2c4',
+    surface: '#fff9ee',
+    surfaceAlt: '#f6ead0',
+    border: '#dcc399',
+    borderStrong: '#b8944f',
+    text: '#3a2a14',
+    textMuted: '#6b5636',
+    textFaint: '#9c8768',
+    accent: '#8f5f28',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const oceanoTheme: AppTheme = {
+  id: 'oceano',
+  scheme: 'light',
+  colors: {
+    bg: '#e6f1f3',
+    surface: '#ffffff',
+    surfaceAlt: '#edf7f8',
+    border: '#bfe0e6',
+    borderStrong: '#8cc4cf',
+    text: '#122e33',
+    textMuted: '#3f5c61',
+    textFaint: '#6f8a8f',
+    accent: '#1b7a8c',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const lavandaTheme: AppTheme = {
+  id: 'lavanda',
+  scheme: 'light',
+  colors: {
+    bg: '#f1eaf5',
+    surface: '#ffffff',
+    surfaceAlt: '#f7f1fa',
+    border: '#ddc9e8',
+    borderStrong: '#b990cf',
+    text: '#241a2c',
+    textMuted: '#57495e',
+    textFaint: '#8a7a8f',
+    accent: '#7a4f9e',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const carbonTheme: AppTheme = {
+  id: 'carbon',
+  scheme: 'dark',
+  colors: {
+    bg: '#1c1b1a',
+    surface: '#2a2826',
+    surfaceAlt: '#242220',
+    border: '#4a4642',
+    borderStrong: '#635d57',
+    text: '#ececec',
+    textMuted: '#b8b3ac',
+    textFaint: '#8a8580',
+    accent: '#d1684f',
+    // Blanco sobre este acento no pasa AA para texto normal (naranja medio);
+    // texto oscuro (igual al fondo) si pasa, mismo criterio que "amanecer".
+    accentContrast: '#1c1b1a',
+  },
+}
+
+export const APP_THEMES: AppTheme[] = [
+  cremaTheme,
+  piedraTheme,
+  amanecerTheme,
+  nocheTheme,
+  pizarraTheme,
+  maderaTheme,
+  oceanoTheme,
+  lavandaTheme,
+  carbonTheme,
+]
 
 export type AppThemeId = (typeof APP_THEMES)[number]['id'] | 'system'
 
