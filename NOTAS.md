@@ -1,5 +1,72 @@
 # Notas de desarrollo
 
+## OJO_FALSO resuelto, radar sin verde fijo, y 4 temas nuevos (2026-09-01, sesión todavía más posterior)
+
+### OJO_FALSO: por fin resuelto (`57c2a9c`)
+
+Causa raiz de todos los intentos anteriores, confirmada por fin con certeza:
+`buildEnclosedShape` (la tecnica de "llenar todo el tablero de blanco, poner
+un anillo negro, vaciar el espacio de ojo") hace que **cualquier** piedra
+del anillo tenga cero libertades "hacia afuera" desde el primer momento —
+todo alrededor ya es blanco (ocupado), no hay ninguna libertad ahi que una
+diagonal pudiera quitarle. Como las libertades nunca dependen del color de
+una diagonal (eso es cierto en cualquier posicion de Go, no es un bug de
+esta tecnica en particular), recolorear una diagonal bajo relleno total
+literalmente no puede cambiar nada: la tecnica es estructuralmente incapaz
+de representar un ojo falso, sin importar cuanto se ajuste la geometria.
+
+La construccion que si funciona es dispersa (sin relleno de fondo):
+`buildOjoFalsoSeed` en `content/seeds.ts` pone un ojo de esquina (el caso
+mas simple: una sola diagonal en juego) con dos piedras de anillo A=(1,0) y
+B=(0,1), mas una piedra blanca D en la diagonal (1,1). La clave: D es vecina
+**ortogonal** directa de A y de B a la vez (no solo diagonal del punto de
+ojo) -- eso le quita a cada una una libertad real que de otro modo tendrian,
+dejandolas con una sola libertad compartida: la esquina misma. Blanco juega
+ahi y captura las dos de un solo movimiento.
+
+Verificado contra `solve()` en los tres regimenes que el proyecto realmente
+usa (no alcanza con probar uno): `regionMargin=1, maxDepth=8` (lo que usa
+`buildSeedProblems()` para aceptar la semilla), `margin=2, maxDepth=5` (lo
+que `seeds.test.ts` re-verifica sobre *todas* las semillas ya generadas,
+sin importar el margen con que se generaron), y `margin=1, maxDepth=8` (lo
+que usa en vivo `useSolvableExercise.ts` durante el ejercicio real). Los
+tres dan `solved: true`, limpio, sin tocar el limite de profundidad. Banco
+regenerado: 4 problemas de OJO_FALSO (una por cada esquina/orientacion via
+las 8 transformaciones diedrales, deduplicadas).
+
+Nota tecnica para quien construya la proxima forma a mano: durante el
+proceso se armo mal una vez un arbol de refutacion "correcto pero feo" (una
+variante con libertades extra en el anillo, que sigue siendo un ojo falso
+real y el solucionador la confirma como `solved: true`, pero produce una
+secuencia de 14+ jugadas con el defensor tirando piedras una y otra vez a
+un punto ya condenado antes de rendirse del todo). Aunque es logicamente
+valida, como ejercicio interactivo se ve confusa. La version aceptada usa
+las piedras del anillo ya en su minimo de libertades desde el inicio, asi
+que blanco resuelve en un solo click (perfectamente aceptable y coherente
+con como ya funcion Doble atari en este banco) y el arbol se resuelve en
+77 nodos sin tocar el limite de profundidad.
+
+### El radar de Perfil se veia siempre verde, sin importar el tema (`544f241`)
+
+El usuario reporto "el tema del sistema es verde musgo" — pero el radar de
+habilidad de 6 ejes en Perfil usaba `var(--hoshi-success)` para su relleno,
+borde y vertices, y ese token **no se redefine por tema de app** (solo
+tiene una variante clara/oscura via `[data-scheme]`, igual para los 9
+temas). El radar se veia del mismo verde sin importar que tema estuviera
+elegido, dando la impresion de que "el tema" era verde cuando en realidad
+el color del radar nunca dependia del tema en absoluto. Cambiado a
+`var(--hoshi-accent)`: confirmado visualmente que ahora el radar cambia de
+color con cada tema (negro en Clasico, naranja en Amanecer, coral en
+Carbon, etc.).
+
+### 4 temas de app nuevos, a pedido explicito
+
+Madera (tonos calidos de madera, primer tema de app inspirado en el mismo
+espiritu que el tema de tablero Kaya), Oceano (celeste-turquesa), Lavanda
+(purpura suave) y Carbon (tercer tema oscuro, grafito neutro con acento
+coral, distinto del ambar de Noche y el azul de Pizarra). Quedan 9 temas
+seleccionables mas "seguir sistema" (`src/ui/theme/appThemes.ts`).
+
 ## Estilos de bot, bug critico de persistencia, y pulido de Hoy (2026-09-01, sesión aun más posterior)
 
 ### Estilos de juego del bot (`30961b3`)
