@@ -1,5 +1,84 @@
 # Notas de desarrollo
 
+## v2 punto 2, track 1: estimador de influencia (Bouzy, reconstruido) (2026-09-02)
+
+Primera mitad del punto 2 de v2 (motor de evaluacion posicional). El plan
+de dos tracks (investigado en paralelo al refactor de tablero, ver mensaje
+al usuario) proponia: track 1 = estimador heuristico barato y sin
+dependencias, track 2 = red neuronal pequena de KataGo. Este es el track
+1, construido y verificado.
+
+### El PDF original de Bouzy no quedo accesible: reconstruccion, no cita textual
+
+`go-trainer-roadmap-maestro.md` no menciona Bouzy — la sugerencia de
+"Bouzy 5/21" salio de la investigacion del track 2 (comparacion de
+motores). El paper original (Bouzy, "Mathematical Morphology Applied to
+Computer Go", IJPRAI 17(2), 2003) no esta accesible en ningun mirror
+encontrado (citeseerx, slideplayer, sensei's library — todos fallaron o
+dieron 403/404). GNU Go usa un algoritmo distinto y mas sofisticado
+(propagacion de influencia con permeabilidad, no dilatacion/erosion
+simple); `online-go/score-estimator` es MIT pero es un motor mucho mas
+grande (deteccion de seki, rollouts Monte Carlo) que no es portable en
+poco tiempo.
+
+Decision explicita del usuario ante esto: invertir el tiempo en encontrar
+la formula real en vez de inventar una propia y llamarla "Bouzy" sin
+poder verificarla. Se encontro, cruzando tres descripciones secundarias
+independientes de motores de busqueda que convergen en la misma
+definicion:
+
+- Dilatacion Dz(p): si el vecindario de `p` no toca ningun valor de signo
+  contrario, `p` crece en la cantidad de vecinos del mismo signo. Si toca
+  un vecino de signo contrario, no crece — el crecimiento se frena justo
+  en el limite de contacto entre zonas.
+- Erosion Ez(p): el valor se encoge hacia cero en la cantidad de vecinos
+  que no refuerzan su signo.
+- 5 dilataciones / 21 erosiones (formula citada: 1+n(n-1) erosiones para
+  n dilataciones).
+
+Documentado en el codigo explicitamente como reconstruccion a partir de
+descripciones secundarias, no como transcripcion literal del paper.
+
+### Verificado antes de confiar en el resultado, no solo citado
+
+Antes de escribir los tests formales, se corrio un script de depuracion
+imprimiendo la grilla completa de influencia para casos conocidos:
+
+- Una piedra negra aislada en el centro de un 9x9: termina con **cero**
+  puntos de territorio real mas alla de si misma (los vecinos que
+  brevemente ganaron valor durante la dilatacion se erosionan
+  completamente de vuelta a 0) — confirma la propiedad central que el
+  metodo promete.
+- Una pared solida de 9 piedras conectadas: retiene influencia real (112
+  a 117) en las 9, a diferencia de la piedra aislada.
+- Tablero dividido a la mitad (negro vs blanco, columna central vacia):
+  la columna central termina exactamente en 0 (neutral), cada lado
+  inclina hacia su propio color sin cruzar.
+- Negar todas las piedras niega el resultado exacto (simetria perfecta
+  entre colores).
+
+Las cuatro propiedades se confirmaron primero con el script antes de
+escribirlas como aserciones — no se asumio que la reconstruccion se
+comportaba como promete solo por la cita. `src/analysis/influence.ts` +
+`tests/analysis/influence.test.ts` (6 tests, incluye un caso 9x13 para
+confirmar que generaliza al tablero rectangular del punto 1).
+
+### Alcance
+
+`estimateInfluence(board)` devuelve un valor de influencia con signo por
+punto; `classifyInfluence(map)` lo reduce a negro/blanco/neutral. No
+afirma territorio final bajo reglas reales (eso lo sigue haciendo
+`computeAreaScore`) — es una estimacion de hacia donde "inclina" cada
+punto, pensada para ensenar moyo/direccion/grosor en los niveles 4-6.
+Cero dependencias nuevas, sub-milisegundo por posicion, no necesita Web
+Worker. Todavia no esta conectado a ninguna pantalla — eso es contenido/UI
+de los puntos 3 y 5, no de esta pasada.
+
+### Verificacion
+
+`npx tsc -b` limpio, `npx vitest run` 325/325 verdes (34 archivos, 6
+nuevos), sin warnings de oxlint en los archivos nuevos.
+
 ## v2 punto 1: BoardState pasa a width/height (2026-09-02)
 
 Primer punto de v2 (roadmap maestro, secciones 7-9-12: niveles 4-6,
