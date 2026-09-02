@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { conceptsWithEvidence } from '../../analysis/concepts'
 import { AXIS_LABEL_KEY, computeAxisScores } from '../../analysis/axes'
+import { getFirstOpenAt } from '../../learning/firstOpen'
+import { bucketFirstWin, computeFirstWin } from '../../learning/firstWin'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
 import { computeProfiles, weakestConcepts } from '../../learning/profile'
 import type { ConceptProfile } from '../../learning/profile'
@@ -42,6 +44,8 @@ export function ProfileScreen() {
   const concepts = useMemo(() => conceptsWithEvidence(), [])
   const axisScores = useMemo(() => computeAxisScores(profiles), [profiles])
   const insights = useMemo(() => computeKnowledgeApplicationInsights(profiles), [profiles])
+  const firstWin = useMemo(() => computeFirstWin(games, getFirstOpenAt()), [games])
+  const firstWinDisplay = firstWin.elapsedMs === null ? null : bucketFirstWin(firstWin.elapsedMs)
 
   if (!loaded) return null
 
@@ -64,6 +68,12 @@ export function ProfileScreen() {
           noDataLabel={t('profile.noData')}
         />
       </section>
+
+      {firstWinDisplay && (
+        <section className="profile-first-win">
+          <p>{t(`profile.firstWin.${firstWinDisplay.unit}` as TranslationKey, { n: firstWinDisplay.value })}</p>
+        </section>
+      )}
 
       {weakest.length > 0 && (
         <section className="profile-weakest">

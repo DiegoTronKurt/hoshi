@@ -128,6 +128,9 @@
   "profile.insight.knowsNotApplies": "You recognize the pattern when explicitly asked, but you're not yet catching it consistently during a real game.",
   "profile.insight.appliesBetterThanKnows": "You apply this better in real games than in isolated exercises.",
   "profile.insight.consistent": "You apply this about as consistently as you solve it in exercises.",
+  "profile.firstWin.minutes": "You won your first game against the bot {{n}} minutes after first opening Hoshi.",
+  "profile.firstWin.hours": "You won your first game against the bot {{n}} hours after first opening Hoshi.",
+  "profile.firstWin.days": "You won your first game against the bot {{n}} days after first opening Hoshi.",
 
   "axis.RULES_COUNTING.label": "Rules & counting",
   "axis.CAPTURING.label": "Capturing",
@@ -173,6 +176,9 @@
   "settings.backup.confirmWarning": "Importing will replace all progress currently on this device. This can't be undone.",
   "settings.backup.confirmButton": "Replace my data",
   "settings.backup.cancelButton": "Cancel",
+  "settings.feedback.label": "Report a problem",
+  "settings.feedback.description": "Found a broken exercise, or something that isn't working right? Email me directly.",
+  "settings.feedback.cta": "Send an email",
 
   "learn.title": "Learn",
   "learn.progressOverall": "{{read}} of {{total}} lessons completed",

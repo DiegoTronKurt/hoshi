@@ -128,6 +128,9 @@
   "profile.insight.knowsNotApplies": "Reconoces el patrón cuando te lo piden explícitamente, pero todavía no lo detectas de forma consistente durante una partida.",
   "profile.insight.appliesBetterThanKnows": "Lo aplicas mejor en partidas reales que en ejercicios aislados.",
   "profile.insight.consistent": "Lo aplicas de forma bastante consistente con cómo lo resuelves en ejercicios.",
+  "profile.firstWin.minutes": "Ganaste tu primera partida contra el bot {{n}} minutos después de abrir Hoshi por primera vez.",
+  "profile.firstWin.hours": "Ganaste tu primera partida contra el bot {{n}} horas después de abrir Hoshi por primera vez.",
+  "profile.firstWin.days": "Ganaste tu primera partida contra el bot {{n}} días después de abrir Hoshi por primera vez.",
 
   "axis.RULES_COUNTING.label": "Reglas y conteo",
   "axis.CAPTURING.label": "Captura",
@@ -173,6 +176,9 @@
   "settings.backup.confirmWarning": "Importar reemplazará todo el progreso que hay ahora en este dispositivo. Esto no se puede deshacer.",
   "settings.backup.confirmButton": "Reemplazar mis datos",
   "settings.backup.cancelButton": "Cancelar",
+  "settings.feedback.label": "Reportar un problema",
+  "settings.feedback.description": "¿Encontraste un ejercicio con un error, o algo que no funciona como debería? Escríbeme directo.",
+  "settings.feedback.cta": "Enviar un email",
 
   "learn.title": "Aprender",
   "learn.progressOverall": "{{read}} de {{total}} lecciones completadas",

@@ -32,6 +32,12 @@ const APP_THEME_NAME_KEY: Record<string, TranslationKey> = {
 
 const APP_THEME_OPTION_IDS = ['system', ...APP_THEMES.map((theme) => theme.id)]
 
+const FEEDBACK_EMAIL = 'fractimeapp@gmail.com'
+
+function buildFeedbackMailto(): string {
+  return `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('Hoshi: reporte de un problema')}`
+}
+
 function buildPreviewBoard() {
   const size = 5
   const board = createBoard(size)
@@ -259,6 +265,14 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             </div>
           </div>
         )}
+      </section>
+
+      <section className="settings-section">
+        <h3>{t('settings.feedback.label')}</h3>
+        <p className="settings-description">{t('settings.feedback.description')}</p>
+        <a className="settings-feedback-link" href={buildFeedbackMailto()}>
+          {t('settings.feedback.cta')}
+        </a>
       </section>
     </div>
   )

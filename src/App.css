@@ -1311,6 +1311,20 @@
   justify-content: center;
 }
 
+.profile-first-win {
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+  text-align: center;
+}
+
+.profile-first-win p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+}
+
 .radar-chart {
   width: 100%;
   max-width: 300px;
@@ -1546,6 +1560,20 @@
   background: var(--hoshi-surface);
   color: var(--hoshi-text);
   font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-feedback-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  text-decoration: none;
   cursor: pointer;
 }
 

@@ -3,6 +3,7 @@ import type { ComponentType } from 'react'
 import type { ConceptId } from './analysis/concepts'
 import { useI18n } from './i18n'
 import type { TranslationKey } from './i18n'
+import { recordFirstOpenIfNeeded } from './learning/firstOpen'
 import { ExercisesIcon, LearnIcon, PlayIcon, ProfileIcon, ReviewIcon, TodayIcon } from './ui/icons/NavIcons'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
 import { LearnScreen } from './ui/lessons/LearnScreen'
@@ -51,6 +52,10 @@ function App() {
   const scheme = appThemeId === 'system' ? systemScheme : appTheme.scheme
   const [screen, setScreen] = useState<Screen>('today')
   const [exercisesConcept, setExercisesConcept] = useState<ConceptId | undefined>(undefined)
+
+  useEffect(() => {
+    recordFirstOpenIfNeeded()
+  }, [])
 
   function goToExercises(conceptId?: ConceptId) {
     setExercisesConcept(conceptId)
