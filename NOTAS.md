@@ -1,5 +1,171 @@
 # Notas de desarrollo
 
+## v2 punto 1: BoardState pasa a width/height (2026-09-02)
+
+Primer punto de v2 (roadmap maestro, secciones 7-9-12: niveles 4-6,
+motor de evaluacion). Por pedido explicito del usuario, antes de tocar
+codigo se presento el plan completo (firma de tipos, archivos afectados,
+estrategia de migracion de tests) y se espero confirmacion — este es el
+resultado ya implementado y verificado de ese plan.
+
+### Por que ahora
+
+`go-trainer-roadmap-maestro.md` seccion 8 ya lo marcaba como deuda
+tecnica pendiente "antes de v2"; la entrada de v1.5 (2026-09-01) en este
+mismo archivo confirmaba que casi todo el nucleo ya generalizaba por
+tamano (Zobrist, Benson, scoring, solucionador, verificado con tests a
+13 y 19) salvo que `BoardState.size` seguia siendo un solo numero, "sin
+ningun consumidor real de esa generalizacion todavia". El Nivel 4
+(Forma, 9x13 — el unico tamano no cuadrado de todo el curriculo) es ese
+consumidor. Se verifico contra el codigo actual antes de asumir que
+seguia igual (no habia ningun cambio no documentado).
+
+### El hallazgo real: BOARD_TRANSFORMS no es 8-para-8 en un rectangulo
+
+Las 8 transformaciones diedrales (identidad, 3 rotaciones, 4 espejos)
+son la simetria de un tablero *cuadrado*. En un rectangulo ancho×alto
+con ancho≠alto, las dos rotaciones de 90 grados y las dos transposiciones
+diagonales (4 de las 8) intercambian ancho y alto: aplicadas a un 9x13
+producen un 13x9, una forma distinta, no la misma forma con contenido
+transformado. Las otras 4 (identidad, 180 grados, espejo horizontal,
+espejo vertical) preservan la forma siempre.
+
+`BoardTransform` paso de ser una funcion suelta a `{ apply, swapsAxes }`,
+y `applicableTransforms(width, height)` devuelve las 8 en un tablero
+cuadrado, solo las 4 que preservan forma si no lo es. `transformBoard`
+calcula el ancho/alto de salida a partir de `swapsAxes` en vez de asumir
+que coincide con el de entrada. El unico consumidor real de esto hoy
+(`content/seeds.ts::buildSeedProblems`, que multiplica cada plantilla
+verificada por las 8 transformaciones) ya usa `applicableTransforms` en
+vez de la lista fija — listo para cuando haya una plantilla 9x13 sin
+tener que volver a tocarlo.
+
+### Decision para acotar el costo real de la migracion
+
+`createBoard(width, height = width)`: todo call site que ya creaba un
+tablero cuadrado (decenas, entre contenido de lecciones, seeds y tests)
+sigue compilando sin cambios y sigue produciendo un tablero cuadrado.
+Solo contenido genuinamente rectangular necesita pasar los dos
+argumentos. Gracias a esto, la migracion de ~39 call sites de test que
+llamaban `createBoard(N)` no toco ninguno de ellos.
+
+`toXY`/`toPoint` solo necesitaban `width` (son aritmetica de indice por
+fila), asi que se renombraron sin agregar parametro. `neighbors`/
+`diagonals`/`inBounds` si necesitaban ambos (bordes reales de cada eje),
+asi que ganaron `height` como parametro nuevo — cambio mecanico pero
+real en cada call site (`core/groups.ts`, `benson.ts`, `scoring.ts`,
+`rules.ts`, `engine/playoutPolicy.ts`, `botStyles.ts`,
+`solver/doubleAtari.ts`, `analysis/mistakes.ts`). El cache de vecinos y
+la tabla de Zobrist (`core/zobrist.ts`) pasaron de clave `size` (numero
+suelto) a clave compuesta `` `${width}x${height}` ``, para que un futuro
+13x9 no choque con un 9x13.
+
+Contenido de lecciones (`content/lessons/types.ts`, `n0-n3.ts`,
+`seeds.ts`) y las previsualizaciones cuadradas de UI (Ajustes,
+Ejercicios, tarjeta de leccion actual) deliberadamente **no** se
+tocaron: siguen usando un solo `size`, correcto hoy porque todo ese
+contenido es cuadrado. `BoardCanvas` recibe `width`/`height` en vez de
+`size` (con `height = width` por defecto), asi que estos sitios pasan
+el mismo `size` dos veces en vez de necesitar su propio tipo nuevo.
+
+### Bugs reales encontrados, no solo renombrados
+
+Tres lugares reusaban una sola variable `size` para el limite de ambos
+ejes, correcto solo por coincidencia mientras todo el contenido era
+cuadrado:
+
+- `solver/region.ts::computeRegion` — recortaba ambos ejes al mismo
+  limite (el recorte del solucionador para problemas locales).
+- `engine/botStyles.ts::distanceToEdge` — la heuristica de peso de los
+  estilos "Territorial"/"Influencia" median mal la distancia al borde
+  en el eje Y de un tablero no cuadrado.
+- `analysis/mistakes.ts::detectPrimeraLineaTemprana` — el detector de
+  "primera linea temprana" perdonaria en silencio una jugada en la
+  ultima fila real de un tablero no cuadrado.
+
+Ninguno de los tres se manifestaba hoy (todo el contenido real es
+cuadrado), pero los tres quedaban listos para fallar en silencio apenas
+existiera contenido rectangular real. Arreglados junto con el resto.
+
+### SGF gana soporte real de tablero rectangular
+
+El spec FF4 permite `SZ[ancho:alto]` para tablero no cuadrado; el codigo
+solo escribia/leia `SZ[N]`. Peor: `Number("9:13")` da `NaN` en silencio,
+lo que habria corrompido cualquier `sgfToPoint` posterior sin ningun
+error visible. `core/sgf.ts` gana `formatSize`/`parseSize` compartidos,
+usados tambien por los tres archivos que antes duplicaban esta logica
+cada uno por su cuenta (`content/problemSgf.ts`, `doubleAtariProblem.ts`,
+`ladderProblem.ts`).
+
+### BoardCanvas: reescritura real, no solo re-tipado
+
+El canvas se forzaba cuadrado a partir de un solo `displaySize`. Ahora
+la celda (cuadrada, para que las piedras no salgan ovaladas) se deriva
+del ancho disponible, y el alto del canvas sigue a esa celda aplicada al
+numero de filas en vez de asumir tablero cuadrado — un 9x13 queda mas
+alto que ancho, no estirado. Los ocho llamadores (`GuidedDemo`,
+`ExerciseView`, `LearnScreen`, `LessonScreen`, `SettingsScreen`,
+`TodayScreen`, `ReviewScreen`, `PlayGameScreen`,
+`ExercisesConceptScreen`) se actualizaron en el mismo cambio.
+
+`ui/board/hoshiPoints.ts` gana firma `width`/`height`; devuelve `[]`
+para cualquier tablero no cuadrado por ahora (antes tampoco tenia layout
+para 9x13). El layout real de puntos hoshi para 9x13 es una decision de
+contenido (que convencion real usar), no algo a inventar en este
+refactor — queda para cuando se autoren las lecciones del Nivel 4.
+
+### Deliberadamente NO tocado en esta pasada
+
+`storage/db.ts::SavedGameRecord.size` y `ui/play/playConfig.ts`
+(`PlayConfig`/`PlaySeed`/`LastPlayConfig`) siguen con un solo `size`.
+No es un olvido: Jugar todavia no ofrece ningun tamano no cuadrado (el
+selector solo tiene 5x5/7x7/9x9 mas 13x13/19x19 bloqueados), asi que
+toda partida real guardada hoy es cuadrada de verdad. Agregarles
+width/height es trabajo del punto 5 (conectar Forma/Apertura/Joseki a
+la interfaz real), cuando Jugar efectivamente ofrezca 9x13. `Ejercicios`
+no se toco, sin relacion con este pedido.
+
+### Verificacion
+
+`npx tsc -b` limpio. `npx vitest run`: fallaron 32 tests en 11 archivos
+en la primera pasada — no por logica rota, sino porque `tests/` no esta
+cubierto por `tsc -b` (solo `src/`), asi que varios tests construian
+`BoardState` a mano como `{ size, stones }` (forma vieja) y fallaban en
+silencio en tiempo de ejecucion en vez de en tiempo de compilacion.
+Corregidos uno por uno contra el error real (`board.size` → `board.width`
+en helpers `place()`, `createGame(size, komi)` → `createGame(size, size,
+komi)`, `gameRecordToSgf`/`transformPoint` con el argumento nuevo). Se
+aprovecho para agregar cobertura nueva de tablero rectangular en
+`tests/core/board.test.ts` (`applicableTransforms`, biyeccion de las 4
+transformaciones validas en 9x13, intercambio de ancho/alto en
+`transformBoard` para una transformacion que si cruza ejes). Resultado
+final: 319/319 verdes en 33 archivos (313 + 6 nuevos), sin warnings
+nuevos de oxlint.
+
+Regresion adicional: se regeneraron `tools/generate-ladder-problems.ts`
+y `generate-double-atari-problems.ts` (los dos generadores rapidos, sin
+esperar el autojuego largo) y se comparo byte a byte contra el JSON ya
+commiteado — salida identica, confirmando que el refactor no cambio
+ningun comportamiento real en tableros cuadrados.
+
+Verificacion visual en vivo con Playwright contra `npm run dev`:
+Aprender (nivel 4 Forma se ve "9x13 · Bloqueado", exactamente como pide
+la especificacion de pantallas; demo interactivo de 5x5 en una leccion
+real), Jugar (tablero 9x9, hoshi points correctos, clic real en una
+interseccion coloca la piedra en el punto correcto), Ejercicios
+(problema real de Dos ojos en 9x9). Cero errores de consola en todo el
+recorrido.
+
+### Que sigue
+
+Puntos 2 a 5 del pedido de v2 siguen pendientes: comparacion del motor
+de evaluacion posicional (investigado en paralelo, ver mensaje al
+usuario — recomendacion entregada, integracion todavia no empezada),
+contenido de niveles 4-6, investigacion de si el motor aporta a la
+verificacion cruzada del banco y a la calibracion de dificultad, y
+conectar todo a la interfaz real (desbloqueo de niveles, 13x13 en
+Jugar).
+
 ## Banco de problemas: de 120 a 142, con etiqueta de dificultad (2026-09-02)
 
 Cierra el pedido "añadir más ejercicios, incrementando dificultad", con las
