@@ -8,6 +8,9 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { minimoTheme } from '../board/themes'
+import { LockIcon } from '../common/LockIcon'
+import type { PlaySeed } from '../play/playConfig'
+import { AboutGoScreen } from './AboutGoScreen'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
 
@@ -19,12 +22,33 @@ const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   3: 'learn.level.3',
 }
 
+/**
+ * Niveles 4 a 10 del curriculo (roadmap maestro, tabla de la especificacion
+ * de pantallas): todavia bloqueados en esta etapa de la app (v1, niveles 0-3
+ * nada mas), pero se muestran con su nombre y tamano de tablero reales, no
+ * ocultos ni inventados -- mismo principio que los tamanos de tablero
+ * bloqueados en Jugar (play/PlayConfigScreen.tsx).
+ */
+const LOCKED_LEVELS = [
+  { level: 4, titleKey: 'learn.level.4' as TranslationKey, boardSize: '9x13' },
+  { level: 5, titleKey: 'learn.level.5' as TranslationKey, boardSize: '13x13' },
+  { level: 6, titleKey: 'learn.level.6' as TranslationKey, boardSize: '13x13' },
+  { level: 7, titleKey: 'learn.level.7' as TranslationKey, boardSize: '19x19' },
+  { level: 8, titleKey: 'learn.level.8' as TranslationKey, boardSize: '19x19' },
+  { level: 9, titleKey: 'learn.level.9' as TranslationKey, boardSize: '19x19' },
+  { level: 10, titleKey: 'learn.level.10' as TranslationKey, boardSize: '19x19' },
+] as const
+
 interface LearnScreenProps {
   onNavigateToExercises: (conceptId: ConceptId) => void
-  onNavigateToPlay: () => void
+  onNavigateToPlay: (seed?: PlaySeed) => void
 }
 
-type View = { kind: 'levels' } | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 } | { kind: 'lesson'; lessonId: string }
+type View =
+  | { kind: 'levels' }
+  | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 }
+  | { kind: 'lesson'; lessonId: string }
+  | { kind: 'about' }
 
 function fallbackPreview() {
   const size = 5
@@ -66,6 +90,10 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
     }
     return { total, read }
   }, [lessonsByLevel])
+
+  if (view.kind === 'about') {
+    return <AboutGoScreen onBack={() => setView({ kind: 'levels' })} />
+  }
 
   if (view.kind === 'lesson') {
     const lesson = getLesson(view.lessonId)
@@ -151,6 +179,9 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
   return (
     <div className="learn">
       <h2>{t('learn.title')}</h2>
+      <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'about' })}>
+        {t('about.cta')}
+      </button>
       {overallProgress.total > 0 && (
         <div className="learn-progress-overall">
           <p className="learn-progress-label">
@@ -183,6 +214,21 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
             </li>
           )
         })}
+        {LOCKED_LEVELS.map((info) => (
+          <li key={info.level}>
+            <div className="learn-level-card learn-level-card-locked" aria-disabled="true">
+              <span className="learn-level-badge learn-level-badge-locked">
+                <LockIcon />
+              </span>
+              <span className="learn-level-info">
+                <span>{t(info.titleKey)}</span>
+                <span className="learn-level-meta">
+                  {info.boardSize} · {t('learn.locked')}
+                </span>
+              </span>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   )

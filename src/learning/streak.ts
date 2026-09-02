@@ -8,8 +8,10 @@ export interface StreakSummary {
 }
 
 /** 'YYYY-MM-DD' en el huso horario local (no UTC): la racha debe romperse a
- * la medianoche del usuario, no a la medianoche UTC. */
-function toLocalDateKey(iso: string): string {
+ * la medianoche del usuario, no a la medianoche UTC. Exportada para que
+ * otras derivaciones "por dia calendario local" (learning/dailyProgress.ts)
+ * usen el mismo criterio en vez de reimplementarlo. */
+export function toLocalDateKey(iso: string): string {
   const date = new Date(iso)
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')

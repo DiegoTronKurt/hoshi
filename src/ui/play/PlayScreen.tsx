@@ -1,251 +1,54 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { applyMove, createGame } from '../../core/rules'
-import { computeAreaScore } from '../../core/scoring'
-import { gameRecordToSgf } from '../../core/sgf'
-import type { RecordedMove } from '../../core/sgf'
+import { useState } from 'react'
 import { BLACK } from '../../core/types'
-import type { Color, GameState, IllegalReason } from '../../core/types'
-import type { BotStyleId } from '../../engine/botStyles'
-import { EngineClient } from '../../engine/client'
-import { useI18n } from '../../i18n'
-import { computeAdaptiveStrength } from '../../learning/adaptiveDifficulty'
-import { listGames, saveGame } from '../../storage/db'
-import type { SavedGameRecord } from '../../storage/db'
-import { BoardCanvas } from '../board/BoardCanvas'
-import { useSettings } from '../settings'
-import { GameControls } from './GameControls'
-import type { DifficultyMode, GameMode } from './GameControls'
-import { SavedGamesList } from './SavedGamesList'
-import { STRENGTH_LEVELS } from './strengthLevels'
-import type { StrengthLevel } from './strengthLevels'
+import { PlayConfigScreen } from './PlayConfigScreen'
+import { PlayGameScreen } from './PlayGameScreen'
+import type { PlayConfig, PlaySeed } from './playConfig'
 
-const KOMI = 6.5
+type PlayView = { kind: 'config' } | { kind: 'game'; config: PlayConfig }
 
-export function PlayScreen() {
-  const { t } = useI18n()
-  const { theme, playStoneSoundIfEnabled } = useSettings()
+interface PlayScreenProps {
+  onGameActiveChange: (active: boolean) => void
+  onNavigateToToday: () => void
+  onNavigateToReview: (gameId: number) => void
+  /** Posicion de arranque (partida de comprobacion de una leccion): si viene
+   * seteada, esta pantalla salta directo a la partida en modo local con esa
+   * posicion en vez de mostrar la pantalla de configuracion. */
+  initialSeed?: PlaySeed
+}
 
-  const [size, setSize] = useState(9)
-  const [mode, setMode] = useState<GameMode>('local')
-  const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>('manual')
-  const [strengthId, setStrengthId] = useState<StrengthLevel['id']>('normal')
-  const [botStyle, setBotStyle] = useState<BotStyleId>('standard')
-  const [humanColor, setHumanColor] = useState<Color>(BLACK)
-
-  const [game, setGame] = useState<GameState>(() => createGame(9, KOMI))
-  const [moves, setMoves] = useState<RecordedMove[]>([])
-  const [lastMove, setLastMove] = useState<number | null>(null)
-  const [message, setMessage] = useState<IllegalReason | null>(null)
-  const [botThinking, setBotThinking] = useState(false)
-  const [justSaved, setJustSaved] = useState(false)
-  const [savedGames, setSavedGames] = useState<SavedGameRecord[]>([])
-
-  const engineRef = useRef<EngineClient | null>(null)
-  const savedThisGameRef = useRef(false)
-
-  useEffect(() => {
-    engineRef.current = new EngineClient()
-    return () => engineRef.current?.terminate()
-  }, [])
-
-  useEffect(() => {
-    listGames()
-      .then(setSavedGames)
-      .catch(() => setSavedGames([]))
-  }, [])
-
-  const adaptiveResult = useMemo(() => computeAdaptiveStrength(savedGames), [savedGames])
-  const effectiveStrengthId = difficultyMode === 'adaptive' ? adaptiveResult.strengthId : strengthId
-
-  function handleDifficultyModeChange(nextMode: DifficultyMode) {
-    setDifficultyMode(nextMode)
-    resetGame(size)
+function seededConfig(seed: PlaySeed): PlayConfig {
+  return {
+    size: seed.size,
+    mode: 'local',
+    strengthId: 'normal',
+    botStyle: 'standard',
+    humanColor: BLACK,
+    initialStones: seed.stones,
+    initialToMove: seed.toMove,
   }
+}
 
-  function handleBotStyleChange(nextStyle: BotStyleId) {
-    setBotStyle(nextStyle)
-    resetGame(size)
+/**
+ * Router chico de la pestana Jugar, mismo patron que LearnScreen: pantalla
+ * de configuracion (formulario) y pantalla de partida en curso (tablero, sin
+ * nada de eso editable) son dos vistas separadas, nunca mezcladas.
+ */
+export function PlayScreen({ onGameActiveChange, onNavigateToToday, onNavigateToReview, initialSeed }: PlayScreenProps) {
+  const [view, setView] = useState<PlayView>(() =>
+    initialSeed ? { kind: 'game', config: seededConfig(initialSeed) } : { kind: 'config' },
+  )
+
+  if (view.kind === 'config') {
+    return <PlayConfigScreen onStart={(config) => setView({ kind: 'game', config })} />
   }
-
-  function resetGame(nextSize: number) {
-    setGame(createGame(nextSize, KOMI))
-    setMoves([])
-    setLastMove(null)
-    setMessage(null)
-    setBotThinking(false)
-    setJustSaved(false)
-    savedThisGameRef.current = false
-  }
-
-  function handleSizeChange(nextSize: number) {
-    setSize(nextSize)
-    resetGame(nextSize)
-  }
-
-  function handleModeChange(nextMode: GameMode) {
-    setMode(nextMode)
-    resetGame(size)
-  }
-
-  function handleHumanColorChange(color: Color) {
-    setHumanColor(color)
-    resetGame(size)
-  }
-
-  function isHumanTurn(): boolean {
-    if (game.gameOver || botThinking) return false
-    return mode === 'local' || game.toMove === humanColor
-  }
-
-  function applyPlayerMove(point: number | null) {
-    const color = game.toMove
-    const result = applyMove(game, point)
-    if (!result.legal || !result.state) {
-      setMessage(result.reason ?? null)
-      return
-    }
-    setMoves((prev) => [...prev, { color, point }])
-    setGame(result.state)
-    setLastMove(point)
-    setMessage(null)
-    if (point !== null) playStoneSoundIfEnabled()
-  }
-
-  function handleIntersectionClick(point: number) {
-    if (!isHumanTurn()) return
-    applyPlayerMove(point)
-  }
-
-  function handlePass() {
-    if (!isHumanTurn()) return
-    applyPlayerMove(null)
-  }
-
-  // El bot juega automaticamente cuando le toca a el en modo "Contra el bot".
-  useEffect(() => {
-    if (mode !== 'bot' || game.gameOver || game.toMove === humanColor) return
-    const engine = engineRef.current
-    if (!engine) return
-
-    const strength = STRENGTH_LEVELS.find((level) => level.id === effectiveStrengthId) ?? STRENGTH_LEVELS[1]
-    let cancelled = false
-    setBotThinking(true)
-
-    engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, botStyle).then((response) => {
-      if (cancelled) return
-      setBotThinking(false)
-      const color = game.toMove
-      const result = applyMove(game, response.move)
-      if (!result.legal || !result.state) return
-      setMoves((prev) => [...prev, { color, point: response.move }])
-      setGame(result.state)
-      setLastMove(response.move)
-      if (response.move !== null) playStoneSoundIfEnabled()
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [game, mode, humanColor, effectiveStrengthId, botStyle, playStoneSoundIfEnabled])
-
-  const finalScore = useMemo(() => {
-    if (!game.gameOver) return null
-    return computeAreaScore(game.board, game.komi)
-  }, [game])
-
-  // Guarda la partida en IndexedDB apenas termina, una sola vez.
-  useEffect(() => {
-    if (!game.gameOver || savedThisGameRef.current || !finalScore) return
-    savedThisGameRef.current = true
-
-    const winner: 'black' | 'white' = finalScore.black > finalScore.white ? 'black' : 'white'
-    const strength = STRENGTH_LEVELS.find((level) => level.id === effectiveStrengthId)
-    const sgf = gameRecordToSgf(size, KOMI, moves)
-
-    saveGame({
-      createdAt: new Date().toISOString(),
-      size,
-      komi: KOMI,
-      mode,
-      botPlayouts: mode === 'bot' ? strength?.playouts : undefined,
-      botStrengthId: mode === 'bot' ? strength?.id : undefined,
-      botStyle: mode === 'bot' ? botStyle : undefined,
-      humanColor: mode === 'bot' ? humanColor : undefined,
-      result: { black: finalScore.black, white: finalScore.white, winner },
-      sgf,
-    }).then(() => {
-      setJustSaved(true)
-      listGames()
-        .then(setSavedGames)
-        .catch(() => {})
-    })
-  }, [game.gameOver, finalScore, size, mode, effectiveStrengthId, botStyle, humanColor, moves])
-
-  const turnKey = game.toMove === BLACK ? 'board.turn.black' : 'board.turn.white'
 
   return (
-    <>
-      <GameControls
-        size={size}
-        onSizeChange={handleSizeChange}
-        mode={mode}
-        onModeChange={handleModeChange}
-        difficultyMode={difficultyMode}
-        onDifficultyModeChange={handleDifficultyModeChange}
-        strengthId={strengthId}
-        onStrengthChange={setStrengthId}
-        adaptiveResult={adaptiveResult}
-        botStyle={botStyle}
-        onBotStyleChange={handleBotStyleChange}
-        humanColor={humanColor}
-        onHumanColorChange={handleHumanColorChange}
-        onNewGame={() => resetGame(size)}
-        onPass={handlePass}
-        passDisabled={!isHumanTurn()}
-      />
-
-      <BoardCanvas
-        size={size}
-        stones={game.board.stones}
-        lastMove={lastMove}
-        theme={theme}
-        onIntersectionClick={handleIntersectionClick}
-      />
-
-      <div className="status" aria-live="polite">
-        {mode === 'bot' && (
-          <p className="bot-kyu">
-            {t('play.bot.label', { kyu: STRENGTH_LEVELS.find((l) => l.id === effectiveStrengthId)?.approxKyu ?? 0 })}
-          </p>
-        )}
-        {game.gameOver ? (
-          <>
-            <p className="turn">{t('board.gameOver')}</p>
-            {finalScore && (
-              <p className="result">
-                {t('play.result.title')}: {t('color.black')} {finalScore.black} - {t('color.white')}{' '}
-                {finalScore.white} (
-                {finalScore.black > finalScore.white ? t('play.result.winnerBlack') : t('play.result.winnerWhite')})
-              </p>
-            )}
-            {justSaved && <p className="saved-note">{t('play.saved')}</p>}
-          </>
-        ) : botThinking ? (
-          <p className="turn">{t('play.thinking')}</p>
-        ) : (
-          <p className="turn">{t(turnKey)}</p>
-        )}
-        {message && <p className="illegal-message">{t(`board.illegal.${message}`)}</p>}
-        <p className="captures">
-          {t('board.captures')}: {t('board.captures.black')} {game.captures.black} · {t('board.captures.white')}{' '}
-          {game.captures.white}
-        </p>
-      </div>
-
-      <section className="saved-games">
-        <h2>{t('play.savedGames.title')}</h2>
-        <SavedGamesList games={savedGames} />
-      </section>
-    </>
+    <PlayGameScreen
+      config={view.config}
+      onExitToConfig={() => setView({ kind: 'config' })}
+      onNavigateToToday={onNavigateToToday}
+      onNavigateToReview={onNavigateToReview}
+      onActiveChange={onGameActiveChange}
+    />
   )
 }

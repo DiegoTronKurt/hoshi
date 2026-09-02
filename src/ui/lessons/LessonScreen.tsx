@@ -3,6 +3,7 @@ import { conceptsForLesson } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
 import type { Lesson } from '../../content/lessons'
 import { useI18n } from '../../i18n'
+import type { PlaySeed } from '../play/playConfig'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
 import { GuidedDemo } from './GuidedDemo'
@@ -13,7 +14,7 @@ interface LessonScreenProps {
   lesson: Lesson
   onBack: () => void
   onNavigateToExercises: (conceptId: ConceptId) => void
-  onNavigateToPlay: () => void
+  onNavigateToPlay: (seed?: PlaySeed) => void
 }
 
 export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigateToPlay }: LessonScreenProps) {
@@ -63,7 +64,14 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
 
       <section className="lesson-checkgame">
         <h3>{t('learn.checkGame.title')}</h3>
-        <button type="button" onClick={onNavigateToPlay}>
+        <button
+          type="button"
+          onClick={() =>
+            onNavigateToPlay(
+              lesson.demo ? { size: lesson.demo.size, stones: lesson.demo.initialStones, toMove: lesson.demo.toMove } : undefined,
+            )
+          }
+        >
           {t('learn.checkGame.cta')}
         </button>
       </section>

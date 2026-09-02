@@ -50,13 +50,18 @@ function worstSeverity(mistakes: Mistake[]): ConceptSeverity | null {
 interface ReviewScreenProps {
   /** Salta a Ejercicios ya filtrado en el concepto del error principal. */
   onPracticeConcept: (conceptId: ConceptId) => void
+  /** Partida a abrir directo en el detalle al entrar (p.ej. desde "Revisar
+   * esta partida" al terminar una partida en Jugar). Se consume una sola vez
+   * como valor inicial: cada vez que la pestana se monta de nuevo llega un
+   * valor fresco, mismo patron que initialConcept en ExercisesScreen. */
+  initialGameId?: number
 }
 
-export function ReviewScreen({ onPracticeConcept }: ReviewScreenProps) {
+export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenProps) {
   const { t, language } = useI18n()
   const { theme } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
-  const [selectedGameId, setSelectedGameId] = useState<number | null>(null)
+  const [selectedGameId, setSelectedGameId] = useState<number | null>(initialGameId ?? null)
   const [selectedEventIndex, setSelectedEventIndex] = useState<number | null>(null)
 
   useEffect(() => {

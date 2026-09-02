@@ -1,3 +1,4 @@
+import { CONCEPTS } from '../../analysis/concepts'
 import type { LoadedProblem } from '../../content/problemBank'
 import { BLACK } from '../../core/types'
 import type { GameState } from '../../core/types'
@@ -72,7 +73,14 @@ export function ExerciseView({
       />
 
       <div className="exercises-status" aria-live="polite">
-        {status === 'solved' && <p className="exercises-solved">{t('exercises.solved')}</p>}
+        {status === 'solved' && (
+          <div className="exercises-solved-panel">
+            <p className="exercises-solved">{t('exercises.solved')}</p>
+            <p className="exercises-why">
+              <strong>{t('exercises.why')}</strong> {t(CONCEPTS[loaded.problem.conceptId].summaryKey as TranslationKey)}
+            </p>
+          </div>
+        )}
         {status === 'incorrect' && !thinking && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
         {thinking && <p>{t('exercises.thinking')}</p>}
       </div>

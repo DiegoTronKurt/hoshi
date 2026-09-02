@@ -293,12 +293,6 @@
   margin: 0 0 0.35rem;
 }
 
-.bot-kyu {
-  font-size: 0.8rem;
-  color: var(--hoshi-text-faint);
-  margin: 0 0 0.4rem;
-}
-
 .status .captures {
   font-variant-numeric: tabular-nums;
   color: var(--hoshi-text-muted);
@@ -397,6 +391,17 @@
 .exercises-solved {
   color: var(--hoshi-success);
   font-weight: 600;
+}
+
+.exercises-solved-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exercises-why {
+  color: var(--hoshi-text-muted);
+  font-size: 0.9rem;
 }
 
 .exercises-incorrect {
@@ -664,12 +669,6 @@
   padding: 2rem 1rem;
 }
 
-.today-plan-count {
-  text-align: center;
-  color: var(--hoshi-text-muted);
-  margin: 0;
-}
-
 .today-plan-list {
   list-style: none;
   margin: 0;
@@ -764,7 +763,19 @@
 }
 
 .today-header {
-  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.today-header-text {
+  text-align: left;
+}
+
+.today-header-text h2 {
+  text-align: left;
 }
 
 .today-level {
@@ -791,22 +802,32 @@
   height: 16px;
 }
 
-.today-daily-goal {
-  text-align: center;
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--hoshi-text-muted);
-}
-
 .today-focus-card {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
   padding: 0.9rem 1rem;
   border-radius: 12px;
   border: 1px solid var(--hoshi-border);
   background: var(--hoshi-surface-alt);
+}
+
+.today-focus-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.today-focus-diagram {
+  flex-shrink: 0;
+}
+
+.today-focus-diagram .board-container {
+  width: 96px;
 }
 
 .today-focus-top {
@@ -824,6 +845,112 @@
 .today-focus-why {
   margin: 0;
   font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+}
+
+.today-stats-row {
+  width: 100%;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.today-stat-tile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.7rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+  text-align: center;
+}
+
+.today-stat-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--hoshi-warning);
+}
+
+.today-stat-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-stat-label {
+  font-size: 0.7rem;
+  color: var(--hoshi-text-muted);
+}
+
+.today-plan-title {
+  align-self: flex-start;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-faint);
+}
+
+.today-exercise-preview {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+}
+
+.today-exercise-preview h3 {
+  margin: 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.today-exercise-preview .board-container {
+  width: 220px;
+}
+
+.today-exercise-preview-count {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--hoshi-text-faint);
+}
+
+.today-exercise-preview button {
+  min-height: 44px;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.today-insight-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+}
+
+.today-insight-stat {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.today-insight-detail {
+  margin: 0;
+  font-size: 0.8rem;
   color: var(--hoshi-text-muted);
 }
 
@@ -958,6 +1085,27 @@
 
 .learn-level-meta {
   font-size: 0.75rem;
+  color: var(--hoshi-text-faint);
+}
+
+.learn-level-card-locked {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.7rem;
+  min-height: 44px;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1px dashed var(--hoshi-border);
+  background: var(--hoshi-surface);
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+.learn-level-badge-locked {
+  background: var(--hoshi-surface-alt);
   color: var(--hoshi-text-faint);
 }
 
@@ -1202,6 +1350,59 @@
   color: var(--hoshi-accent-contrast);
   font-size: 0.95rem;
   cursor: pointer;
+}
+
+.learn-about-cta {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+  color: var(--hoshi-text);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.about-go-section {
+  width: 100%;
+  border-top: 1px solid var(--hoshi-border);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.about-go-section h3 {
+  margin: 0 0 0.6rem;
+}
+
+.about-go-glossary {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.about-go-glossary-entry dt {
+  font-weight: 600;
+}
+
+.about-go-glossary-term {
+  font-weight: 400;
+  color: var(--hoshi-text-muted);
+}
+
+.about-go-glossary-entry dd {
+  margin: 0.1rem 0 0;
+  color: var(--hoshi-text-muted);
+}
+
+.about-go-rule {
+  margin-top: 0.9rem;
+}
+
+.about-go-rule h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
 }
 
 .profile {
@@ -1672,6 +1873,13 @@
   background: var(--hoshi-surface-alt);
 }
 
+.play-size-card-locked {
+  border-style: dashed;
+  color: var(--hoshi-text-faint);
+  opacity: 0.7;
+  cursor: default;
+}
+
 .play-bot-card-kyu {
   font-size: 0.7rem;
   color: var(--hoshi-text-faint);
@@ -1686,6 +1894,224 @@
 
 .play-adaptive-current {
   margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.play-config {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.play-config h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.play-start-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.play-game {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.play-game-header {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--hoshi-text-muted);
+}
+
+.play-count-panel {
+  margin: 0.35rem 0 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--hoshi-text);
+}
+
+.play-ingame-controls {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.play-ingame-controls button {
+  flex: 1;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 0 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.play-ingame-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.play-ingame-controls button.active {
+  border-color: var(--hoshi-accent);
+  background: var(--hoshi-surface-alt);
+}
+
+.play-ingame-controls .play-exit-button {
+  border-color: var(--hoshi-danger);
+  color: var(--hoshi-danger);
+}
+
+.play-end-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface-alt);
+  text-align: center;
+}
+
+.play-end-panel h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.play-end-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.play-end-actions button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.play-end-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.play-end-actions button:first-child {
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-weight: 600;
+}
+
+.progress-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progress-ring-track {
+  stroke: var(--hoshi-border);
+}
+
+.progress-ring-value {
+  stroke: var(--hoshi-accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.2s ease;
+}
+
+.progress-ring-text {
+  position: absolute;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--hoshi-text);
+}
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.confirm-dialog {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: var(--hoshi-surface);
+  border: 1px solid var(--hoshi-border);
+}
+
+.confirm-dialog h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.confirm-dialog p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--hoshi-text-muted);
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.confirm-dialog-actions button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.confirm-dialog-actions button.confirm-dialog-confirm {
+  border: none;
+  background: var(--hoshi-danger);
+  color: var(--hoshi-accent-contrast);
   font-weight: 600;
 }
 
