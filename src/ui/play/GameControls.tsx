@@ -1,12 +1,22 @@
 import { BLACK, WHITE } from '../../core/types'
 import type { Color } from '../../core/types'
+import type { BotStyleId } from '../../engine/botStyles'
+import { BOT_STYLES } from '../../engine/botStyles'
 import { useI18n } from '../../i18n'
+import type { TranslationKey } from '../../i18n'
 import type { AdaptiveDifficultyResult } from '../../learning/adaptiveDifficulty'
 import { ADAPTIVE_MIN_GAMES } from '../../learning/adaptiveDifficulty'
 import { STRENGTH_LEVELS } from './strengthLevels'
 import type { StrengthLevel } from './strengthLevels'
 
 const BOARD_SIZES = [5, 7, 9] as const
+
+const BOT_STYLE_LABEL_KEY: Record<BotStyleId, TranslationKey> = {
+  standard: 'play.botStyle.standard',
+  territorial: 'play.botStyle.territorial',
+  influence: 'play.botStyle.influence',
+  combative: 'play.botStyle.combative',
+}
 
 export type GameMode = 'local' | 'bot'
 export type DifficultyMode = 'manual' | 'adaptive'
@@ -21,6 +31,8 @@ interface GameControlsProps {
   strengthId: StrengthLevel['id']
   onStrengthChange: (id: StrengthLevel['id']) => void
   adaptiveResult: AdaptiveDifficultyResult
+  botStyle: BotStyleId
+  onBotStyleChange: (style: BotStyleId) => void
   humanColor: Color
   onHumanColorChange: (color: Color) => void
   onNewGame: () => void
@@ -38,6 +50,8 @@ export function GameControls({
   strengthId,
   onStrengthChange,
   adaptiveResult,
+  botStyle,
+  onBotStyleChange,
   humanColor,
   onHumanColorChange,
   onNewGame,
@@ -128,6 +142,24 @@ export function GameControls({
               </p>
             </div>
           )}
+
+          <div className="play-card-group">
+            <span className="play-card-group-label">{t('play.botStyle.label')}</span>
+            <div className="play-card-row" role="group" aria-label={t('play.botStyle.label')}>
+              {BOT_STYLES.map((style) => (
+                <button
+                  key={style}
+                  type="button"
+                  className={`play-bot-card ${style === botStyle ? 'active' : ''}`}
+                  aria-pressed={style === botStyle}
+                  onClick={() => onBotStyleChange(style)}
+                >
+                  <span>{t(BOT_STYLE_LABEL_KEY[style])}</span>
+                </button>
+              ))}
+            </div>
+            <p className="settings-description">{t(`play.botStyle.description.${botStyle}` as TranslationKey)}</p>
+          </div>
 
           <div className="controls">
             <label htmlFor="human-color">{t('play.color.label')}</label>

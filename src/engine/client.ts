@@ -1,4 +1,5 @@
 import type { GameState } from '../core/types'
+import type { BotStyleId } from './botStyles'
 import type { EngineRequest, EngineResponse } from './worker'
 
 export type EngineMoveResult = Omit<EngineResponse, 'requestId'>
@@ -20,9 +21,15 @@ export class EngineClient {
     }
   }
 
-  chooseMove(state: GameState, playouts: number, randomSeed?: number, maxTimeMs?: number): Promise<EngineMoveResult> {
+  chooseMove(
+    state: GameState,
+    playouts: number,
+    randomSeed?: number,
+    maxTimeMs?: number,
+    style?: BotStyleId,
+  ): Promise<EngineMoveResult> {
     const requestId = this.nextRequestId++
-    const request: EngineRequest = { requestId, state, playouts, randomSeed, maxTimeMs }
+    const request: EngineRequest = { requestId, state, playouts, randomSeed, maxTimeMs, style }
     return new Promise((resolve) => {
       this.pending.set(requestId, resolve)
       this.worker.postMessage(request)

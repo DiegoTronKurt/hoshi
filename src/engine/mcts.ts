@@ -2,6 +2,8 @@ import { applyMove, listLegalMoves } from '../core/rules'
 import { computeAreaScore } from '../core/scoring'
 import { BLACK, EMPTY, WHITE, opponent } from '../core/types'
 import type { Color, GameState } from '../core/types'
+import { prepareStyleContext, styleWeight } from './botStyles'
+import type { BotStyleId, StyleContext } from './botStyles'
 import { createRng, shuffle, shuffledIndices } from './random'
 import type { RandomFn } from './random'
 import { findAtariSavingMoves, isSimpleEye } from './playoutPolicy'
@@ -47,7 +49,39 @@ function selectUctChild(node: MctsNode, random: RandomFn): MctsNode {
   return best as MctsNode
 }
 
-function choosePlayoutMove(state: GameState, random: RandomFn): GameState {
+/** Elige, entre los candidatos legales de `points`, uno al azar ponderado por
+ * `styleWeight` (sin reemplazo: si el elegido resulta ilegal, se descarta y
+ * se reintenta entre el resto). Casi siempre acierta a la primera, ya que
+ * las unicas jugadas ilegales entre puntos vacios sin ojo simple son
+ * superko o suicidio real, ambos poco frecuentes. */
+function pickWeightedMove(state: GameState, points: number[], ctx: StyleContext, random: RandomFn): GameState | null {
+  let remaining = points
+  let weights = points.map((p) => styleWeight(ctx, state.board, p))
+
+  while (remaining.length > 0) {
+    const total = weights.reduce((sum, w) => sum + w, 0)
+    let roll = random() * total
+    let index = remaining.length - 1
+    for (let i = 0; i < remaining.length; i++) {
+      roll -= weights[i]
+      if (roll <= 0) {
+        index = i
+        break
+      }
+    }
+
+    const point = remaining[index]
+    const result = applyMove(state, point)
+    if (result.legal) return result.state as GameState
+
+    remaining = remaining.filter((_, i) => i !== index)
+    weights = weights.filter((_, i) => i !== index)
+  }
+
+  return null
+}
+
+function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId): GameState {
   const atariSaves = findAtariSavingMoves(state)
   if (atariSaves.length > 0 && random() < ATARI_RESPONSE_PROBABILITY) {
     for (const point of shuffle(atariSaves, random)) {
@@ -57,22 +91,42 @@ function choosePlayoutMove(state: GameState, random: RandomFn): GameState {
   }
 
   const size = state.board.size
+
+  if (style === 'standard') {
+    // Ruta identica a la de siempre, sin el costo de preparar un contexto de
+    // estilo: el bot "Estandar" debe comportarse exactamente como antes de
+    // que existieran los estilos.
+    for (const point of shuffledIndices(size * size, random)) {
+      if (state.board.stones[point] !== EMPTY) continue
+      if (isSimpleEye(state.board, point, state.toMove)) continue
+      const result = applyMove(state, point)
+      if (result.legal) return result.state as GameState
+    }
+    return applyMove(state, null).state as GameState
+  }
+
+  const candidates: number[] = []
   for (const point of shuffledIndices(size * size, random)) {
     if (state.board.stones[point] !== EMPTY) continue
     if (isSimpleEye(state.board, point, state.toMove)) continue
-    const result = applyMove(state, point)
-    if (result.legal) return result.state as GameState
+    candidates.push(point)
+  }
+
+  if (candidates.length > 0) {
+    const ctx = prepareStyleContext(style, state.board, state.toMove)
+    const picked = pickWeightedMove(state, candidates, ctx, random)
+    if (picked) return picked
   }
 
   return applyMove(state, null).state as GameState
 }
 
-function simulatePlayout(initialState: GameState, random: RandomFn): GameState {
+function simulatePlayout(initialState: GameState, random: RandomFn, style: BotStyleId): GameState {
   let state = initialState
   const maxMoves = state.board.size * state.board.size * 3
   let played = 0
   while (!state.gameOver && played < maxMoves) {
-    state = choosePlayoutMove(state, random)
+    state = choosePlayoutMove(state, random, style)
     played++
   }
   return state
@@ -82,6 +136,9 @@ export interface MctsOptions {
   playouts: number
   randomSeed?: number
   maxTimeMs?: number
+  /** Estilo de juego elegido a mano para el bot (ver engine/botStyles.ts).
+   * 'standard' por defecto: el comportamiento de siempre, sin sesgo. */
+  style?: BotStyleId
 }
 
 export interface MctsResult {
@@ -98,6 +155,7 @@ export function chooseMove(rootState: GameState, options: MctsOptions): MctsResu
 
   const random = createRng(options.randomSeed ?? Date.now())
   const maxTimeMs = options.maxTimeMs ?? DEFAULT_MAX_TIME_MS
+  const style = options.style ?? 'standard'
   const root = createNode(null, null, rootState)
   const startedAt = Date.now()
   let playoutsRun = 0
@@ -126,7 +184,7 @@ export function chooseMove(rootState: GameState, options: MctsOptions): MctsResu
       path.push(node)
     }
 
-    const finalState = simulatePlayout(state, random)
+    const finalState = simulatePlayout(state, random, style)
     const score = computeAreaScore(finalState.board, finalState.komi)
     const winner: Color = score.black > score.white ? BLACK : WHITE
 

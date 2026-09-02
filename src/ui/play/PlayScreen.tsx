@@ -5,6 +5,7 @@ import { gameRecordToSgf } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
 import type { Color, GameState, IllegalReason } from '../../core/types'
+import type { BotStyleId } from '../../engine/botStyles'
 import { EngineClient } from '../../engine/client'
 import { useI18n } from '../../i18n'
 import { computeAdaptiveStrength } from '../../learning/adaptiveDifficulty'
@@ -28,6 +29,7 @@ export function PlayScreen() {
   const [mode, setMode] = useState<GameMode>('local')
   const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>('manual')
   const [strengthId, setStrengthId] = useState<StrengthLevel['id']>('normal')
+  const [botStyle, setBotStyle] = useState<BotStyleId>('standard')
   const [humanColor, setHumanColor] = useState<Color>(BLACK)
 
   const [game, setGame] = useState<GameState>(() => createGame(9, KOMI))
@@ -57,6 +59,11 @@ export function PlayScreen() {
 
   function handleDifficultyModeChange(nextMode: DifficultyMode) {
     setDifficultyMode(nextMode)
+    resetGame(size)
+  }
+
+  function handleBotStyleChange(nextStyle: BotStyleId) {
+    setBotStyle(nextStyle)
     resetGame(size)
   }
 
@@ -124,7 +131,7 @@ export function PlayScreen() {
     let cancelled = false
     setBotThinking(true)
 
-    engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs).then((response) => {
+    engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, botStyle).then((response) => {
       if (cancelled) return
       setBotThinking(false)
       const color = game.toMove
@@ -139,7 +146,7 @@ export function PlayScreen() {
     return () => {
       cancelled = true
     }
-  }, [game, mode, humanColor, effectiveStrengthId, playStoneSoundIfEnabled])
+  }, [game, mode, humanColor, effectiveStrengthId, botStyle, playStoneSoundIfEnabled])
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null
@@ -162,6 +169,7 @@ export function PlayScreen() {
       mode,
       botPlayouts: mode === 'bot' ? strength?.playouts : undefined,
       botStrengthId: mode === 'bot' ? strength?.id : undefined,
+      botStyle: mode === 'bot' ? botStyle : undefined,
       humanColor: mode === 'bot' ? humanColor : undefined,
       result: { black: finalScore.black, white: finalScore.white, winner },
       sgf,
@@ -171,7 +179,7 @@ export function PlayScreen() {
         .then(setSavedGames)
         .catch(() => {})
     })
-  }, [game.gameOver, finalScore, size, mode, effectiveStrengthId, humanColor, moves])
+  }, [game.gameOver, finalScore, size, mode, effectiveStrengthId, botStyle, humanColor, moves])
 
   const turnKey = game.toMove === BLACK ? 'board.turn.black' : 'board.turn.white'
 
@@ -187,6 +195,8 @@ export function PlayScreen() {
         strengthId={strengthId}
         onStrengthChange={setStrengthId}
         adaptiveResult={adaptiveResult}
+        botStyle={botStyle}
+        onBotStyleChange={handleBotStyleChange}
         humanColor={humanColor}
         onHumanColorChange={handleHumanColorChange}
         onNewGame={() => resetGame(size)}

@@ -22,6 +22,10 @@ export interface SavedGameRecord {
    * quien conoce el tipo real. Ausente en partidas guardadas antes de que
    * existiera la dificultad adaptativa. */
   botStrengthId?: string
+  /** Estilo de juego del bot (id de BotStyleId en engine/botStyles.ts),
+   * guardado como string suelto por el mismo motivo que botStrengthId.
+   * Ausente en partidas guardadas antes de que existieran los estilos. */
+  botStyle?: string
   /** Color con el que jugo la persona en una partida contra el bot. Ausente
    * en partidas guardadas antes de este campo o en partidas locales
    * (mode: 'local', donde no aplica un solo "color humano"). */
