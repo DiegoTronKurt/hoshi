@@ -1,5 +1,89 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-02, despues de v2 puntos 1 y 2)
+
+Reemplaza la version "antes de v2" de mas abajo (dejada como registro
+historico). Resumen de estado, no narrativa — el detalle de como se llego
+a cada punto vive en las entradas de sesion, en orden cronologico, mas
+arriba en este archivo.
+
+### v1, v1.1, empaquetado Android, banco de problemas: sin cambios
+
+Todo lo que decia la entrada "antes de v2" sigue igual: v1 y v1.1
+cerrados, banco de problemas en 142 (68 autojuego + 32 escaleras + 32
+doble atari, con etiqueta de dificultad), gate de v1 saltado sigue siendo
+el mayor riesgo abierto del proyecto (nadie que sepa Go de verdad revisó
+todavía ni una lección ni un problema del banco — mas urgente, no menos,
+con el banco en 142). Ejercicios ya se dividio en dos pantallas
+(commit `ba14ba5`), asi que ese pendiente especifico ya cerro.
+
+### v2 — arrancado de verdad esta sesión, puntos 1 y 2 cerrados
+
+El roadmap maestro (secciones 7, 8, 9, 12) marcaba v2 como "el próximo
+hito grande, sin empezar todavía". Ya no: los primeros dos de los cinco
+puntos pedidos estan hechos, verificados y commiteados.
+
+**Punto 1 (refactor de tablero) — cerrado.** `BoardState.size` (un solo
+numero) paso a `width`/`height` explicitos en todo el motor: tipos,
+tablero, Zobrist, Benson, scoring, reglas, solucionador, SGF, motor MCTS,
+y el canvas de UI (reescrito, no solo re-tipado). El hallazgo real: 4 de
+las 8 transformaciones diedrales intercambian ancho y alto, solo validas
+en tablero cuadrado — `applicableTransforms()` las filtra cuando no lo
+es. Tres bugs reales encontrados (region del solucionador, heuristica de
+borde de los estilos del bot, detector de "primera linea temprana"), los
+tres agazapados porque hasta ahora todo el contenido real era cuadrado.
+Migracion barata via `createBoard(width, height = width)`: decenas de
+call sites cuadrados no necesitaron tocarse. Detalle completo, incluida
+la verificacion (tests nuevos, regeneracion byte-identica de los
+generadores, Playwright en vivo), en la entrada "v2 punto 1" mas arriba.
+
+**Punto 2 (motor de evaluacion posicional) — cerrado, dos tracks.**
+Comparacion de opciones investigada primero (el "~8MB KataGo" del roadmap
+resulto ser una cita equivocada; los modelos reales de esa familia
+pesan 75-293MB). Track 1: estimador de influencia por dilatacion/erosion
+(tipo Bouzy, reconstruido de fuentes secundarias ya que el paper original
+no quedo accesible — documentado como reconstruccion, verificado con un
+script antes de confiar), cero dependencias nuevas. Track 2: red real de
+KataGo (`g170 b10c128`, CC0) corriendo en un Web Worker via TensorFlow.js
+(excepcion puntual y confirmada a la regla de cero dependencias nuevas),
+con un codificador de entrada propio reconstruido de la fuente real de
+KataGo (MIT) y restringido a la configuracion de reglas fija de Hoshi —
+resulto mucho mas chico de lo que parecia al principio una vez que se
+entendio que las ramas de reglas japonesas (que Hoshi nunca usa) eran la
+parte complicada. Un bug real de superko encontrado y arreglado antes de
+commitear. Ninguno de los dos tracks esta conectado a ninguna pantalla
+todavia — eso es trabajo de los puntos 3 y 5. Detalle completo en las dos
+entradas "v2 punto 2" mas arriba.
+
+### v2 — puntos 3, 4, 5: sin empezar
+
+- **Punto 3**: contenido real de los niveles 4-6 (Forma/9x13, Apertura/
+  13x13, Joseki/13x13), mismo patron de datos TypeScript + GuidedDemo que
+  niveles 0-3, con la afirmacion de posicion/direccion pasando por
+  evaluacion del motor (track 1 y/o 2) en vez de por el solucionador
+  exhaustivo de tsumego (no aplica a este tipo de contenido).
+- **Punto 4**: investigar si el motor (ya existe, track 1 y 2 utilizables
+  hoy) aporta algo real a dos puntos debiles ya documentados: verificacion
+  cruzada del banco de 142 problemas (¿la jugada correcta se ve natural
+  segun el motor, o rara?) y calibracion de la etiqueta de dificultad
+  actual (¿coincide con que tan claro es el mejor movimiento segun el
+  motor?). Investigar y reportar antes de tocar ninguna etiqueta o
+  problema existente.
+- **Punto 5**: conectar todo a la interfaz real — niveles 4-6
+  desbloqueados en Aprender, 13x13 en Jugar, mismo criterio de progreso
+  que ya usan los niveles 0-3.
+
+Explicitamente fuera de alcance de v2 (decision del roadmap, no olvido):
+sparring adaptativo y estimacion de fuerza propia del jugador, ambos
+diferidos a una decision aparte incluso ahora que el motor ya existe.
+
+### Empaquetado Android
+
+Ver la entrada de sesion correspondiente para la version exacta y el
+detalle del build mas reciente.
+
+---
+
 ## v2 punto 2, track 2: red de KataGo (b10c128) integrada de verdad (2026-09-02)
 
 Segunda mitad del punto 2 de v2. A diferencia del track 1 (heuristica sin
@@ -1109,7 +1193,11 @@ para que la re-verificación en CI no vuelva a colgarse.
 
 ---
 
-## Estado general del proyecto (2026-09-02)
+## Estado general del proyecto — version anterior, historica (2026-09-02, antes de v2)
+
+Reemplazada por la version nueva al principio de este archivo, que cubre
+el trabajo real de v2 (refactor de tablero, motor de evaluacion) hecho
+despues de esta. Dejada tal cual, como registro historico.
 
 Reemplaza la versión de 2026-09-01 de más abajo (dejada tal cual, como
 registro histórico, en vez de borrada — quedó desactualizada casi de
