@@ -27,34 +27,40 @@ describe('board', () => {
     expect(neighbors(9, toPoint(9, 4, 4)).length).toBe(4)
   })
 
-  it('las 8 transformaciones diedrales son cada una una biyeccion del tablero', () => {
-    const size = 9
-    for (const transform of BOARD_TRANSFORMS) {
-      const seen = new Set<number>()
-      for (let p = 0; p < size * size; p++) {
-        const [x, y] = toXY(size, p)
-        const [tx, ty] = transform(x, y, size)
-        expect(tx).toBeGreaterThanOrEqual(0)
-        expect(tx).toBeLessThan(size)
-        expect(ty).toBeGreaterThanOrEqual(0)
-        expect(ty).toBeLessThan(size)
-        seen.add(toPoint(size, tx, ty))
+  it('las 8 transformaciones diedrales son cada una una biyeccion del tablero, en 9x9 y en los tamanos todavia bloqueados 13x13/19x19', () => {
+    // v1.5 (roadmap maestro, seccion 8): esta simetria es matematicamente
+    // solo para tablero cuadrado, y hasta ahora nunca se ejercito en un
+    // tamano mas grande que 9 -- red de seguridad barata antes de que
+    // Aprender/Jugar desbloqueen esos tamanos de verdad.
+    for (const size of [9, 13, 19]) {
+      for (const transform of BOARD_TRANSFORMS) {
+        const seen = new Set<number>()
+        for (let p = 0; p < size * size; p++) {
+          const [x, y] = toXY(size, p)
+          const [tx, ty] = transform(x, y, size)
+          expect(tx).toBeGreaterThanOrEqual(0)
+          expect(tx).toBeLessThan(size)
+          expect(ty).toBeGreaterThanOrEqual(0)
+          expect(ty).toBeLessThan(size)
+          seen.add(toPoint(size, tx, ty))
+        }
+        expect(seen.size).toBe(size * size)
       }
-      expect(seen.size).toBe(size * size)
     }
   })
 
-  it('transformBoard mueve las piedras de forma consistente con transformPoint', () => {
-    const size = 9
-    const board = createBoard(size)
-    const corner = toPoint(size, 0, 0)
-    board.stones[corner] = BLACK
+  it('transformBoard mueve las piedras de forma consistente con transformPoint, en 9x9 y en 13x13/19x19', () => {
+    for (const size of [9, 13, 19]) {
+      const board = createBoard(size)
+      const corner = toPoint(size, 0, 0)
+      board.stones[corner] = BLACK
 
-    for (const transform of BOARD_TRANSFORMS) {
-      const transformed = transformBoard(board, transform)
-      const expectedPoint = transformPoint(size, corner, transform)
-      expect(transformed.stones[expectedPoint]).toBe(BLACK)
-      expect(transformed.stones.reduce((sum, v) => sum + (v !== 0 ? 1 : 0), 0)).toBe(1)
+      for (const transform of BOARD_TRANSFORMS) {
+        const transformed = transformBoard(board, transform)
+        const expectedPoint = transformPoint(size, corner, transform)
+        expect(transformed.stones[expectedPoint]).toBe(BLACK)
+        expect(transformed.stones.reduce((sum, v) => sum + (v !== 0 ? 1 : 0), 0)).toBe(1)
+      }
     }
   })
 

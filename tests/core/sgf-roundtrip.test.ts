@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
 import { applyMove, createGame } from '../../src/core/rules'
-import { gameRecordToSgf, parseSgf, sgfToGameRecord, writeSgf } from '../../src/core/sgf'
+import { gameRecordToSgf, parseSgf, pointToSgf, sgfToGameRecord, sgfToPoint, writeSgf } from '../../src/core/sgf'
 import type { RecordedMove } from '../../src/core/sgf'
 import type { GameState } from '../../src/core/types'
 
@@ -63,5 +63,18 @@ describe('SGF', () => {
 
     expect(Array.from(replay.board.stones)).toEqual(Array.from(state.board.stones))
     expect(replay.captures).toEqual(state.captures)
+  })
+
+  it('las coordenadas de la ultima fila/columna hacen ida y vuelta en 13x13 y 19x19', () => {
+    // v1.5 (roadmap maestro, seccion 8): red de seguridad barata a tamanos
+    // todavia sin ejercitar -- el punto mas lejano del origen es el que
+    // ejercita el limite real de COORDINATE_LETTERS (26 letras).
+    for (const size of [13, 19]) {
+      const points = [toPoint(size, 0, 0), toPoint(size, size - 1, size - 1), toPoint(size, size - 1, 0)]
+      for (const point of points) {
+        const coord = pointToSgf(size, point)
+        expect(sgfToPoint(size, coord)).toBe(point)
+      }
+    }
   })
 })
