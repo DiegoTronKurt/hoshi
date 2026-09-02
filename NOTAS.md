@@ -1,5 +1,25 @@
 # Notas de desarrollo
 
+## Canal de feedback y tiempo hasta la primera victoria (2026-09-01, sesión todavía más posterior, cont.)
+
+Dos ítems chicos del roadmap (secciones 11.2 y 11.3), en un solo commit
+(`c10cf77`):
+
+- **Feedback sin servidor**: enlace `mailto:fractimeapp@gmail.com` en
+  Ajustes ("Reportar un problema"), con asunto prellenado. El email de
+  destino lo eligió el usuario explícitamente (no la cuenta universitaria
+  que usa para otras cosas).
+- **Tiempo hasta la primera victoria**: `learning/firstOpen.ts` guarda una
+  fecha de "primera apertura" en localStorage (dato nuevo, es lo único que
+  de verdad no se podía derivar de partidas ya guardadas) y
+  `learning/firstWin.ts` deriva el resto de `SavedGameRecord[]`, contando
+  solo victorias contra el bot (no partidas locales entre dos personas
+  compartiendo el dispositivo, donde no hay forma de saber cuál de las dos
+  es "quien aprende con la app" — contarlas habría dado una métrica sin
+  sentido). Se muestra en Perfil, redondeado a minutos/horas/días según
+  corresponda (`bucketFirstWin`), solo si ya hay una primera victoria
+  registrada.
+
 ## OJO_FALSO resuelto, radar sin verde fijo, y 4 temas nuevos (2026-09-01, sesión todavía más posterior)
 
 ### OJO_FALSO: por fin resuelto (`57c2a9c`)
