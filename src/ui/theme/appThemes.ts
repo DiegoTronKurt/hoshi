@@ -57,23 +57,6 @@ export const piedraTheme: AppTheme = {
   },
 }
 
-export const bambuTheme: AppTheme = {
-  id: 'bambu',
-  scheme: 'light',
-  colors: {
-    bg: '#eef2e8',
-    surface: '#ffffff',
-    surfaceAlt: '#f3f6ee',
-    border: '#cddabc',
-    borderStrong: '#aac491',
-    text: '#1e2417',
-    textMuted: '#4d5645',
-    textFaint: '#7c8871',
-    accent: '#4a7c3f',
-    accentContrast: '#ffffff',
-  },
-}
-
 export const amanecerTheme: AppTheme = {
   id: 'amanecer',
   scheme: 'light',
@@ -128,7 +111,7 @@ export const pizarraTheme: AppTheme = {
   },
 }
 
-export const APP_THEMES: AppTheme[] = [cremaTheme, piedraTheme, bambuTheme, amanecerTheme, nocheTheme, pizarraTheme]
+export const APP_THEMES: AppTheme[] = [cremaTheme, piedraTheme, amanecerTheme, nocheTheme, pizarraTheme]
 
 export type AppThemeId = (typeof APP_THEMES)[number]['id'] | 'system'
 

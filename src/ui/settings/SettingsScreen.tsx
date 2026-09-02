@@ -21,7 +21,6 @@ const APP_THEME_NAME_KEY: Record<string, TranslationKey> = {
   system: 'settings.appTheme.system',
   crema: 'settings.appTheme.crema',
   piedra: 'settings.appTheme.piedra',
-  bambu: 'settings.appTheme.bambu',
   amanecer: 'settings.appTheme.amanecer',
   noche: 'settings.appTheme.noche',
   pizarra: 'settings.appTheme.pizarra',

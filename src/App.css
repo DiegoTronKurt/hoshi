@@ -86,19 +86,6 @@
   --hoshi-accent-contrast: #ffffff;
 }
 
-.app[data-app-theme='bambu'] {
-  --hoshi-bg: #eef2e8;
-  --hoshi-surface: #ffffff;
-  --hoshi-surface-alt: #f3f6ee;
-  --hoshi-border: #cddabc;
-  --hoshi-border-strong: #aac491;
-  --hoshi-text: #1e2417;
-  --hoshi-text-muted: #4d5645;
-  --hoshi-text-faint: #7c8871;
-  --hoshi-accent: #4a7c3f;
-  --hoshi-accent-contrast: #ffffff;
-}
-
 .app[data-app-theme='amanecer'] {
   --hoshi-bg: #fbeee2;
   --hoshi-surface: #fffaf5;
