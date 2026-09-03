@@ -1,0 +1,254 @@
+[
+  {
+    "id": "areaValue1",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ia][bb][cb][db][eb][fb][gb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][fi][gi]AW[aa][ba][ca][ha][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][fh][ai][bi][ei][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue2",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ia][bb][cb][db][eb][fb][gb][hb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][fi][gi]AW[aa][ba][ca][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][fh][ai][bi][ei][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue3",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ha][ia][bb][cb][db][eb][fb][gb][hb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][fi][gi]AW[aa][ba][ca][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][fh][ai][bi][ei][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue4",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ha][ia][bb][cb][db][eb][fb][gb][hb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][fi][gi][hi]AW[aa][ba][ca][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][fh][ai][bi][ei])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue5",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ha][ia][bb][cb][db][eb][fb][gb][hb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][di][fi][gi][hi]AW[aa][ba][ca][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][ai][bi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue6",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[da][ea][fa][ga][ha][ia][bb][cb][db][eb][fb][gb][hb][ib][cc][dc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][ch][dh][gh][hh][ih][ci][di][fi][gi][hi][ii]AW[aa][ba][ca][ab][bc][ae][be][af][bf][ag][bg][cg][bh][eh][ai][bi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue7",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ei][fi][hi]AW[da][ha][db][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][ef][cg][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue8",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ba][ca][fa][bb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][ef][cg][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue9",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][ef][cg][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue10",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue11",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue12",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][if][eg][ig][ah][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][bh][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue13",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][gf][if][eg][ig][ah][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][bh][ch][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue14",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][gf][if][eg][ig][ah][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][bh][ch][bi][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue15",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][gf][if][eg][ig][ah][dh][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][fe][ge][bf][cf][ef][cg][bh][ch][bi][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue16",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][gf][if][eg][ig][ah][dh][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][de][fe][ge][bf][cf][ef][cg][bh][ch][bi][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue17",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ba][ca][fa][bb][hb][ec][hc][ed][fd][gd][ee][he][df][gf][if][eg][ig][ah][dh][gh][ai][ei][fi][hi]AW[da][ha][db][eb][fb][ac][cc][fc][gc][bd][dd][be][ce][de][fe][ge][bf][cf][ef][cg][bh][ch][bi][di])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue18",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ca][da][ea][ga][ha][ia][cb][db][eb][fb][gb][hb][ib][ac][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][gf][if][ag][bg][cg][dg][eg][gg][hg][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][ii]AW[aa][ba][ab][bb][fg][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue19",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ca][da][ea][ga][ha][ia][cb][db][eb][fb][gb][hb][ib][ac][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][gf][if][ag][bg][cg][dg][eg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][ii]AW[aa][ba][ab][bb][fg][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue20",
+    "conceptId": "RELLENO_TERRITORIO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[RELLENO_TERRITORIO_PROPIO]PL[B]AB[ca][da][ea][ga][ha][ia][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][gf][if][ag][bg][cg][dg][eg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][ii]AW[ba][fg][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue21",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[ca][da][ea][fa][ga][ha][ia][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][if][ag][bg][cg][dg][eg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][ii]AW[aa][ba][ab][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue22",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][ib][hc][ic][bd][cd][dd][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][cc][dc][ec][fc][gc][ad][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][di][gi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue23",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][hb][ib][hc][ic][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][bc][cc][dc][ec][fc][gc][ad][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][di][gi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue24",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][hb][ib][hc][ic][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][bc][cc][dc][ec][fc][gc][ad][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][di][ei][gi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue25",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][hb][ib][hc][ic][dd][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][bc][cc][dc][ec][fc][gc][ad][bd][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][di][ei][gi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue26",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][hb][ib][hc][ic][dd][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][bc][cc][dc][ec][fc][gc][ad][bd][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][di][ei][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue27",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[ha][ia][eb][fb][gb][hb][ib][hc][ic][dd][hd][ee][ge][he][ie][ef][gf][if][eg][gg][ah][eh][fh]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][ac][bc][cc][dc][ec][fc][gc][ad][bd][ed][fd][gd][ae][be][ce][de][fe][af][bf][cf][df][ff][hf][ag][bg][cg][dg][fg][hg][ig][ch][dh][gh][hh][ai][bi][ci][di][ei][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue28",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][ef][ff][gf][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][ei][fi][gi][hi][ii]AW[ia][ib][fd][bf][hf][ag][hg][ig][bh][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue29",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][ef][ff][gf][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[ia][ib][fd][bf][hf][ag][hg][ig][bh][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue30",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][ef][ff][gf][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[ia][fd][bf][hf][ag][hg][ig][bh][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue31",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][df][ef][ff][gf][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[ia][fd][bf][hf][ag][hg][ig][bh][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue32",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][df][ef][ff][gf][bg][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[ia][fd][hf][hg][ig][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue33",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][cf][df][ef][ff][gf][bg][cg][dg][eg][fg][gg][ah][ch][dh][eh][fh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[fd][hf][hg][ig][hh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue34",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][ff][gf][gg][ch][gh][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][hf][if][ag][bg][cg][dg][eg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue35",
+    "conceptId": "RELLENO_TERRITORIO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[RELLENO_TERRITORIO_PROPIO]PL[B]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][ch]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue36",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][ch][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue37",
+    "conceptId": "RELLENO_TERRITORIO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[RELLENO_TERRITORIO_PROPIO]PL[B]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][ch][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue38",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][gf][ch][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue39",
+    "conceptId": "RELLENO_TERRITORIO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[RELLENO_TERRITORIO_PROPIO]PL[B]AB[aa][ba][da][ea][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][gf][ch][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue40",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][fa][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][gf][ch][gi]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][hh][ih][ai][bi][ci][di][ei][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue41",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][fa][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][gf][ch]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "areaValue42",
+    "conceptId": "PASE_PREMATURO",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[PASE_PREMATURO]PL[W]AB[aa][ba][da][ea][fa][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][de][gf]AW[bb][ac][bc][ad][cd][id][ae][be][ce][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][bh][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][hi][ii])",
+    "difficulty": "easy"
+  }
+]

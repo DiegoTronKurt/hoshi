@@ -17,6 +17,7 @@ interface ExerciseViewProps {
   solutionMoves: number | null
   theme: BoardTheme
   onIntersectionClick: (point: number) => void
+  onPass: () => void
 }
 
 /** A quien le toca jugar, para la linea de metadatos (mismo criterio que
@@ -24,6 +25,7 @@ interface ExerciseViewProps {
 function displayColor(loaded: LoadedProblem) {
   if (loaded.kind === 'tsumego') return loaded.problem.toMove
   if (loaded.kind === 'ladder') return loaded.problem.chaserColor
+  if (loaded.kind === 'areaValue') return loaded.problem.toMove
   return loaded.problem.color
 }
 
@@ -43,6 +45,7 @@ export function ExerciseView({
   solutionMoves,
   theme,
   onIntersectionClick,
+  onPass,
 }: ExerciseViewProps) {
   const { t } = useI18n()
   const toMoveKey: TranslationKey = displayColor(loaded) === BLACK ? 'color.black' : 'color.white'
@@ -72,6 +75,12 @@ export function ExerciseView({
         theme={theme}
         onIntersectionClick={onIntersectionClick}
       />
+
+      {loaded.kind === 'areaValue' && status !== 'solved' && (
+        <button type="button" className="exercises-pass-button" onClick={onPass}>
+          {t('board.pass')}
+        </button>
+      )}
 
       <div className="exercises-status" aria-live="polite">
         {status === 'solved' && (

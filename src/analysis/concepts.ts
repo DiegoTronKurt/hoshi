@@ -92,7 +92,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     japaneseTerm: 'atari',
     lessonId: 'n0-l5',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'high',
   },
   AUTOATARI: {
@@ -103,7 +103,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     japaneseTerm: 'atari',
     lessonId: 'n0-l5',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'medium',
   },
   CAPTURA_PERDIDA: {
@@ -144,7 +144,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.RELLENO_TERRITORIO_PROPIO.summary',
     lessonId: 'n1-l7',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   PASE_PREMATURO: {
@@ -154,7 +154,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.PASE_PREMATURO.summary',
     lessonId: 'n1-l2',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'medium',
   },
   PIEDRA_MUERTA_ATACADA_EN_VANO: {
@@ -194,7 +194,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.RELLENO_OJO_PROPIO.summary',
     lessonId: 'n2-l1',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'high',
   },
   PUNTO_VITAL: {
@@ -290,7 +290,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.CORTE_NO_DEFENDIDO.summary',
     lessonId: 'n3-l6',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'medium',
   },
   CONEXION_INNECESARIA: {
@@ -310,7 +310,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.TRIANGULO_VACIO.summary',
     lessonId: 'n3-l8',
     hasDetector: true,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   PRIMERA_LINEA_TEMPRANA: {

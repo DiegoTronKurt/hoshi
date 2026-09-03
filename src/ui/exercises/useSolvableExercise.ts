@@ -10,6 +10,7 @@ import type { SolverClient } from '../../solver/client'
 import { isGroupPassAlive } from '../../solver/tsumego'
 import { simulateLadder, solveLadder } from '../../solver/ladder'
 import { isDoubleAtariMove } from '../../solver/doubleAtari'
+import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isOwnTerritory } from '../../solver/areaValue'
 import { getSrsCard, recordAttempt, saveSrsCard } from '../../storage/db'
 import { useSettings } from '../settings'
 
@@ -25,6 +26,10 @@ export interface SolvableProblemState {
   solutionMoves: number | null
   isUserTurn: boolean
   handleIntersectionClick: (point: number) => void
+  /** Solo tiene efecto para loaded.kind === 'areaValue': las otras dos
+   * respuestas (RELLENO_TERRITORIO_PROPIO/PASE_PREMATURO) son "un punto
+   * concreto" o "pasar", nunca ambas a la vez. */
+  handlePass: () => void
   reset: () => void
   /** Reporta el problema como no resuelto (para un boton "no lo se" / saltar). */
   giveUp: () => void
@@ -34,6 +39,7 @@ export interface SolvableProblemState {
 function initialToMove(loaded: LoadedProblem): Color {
   if (loaded.kind === 'tsumego') return loaded.problem.toMove
   if (loaded.kind === 'ladder') return loaded.problem.chaserColor
+  if (loaded.kind === 'areaValue') return loaded.problem.toMove
   return loaded.problem.color
 }
 
@@ -46,14 +52,18 @@ function initialToMove(loaded: LoadedProblem): Color {
  * llegue a el, actualiza el intento guardado y la tarjeta SRS de ese
  * problema.
  *
- * Tres tipos de problema conviven aca porque ninguno de los otros dos encaja
- * en Problem/solve() (ver content/ladderProblem.ts y
- * content/doubleAtariProblem.ts): tsumego valida contra el Worker del
- * solucionador de vida-muerte y deja que el rival responda con la mejor
- * defensa/ataque; escalera valida con solveLadder en el hilo principal (es
- * barata) y hace jugar al que huye su mejor escape; doble atari es
- * reconocimiento de una sola jugada, se resuelve al toque sin respuesta del
- * rival.
+ * Cuatro tipos de problema conviven aca porque ninguno de los otros tres
+ * encaja en Problem/solve() (ver content/ladderProblem.ts,
+ * content/doubleAtariProblem.ts y content/areaValueProblem.ts): tsumego
+ * valida contra el Worker del solucionador de vida-muerte y deja que el
+ * rival responda con la mejor defensa/ataque; escalera valida con
+ * solveLadder en el hilo principal (es barata) y hace jugar al que huye su
+ * mejor escape; doble atari es reconocimiento de una sola jugada, se
+ * resuelve al toque sin respuesta del rival; valor de area (RELLENO_
+ * TERRITORIO_PROPIO/PASE_PREMATURO) valida con solver/areaValue.ts y no
+ * tiene respuesta del rival tampoco, pero a diferencia de doble atari admite
+ * dos formas de responder -- un punto o pasar (handlePass) -- porque la
+ * jugada correcta puede ser cualquiera de las dos segun la posicion.
  */
 export function useSolvableExercise(
   entry: BankEntry | null,
@@ -111,7 +121,7 @@ export function useSolvableExercise(
     setSolutionMoves(null)
     if (!loaded) return
 
-    if (loaded.kind === 'doubleAtari') {
+    if (loaded.kind === 'doubleAtari' || loaded.kind === 'areaValue') {
       setSolutionMoves(1)
       return
     }
@@ -301,6 +311,36 @@ export function useSolvableExercise(
       return
     }
 
+    if (loaded.kind === 'areaValue') {
+      const problem = loaded.problem
+      // Jugar dentro del propio territorio ya asegurado es incorrecto sin
+      // importar nada mas (RELLENO_TERRITORIO_PROPIO): ni siquiera hace
+      // falta mirar el delta de area para esta parte.
+      if (isOwnTerritory(game.board, point, problem.toMove)) {
+        wrongAttemptsRef.current += 1
+        setStatus('incorrect')
+        return
+      }
+
+      // Cualquier punto que mejore el area por encima del mismo umbral que
+      // usa detectPasePrematuro cuenta como correcto, no solo el mejor: el
+      // ejercicio ensena "hay una jugada real aca", no "encuentra LA mejor".
+      const delta = areaDeltaForPoint(game.board, point, problem.toMove)
+      if (delta === null || delta <= PASS_VALUE_THRESHOLD) {
+        wrongAttemptsRef.current += 1
+        setStatus('incorrect')
+        return
+      }
+
+      const result = applyMove(game, point)
+      if (!result.legal || !result.state) return
+      playStoneSoundIfEnabled()
+      setGame(result.state)
+      setLastMove(point)
+      setStatus('solved')
+      return
+    }
+
     // doubleAtari: reconocimiento de una sola jugada, sin respuesta del rival.
     const problem = loaded.problem
     if (!isDoubleAtariMove(game.board, point, problem.color)) {
@@ -314,6 +354,20 @@ export function useSolvableExercise(
     playStoneSoundIfEnabled()
     setGame(result.state)
     setLastMove(point)
+    setStatus('solved')
+  }
+
+  function handlePass() {
+    if (!isUserTurn || thinking || !loaded || !game || loaded.kind !== 'areaValue') return
+    const problem = loaded.problem
+    const best = bestAreaMove(game.board, problem.toMove)
+    if (best !== null) {
+      // Habia una jugada real (PASE_PREMATURO): pasar fue prematuro.
+      wrongAttemptsRef.current += 1
+      setStatus('incorrect')
+      return
+    }
+    setLastMove(null)
     setStatus('solved')
   }
 
@@ -332,5 +386,5 @@ export function useSolvableExercise(
     void recordOutcome(false)
   }
 
-  return { game, lastMove, status, thinking, solutionMoves, isUserTurn, handleIntersectionClick, reset, giveUp }
+  return { game, lastMove, status, thinking, solutionMoves, isUserTurn, handleIntersectionClick, handlePass, reset, giveUp }
 }
