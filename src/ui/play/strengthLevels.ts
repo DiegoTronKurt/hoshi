@@ -12,8 +12,9 @@ export interface StrengthLevel {
   /** Kyu aproximado, ESTIMADO a partir de la cantidad de playouts de un MCTS
    * con politica de rollout simple (no calibrado jugando partidas reales
    * contra cada nivel todavia -- roadmap maestro, seccion 2.2, lo marca
-   * explicitamente como pendiente). Las etiquetas de traduccion incluyen
-   * "estimado" a proposito, para no mostrar una precision que no existe. */
+   * explicitamente como pendiente). PlayConfigScreen.tsx muestra el aviso
+   * "play.strength.disclaimer" junto al selector para no mostrar una
+   * precision que no existe. */
   approxKyu: number
   labelKey: TranslationKey
 }

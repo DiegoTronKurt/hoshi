@@ -135,7 +135,6 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
                     onClick={() => setStrengthId(level.id)}
                   >
                     <span>{t(level.labelKey)}</span>
-                    <span className="play-bot-card-kyu">~{level.approxKyu} kyu</span>
                   </button>
                 ))}
               </div>
@@ -150,6 +149,7 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
               </p>
             </div>
           )}
+          <p className="settings-description">{t('play.strength.disclaimer')}</p>
 
           <div className="play-card-group">
             <span className="play-card-group-label">{t('play.botStyle.label')}</span>

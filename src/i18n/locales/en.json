@@ -33,6 +33,7 @@
   "play.adaptive.current": "Adaptive: currently ~{{kyu}} kyu",
   "play.adaptive.description": "You won {{winRate}}% of your last games. This nudges the level up or down after each one, to keep games close to even.",
   "play.adaptive.warmup": "Play {{needed}} games against the bot for this to start adjusting on its own.",
+  "play.strength.disclaimer": "Estimated kyu, not yet calibrated with real games.",
   "play.botStyle.label": "Bot style",
   "play.botStyle.standard": "Standard",
   "play.botStyle.territorial": "Territorial",

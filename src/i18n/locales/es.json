@@ -33,6 +33,7 @@
   "play.adaptive.current": "Adaptativa: ahora mismo ~{{kyu}} kyu",
   "play.adaptive.description": "Ganaste el {{winRate}}% de tus últimas partidas. Sube o baja el nivel después de cada una, para que te queden más o menos parejas.",
   "play.adaptive.warmup": "Juega {{needed}} partidas contra el bot para que esto empiece a ajustarse solo.",
+  "play.strength.disclaimer": "Kyu estimado, no calibrado todavía con partidas reales.",
   "play.botStyle.label": "Estilo del bot",
   "play.botStyle.standard": "Estándar",
   "play.botStyle.territorial": "Territorial",

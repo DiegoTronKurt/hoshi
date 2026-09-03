@@ -1885,11 +1885,6 @@
   cursor: default;
 }
 
-.play-bot-card-kyu {
-  font-size: 0.7rem;
-  color: var(--hoshi-text-faint);
-}
-
 .play-adaptive-status {
   padding: 0.6rem 0.75rem;
   border-radius: 10px;
