@@ -55,20 +55,41 @@ commitear. Ninguno de los dos tracks esta conectado a ninguna pantalla
 todavia — eso es trabajo de los puntos 3 y 5. Detalle completo en las dos
 entradas "v2 punto 2" mas arriba.
 
-### v2 — puntos 3, 4, 5: sin empezar
+### v2 — punto 4 investigado; punto 1 arrancado (Nivel 4, 4 de 5 conceptos); puntos 3 y 5 sin empezar
 
+- **Punto 1**: contenido real de los niveles 4-6. Nivel 4 (Forma, 9x13)
+  arrancado esta sesion: 4 de 5 conceptos aprobados ya tienen leccion real
+  y verificada (`content/lessons/n4.ts`) -- forma eficiente (dango vs
+  keima repartido), el corte del keima, hane con corte hacia una escalera,
+  y extension desde una pared (verificada con partidas simuladas completas
+  del bot MCTS, no con el motor de evaluacion -- ver mas abajo por que).
+  El quinto (direccion/lado grande) sigue sin verificar: ni el estimador de
+  influencia, ni el valor de KataGo, ni partidas simuladas completas dieron
+  todavia una diferencia real, reproducible y en el sentido correcto -- el
+  primer intento de partidas simuladas incluso dio el resultado *invertido*
+  de forma reproducible (ver detalle en la entrada "v2 punto 1 (Nivel 4
+  Forma), parte 2" mas arriba). Niveles 5 y 6 (Apertura, Joseki) sin
+  empezar. Generalizacion de tipos que esto necesito (`Lesson.level`,
+  `LessonBlock.diagram`, `DemoScript`, ambos de `size` unico a
+  `width`/`height`, `Concept.level`) ya esta hecha y cubre niveles 4-6
+  completos, no solo el 4 -- no hace falta repetirla para Apertura/Joseki.
 - **Punto 3**: contenido real de los niveles 4-6 (Forma/9x13, Apertura/
   13x13, Joseki/13x13), mismo patron de datos TypeScript + GuidedDemo que
   niveles 0-3, con la afirmacion de posicion/direccion pasando por
   evaluacion del motor (track 1 y/o 2) en vez de por el solucionador
   exhaustivo de tsumego (no aplica a este tipo de contenido).
-- **Punto 4**: investigar si el motor (ya existe, track 1 y 2 utilizables
-  hoy) aporta algo real a dos puntos debiles ya documentados: verificacion
-  cruzada del banco de 142 problemas (¿la jugada correcta se ve natural
-  segun el motor, o rara?) y calibracion de la etiqueta de dificultad
-  actual (¿coincide con que tan claro es el mejor movimiento segun el
-  motor?). Investigar y reportar antes de tocar ninguna etiqueta o
-  problema existente.
+- **Punto 4** — cerrado en su alcance pedido (investigar y reportar, sin
+  tocar el banco). Resultado: track 2 (politica de KataGo, una sola pasada
+  sin busqueda) NO ayuda a verificar ESCALERA/SNAPBACK/RED_GETA/DOBLE_ATARI
+  (rank de la jugada correcta indistinguible de azar), algo de senal real
+  en DOS_OJOS/NAKADE/PUNTO_VITAL/CAPTURA_SIMPLE (mas reconocimiento de forma
+  que lectura), y una senal parcial de calibracion de dificultad solo en
+  tsumego (el margen de la politica baja al subir la dificultad declarada,
+  pero no de forma limpia). Track 1 no aplica (no tiene ranking de jugadas).
+  Detalle completo en la entrada "v2 punto 4" mas arriba. El bug real de
+  contenido encontrado como efecto secundario (4 problemas DOS_OJOS
+  irresolubles en vivo por un desajuste de region) **ya se corrigio**, ver
+  la entrada "v2 punto 4, correccion del bug DOS_OJOS" mas arriba.
 - **Punto 5**: conectar todo a la interfaz real — niveles 4-6
   desbloqueados en Aprender, 13x13 en Jugar, mismo criterio de progreso
   que ya usan los niveles 0-3.
@@ -81,6 +102,429 @@ diferidos a una decision aparte incluso ahora que el motor ya existe.
 
 Ver la entrada de sesion correspondiente para la version exacta y el
 detalle del build mas reciente.
+
+---
+
+## v2 punto 4, correccion del bug DOS_OJOS: los 4 problemas reemplazados, con red de seguridad nueva en CI (2026-09-02)
+
+Retoma el bug encontrado como efecto secundario en la investigacion del
+punto 4 (entrada de mas abajo), que en su momento se dejo sin tocar por
+decision explicita del usuario ("postergarlo, seguir con el resto de v2
+primero"). Pedido explicito de esta sesion: "corrijamos el bug DOS_OJOS
+ahora".
+
+### Confirmacion de la causa raiz
+
+`tools/generate-problems.ts::tryBuildProblem` siempre acepta un problema
+verificandolo con `computeRegion(..., 2)` (margen 2). `useSolvableExercise.ts`,
+la pantalla real de Ejercicios/Hoy, resuelve en vivo con
+`computeRegion(..., 1)` (margen 1, mas angosto). Para `p57`/`p65`/`p71`/`p73`
+esa region mas angosta recortaba un punto real que el defensor necesitaba
+para completar su segundo ojo, tratandolo como pared fija — el solucionador
+en vivo declaraba el grupo muerto sin importar la jugada, dejando estos 4
+problemas irresolubles hoy para cualquiera que los intentara en Ejercicios o
+Hoy. Confirmado de nuevo con un script de un solo uso antes de tocar nada:
+margin=1 da `solved: false` en los 4 (no solo "liveForDefender: false" —
+directamente ninguna jugada del defensor, restringida a esa region chica,
+alcanza el objetivo), margin=2 da `solved: true`.
+
+### Por que no se ensancho el margen en vivo (opcion descartada, con prueba)
+
+La primera opcion evaluada — subir el margen que usa `useSolvableExercise.ts`
+de 1 a 2, para que coincida con el generador — se probo directamente en vez
+de asumirla segura: re-resolver los 78 tsumego del banco con margin=2 hizo
+crashear Node por falta de memoria, dos veces (heap por defecto, ~435s; heap
+de 6GB, ~647s). Un script sin buffer de logs (`vite-node` con
+`process.stdout.write`, no `vitest`, porque el crash de un worker de vitest
+pierde todo el `console.log` en buffer) identifico el problema real: no es
+ningun DOS_OJOS — es `p25`/`p26` (SNAPBACK), donde `p25` ya tardaba 384s y
+54.5 millones de nodos antes de que `p26` reventara la memoria. Confirma un
+riesgo que NOTAS ya habia documentado una vez (una region sin esquina ni
+borde que la acote explota combinatoriamente) para un candidato de geta —
+ahora confirmado tambien para snapback, a margen 2. Ensanchar el margen en
+vivo para todos arreglaba los 4 DOS_OJOS pero arriesgaba colgar la app para
+quien intentara un SNAPBACK real. Descartada.
+
+### La correccion aplicada, quirurgica
+
+1. **`tools/generate-problems.ts::tryBuildProblem`** gana un segundo chequeo
+   permanente: despues de aceptar con margin=2 (como siempre), tambien
+   vuelve a resolver con margin=1 (el mismo regimen que usa
+   `useSolvableExercise.ts` en vivo) y descarta el candidato si eso no
+   resuelve. Esto evita que esta clase de bug pueda volver a colarse en
+   cualquier regeneracion futura del banco, sin tocar el margen compartido
+   de la pantalla en vivo (que sigue protegiendo a los otros 74 problemas
+   del riesgo de explosion de RED_GETA/SNAPBACK confirmado arriba).
+2. **Reemplazo quirurgico de las 4 entradas rotas.** Un script temporal
+   (mismo patron de autojuego + candidatos que ya usa el generador real,
+   con el chequeo nuevo de margin=1 aplicado) busco reemplazos nuevos para
+   `p57`/`p65`/`p71`/`p73`, preservando sus `id` y posicion en el array
+   (para no alterar ninguna otra entrada ni desordenar el banco). Primer
+   intento con una clave de dedupe por tablero completo genero 4
+   "reemplazos" que resultaron ser, en la practica, la misma forma local
+   capturada en instantaneas consecutivas de una sola partida de autojuego
+   (mismo grupo, misma jugada `B[ci]`, solo cambiaban piedras lejanas sin
+   relacion) — descubierto revisando el diff antes de darlo por bueno, no
+   despues. Corregido usando la misma clave de dedupe que ya usa
+   `tools/generate-problems.ts::main()` (posicion + color del grupo
+   candidato, no el tablero completo), que si genero 4 formas realmente
+   distintas: `p57` (grupo blanco de una piedra, esquina), `p65` (dos
+   piedras blancas de borde), `p71` (cuatro piedras blancas), `p73` (tres
+   piedras blancas con un arbol de refutacion real de profundidad 2).
+   Dificultad recalculada con la misma formula de siempre
+   (`difficultyFromDepth`): easy/easy/easy/medium.
+
+### Verificado antes de dar por cerrado
+
+- Los 4 reemplazos resuelven `solved: true` con margin=1 (el regimen real
+  de Ejercicios/Hoy) — confirmado con un script de un solo uso antes de
+  escribir el test permanente.
+- **Barrido completo**: los 78 tsumego del banco (no solo los 4 tocados)
+  resuelven con margin=1 sin ninguna falla — el problema estaba acotado a
+  esos 4, no era mas amplio de lo que ya se sabia.
+- **Test de regresion nuevo en CI**: `tests/content/problem-bank.test.ts`
+  gana un segundo `it.each` (78 casos, uno por tsumego) que reproduce
+  exactamente el regimen de `useSolvableExercise.ts` (margin=1), ademas
+  del que ya existia a margin=2 (el del generador). Cualquier problema
+  futuro con este mismo desajuste — generado por el pipeline o pegado a
+  mano en `bank.json` — ahora lo detecta CI en cada push, no solo una
+  investigacion manual ocasional.
+- `npx tsc -b` limpio. `npx vitest run`: 419/419 verdes en 36 archivos
+  (341 anteriores + 78 del test nuevo). `npx oxlint` sin warnings nuevos en
+  ninguno de los archivos tocados (`tools/generate-problems.ts`,
+  `tests/content/problem-bank.test.ts`, `src/content/problems/bank.json`).
+  Scripts temporales de diagnostico borrados al terminar, mismo habito de
+  siempre.
+- **No se hizo** una pasada de Playwright en el navegador para esta
+  correccion en particular: a diferencia del contenido de Nivel 4 (donde
+  el riesgo real esta en el render/las demos interactivas), este es un bug
+  puramente de contenido/solucionador sin ninguna superficie de UI nueva, y
+  Ejercicios no tiene forma de saltar a un problema por id (elige al azar
+  dentro del filtro de concepto) — verificar con el solucionador real, en
+  el mismo regimen exacto que usa la pantalla en vivo, ya es la
+  verificacion que importa aca.
+
+### Que sigue
+
+Con esto, el punto 4 de v2 queda completamente cerrado (investigacion +
+correccion). Pendiente decidir con el usuario: seguir con Nivel 5
+(Apertura, 13x13) o con el punto 3 (conectar Nivel 4 a la interfaz real).
+
+---
+
+## v2 punto 1 (Nivel 4, Forma): 3 de 5 conceptos, verificados; 2 sin verificar (2026-09-02)
+
+Primer nivel de contenido de v2 (Forma, 9x13), un nivel a la vez segun lo
+acordado con el usuario. Antes de escribir nada se propuso una lista de 5
+conceptos (progresion estandar despues de tactica, aprovechando que
+`influence.ts` ya se construyo explicitamente "para ensenar moyo/direccion/
+grosor en niveles 4-6"), aprobada tal cual por el usuario: forma eficiente,
+corte del keima, hane y riesgo de corte, extension desde una pared,
+direccion (lado grande). Resultado real: los primeros 3 se escribieron y
+verificaron; los otros 2 se investigaron a fondo y no se pudieron verificar
+con el motor disponible -- reportado en vez de forzado, mismo principio que
+ya aplico el punto 4.
+
+### Generalizacion de tipos, previa y necesaria
+
+`Lesson.level`, `LessonBlock.diagram` y `DemoScript` seguian con un solo
+`size` (cuadrado), deliberadamente no tocado en el refactor de tablero del
+punto 1 de v2 ("correcto hoy porque todo ese contenido es cuadrado" --
+dejaba de serlo con Forma). Pasaron a `width`/`height` explicitos, igual
+patron que `BoardState` ya tiene: `helpers.ts::board()` gano un cuarto
+parametro `height = width` (todo call site cuadrado de n0-n3.ts sigue
+compilando sin tocarse), y los ~35 usos de `size:` en n0.ts-n3.ts se
+migraron mecanicamente a pares `width:`/`height:` (script de una sola
+pasada, verificado contra `git diff` antes de aceptarlo). `Concept.level`
+(analysis/concepts.ts) tambien paso de `0|1|2|3` a incluir `4|5|6` --
+cubre los tres niveles de v2 de una vez, no hace falta repetir esto para
+Apertura/Joseki. `ui/board/hoshiPoints.ts` gano el layout de puntos hoshi
+de 9x13 (columnas 2/6 del 9x9, filas 3/9 del 13x13, mas tengen real --
+convencion propia documentada como tal, un tablero rectangular no es un
+goban fisico estandar). `LessonScreen.tsx`: el boton "partida de
+comprobacion" usa `PlaySeed` (`ui/play/playConfig.ts`), que sigue siendo
+`size: number` (cuadrado) a proposito -- eso es trabajo del punto 5, no de
+este. Como una demo rectangular no puede armar un `PlaySeed` valido
+todavia, el boton se oculta cuando `demo.width !== demo.height` en vez de
+mandar a un tablero en blanco sin relacion con la leccion.
+
+### Los 3 conceptos verificados
+
+Cada afirmacion de posicion se probo primero con un script de depuracion
+(`tests/content/_debug-n4.test.ts`, borrado al terminar, mismo habito que
+el resto del proyecto) antes de escribirla en la leccion:
+
+- **Forma eficiente**: cuatro piedras amontonadas ("dango", 2x2) contra las
+  mismas cuatro piedras repartidas en una cadena de saltos de keima sin
+  tocarse. Verificado con `getGroup` real (no a mano): 8 libertades contra
+  16 -- exactamente el doble con la misma cantidad de piedras. Herramienta
+  correcta aca: conteo de libertades exacto, no el motor de evaluacion (no
+  hace falta aproximar algo que se puede contar).
+- **Corte del keima**: dos piedras negras en relacion de keima tienen dos
+  puntos reales intermedios donde blanco puede jugar. Alcance
+  deliberadamente acotado a lo que se puede afirmar sin especular: se
+  verifico que jugar ahi separa a las dos piedras negras en grupos
+  distintos Y que la piedra de corte queda con 3 libertades (jugada segura,
+  no un error de blanco) -- sin afirmar quien gana una pelea posterior, que
+  dependeria del resto del tablero y no es una propiedad general del keima.
+- **Hane y riesgo de corte**: hane, corte de blanco, y la primera jugada de
+  una escalera real que atrapa la piedra de corte en la esquina. La
+  geometria exacta (corredor con 2 libertades, perseguidor en las otras dos
+  direcciones) se calco literalmente de la ya verificada en
+  `tests/solver/ladder.test.ts` en vez de inventar una nueva a mano --
+  intentos previos con geometria propia (atari hacia el lado equivocado)
+  daban `escaped`, no `captured`, hasta corregir la direccion. Verificado
+  con `solveLadder` real: `captured: true`.
+
+### Primer intento (evaluacion estatica de una sola posicion): no alcanzo
+
+Intento con track 1 (`estimateInfluence`/`classifyInfluence`): comparar el
+territorio resultante de extender una pared a distintas distancias, y de
+jugar del lado grande vs el chico. Resultado: **sin diferencia real** --
+misma ganancia (+1 punto) sin importar la distancia de extension (1 a 6), y
+la misma ganancia jugando del lado grande o del chico. Diagnostico con la
+grilla cruda de valores (no solo el conteo clasificado): con 5 dilataciones
+y 21 erosiones, dos paredes de 5 piedras completamente separadas por una
+columna vacia de por medio ni siquiera se tocan -- toda la columna intermedia
+queda en cero. El metodo (documentado el mismo dia que se construyo:
+"pensada para ensenar moyo/direccion/grosor") resulta, en la practica,
+mucho mas conservador de lo esperado a la escala de una pared de 4-5
+piedras: sirve para clasificar que tan "reforzada" esta una piedra o grupo
+ya puesto, no para proyectar territorio hacia espacio vacio lejano desde
+una pared chica.
+
+Segundo intento con track 2 (valor de KataGo, una sola pasada): en un
+tablero casi vacio con solo la pared y una piedra rival lejana, el valor
+queda saturado (P(gana blanco) ~0.99 en todos los casos) porque la red lee
+la posicion como "partida recien empezada, blanco gana por comodidad" --
+las diferencias entre distancias de extension existen pero son de tercer
+decimal (0.9946 a 0.9959) y no monotonicas de forma limpia, demasiado
+ruido para afirmar nada con la confianza que pide este proyecto.
+
+**Conclusion de este primer intento, reportada en vez de forzada:**
+ninguna evaluacion ESTATICA de una sola posicion (track 1 ni track 2) da
+una diferencia demostrable a la escala chica de una leccion de nivel 4.
+Reportado al usuario antes de seguir. Decision del usuario: no forzar una
+regla practica sin verificar, probar en cambio con partidas simuladas
+completas via el bot MCTS que ya existe (`engine/mcts.ts`) antes de
+descartar los dos conceptos.
+
+### Segunda pasada: partidas simuladas completas con el bot MCTS
+
+`chooseMove` (usado para elegir una sola jugada) no sirve directo para
+esto: su `winRate` es el del mejor hijo del arbol UCT, y con un tablero de
+9x13 casi vacio (mas de 100 jugadas legales) cada candidato recibe
+demasiado pocas visitas -- probado con 1000 y 3000 playouts, la mejor
+jugada variaba de `winRate` 0.57 a 0.75 entre semillas distintas, ruido
+puro. La funcion que realmente hacia falta era la que ya usa cada
+simulacion interna de MCTS para jugar una partida completa hasta el final
+(`simulatePlayout`), no expuesta hasta ahora -- se agrego un `export` (sin
+cambiar su comportamiento) especificamente para poder promediar muchas
+partidas completas de forma directa (Monte Carlo llano), no ruidoso como
+leer un solo nodo del arbol: cada partida tarda ~11ms en un 9x13 (mucho
+mas barato que el arbol UCT, que reconstruye y recorre nodos), asi que
+promediar 400-2000 partidas por candidato sale en segundos.
+
+**Extension desde una pared -- exito, verificada de verdad.** Pared de 4
+piedras, rival blanco lejos, comparando extension a distancia 2, 3 y 4:
+distancia 3 gano de forma consistente en dos bloques de semillas
+independientes (winRate negro 0.605/0.655 contra 0.583/0.613 en distancia
+2 y 0.588/0.595 en distancia 4; margen de puntaje promedio tambien mayor).
+Reproducible, no ruido -- se agrego a `analysis/concepts.ts` y
+`content/lessons/n4.ts` como `EXTENSION_DESDE_PARED` (n4-l4), con las
+distancias 2 (corta) y 3 (balanceada) como los dos diagramas de
+comparacion. La leccion no cita los numeros crudos de la simulacion (son
+una estimacion de Monte Carlo con ruido propio, especifica de esta
+posicion de ejemplo, no una constante universal) -- solo afirma
+cualitativamente que la distancia balanceada salio mejor en partidas
+simuladas completas, que es lo que de verdad se verifico.
+
+**Direccion (lado grande) -- sigue sin verificarse, y con un hallazgo
+que vale la pena registrar.** Primer diseño (moyo de 5 piedras abajo-
+izquierda vs una piedra sola arriba-derecha, pared blanca en el medio):
+el resultado **no fue reproducible entre bloques de semillas** (un bloque
+favorecio el lado grande, el otro el lado chico). Segundo diseño, mas
+marcado (pared solida de 7 piedras casi de borde a borde para cada color,
+2000 partidas por candidato): esta vez SI fue reproducible entre los dos
+bloques de semillas -- pero en el sentido **contrario** al esperado: reforzar
+el lado "chico" salio consistentemente mejor que reforzar el lado
+"grande" (margen promedio +3.35/+3.56 contra +0.52/+1.08). Interpretacion,
+no descartada sin mirar: el lado "grande" en ese diseño ya estaba
+practicamente asegurado por la pared completa que lo encierra (reforzarlo
+es una jugada de bajo valor marginal, aunque el area en si sea grande),
+mientras que la piedra sola del lado "chico" seguia genuinamente en
+peligro en un espacio angosto -- exactamente el tipo de matiz (valor
+marginal de la jugada, no tamano bruto del area) que hace que "jugar del
+lado grande" sea mas dificil de ilustrar bien de lo que parece a primera
+vista. `DIRECCION_LADO_GRANDE` sigue sin agregarse a `analysis/concepts.ts`
+ni a `content/lessons/n4.ts`. Reportado al usuario en vez de seguir
+iterando posiciones sin limite.
+
+### Verificacion final
+
+`npx tsc -b` limpio. `npx vitest run`: 341/341 verdes (36 archivos). Sin
+warnings nuevos de `npx oxlint` (confirmado comparando explicitamente
+contra los archivos tocados, todos los warnings existentes son de antes).
+Playwright en vivo contra `npm run dev` (Nivel 4 desbloqueado solo de forma
+temporal para poder navegar a el, revertido antes de terminar -- desbloquear
+de verdad es el punto 5): las 4 lecciones se ven y funcionan bien --
+`Forma eficiente` muestra los dos diagramas 9x13 con las libertades
+correctas interpoladas (bug real encontrado y arreglado en el camino: las
+traducciones usaban `{libs}` en vez de `{{libs}}`, el formato real que usa
+`i18n/index.tsx`), `El corte del keima` acepta el click en cualquiera de
+los dos puntos de corte, `Hane y el riesgo de corte` completa sus 3 pasos
+(cabeceo, corte automatico de blanco, jugada de persecucion) mostrando el
+feedback correcto en cada uno, `Extension desde una pared` muestra los dos
+diagramas de comparacion (corta/balanceada) con la pared y la piedra rival
+en las posiciones correctas. Cero errores de consola en todo el recorrido,
+en las dos pasadas (antes y despues de agregar la leccion de extension).
+
+---
+
+## v2 punto 4: motor de evaluacion vs banco de 142 problemas -- investigado, sin tocar nada (2026-09-02)
+
+Pedido explicito: investigar si el motor (track 1 y/o 2, ya utilizables desde
+el punto 2) aporta algo real a (a) verificacion cruzada del banco -- ¿la
+jugada correcta se ve natural o rara segun el motor? -- y (b) calibracion de
+la etiqueta de dificultad actual (derivada solo de profundidad de lectura).
+Reportar antes de tocar ninguna etiqueta o problema existente -- no se tocó
+nada del banco en esta pasada.
+
+### Metodologia
+
+Script temporal (`tests/eval/_investigate-bank.test.ts`, corrido bajo vitest
+por el mismo motivo que `tests/eval/model.test.ts`: tf.js necesita el entorno
+jsdom de `vite.config.ts` para registrar un backend sin navegador real --
+`vite-node` puro no sirve para esto, se probo y tira `WebGL is not
+supported`/fallback silencioso poco confiable). Borrado al terminar, como los
+demas scripts de depuracion de este proyecto (mismo patron que
+`/tmp/depth-check.mjs` citado en `content/difficulty.ts`); el JSON crudo de
+resultados (142 filas) quedo fuera del repo.
+
+Para cada una de las 142 entradas (`listBankEntries()`): se determino la
+"jugada correcta" con la misma logica que usa la app hoy, no con el arbol
+SGF recortado (`problemToSgf` guarda como mucho 2 hijos por nodo, y para
+problemas donde el atacante mueve primero esos 2 son arbitrarios, no
+necesariamente los ganadores -- ver `content/problemSgf.ts::childrenToSgf`).
+En su lugar:
+
+- Tsumego (78): se volvio a correr `solve()` fresco con
+  `computeRegion(board, targetPoints, 1)` y `maxDepth=8` -- exactamente los
+  parametros que usa `useSolvableExercise.ts` en vivo hoy -- y se tomo
+  `result.root.move`.
+- Escalera (32): `solveLadder(...).moves[0]`.
+- Doble atari (32): `problem.expectedPoints` (ya viene dado, sin ambiguedad).
+
+Con eso se corrio `encodeInput` + `evaluatePosition` (track 2, una sola
+pasada, sin busqueda ni rollouts -- la app no corre MCTS encima de estas
+cabezas) sobre la posicion inicial de cada problema, y se comparo la
+distribucion de politica (solo puntos legales, sin pase) contra la jugada
+correcta: rank, probabilidad, y si el maximo de la politica (top1) coincide
+con la jugada correcta. Track 1 (`analysis/influence.ts`) no se probo: no
+tiene ningun concepto de "ranking de jugada candidata", solo inclinacion de
+territorio por punto -- no es la herramienta para esta pregunta, reportado
+en vez de forzarlo.
+
+### Hallazgo principal: la politica cruda (sin busqueda) no ayuda en lo tactico
+
+Tasa de acierto del top1 de la politica contra la jugada realmente correcta,
+por concepto:
+
+| Concepto | n | top1 correcto |
+|---|---|---|
+| NAKADE | 10 | 5/10 (50%) |
+| CAPTURA_SIMPLE | 12 | 3/12 (25%) |
+| PUNTO_VITAL | 14 | 3/14 (21%) |
+| DOS_OJOS | 10 (de 14, 4 sin datos -- ver bug abajo) | 2/10 (20%) |
+| DOBLE_ATARI | 32 | 1/32 (3%) |
+| RED_GETA | 8 | 0/8 (0%) |
+| OJO_FALSO | 4 | 0/4 (0%) |
+| SNAPBACK | 16 | 0/16 (0%) |
+| ESCALERA | 32 | 0/32 (0%) |
+
+Mas revelador todavia: el **rank promedio de la jugada correcta como
+porcentaje de las jugadas legales** ronda 0.46-0.62 en todos los conceptos
+(0.5 = indistinguible de orden aleatorio). Para ESCALERA (0.548) y
+DOBLE_ATARI (0.467) la politica cruda no tiene ninguna capacidad real de
+distinguir la jugada correcta del resto. Tiene sentido con lo que se sabe de
+redes de politica de KataGo en general: leen forma/patron de una sola pasada
+razonablemente bien (por eso NAKADE/CAPTURA_SIMPLE/PUNTO_VITAL/DOS_OJOS
+tienen algo de señal real, muy por encima de ESCALERA/SNAPBACK), pero
+escaleras, snapbacks, geta y doble atari son exactamente los casos de libro
+que necesitan lectura explicita (o busqueda tipo MCTS encima de la red, que
+esta app no implementa) -- una sola pasada de la cabeza de politica no
+alcanza, y no es un bug de la integracion, es una limitacion conocida y
+esperable de usar la red "en crudo".
+
+**Conclusion para el punto 4, parte (a):** track 2 sin busqueda no sirve
+como verificacion cruzada generica del banco. Podria tener algun valor
+acotado como segunda opinion barata solo para DOS_OJOS/NAKADE/PUNTO_VITAL/
+CAPTURA_SIMPLE, pero incluso ahi el 20-50% de acierto es demasiado bajo para
+usarlo como filtro automatico -- en el mejor caso, una pista con mucho ruido
+para revision humana, no un sustituto de ella. No se recomienda invertir mas
+tiempo en esta direccion sin agregar busqueda real (fuera de alcance de v2,
+costo no trivial).
+
+### Calibracion de dificultad: señal parcial, no limpia
+
+Comparando el margen de la politica (probabilidad de la jugada top1 menos la
+segunda, un proxy de "que tan obvia le parece la posicion a la red",
+independiente de si esa jugada es la tacticamente correcta) contra la
+etiqueta de dificultad ya existente, restringido a tsumego (los unicos donde
+la etiqueta viene de profundidad de lectura real vs los otros dos tipos con
+formulas mas simples):
+
+| Dificultad | n | margen mediana |
+|---|---|---|
+| easy | 18 | 0.862 |
+| medium | 18 | 0.817 |
+| hard | 38 | 0.602 |
+
+Hay una tendencia real (el margen baja al subir la dificultad declarada,
+consistente con "una posicion mas dificil de leer tambien le resulta menos
+obvia a la red"), pero no es monotonica de forma limpia contra la tasa de
+acierto del top1 (easy 5/18, medium 2/18, hard 6/38 -- medium queda peor que
+hard). Con esta muestra (n=18 en dos de los tres grupos) no alcanza para
+proponer recalibrar nada. **Conclusion parte (b):** hay una señal real pero
+debil y no lo bastante confiable todavia para tocar los umbrales de
+`difficultyFromDepth` -- quedaria para revisitar si el banco crece mucho
+mas o si se agrega busqueda real al motor.
+
+### Bug real encontrado como efecto secundario, no tocado
+
+Al recalcular la jugada correcta con los mismos parametros que usa
+`useSolvableExercise.ts` en vivo (`computeRegion(board, targetPoints, 1)`,
+no el `margin=2` que usa `tools/generate-problems.ts` para el autojuego),
+**4 problemas DOS_OJOS del banco (`p57`, `p65`, `p71`, `p73`) no resuelven**:
+`solve()` con la region de margen 1 da `liveForDefender: false` (el grupo
+"muere" con el margen chico) cuando con el margen 2 original (con el que se
+generaron y verificaron) da `liveForDefender: true`. Confirmado con un
+segundo script de depuracion corriendo `solve()` en ambos regimenes sobre
+los 4 (`tests/eval/_debug-margin.test.ts`, tambien borrado): la region de
+margen 1 recorta un punto real que la linea de vida original necesitaba,
+tratandolo como pared fija.
+
+Esto es distinto de lo que ya se habia verificado antes (NOTAS, entrada de
+seeds: "verificado contra `solve()` en los tres regimenes que el proyecto
+realmente usa... los tres dan `solved: true`") -- esa verificacion cubrio
+las posiciones semilla de `buildSeedProblems()`, no las generadas por
+autojuego, que nunca se cruzaron contra el margen=1 real de
+`useSolvableExercise.ts`. Consecuencia practica: estos 4 problemas
+probablemente aparecen hoy como irresolubles para cualquiera que los
+intente en Ejercicios/Hoy (el grupo se juzga muerto sin importar la jugada).
+Bajo impacto inmediato (nadie mas que el usuario tiene datos de produccion
+guardados, mismo comentario que ya hace la seccion 11.4 del roadmap), pero
+es un bug de contenido real, no hipotetico.
+
+**No corregido en esta pasada** (pedido explicito: reportar antes de tocar
+el banco). Dos arreglos posibles quedan identificados para cuando se retome:
+(1) ampliar el margen que usa `useSolvableExercise.ts` para estos casos
+(riesgo: podria cambiar el comportamiento en vivo de otros problemas
+tambien), o (2) regenerar estos 4 problemas especificos verificandolos ya
+contra margin=1 antes de aceptarlos (mas quirurgico, no toca el mecanismo
+compartido). Decision explicita del usuario: postergarlo, seguir con el
+resto de v2 primero (bajo impacto inmediato, sin usuarios reales con
+progreso guardado todavia).
 
 ---
 
