@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { applyMove, createGame, gameStateFromBoard } from '../../core/rules'
-import { computeAreaScore } from '../../core/scoring'
+import { computeAreaOwnership, computeAreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
@@ -152,6 +152,11 @@ export function PlayGameScreen({
 
   const liveScore = useMemo(() => computeAreaScore(game.board, game.komi), [game])
 
+  /** Solo se calcula al terminar la partida (y solo una vez, ya que `game`
+   * deja de cambiar): BoardCanvas usa el cambio de referencia null -> array
+   * para disparar la animacion de revelado una sola vez. */
+  const territory = useMemo(() => (game.gameOver ? computeAreaOwnership(game.board) : null), [game])
+
   // Guarda la partida en IndexedDB apenas termina, una sola vez.
   useEffect(() => {
     if (!game.gameOver || savedThisGameRef.current || !finalScore) return
@@ -196,6 +201,7 @@ export function PlayGameScreen({
         height={config.size}
         stones={game.board.stones}
         lastMove={lastMove}
+        territory={territory}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
