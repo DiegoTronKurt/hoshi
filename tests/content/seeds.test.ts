@@ -10,10 +10,20 @@ import type { Problem } from '../../src/content/problemSgf'
 // proposito (geta y snapback en particular, con regiones mas abiertas que
 // las formas de ojo). Se calcula una sola vez para las dos pruebas de este
 // archivo en vez de duplicar el costo.
+// 120000 no alcanzaba de forma intermitente: buildSeedProblems() en
+// aislamiento tarda ~200s de por si (medido corriendo solo este archivo),
+// y bajo la corrida completa (36 archivos, mucho computo de solucionador
+// concurrente en los workers de vitest) a veces se pasaba del limite --
+// no es un cuelgue real ni una regresion de contenido (en aislamiento, o
+// cuando la corrida completa no queda por casualidad con este archivo
+// compitiendo por CPU, siempre termina bien), solo un margen insuficiente
+// para el caso concurrente. Confirmado repitiendo la corrida completa
+// varias veces: mismo archivo, mismo hook, sin ningun cambio de codigo de
+// por medio, a veces pasa y a veces no.
 let problems: Problem[]
 beforeAll(() => {
   problems = buildSeedProblems()
-}, 120000)
+}, 300000)
 
 describe('posiciones semilla', () => {
   it('produce al menos una posicion semilla verificada por el solucionador', () => {
