@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { ConceptId } from '../../analysis/concepts'
 import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
-import { lessonsForLevel } from '../../content/lessons'
+import { getLesson, lessonsForLevel } from '../../content/lessons'
+import type { Lesson } from '../../content/lessons'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { countCompletedToday } from '../../learning/dailyProgress'
@@ -18,7 +20,7 @@ import { ProgressRing } from '../common/ProgressRing'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
 import { StreakIcon } from '../icons/StreakIcon'
-import { isLessonRead } from '../lessons/readProgress'
+import { getReopenedLessons, isLessonRead } from '../lessons/readProgress'
 import { STRENGTH_LEVELS } from '../play/strengthLevels'
 import { useSettings } from '../settings'
 
@@ -47,9 +49,10 @@ function focusReasonKey(item: SessionItem): TranslationKey {
 
 interface TodayScreenProps {
   onNavigateToPlay: () => void
+  onNavigateToLearn: (lessonId?: string) => void
 }
 
-export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
+export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreenProps) {
   const { t } = useI18n()
   const { theme, dailyGoal, streakEnabled } = useSettings()
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
@@ -89,6 +92,21 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
     return insights.find((insight) => insight.kind === 'knowsNotApplies') ?? null
   }, [profiles])
 
+  // Lecciones reabiertas por 3+ errores del mismo concepto en las ultimas 5
+  // partidas (training-policy/session.ts::findConceptsToReopen, disparado
+  // en PlayGameScreen.tsx al guardar cada partida). Se lee una sola vez por
+  // montaje, mismo criterio que entries mas abajo: si el usuario juega una
+  // partida nueva y vuelve a Hoy, esta pantalla se desmonta y remonta con
+  // la pestana (ver App.tsx), asi que no hace falta releer en caliente.
+  const reopenedLessons = useMemo(() => {
+    const result: Array<{ lesson: Lesson; conceptId: ConceptId }> = []
+    for (const { lessonId, conceptId } of getReopenedLessons()) {
+      const lesson = getLesson(lessonId)
+      if (lesson) result.push({ lesson, conceptId })
+    }
+    return result
+  }, [])
+
   const plan: SessionPlan | null = useMemo(() => {
     if (!loaded) return null
     return planSession(entries, srsCards, profiles, new Date(), DEFAULT_SESSION_MINUTES)
@@ -114,7 +132,7 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
     setLoadedProblem(currentEntry ? loadEntry(currentEntry) : null)
   }, [currentEntry])
 
-  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, giveUp } = useSolvableExercise(
+  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, handlePass, giveUp } = useSolvableExercise(
     currentEntry,
     loadedProblem,
     solverClient,
@@ -271,6 +289,20 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
           </button>
         )}
 
+        {reopenedLessons.map(({ lesson, conceptId }) => (
+          <section key={lesson.id} className="today-reopen-card">
+            <p className="today-reopen-detail">
+              {t('today.reopen.detail', {
+                concept: t(`concept.${conceptId}.label` as TranslationKey),
+                lesson: t(lesson.titleKey),
+              })}
+            </p>
+            <button type="button" onClick={() => onNavigateToLearn(lesson.id)}>
+              {t('today.reopen.cta')}
+            </button>
+          </section>
+        ))}
+
         {topInsight && (
           <section className="today-insight-card">
             <p className="today-insight-stat">
@@ -316,6 +348,7 @@ export function TodayScreen({ onNavigateToPlay }: TodayScreenProps) {
         solutionMoves={solutionMoves}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
+        onPass={handlePass}
       />
 
       <div className="today-controls">

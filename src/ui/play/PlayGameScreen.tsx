@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { CONCEPTS } from '../../analysis/concepts'
 import { applyMove, createGame, gameStateFromBoard } from '../../core/rules'
 import { computeAreaOwnership, computeAreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
@@ -8,9 +9,12 @@ import type { GameState, IllegalReason } from '../../core/types'
 import { EngineClient } from '../../engine/client'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
-import { saveGame } from '../../storage/db'
+import { getLesson } from '../../content/lessons'
+import { listGames, saveGame } from '../../storage/db'
+import { findConceptsToReopen } from '../../training-policy/session'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { ConfirmDialog } from '../common/ConfirmDialog'
+import { reopenLesson } from '../lessons/readProgress'
 import { useSettings } from '../settings'
 import { PlayInGameControls } from './PlayInGameControls'
 import type { PlayConfig } from './playConfig'
@@ -180,6 +184,20 @@ export function PlayGameScreen({
     }).then((id) => {
       setJustSaved(true)
       setSavedGameId(id)
+
+      // Chequeo de reapertura (una sola vez, aca, no en Hoy): si se hiciera
+      // en Hoy cada vez que se abre la pantalla, releer una leccion ya
+      // reabierta sin jugar una partida nueva la volveria a marcar como no
+      // leida de la nada. Evaluando solo cuando se guarda una partida nueva,
+      // "reabrir" es un evento real (esta partida disparo el patron), no un
+      // estado que se reafirma solo. listGames() para incluir esta partida
+      // recien guardada, no solo las anteriores.
+      listGames().then((allGames) => {
+        for (const conceptId of findConceptsToReopen(allGames)) {
+          const lesson = getLesson(CONCEPTS[conceptId].lessonId)
+          if (lesson) reopenLesson(lesson.id, conceptId)
+        }
+      })
     })
   }, [game.gameOver, finalScore, config, moves])
 

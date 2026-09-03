@@ -43,6 +43,9 @@ const LOCKED_LEVELS = [
 ] as const
 
 interface LearnScreenProps {
+  /** Leccion preseleccionada al entrar (p.ej. desde el aviso de reapertura
+   * de Hoy) -- mismo patron que initialConcept en ExercisesScreen. */
+  initialLessonId?: string
   onNavigateToExercises: (conceptId: ConceptId) => void
   onNavigateToPlay: (seed?: PlaySeed) => void
 }
@@ -73,9 +76,11 @@ function lessonPreview(lesson: Lesson): { width: number; height: number; stones:
   return FALLBACK_PREVIEW
 }
 
-export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnScreenProps) {
+export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigateToPlay }: LearnScreenProps) {
   const { t } = useI18n()
-  const [view, setView] = useState<View>({ kind: 'levels' })
+  const [view, setView] = useState<View>(() =>
+    initialLessonId ? { kind: 'lesson', lessonId: initialLessonId } : { kind: 'levels' },
+  )
 
   const lessonsByLevel = useMemo(
     () => Object.fromEntries(LEVELS.map((level) => [level, lessonsForLevel(level)])) as Record<number, ReturnType<typeof lessonsForLevel>>,

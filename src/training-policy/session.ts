@@ -1,9 +1,11 @@
 import type { ConceptId } from '../analysis/concepts'
+import { analyzeGame } from '../analysis/mistakes'
 import type { BankEntry } from '../content/problemBank'
+import { sgfToGameRecord } from '../core/sgf'
 import { isDue } from '../learning/fsrs'
 import { weakestConcepts } from '../learning/profile'
 import type { ConceptProfile } from '../learning/profile'
-import type { SrsCardRecord } from '../storage/db'
+import type { SavedGameRecord, SrsCardRecord } from '../storage/db'
 
 export const DEFAULT_SESSION_MINUTES = 10
 /** Estimacion de cuanto tarda una persona en resolver un problema de este
@@ -100,4 +102,40 @@ export function planSession(
   }
 
   return { items, minutes }
+}
+
+export const REOPEN_WINDOW_GAMES = 5
+export const REOPEN_MISTAKE_THRESHOLD = 3
+
+/**
+ * Conceptos cuya leccion conviene reabrir: aparecieron con al menos un
+ * error real (context: 'game', result: 'incorrect') en 3 o mas de las
+ * ultimas 5 partidas jugadas. Cuenta partidas con el error, no ocurrencias
+ * totales -- un solo error repetido muchas veces dentro de una misma
+ * partida corta (p.ej. PRIMERA_LINEA_TEMPRANA) no deberia pesar lo mismo
+ * que el mismo patron volviendo a aparecer en partidas distintas de
+ * verdad. Si el jugador todavia tiene menos de 5 partidas guardadas, usa
+ * las que haya -- la ventana es un techo, no un minimo para empezar a
+ * contar.
+ */
+export function findConceptsToReopen(games: SavedGameRecord[]): ConceptId[] {
+  const recent = games
+    .slice()
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, REOPEN_WINDOW_GAMES)
+
+  const gamesWithMistake = new Map<ConceptId, number>()
+  for (const game of recent) {
+    const moves = sgfToGameRecord(game.sgf).moves
+    const conceptsInThisGame = new Set(
+      analyzeGame(game.size, game.komi, moves)
+        .filter((occ) => occ.result === 'incorrect')
+        .map((occ) => occ.conceptId),
+    )
+    for (const conceptId of conceptsInThisGame) {
+      gamesWithMistake.set(conceptId, (gamesWithMistake.get(conceptId) ?? 0) + 1)
+    }
+  }
+
+  return [...gamesWithMistake.entries()].filter(([, count]) => count >= REOPEN_MISTAKE_THRESHOLD).map(([conceptId]) => conceptId)
 }

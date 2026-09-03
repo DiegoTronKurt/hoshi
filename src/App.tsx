@@ -3,7 +3,6 @@ import type { ComponentType } from 'react'
 import type { ConceptId } from './analysis/concepts'
 import { useI18n } from './i18n'
 import type { TranslationKey } from './i18n'
-import { recordFirstOpenIfNeeded } from './learning/firstOpen'
 import { ExercisesIcon, LearnIcon, PlayIcon, ProfileIcon, ReviewIcon, TodayIcon } from './ui/icons/NavIcons'
 import { ConfirmDialog } from './ui/common/ConfirmDialog'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
@@ -23,6 +22,7 @@ interface PendingNavigation {
   conceptId?: ConceptId
   gameId?: number
   playSeed?: PlaySeed
+  lessonId?: string
 }
 
 const NAV_ITEMS: Array<{ id: Screen; labelKey: TranslationKey; Icon: ComponentType<{ className?: string }> }> = [
@@ -65,15 +65,13 @@ function App() {
   const [playSeed, setPlaySeed] = useState<PlaySeed | undefined>(undefined)
   const [playGameActive, setPlayGameActive] = useState(false)
   const [pendingNav, setPendingNav] = useState<PendingNavigation | null>(null)
-
-  useEffect(() => {
-    recordFirstOpenIfNeeded()
-  }, [])
+  const [learnLessonId, setLearnLessonId] = useState<string | undefined>(undefined)
 
   function applyNav(target: PendingNavigation) {
     if (target.screen === 'exercises') setExercisesConcept(target.conceptId)
     if (target.screen === 'review') setReviewGameId(target.gameId)
     if (target.screen === 'play') setPlaySeed(target.playSeed)
+    if (target.screen === 'learn') setLearnLessonId(target.lessonId)
     setScreen(target.screen)
   }
 
@@ -100,9 +98,15 @@ function App() {
       </header>
 
       <main className="app-main">
-        {screen === 'today' && <TodayScreen onNavigateToPlay={() => attemptNav({ screen: 'play' })} />}
+        {screen === 'today' && (
+          <TodayScreen
+            onNavigateToPlay={() => attemptNav({ screen: 'play' })}
+            onNavigateToLearn={(lessonId) => attemptNav({ screen: 'learn', lessonId })}
+          />
+        )}
         {screen === 'learn' && (
           <LearnScreen
+            initialLessonId={learnLessonId}
             onNavigateToExercises={(conceptId) => goToExercises(conceptId)}
             onNavigateToPlay={(seed) => attemptNav({ screen: 'play', playSeed: seed })}
           />

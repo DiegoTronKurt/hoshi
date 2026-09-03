@@ -127,6 +127,8 @@
   "today.planOverview.collapse": "Hide the rest of the plan",
   "today.exercisePreview.count": "Exercise {{current}} of {{total}}",
   "today.exercisePreview.start": "Practice",
+  "today.reopen.detail": "You've repeated the {{concept}} mistake in several of your recent games. It's worth revisiting \"{{lesson}}\" again.",
+  "today.reopen.cta": "Revisit lesson",
   "today.reason.overdue": "Review",
   "today.reason.weak": "Weak area",
   "today.reason.new": "New",
@@ -150,9 +152,6 @@
   "profile.insight.knowsNotApplies": "You recognize the pattern when explicitly asked, but you're not yet catching it consistently during a real game.",
   "profile.insight.appliesBetterThanKnows": "You apply this better in real games than in isolated exercises.",
   "profile.insight.consistent": "You apply this about as consistently as you solve it in exercises.",
-  "profile.firstWin.minutes": "You won your first game against the bot {{n}} minutes after first opening Hoshi.",
-  "profile.firstWin.hours": "You won your first game against the bot {{n}} hours after first opening Hoshi.",
-  "profile.firstWin.days": "You won your first game against the bot {{n}} days after first opening Hoshi.",
 
   "axis.RULES_COUNTING.label": "Rules & counting",
   "axis.CAPTURING.label": "Capturing",

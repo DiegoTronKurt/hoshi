@@ -383,6 +383,11 @@
   color: var(--hoshi-text-muted);
 }
 
+.exercises-pass-button {
+  display: block;
+  margin: 0.5rem auto;
+}
+
 .exercises-status {
   text-align: center;
   min-height: 1.4rem;
@@ -934,6 +939,22 @@
   color: var(--hoshi-accent-contrast);
   font-size: 0.95rem;
   cursor: pointer;
+}
+
+.today-reopen-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-warning);
+  background: var(--hoshi-surface-alt);
+}
+
+.today-reopen-detail {
+  margin: 0;
+  font-size: 0.85rem;
 }
 
 .today-insight-card {
@@ -1515,20 +1536,6 @@
 .profile-radar {
   display: flex;
   justify-content: center;
-}
-
-.profile-first-win {
-  padding: 0.7rem 0.9rem;
-  border-radius: 10px;
-  border: 1px solid var(--hoshi-border);
-  background: var(--hoshi-surface-alt);
-  text-align: center;
-}
-
-.profile-first-win p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--hoshi-text-muted);
 }
 
 .radar-chart {
