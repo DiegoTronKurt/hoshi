@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rellenoojo1",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ea][ab][bb][cb][db][eb][ac][bc][dc][bd][cd][gd][hd][de][he][ie][cf][df][ef][if][bg][eg][gg][hg][ig][bh][eh][gh][hh][ih]AW[da][fa][fb][gb][ib][ec][fc][gc][hc][ic][ad][dd][ed][fd][id][ae][be][ce][ee][fe][af][bf][ff][gf][hf][dg][fg][ah][ch][dh][fh][bi][ci][ei][fi][gi][hi]TR[ad][ae][be][af][bf][ce]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[cc]GW[1];W[ag]GW[0])(;B[ag]GW[0](;W[ad]GW[0](;B[cc]GW[0](;W[ae]GW[0](;B[be]GW[0](;W[af]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[bf]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[bf]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[af]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))))(;B[ce]GW[0](;W[be]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[be]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))))(;W[be]GW[0](;B[ae]GW[0](;W[ce]GW[0](;B[ad]GW[0](;W[af]GW[0])(;W[bf]GW[0]))(;B[af]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ad]GW[0](;W[ce]GW[0])(;W[bf]GW[0]))(;B[ce]GW[0](;W[ad]GW[0])(;W[cg]GW[0]))))(;B[ce]GW[0](;W[ae]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ae]GW[0](;W[ad]GW[0])(;W[cg]GW[0]))(;B[bf]GW[0];W[cg]GW[0])))))(;B[ae]GW[0](;W[be]GW[0](;B[cc]GW[0](;W[ce]GW[0](;B[ad]GW[0](;W[af]GW[0])(;W[bf]GW[0]))(;B[af]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ad]GW[0](;W[ce]GW[0])(;W[bf]GW[0]))(;B[ce]GW[0](;W[ad]GW[0])(;W[cg]GW[0]))))(;B[ad]GW[0](;W[ce]GW[0](;B[cc]GW[0](;W[af]GW[0])(;W[bf]GW[0]))(;B[af]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[cc]GW[0](;W[ce]GW[0])(;W[bf]GW[0]))(;B[ce]GW[0];W[cg]GW[0]))))(;W[ce]GW[0](;B[cc]GW[0](;W[be]GW[0](;B[ad]GW[0](;W[af]GW[0])(;W[bf]GW[0]))(;B[af]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ad]GW[0](;W[be]GW[0])(;W[bf]GW[0]))(;B[be]GW[0];W[cg]GW[0])))(;B[ad]GW[0](;W[be]GW[0](;B[cc]GW[0](;W[af]GW[0])(;W[bf]GW[0]))(;B[af]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[cc]GW[0](;W[be]GW[0])(;W[bf]GW[0]))(;B[be]GW[0];W[cg]GW[0]))))))(;W[ae]GW[0](;B[cc]GW[0](;W[ad]GW[0](;B[be]GW[0](;W[af]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[bf]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[bf]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[af]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))))(;B[ce]GW[0](;W[be]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[be]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))))(;W[be]GW[0](;B[ad]GW[0](;W[ce]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0])))(;B[ce]GW[0](;W[ad]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ad]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0])))))(;B[ad]GW[0](;W[be]GW[0](;B[cc]GW[0](;W[ce]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[ce]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0])))(;B[ce]GW[0](;W[af]GW[0](;B[cc]GW[0];W[cg]GW[0])(;B[bf]GW[0](;W[ae]GW[0])(;W[be]GW[0])))(;W[bf]GW[0](;B[cc]GW[0];W[cg]GW[0])(;B[af]GW[0](;W[ae]GW[0])(;W[be]GW[0])))))(;W[ce]GW[0](;B[cc]GW[0](;W[be]GW[0](;B[af]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0]))(;W[af]GW[0](;B[be]GW[0];W[cg]GW[0])(;B[bf]GW[0];W[cg]GW[0])))(;B[be]GW[0](;W[af]GW[0](;B[cc]GW[0];W[cg]GW[0])(;B[ce]GW[0];W[cg]GW[0]))(;W[bf]GW[0](;B[cc]GW[0];W[cg]GW[0])(;B[ce]GW[0];W[cg]GW[0]))))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "rellenoojo2",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[ba][ca][da][cb]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1](;W[fa]GB[1](;B[aa]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[eb]GB[1](;B[aa]GB[1])(;B[ac]GB[1])))(;W[eb]GB[1](;B[aa]GB[1];W[fa]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[fa]GB[1](;B[aa]GB[1])(;B[ac]GB[1]))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "rellenoojo3",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[bb]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[aa]GW[1];W[ac]GW[0](;B[ab]GW[0])(;B[bd]GW[1]))(;B[ab]GW[0]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "rellenoojo4",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[cd]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "rellenoojo5",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ea][ga][db][eb][fb][cc][dc][ec][fc][gc][fd][fe][bf][ef][ff][dg][eg][fg][gg][hg][ig][dh][eh][gh][di][ei][gi][hi][ii]AW[ba][ca][ha][ab][bb][cb][gb][hb][ib][ac][bc][hc][ad][cd][dd][ed][gd][id][ae][be][ce][de][ee][ge][he][ie][af][df][gf][hf][if][ag][cg][ah][ch][fh][hh][bi][ci]TR[ha][hb][gb][ib][hc]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[fa]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "rellenoojo6",
+    "conceptId": "RELLENO_OJO_PROPIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][fa][ga][ab][bb][cb][ib][ac][cc][hc][cd][ed][hd][id][be][ce][he][ie][bf][if][ag][bg][cg][hg][ig][bh][ih][ai][bi][hi]AW[ca][ea][ia][eb][fb][gb][hb][dc][ec][fc][bd][fd][gd][ae][de][ee][fe][ge][cf][ff][gf][hf][dg][eg][gg][ch][dh][eh][gh][hh][ci][di][fi][gi]TR[ca]ZCONCEPT[RELLENO_OJO_PROPIO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[aa]GW[1](;W[db]GW[0](;B[da]GW[0];W[bc]GW[0];B[ca]GW[0])(;B[bc]GW[1]))(;W[bc]GW[0](;B[da]GW[0];W[db]GW[0];B[ca]GW[0])(;B[db]GW[1])))(;B[da]GW[0](;W[db]GW[0](;B[aa]GW[0];W[bc]GW[0];B[ca]GW[0])(;B[ca]GW[0];W[bc]GW[0];B[aa]GW[0]))(;W[bc]GW[0](;B[aa]GW[0];W[db]GW[0];B[ca]GW[0])(;B[ca]GW[0];W[db]GW[0];B[aa]GW[0]))))",
+    "difficulty": "hard"
+  }
+]

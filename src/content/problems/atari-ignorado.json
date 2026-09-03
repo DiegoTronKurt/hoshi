@@ -1,0 +1,26 @@
+[
+  {
+    "id": "atariignorado1",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ia][bb][fb][gb][ib][ac][ec][fc][gc][ic][ed][gd][hd][id][ae][ce][de][ee][fe][ge][ie][bf][cf][ff][gf][hf][if][ag][cg][dg][eg][ah][eh][fh][ci][ei][hi]AW[ba][ca][da][ea][ab][cb][eb][hb][cc][dc][hc][ad][bd][cd][dd][be][ef][gg][hg][ig][ch][gh][hh][ih][fi][gi]TR[ab]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bc]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "atariignorado2",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[ba][ca][da][cb]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1](;W[fa]GB[1](;B[aa]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[eb]GB[1](;B[aa]GB[1])(;B[ac]GB[1])))(;W[eb]GB[1](;B[aa]GB[1];W[fa]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[fa]GB[1](;B[aa]GB[1])(;B[ac]GB[1]))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "atariignorado3",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fb][ec][hc][cd][dd][ed][fd][hd][be][ce][de][ge][af][cf][df][ef][gf][hf][if][bg][cg][dg][fg][gg][ah][bh][ch][dh][gh][ih][ci][ei][fi][gi]AW[aa][ba][ea][ia][ab][bb][cb][db][eb][gb][hb][ac][bc][cc][dc][fc][ic][ad][bd][gd][id][ae][fe][ie][ff][ig][hh][hi]TR[fb]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gc]GB[1](;W[da]GB[1](;B[fa]GB[1](;W[ga]GB[1];B[fc]GB[1];W[ha]GB[1];B[gd]GB[1])(;W[ha]GB[1](;B[fc]GB[1];W[ga]GB[1];B[gd]GB[1])(;B[gd]GB[1];W[ga]GB[1];B[fc]GB[1])))(;B[ga]GB[1](;W[fa]GB[1];B[fc]GB[1];W[ha]GB[1];B[gd]GB[1];W[ga]GB[1])(;W[ha]GB[1](;B[fc]GB[1];W[fa]GB[1];B[gd]GB[1];W[ga]GB[1])(;B[gd]GB[1];W[fa]GB[1];B[fc]GB[1];W[ga]GB[1]))))(;W[fa]GB[1];B[fc]GB[1](;W[da]GB[1](;B[ga]GB[1];W[ha]GB[1];B[gd]GB[1];W[ga]GB[1])(;B[ha]GB[1];W[ga]GB[1];B[gd]GB[1];W[ha]GB[1]))(;W[ga]GB[1](;B[da]GB[1];W[ha]GB[1];B[gd]GB[1])(;B[gd]GB[1](;W[da]GB[1])(;W[ha]GB[1];B[da]GB[1])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "atariignorado4",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][fa][ga][ab][bb][cb][ib][ac][cc][hc][cd][ed][hd][id][be][ce][he][ie][bf][if][ag][bg][cg][hg][ig][bh][ih][ai][bi][hi]AW[ca][ea][ia][eb][fb][gb][hb][dc][ec][fc][bd][fd][gd][ae][de][ee][fe][ge][cf][ff][gf][hf][dg][eg][gg][ch][dh][eh][gh][hh][ci][di][fi][gi]TR[ca]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[da]GW[1](;B[aa]GW[1](;W[db]GW[1];B[bc]GW[1])(;W[bc]GW[1];B[db]GW[1]))(;B[db]GW[1];W[bc]GW[1];B[aa]GW[1]))",
+    "difficulty": "medium"
+  }
+]

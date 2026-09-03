@@ -1,0 +1,44 @@
+[
+  {
+    "id": "trianguloVacio1",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][da][ha][ia][bb][cb][db][gb][hb][ib][ac][ec][gc][hc][ic][dd][ed][fd][gd][hd][id][ae][de][ee][he][bf][cf][df][ef][ff][gf][if][cg][dg][eg][fg][ah][bh][ch][dh][eh][fh][ih][bi][ci][di][ei][gi][hi][ii]AW[ba][ea][fa][eb][fb][cc][fc][bd][cd][be][ge][hf][gg][hg][ig][gh]TR[ae]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ag]GB[1](;W[bc]GB[1](;B[ad]GB[1];W[ce]GB[1];B[af]GB[1])(;B[ce]GB[1];W[ad]GB[1];B[af]GB[1]))(;W[ad]GB[1];B[af]GB[1](;W[bc]GB[1];B[ce]GB[1])(;W[ce]GB[1];B[bc]GB[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "trianguloVacio2",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][bc][cc][dc][ec][fc][gc][hc][ic][cd][dd][ed][fd][gd][hd][id][ee][ge][he][ie][af][cf][ff][gf][hf][ag][bg][fg][gg][hg][ah][bh][ch][fh][gh][hh][ih][ai][bi][ci][di][ei][gi][ii]AW[ac][ae][be][ce][de][bf][ef][eg][ig][dh]TR[cf]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ad]GB[1](;B[bd]GB[0](;W[df]GB[0](;B[cg]GB[0](;W[dg]GB[1])(;W[eh]GB[0];B[dg]GB[0]))(;B[dg]GB[0](;W[cg]GB[0];B[eh]GB[0](;W[cf]GB[0];B[dg]GB[0])(;W[dg]GB[0]))(;W[eh]GB[0];B[cg]GB[0])))(;W[cg]GB[0](;B[df]GB[0](;W[dg]GB[0](;B[cf]GB[0](;W[df]GB[0];B[eh]GB[0])(;W[eh]GB[0];B[df]GB[0]))(;B[df]GB[0](;W[cf]GB[0];B[eh]GB[0])(;W[eh]GB[0];B[cf]GB[0])))(;W[eh]GB[1]))(;B[dg]GB[0](;W[df]GB[0](;B[cg]GB[0];W[eh]GB[0])(;B[eh]GB[0];W[cg]GB[0];B[dh]GB[0]))(;W[eh]GB[1];B[cg]GB[0];W[df]GB[0]))))(;B[df]GB[0](;W[bd]GB[1];B[dg]GB[0];W[cg]GB[0](;B[cf]GB[0](;W[df]GB[0];B[eh]GB[0])(;W[dg]GB[0];B[eh]GB[0]))(;B[df]GB[0](;W[cf]GB[0];B[eh]GB[0])(;W[dg]GB[0];B[eh]GB[0])))(;W[cg]GB[0](;B[bd]GB[0](;W[dg]GB[0](;B[cf]GB[0](;W[df]GB[0];B[eh]GB[0])(;W[eh]GB[0];B[df]GB[0]))(;B[df]GB[0](;W[cf]GB[0];B[eh]GB[0])(;W[eh]GB[0];B[cf]GB[0])))(;W[eh]GB[1]))(;B[dg]GB[0](;W[bd]GB[1];B[cg]GB[0])(;W[cg]GB[0](;B[bd]GB[0](;W[cf]GB[0](;B[df]GB[0])(;B[dg]GB[0]))(;W[df]GB[0];B[eh]GB[0](;W[cf]GB[0];B[dg]GB[0])(;W[dg]GB[0])))(;B[cf]GB[0](;W[bd]GB[0](;B[df]GB[0])(;B[dg]GB[0]))(;W[df]GB[0](;B[bd]GB[0])(;B[eh]GB[0]))))))))(;W[bd]GB[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "trianguloVacio3",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[ba][ca][da][cb]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1](;W[fa]GB[1](;B[aa]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[eb]GB[1](;B[aa]GB[1])(;B[ac]GB[1])))(;W[eb]GB[1](;B[aa]GB[1];W[fa]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[fa]GB[1](;B[aa]GB[1])(;B[ac]GB[1]))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "trianguloVacio4",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[bb]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[aa]GW[1];W[ac]GW[0](;B[ab]GW[0])(;B[bd]GW[1]))(;B[ab]GW[0]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "trianguloVacio5",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[cd]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "trianguloVacio6",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ec][hc][cd][dd][ed][fd][hd][be][ce][de][ge][af][cf][df][ef][gf][hf][if][bg][cg][dg][gg][ah][bh][ch][dh][gh][ih][ci][ei][fi][gi]AW[aa][ba][ea][ia][ab][bb][cb][db][eb][gb][hb][ac][bc][cc][dc][fc][ic][ad][bd][gd][id][ae][fe][ie][ff][eg][ig][eh][fh][hh][hi]TR[hc][hd]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[fa]GB[1](;B[ga]GB[0](;W[ha]GB[1];B[he]GB[0](;W[ga]GB[1])(;W[fb]GB[1]))(;W[fb]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[ib]GB[1])))(;B[ha]GB[0](;W[ga]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[fb]GB[1]))(;W[fb]GB[1](;B[ib]GB[0](;W[ga]GB[1])(;W[gc]GB[0](;B[ga]GB[0](;W[ia]GB[0](;B[ga]GB[0])(;B[ha]GB[0]))(;W[he]GB[0](;B[hc]GB[0])(;B[hd]GB[0])))(;B[ia]GB[0](;W[ga]GB[0](;B[ha]GB[0])(;B[ia]GB[0]))(;W[he]GB[0](;B[hc]GB[0])(;B[hd]GB[0])))))(;B[he]GB[0](;W[ga]GB[1])(;W[ib]GB[1])))))(;W[ga]GB[1](;B[fa]GB[0](;W[ha]GB[1];B[he]GB[0](;W[fb]GB[1])(;W[ib]GB[1]))(;W[fb]GB[1];B[he]GB[0](;W[fa]GB[1])(;W[ha]GB[1])))(;B[fb]GB[0](;W[fa]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[fb]GB[1]))(;W[ha]GB[1];B[he]GB[0](;W[fa]GB[1])(;W[ib]GB[1])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "trianguloVacio7",
+    "conceptId": "TRIANGULO_VACIO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ea][ga][db][eb][fb][cc][dc][ec][fc][gc][fd][fe][bf][ef][ff][dg][eg][fg][gg][hg][ig][dh][eh][gh][di][ei][gi][hi][ii]AW[ba][ca][ha][ab][bb][cb][gb][hb][ib][ac][bc][hc][ad][cd][dd][ed][gd][id][ae][be][ce][de][ee][ge][he][ie][af][df][gf][hf][if][ag][cg][ah][ch][fh][hh][bi][ci]TR[ha][hb][gb][ib][hc]ZCONCEPT[TRIANGULO_VACIO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[fa]GW[1])",
+    "difficulty": "easy"
+  }
+]
