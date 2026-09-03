@@ -115,6 +115,17 @@ function tryBuildProblem(
   const result = solve({ board, region, targetPoints: groupPoints, targetColor, toMove, objective, maxDepth: 8 })
   if (!result.solved) return null
 
+  // La pantalla de Ejercicios resuelve en vivo con margin=1
+  // (useSolvableExercise.ts), mas angosto que el margin=2 usado aca para
+  // generar. Un problema que solo se sostiene con margin=2 queda
+  // irresolvible en la app real: el jugador nunca puede completar la forma
+  // porque el punto que necesita cae fuera de su region en vivo. Encontrado
+  // en produccion con 4 problemas DOS_OJOS (p57/p65/p71/p73) cuya segunda
+  // libertad de ojo quedaba justo fuera del margen angosto.
+  const liveRegion = computeRegion(board, groupPoints, 1)
+  const liveResult = solve({ board, region: liveRegion, targetPoints: groupPoints, targetColor, toMove, objective, maxDepth: 8 })
+  if (!liveResult.solved) return null
+
   const wantLive = objective === 'live'
   const firstMoveWins = result.root.children.filter((c) => c.liveForDefender === wantLive)
   if (firstMoveWins.length !== 1) return null // se exige primera jugada unica
