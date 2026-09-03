@@ -143,11 +143,22 @@ function detectAutoatari(ctx: AnalysisContext): ConceptOccurrence | null {
  * Existia una jugada legal que capturaba al menos una piedra rival, no se
  * jugo, y ese grupo rival sigue en el tablero al final de la partida
  * registrada. Si hay varios grupos capturables, se reporta el mas grande.
+ *
+ * Caso correcto: la jugada misma captura algo. Cualquier captura ocurre
+ * necesariamente por jugar la ultima libertad de un grupo rival (si no,
+ * no habria nada que retirar), asi que "esta jugada capturo" ya implica
+ * "habia un grupo en atari y se aprovecho" -- mismo principio que el
+ * rescate de ATARI_IGNORADO: una propiedad verificable de la jugada
+ * misma, no de lo que haga el rival despues.
  */
 function detectCapturaPerdida(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
   const before = ctx.states[ctx.moveIndex]
   const rival = opponent(move.color)
+
+  if (ctx.captured[ctx.moveIndex].length > 0) {
+    return makeCorrect(ctx, 'CAPTURA_PERDIDA', move.point)
+  }
 
   let best: { repStone: number; liberty: number; size: number } | null = null
   const seen = new Set<number>()
@@ -357,6 +368,13 @@ function detectPrimeraLineaTemprana(ctx: AnalysisContext): ConceptOccurrence | n
  * (jugar ahi vs. pasar), no una lectura completa: es una senal conservadora,
  * concreta y barata de calcular, no una prueba de que esa jugada gana la
  * partida.
+ *
+ * Caso correcto: se paso y ninguna jugada disponible cambiaba el area en
+ * mas de 2 puntos -- mismo barrido que ya hace falta para el caso
+ * incorrecto, solo que no encontro nada. Comparte la misma limitacion ya
+ * documentada (senal de un solo paso, no lectura completa): "ninguna
+ * jugada grande obvia" no es una prueba de que pasar era optimo, pero es
+ * la misma barra conservadora que ya se le exige al caso incorrecto.
  */
 function detectPasePrematuro(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
@@ -377,8 +395,8 @@ function detectPasePrematuro(ctx: AnalysisContext): ConceptOccurrence | null {
       best = { point: p, delta }
     }
   }
-  if (!best) return null
-  return makeIncorrect(ctx, 'PASE_PREMATURO', null, best.point)
+  if (best) return makeIncorrect(ctx, 'PASE_PREMATURO', null, best.point)
+  return makeCorrect(ctx, 'PASE_PREMATURO', null)
 }
 
 /**

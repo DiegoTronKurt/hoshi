@@ -66,10 +66,19 @@ describe('detectores de errores', () => {
     expect(has(events, 'CAPTURA_PERDIDA', 7)).toBe(true)
   })
 
-  it('CAPTURA_PERDIDA: no se reporta si se juega la captura', () => {
+  it('CAPTURA_PERDIDA: no se reporta como incorrecto si se juega la captura', () => {
     const m = moves([1, 2], [2, 2], [3, 2], [4, 4], [2, 1], [4, 3], [2, 3])
     const events = analyzeGame(SIZE, 0, m)
-    expect(events.some((e) => e.conceptId === 'CAPTURA_PERDIDA')).toBe(false)
+    expect(events.some((e) => e.conceptId === 'CAPTURA_PERDIDA' && e.result === 'incorrect')).toBe(false)
+  })
+
+  it('CAPTURA_PERDIDA: se reporta como correcta si se juega la captura', () => {
+    const m = moves([1, 2], [2, 2], [3, 2], [4, 4], [2, 1], [4, 3], [2, 3])
+    const events = analyzeGame(SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'CAPTURA_PERDIDA')
+    expect(event?.result).toBe('correct')
+    expect(event?.context).toBe('game')
+    expect(event?.severity).toBeUndefined()
   })
 
   it('RELLENO_OJO_PROPIO: la jugada ocupa un ojo simple propio sin capturar', () => {
@@ -189,14 +198,27 @@ describe('detectores de errores', () => {
     expect(has(events, 'PASE_PREMATURO', 11)).toBe(true)
   })
 
-  it('PASE_PREMATURO: no se reporta si ningun movimiento cambia el area de forma relevante', () => {
+  it('PASE_PREMATURO: no se reporta como incorrecto si ningun movimiento cambia el area de forma relevante', () => {
     const m: RecordedMove[] = [
       { color: BLACK, point: p(0, 0) },
       { color: WHITE, point: p(8, 8) },
       { color: BLACK, point: null },
     ]
     const events = analyzeGame(SIZE, 0, m)
-    expect(events.some((e) => e.conceptId === 'PASE_PREMATURO')).toBe(false)
+    expect(events.some((e) => e.conceptId === 'PASE_PREMATURO' && e.result === 'incorrect')).toBe(false)
+  })
+
+  it('PASE_PREMATURO: se reporta como correcto si ningun movimiento cambia el area de forma relevante', () => {
+    const m: RecordedMove[] = [
+      { color: BLACK, point: p(0, 0) },
+      { color: WHITE, point: p(8, 8) },
+      { color: BLACK, point: null },
+    ]
+    const events = analyzeGame(SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'PASE_PREMATURO')
+    expect(event?.result).toBe('correct')
+    expect(event?.context).toBe('game')
+    expect(event?.severity).toBeUndefined()
   })
 
   it('RELLENO_TERRITORIO_PROPIO: la jugada cae en territorio ya pass-alive propio', () => {
