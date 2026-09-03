@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Salida generada de tools/export-review-pdf.ts
+tools/output
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

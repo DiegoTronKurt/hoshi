@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "icons:generate": "node tools/generate-icons.mjs",
-    "problems:generate": "vite-node tools/generate-problems.ts"
+    "problems:generate": "vite-node tools/generate-problems.ts",
+    "review:export": "vite-node tools/export-review-pdf.ts"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
