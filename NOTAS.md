@@ -1,5 +1,215 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-03, banco +35 (+area de juego en progreso), mecanismo de reapertura, gate de v1 a medio cerrar)
+
+Reemplaza la version "2026-09-02, despues de v2 puntos 1 y 2" de mas abajo
+(dejada como registro historico). Resumen de estado, no narrativa — el
+detalle de cada punto vive en la entrada de sesion inmediatamente debajo de
+esta.
+
+### Los 4 criterios de salida de v1: uno removido, uno en manos del usuario, uno con material listo, uno verde
+
+Estado anterior (ver entrada "2026-09-01" mas abajo): ninguno de los 4
+cumplido. Esta sesion, decisiones explicitas del usuario sobre los 4:
+
+1. **20-30 partidas jugadas, terminadas y revisadas**: sigue sin hacer.
+   Pedido explicito del usuario: "el item uno es responsabilidad mia" — no
+   hay accion de codigo pendiente de este lado.
+2. **Tiempo hasta la primera partida ganada, medido**: se habia construido
+   en algun momento no documentado en este archivo (`learning/firstWin.ts`
+   + `learning/firstOpen.ts`, con seccion propia en Perfil) sin que NOTAS
+   se actualizara — descubierto recien esta sesion al buscar el string
+   antes de tocar nada. Pedido explicito del usuario: "remuevanlo de la
+   app". **Removido por completo**, no solo ocultado: los dos modulos
+   (`git rm`, estaban commiteados), su test
+   (`tests/learning/firstWin.test.ts`), el llamado a `recordFirstOpenIfNeeded()` en
+   `App.tsx`, la seccion `.profile-first-win` en `ProfileScreen.tsx` +
+   `App.css`, y las 3 claves `profile.firstWin.*` en `en.json`/`es.json`.
+   Verificado sin referencias sueltas (`grep -rn "firstWin\|firstOpen" src
+   tests` vacio) y `npx tsc -b` limpio. Este criterio queda formalmente
+   fuera del gate de v1, decision explicita, no lo mismo que "pendiente".
+3. **Revision de un jugador dan sobre lecciones 0-2 y 20 problemas del
+   banco**: sigue sin hacerse (necesita una persona real, no es algo que
+   se resuelva con codigo), pero el material para hacerla ya existe y
+   genera limpio por primera vez: `tools/export-review-pdf.ts` (escrito en
+   una sesion anterior, tampoco documentada aca, nunca ejecutado con
+   exito hasta ahora) tenia un bug real -- `solveEntry()` no tenia rama
+   para el tipo de problema `areaValue` nuevo de esta sesion, y caia en el
+   fallback de doble atari leyendo campos que `AreaValueProblem` no tiene
+   (`problem.color`, `problem.expectedPoints`), reventando con `Cannot
+   read properties of undefined` apenas se corrio con contenido real.
+   Arreglado con una rama explicita (usa `bestAreaMove` real, igual que la
+   validacion en vivo -- nunca a mano) y con `renderProblemSection`
+   manejando el caso legitimo de "la jugada correcta es pasar, sin
+   coordenada que marcar". Corrida real: 48 problemas (3 por cada uno de
+   los 16 conceptos con `generatesExercises`, ver punto siguiente) + 21
+   lecciones de niveles 0-2, en
+   `tools/output/revision-contenido-muestra.pdf`. El paquete ya cumple lo
+   que el criterio pide (>=20 problemas, lecciones 0-2 completas); falta
+   la revision en si.
+4. **Cero problemas fallando el invariante del generador en CI**: sigue
+   verde. `tests/content/problem-bank.test.ts` sigue pasando con el banco
+   en 219 (142 + 35 nuevos de mistake-exercises + 42 de la corrida de humo
+   de valor de area, confirmado en vivo en la pantalla de Ejercicios --
+   "Todos: 219 problemas"), y va a seguir creciendo con la regeneracion
+   completa de valor de area todavia en curso al escribir esto.
+
+### Banco de problemas: 5 conceptos sin ejercicios nunca resueltos, +35
+problemas reales; 2 conceptos con un tipo de ejercicio nuevo desde cero
+
+De los 11 conceptos con detector de partida real (`hasDetector: true`), 7
+tenian `generatesExercises: false` sin ningun problema en el banco --
+brecha senalada por el usuario en una sesion anterior ("aside from my part
+on this, whats the next step to close v1") y cerrada recien.
+
+**5 conceptos via el pipeline de autojuego + solucionador ya existente**
+(`tools/generate-mistake-exercises.ts`, nuevo, reutiliza el mismo patron
+de `generate-problems.ts` sin importarlo, mismo criterio que
+`generate-ladder-problems.ts`): en vez de buscar candidatos nuevos, extrae
+patrones de las jugadas GANADORAS y PERDEDORAS que el solucionador ya
+evalua al resolver cualquier tsumego (de este script o de
+DOS_OJOS/CAPTURA_SIMPLE/PUNTO_VITAL). 64 partidas de autojuego, resultado:
+
+| Concepto | problemas | como se extrae |
+|---|---|---|
+| ATARI_IGNORADO | 4 | candidato en atari real (1 libertad) resuelto como objetivo 'live' |
+| AUTOATARI | 11 | jugada perdedora que deja al propio grupo con 1 libertad |
+| RELLENO_OJO_PROPIO | 6 | jugada perdedora que cae en un ojo simple propio (`isSimpleEye`, la misma funcion del detector) |
+| TRIANGULO_VACIO | 7 | jugada perdedora con la geometria exacta de Kageyama (2x2 menos una esquina) -- unico de los 5 que es heuristica de teoria de Go, no una prueba de vida-muerte; ver aviso mas abajo |
+| CORTE_NO_DEFENDIDO | 7 | jugada GANADORA que conecta dos cadenas propias antes distintas |
+
+**Aviso explicito sobre TRIANGULO_VACIO** (pedido por el usuario: "even if
+you use heuristics... state it please"): la jugada en si esta
+comprobada como perdedora por el solucionador (eso es una prueba real),
+pero "triangulo vacio = mala forma" es juicio de teoria de Go (Kageyama,
+*Lessons in the Fundamentals of Go*, cap. 8), no una propiedad que el
+motor verifique de forma independiente como vida-muerte. Los otros 4 son
+tan solidos como el resto del banco de tsumego.
+
+**2 conceptos con un tipo de problema nuevo, `AreaValueProblem`**
+(`RELLENO_TERRITORIO_PROPIO`, `PASE_PREMATURO`): ninguno de los dos encaja
+en el `Problem`/`solve()` de tsumego (la pregunta es "jugar un punto o
+pasar", no "vivir o matar"), asi que se construyo un tipo nuevo end-to-end
+-- `solver/areaValue.ts` (reutiliza `bensonPassAlive`/area score reales,
+nada a mano), `content/areaValueProblem.ts` (serializacion SGF, mismo
+patron que `ladderProblem.ts`), `tools/generate-area-value-problems.ts`
+(autojuego + clasificacion en las ultimas 12 posiciones de cada partida,
+no en cualquier momento -- una jugada temprana casi siempre "mejora el
+area" trivialmente), boton de pasar nuevo en `ExerciseView.tsx` +
+`useSolvableExercise.ts` (validacion en vivo contra las mismas funciones
+del detector real, sin guardar "la respuesta correcta" -- no puede
+desincronizarse). Corrida de humo (6 partidas): 42 problemas (38 + 4).
+**Corrida completa (64 partidas) todavia en progreso al escribir esto** --
+la version final de `content/problems/area-value.json` va a tener mas que
+estos 42; se deja una nota de seguimiento mas abajo en vez de esperar para
+cerrar esta entrada.
+
+**Bug real encontrado y corregido en el camino, fuera de lo pedido**:
+ninguno de los 7 conceptos de arriba aparecia en la pantalla de Ejercicios
+pese a tener banco nuevo, porque `analysis/concepts.ts::generatesExercises`
+seguia en `false` para los 7 (flag estatica, no derivada del banco real).
+`conceptsThatGenerateExercises()` -- la funcion que decide que tarjetas
+mostrar en Ejercicios -- filtra por esa flag, asi que el contenido nuevo
+era invisible en el flujo principal (solo llegable via Hoy/Lecciones).
+Corregido con exactamente 7 cambios `false` -> `true` (confirmado con
+`git diff` que los 4 conceptos genuinamente sin banco -- `CAPTURA_PERDIDA`,
+`GRUPO_MURIO_SIN_OJOS`, `ESCALERA_FALLIDA`, `PRIMERA_LINEA_TEMPRANA` --
+quedaron intactos). Efecto secundario bueno: `export-review-pdf.ts` (punto
+3 del gate de v1, arriba) ahora muestrea los 16 conceptos en vez de 9 sin
+tocar ese script -- `conceptsThatGenerateExercises()` es la misma funcion
+en los dos lugares.
+
+### Mecanismo de reapertura de lecciones (Item 5, mecanismo b)
+
+Segunda mitad del "personalization loop" pedido ("both please" sobre las
+dos partes del Item 5; la primera mitad, inyeccion de ejercicio de alta
+prioridad al dia siguiente, ya estaba). Logica pura nueva en
+`training-policy/session.ts::findConceptsToReopen(games)`: mira las
+ultimas 5 partidas guardadas (no ejercicios) y, para cada concepto, cuenta
+en cuantas de esas 5 aparecio con `result: 'incorrect'` -- 3 o mas
+partidas (no ocurrencias: una partida con el mismo error repetido varias
+veces cuenta 1 sola vez, ver mas abajo) dispara la reapertura. Con menos
+de 5 partidas guardadas, el umbral de 3 igual aplica sobre las que haya
+(la ventana es un techo, no un piso).
+
+**Donde se evalua, y por que ahi y no en Hoy**: dentro del efecto de
+guardado de partida ya existente en `PlayGameScreen.tsx` (mismo lugar que
+ya guarda la partida una sola vez), no en cada carga de la pantalla Hoy.
+Si se evaluara en Hoy, releer una leccion ya reabierta sin jugar ninguna
+partida nueva la volveria a marcar como no leida de la nada (Hoy se
+remonta cada vez que se vuelve a esa pestana). Evaluando solo al terminar
+una partida nueva, "reabrir" es un evento real disparado por esa partida,
+no un estado que se reafirma solo contra historia vieja sin cambios.
+
+**Estado nuevo en `ui/lessons/readProgress.ts`**: ademas del set de
+lectura ya existente, un mapa separado lessonId -> conceptId (localStorage,
+`hoshi-lessons-reopened`) para que Hoy sepa *por que* reabrio cada leccion.
+`markLessonRead()` (ya se llama al abrir cualquier leccion) ahora tambien
+limpia esa entrada -- releer la leccion apaga el aviso, aunque la condicion
+de las ultimas 5 partidas siga tecnicamente cumplida (no vuelve a
+dispararse sola; hace falta una partida nueva).
+
+**Aviso en Hoy + enlace directo a la leccion**: `TodayScreen.tsx` lee
+`getReopenedLessons()` y muestra una tarjeta por leccion reabierta
+(`.today-reopen-card`, mismo patron visual que la tarjeta de insight ya
+existente). El boton "Repasar leccion" necesito un deep-link nuevo hasta
+`LearnScreen` (`initialLessonId`, mismo patron ya establecido por
+`initialConcept` en Ejercicios e `initialGameId` en Revisar) enhebrado por
+`App.tsx` (`PendingNavigation.lessonId`).
+
+**Test nuevo**: `tests/training-policy/session.test.ts` gana 5 casos
+(umbral, ventana de 5, menos de 5 partidas guardadas, y un caso que
+verifica explicitamente que 3 ocurrencias en UNA sola partida no alcanzan
+-- con una asercion directa de que el fixture realmente produce 3
+ocurrencias, no solo 1, para que el test no sea trivialmente cierto por
+la razon equivocada). Reutiliza la secuencia de AUTOATARI ya verificada en
+`tests/analysis/mistakes.test.ts` en vez de derivar geometria nueva.
+
+**Verificado en vivo, no solo con tests**: partida real jugada por la UI
+(pase-pase inmediato, para confirmar que el efecto de `PlayGameScreen.tsx`
+corre sin errores) mas 4 partidas previas inyectadas directo por el motor
+real (mismo patron de `import()` dinamico contra el dev server ya usado
+para verificar Revisar). Resultado real: la posicion de AUTOATARI elegida
+tambien disparaba `CORTE_NO_DEFENDIDO` de forma incidental (mismo tipo de
+sorpresa que ya paso verificando Revisar esta sesion) -- las 2 tarjetas de
+reapertura aparecieron en Hoy con el texto correcto, y el boton de cada
+una llevo a la leccion correcta (`n0-l5` "Atari", `n3-l6` "Cortar y
+conectar", esta ultima ademas mostrando ya un problema guiado real gracias
+al arreglo de `generatesExercises` de mas arriba). Cero errores de
+consola en todo el recorrido.
+
+### Verificacion general de esta sesion
+
+`npx tsc -b` limpio. `npx oxlint`: sin warnings nuevos en ningun archivo
+tocado (confirmado comparando contra `git diff`, no solo mirando la lista
+final). `npx vitest run`: 527/527 verdes en 35 archivos (partiendo de 533
+de la sesion anterior, -11 por borrar `firstWin.test.ts`, +5 de
+`findConceptsToReopen`). Playwright en vivo contra `npm run dev` en tres
+pasadas separadas: el flujo de valor de area (Ejercicios, boton de pasar,
+casos correcto/incorrecto para `PASE_PREMATURO`/`RELLENO_TERRITORIO_PROPIO`),
+la pantalla Revisar (partida sintetica de 10 jugadas mostrando
+13 eventos en 7 conceptos distintos), y el mecanismo de reapertura de
+arriba. Cero errores de consola en las tres.
+
+### Que sigue
+
+1. La regeneracion completa de valor de area (64 partidas) sigue corriendo
+   en background al cerrar esta entrada -- cuando termine,
+   `content/problems/area-value.json` va a tener bastante mas que los 42
+   actuales; confirmar que sigue resolviendo limpio y hacer un commit
+   chico aparte (sin cambios de codigo, solo datos).
+2. El gate de v1 (punto 3 de arriba) tiene material listo pero sigue sin
+   ejecutarse: alguien con experiencia real de Go necesita revisar
+   `tools/output/revision-contenido-muestra.pdf`.
+3. El punto 1 del gate (20-30 partidas del usuario) sigue explicitamente
+   en manos del usuario.
+4. `PRIMERA_LINEA_TEMPRANA` sigue siendo el unico de los 11 conceptos con
+   detector sin ningun camino de ejercicio viable identificado todavia
+   (ni siquiera con apoyo del libro de Kageyama) -- sin accion planeada
+   salvo que el usuario lo retome.
+
+---
+
 ## Estado general del proyecto (2026-09-02, despues de v2 puntos 1 y 2)
 
 Reemplaza la version "antes de v2" de mas abajo (dejada como registro
