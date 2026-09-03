@@ -25,7 +25,10 @@ const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
 /**
  * Niveles 4 a 10 del curriculo (roadmap maestro, tabla de la especificacion
  * de pantallas): todavia bloqueados en esta etapa de la app (v1, niveles 0-3
- * nada mas), pero se muestran con su nombre y tamano de tablero reales, no
+ * nada mas -- el contenido real de Nivel 4 (Forma) ya existe en
+ * content/lessons/n4.ts, pero desbloquearlo en esta pantalla es trabajo del
+ * punto 5 de v2, no de este, asi que sigue listado aca como bloqueado por
+ * ahora), pero se muestran con su nombre y tamano de tablero reales, no
  * ocultos ni inventados -- mismo principio que los tamanos de tablero
  * bloqueados en Jugar (play/PlayConfigScreen.tsx).
  */
@@ -55,7 +58,7 @@ function fallbackPreview() {
   const board = createBoard(size)
   board.stones[toPoint(size, 1, 1)] = BLACK
   board.stones[toPoint(size, 2, 3)] = WHITE
-  return { size, stones: board.stones }
+  return { width: size, height: size, stones: board.stones }
 }
 
 const FALLBACK_PREVIEW = fallbackPreview()
@@ -63,10 +66,10 @@ const FALLBACK_PREVIEW = fallbackPreview()
 /** Mini-preview de una leccion: usa el tablero inicial de su demo si tiene
  * una, si no el primer diagrama de sus bloques, y como ultimo recurso un
  * tablero generico -- nunca inventa una posicion nueva. */
-function lessonPreview(lesson: Lesson): { size: number; stones: Int8Array } {
-  if (lesson.demo) return { size: lesson.demo.size, stones: lesson.demo.initialStones }
+function lessonPreview(lesson: Lesson): { width: number; height: number; stones: Int8Array } {
+  if (lesson.demo) return { width: lesson.demo.width, height: lesson.demo.height, stones: lesson.demo.initialStones }
   const diagram = lesson.blocks.find((b) => b.kind === 'diagram')
-  if (diagram && diagram.kind === 'diagram') return { size: diagram.size, stones: diagram.stones }
+  if (diagram && diagram.kind === 'diagram') return { width: diagram.width, height: diagram.height, stones: diagram.stones }
   return FALLBACK_PREVIEW
 }
 
@@ -104,7 +107,11 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
     return (
       <LessonScreen
         lesson={lesson}
-        onBack={() => setView({ kind: 'lessonList', level: lesson.level })}
+        // Nivel 4-6 no son navegables desde esta pantalla todavia (LEVELS
+        // mas abajo sigue en 0-3, punto 3/5 de v2 pendiente) -- el cast es
+        // seguro porque ninguna lesson.level fuera de 0-3 puede llegar aca
+        // hoy, no un intento de esconder un caso real.
+        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 })}
         onNavigateToExercises={onNavigateToExercises}
         onNavigateToPlay={onNavigateToPlay}
       />
@@ -133,8 +140,8 @@ export function LearnScreen({ onNavigateToExercises, onNavigateToPlay }: LearnSc
                 <h3 className="learn-current-lesson-title">{t(currentLesson.titleKey)}</h3>
                 <span className="learn-current-lesson-preview">
                   <BoardCanvas
-                    width={lessonPreview(currentLesson).size}
-                    height={lessonPreview(currentLesson).size}
+                    width={lessonPreview(currentLesson).width}
+                    height={lessonPreview(currentLesson).height}
                     stones={lessonPreview(currentLesson).stones}
                     lastMove={null}
                     theme={minimoTheme}

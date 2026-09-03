@@ -5,7 +5,8 @@ export type LessonBlock =
   | { kind: 'paragraph'; textKey: TranslationKey }
   | {
       kind: 'diagram'
-      size: number
+      width: number
+      height: number
       stones: Int8Array
       captionKey: TranslationKey
       /** Parametros para interpolar en la traduccion, p.ej. un puntaje calculado con computeAreaScore en vez de escrito a mano. */
@@ -37,7 +38,8 @@ export interface DemoStep {
 }
 
 export interface DemoScript {
-  size: number
+  width: number
+  height: number
   initialStones: Int8Array
   /** De quien es el turno en la posicion inicial. */
   toMove: Color
@@ -48,7 +50,7 @@ export interface DemoScript {
 export interface Lesson {
   /** Coincide con Concept.lessonId, p.ej. 'n0-l1'. */
   id: string
-  level: 0 | 1 | 2 | 3
+  level: 0 | 1 | 2 | 3 | 4 | 5 | 6
   order: number
   titleKey: TranslationKey
   blocks: LessonBlock[]

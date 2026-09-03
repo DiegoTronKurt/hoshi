@@ -2,11 +2,13 @@ import { createBoard, toPoint, toXY } from '../../core/board'
 import { BLACK, WHITE } from '../../core/types'
 import type { BoardState } from '../../core/types'
 
-/** Arma un Int8Array de posiciones para diagramas y demos de lecciones a partir de coordenadas (x, y) legibles. */
-export function board(size: number, black: Array<[number, number]>, white: Array<[number, number]> = []): Int8Array {
-  const b = createBoard(size)
-  for (const [x, y] of black) b.stones[toPoint(size, x, y)] = BLACK
-  for (const [x, y] of white) b.stones[toPoint(size, x, y)] = WHITE
+/** Arma un Int8Array de posiciones para diagramas y demos de lecciones a partir de coordenadas (x, y) legibles.
+ * `height` por defecto igual a `width` (mismo criterio que `createBoard`): todo el contenido cuadrado existente
+ * sigue llamando esto con un solo argumento de tamano, sin tocarse. */
+export function board(width: number, black: Array<[number, number]>, white: Array<[number, number]> = [], height = width): Int8Array {
+  const b = createBoard(width, height)
+  for (const [x, y] of black) b.stones[toPoint(width, x, y)] = BLACK
+  for (const [x, y] of white) b.stones[toPoint(width, x, y)] = WHITE
   return b.stones
 }
 

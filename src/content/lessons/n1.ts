@@ -71,7 +71,8 @@ export const LESSONS_N1: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n1-l2.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(
         SIZE,
         [
@@ -100,7 +101,8 @@ export const LESSONS_N1: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n1-l3.p1' },
       {
         kind: 'diagram',
-        size: AREA_DIAGRAM.size,
+        width: AREA_DIAGRAM.size,
+        height: AREA_DIAGRAM.size,
         stones: AREA_DIAGRAM.stones,
         captionKey: 'lesson.n1-l3.diagram.caption',
         captionParams: { score: AREA_DIAGRAM.score.black, stones: 7, territory: 14 },
@@ -127,7 +129,8 @@ export const LESSONS_N1: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n1-l5.p2' },
     ],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: KO_POSITION.board.stones,
       toMove: BLACK,
       steps: [
@@ -166,7 +169,8 @@ export const LESSONS_N1: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n1-l7.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(
         SIZE,
         [

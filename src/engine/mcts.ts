@@ -144,7 +144,14 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
   return applyMove(state, null).state as GameState
 }
 
-function simulatePlayout(initialState: GameState, random: RandomFn, style: BotStyleId): GameState {
+/** Exportada para poder promediar muchos resultados de partida completa
+ * directamente (Monte Carlo llano), sin pasar por el arbol UCT de
+ * chooseMove -- util para comparar dos posiciones iniciales distintas
+ * cuando el factor de ramificacion es tan grande (tableros grandes, pocas
+ * piedras puestas) que el mejor hijo de la raiz recibe muy pocas visitas
+ * y su winRate queda demasiado ruidoso para comparar (ver NOTAS.md,
+ * investigacion de extension/direccion en Nivel 4). */
+export function simulatePlayout(initialState: GameState, random: RandomFn, style: BotStyleId): GameState {
   let state = initialState
   const maxMoves = state.board.stones.length * 3
   let played = 0

@@ -18,7 +18,8 @@ export const LESSONS_N2: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n2-l1.p1' },
       {
         kind: 'diagram',
-        size: 5,
+        width: 5,
+        height: 5,
         stones: board(5, [
           [3, 4],
           [4, 3],
@@ -38,7 +39,8 @@ export const LESSONS_N2: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n2-l2.p2' },
     ],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: board(
         5,
         [
@@ -74,7 +76,8 @@ export const LESSONS_N2: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n2-l3.p2' },
       {
         kind: 'diagram',
-        size: DOS_OJOS.size,
+        width: DOS_OJOS.size,
+        height: DOS_OJOS.size,
         stones: DOS_OJOS.stones,
         captionKey: 'lesson.n2-l3.diagram.caption',
         highlightPoint: cropPoint(DOS_OJOS, 3, 4),
@@ -91,7 +94,8 @@ export const LESSONS_N2: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n2-l4.p2' },
       {
         kind: 'diagram',
-        size: 5,
+        width: 5,
+        height: 5,
         stones: board(
           5,
           [
@@ -114,7 +118,8 @@ export const LESSONS_N2: Lesson[] = [
     titleKey: 'lesson.n2-l5.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n2-l5.p1' }],
     demo: {
-      size: RECTA.size,
+      width: RECTA.size,
+      height: RECTA.size,
       initialStones: RECTA.stones,
       toMove: BLACK,
       steps: [
@@ -134,7 +139,8 @@ export const LESSONS_N2: Lesson[] = [
     titleKey: 'lesson.n2-l6.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n2-l6.p1' }],
     demo: {
-      size: PIRAMIDE.size,
+      width: PIRAMIDE.size,
+      height: PIRAMIDE.size,
       initialStones: PIRAMIDE.stones,
       toMove: WHITE,
       steps: [
@@ -156,21 +162,24 @@ export const LESSONS_N2: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n2-l7.p1' },
       {
         kind: 'diagram',
-        size: RECTA.size,
+        width: RECTA.size,
+        height: RECTA.size,
         stones: RECTA.stones,
         captionKey: 'lesson.n2-l7.diagram.rectaDeTres.caption',
         highlightPoint: cropPoint(RECTA, 4, 4),
       },
       {
         kind: 'diagram',
-        size: PIRAMIDE.size,
+        width: PIRAMIDE.size,
+        height: PIRAMIDE.size,
         stones: PIRAMIDE.stones,
         captionKey: 'lesson.n2-l7.diagram.piramide.caption',
         highlightPoint: cropPoint(PIRAMIDE, 4, 4),
       },
       {
         kind: 'diagram',
-        size: CUADRADO.size,
+        width: CUADRADO.size,
+        height: CUADRADO.size,
         stones: CUADRADO.stones,
         captionKey: 'lesson.n2-l7.diagram.cuadrado.caption',
         highlightPoint: cropPoint(CUADRADO, 3, 4),
@@ -184,7 +193,8 @@ export const LESSONS_N2: Lesson[] = [
     titleKey: 'lesson.n2-l8.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n2-l8.p1' }],
     demo: {
-      size: CUADRADO.size,
+      width: CUADRADO.size,
+      height: CUADRADO.size,
       initialStones: CUADRADO.stones,
       toMove: WHITE,
       steps: [

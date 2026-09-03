@@ -15,7 +15,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l1.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(SIZE, []),
       toMove: BLACK,
       steps: [
@@ -38,7 +39,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l2.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(SIZE, [[2, 2]]),
       toMove: WHITE,
       steps: [
@@ -61,7 +63,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l3.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(SIZE, [[1, 2]]),
       toMove: BLACK,
       steps: [
@@ -84,7 +87,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l4.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(
         SIZE,
         [
@@ -115,7 +119,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l5.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(
         SIZE,
         [
@@ -161,7 +166,8 @@ export const LESSONS_N0: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n0-l6.p2' },
     ],
     demo: {
-      size: SIZE,
+      width: SIZE,
+      height: SIZE,
       initialStones: board(SIZE, [
         [1, 2],
         [3, 2],

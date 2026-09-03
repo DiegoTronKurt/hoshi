@@ -10,7 +10,8 @@ export const LESSONS_N3: Lesson[] = [
     titleKey: 'lesson.n3-l1.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n3-l1.p1' }],
     demo: {
-      size: 7,
+      width: 7,
+      height: 7,
       initialStones: board(
         7,
         [
@@ -45,7 +46,8 @@ export const LESSONS_N3: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n3-l2.p2' },
     ],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: board(5, [[1, 1]], [[2, 1], [1, 2]]),
       toMove: WHITE,
       steps: [
@@ -87,7 +89,8 @@ export const LESSONS_N3: Lesson[] = [
     titleKey: 'lesson.n3-l3.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n3-l3.p1' }],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: board(5, [[1, 1], [1, 0]], [[2, 1], [1, 2]]),
       toMove: WHITE,
       steps: [
@@ -107,7 +110,8 @@ export const LESSONS_N3: Lesson[] = [
     titleKey: 'lesson.n3-l4.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n3-l4.p1' }],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: board(5, [[1, 2], [2, 1]], [[1, 1]]),
       toMove: BLACK,
       steps: [
@@ -127,7 +131,8 @@ export const LESSONS_N3: Lesson[] = [
     titleKey: 'lesson.n3-l5.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n3-l5.p1' }],
     demo: {
-      size: 7,
+      width: 7,
+      height: 7,
       initialStones: board(
         7,
         [
@@ -174,7 +179,8 @@ export const LESSONS_N3: Lesson[] = [
     titleKey: 'lesson.n3-l6.title',
     blocks: [{ kind: 'paragraph', textKey: 'lesson.n3-l6.p1' }],
     demo: {
-      size: 5,
+      width: 5,
+      height: 5,
       initialStones: board(5, [
         [2, 2],
         [3, 3],
@@ -199,7 +205,8 @@ export const LESSONS_N3: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n3-l7.p1' },
       {
         kind: 'diagram',
-        size: 5,
+        width: 5,
+        height: 5,
         stones: board(5, [
           [2, 2],
           [3, 2],
@@ -210,7 +217,8 @@ export const LESSONS_N3: Lesson[] = [
       },
       {
         kind: 'diagram',
-        size: 5,
+        width: 5,
+        height: 5,
         stones: board(5, [
           [2, 1],
           [1, 2],
@@ -230,7 +238,8 @@ export const LESSONS_N3: Lesson[] = [
       { kind: 'paragraph', textKey: 'lesson.n3-l8.p1' },
       {
         kind: 'diagram',
-        size: 5,
+        width: 5,
+        height: 5,
         stones: board(5, [
           [2, 2],
           [3, 2],

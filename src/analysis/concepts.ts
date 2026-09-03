@@ -36,12 +36,21 @@ export type ConceptId =
   // Transversales
   | 'PRIMERA_LINEA_TEMPRANA'
   | 'JUGADA_LEJOS_DEL_COMBATE'
+  // Nivel 4 (Forma) -- DIRECCION_LADO_GRANDE (direccion) queda pendiente:
+  // ni el estimador de influencia ni partidas simuladas completas con el
+  // bot MCTS dieron todavia una diferencia real, reproducible y en el
+  // sentido correcto -- ver NOTAS.md, decision pendiente del usuario antes
+  // de agregarla.
+  | 'FORMA_EFICIENTE'
+  | 'CORTE_DEL_KEIMA'
+  | 'HANE_Y_CORTE'
+  | 'EXTENSION_DESDE_PARED'
 
 export type ConceptSeverity = 'high' | 'medium' | 'low'
 
 export interface Concept {
   id: ConceptId
-  level: 0 | 1 | 2 | 3
+  level: 0 | 1 | 2 | 3 | 4 | 5 | 6
   /** Clave de traduccion para el nombre visible del concepto. */
   labelKey: string
   /** Clave de traduccion para la explicacion de una frase. */
@@ -320,6 +329,55 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     labelKey: 'concept.JUGADA_LEJOS_DEL_COMBATE.label',
     summaryKey: 'concept.JUGADA_LEJOS_DEL_COMBATE.summary',
     lessonId: 'transversal',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 4 (Forma): sin detector ni banco de ejercicios verificado todavia
+  // (a diferencia de los niveles 0-3, no hay un solucionador exhaustivo para
+  // "esta forma es eficiente" -- la afirmacion se verifica con el motor de
+  // evaluacion en la leccion misma, ver content/lessons/n4.ts, no con un
+  // banco de problemas generado aparte). Mismo patron ya establecido por
+  // KO/CONTEO_AREA en nivel 1: concepto con demo interactiva pero sin
+  // evidencia de Perfil todavia.
+  FORMA_EFICIENTE: {
+    id: 'FORMA_EFICIENTE',
+    level: 4,
+    labelKey: 'concept.FORMA_EFICIENTE.label',
+    summaryKey: 'concept.FORMA_EFICIENTE.summary',
+    lessonId: 'n4-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  CORTE_DEL_KEIMA: {
+    id: 'CORTE_DEL_KEIMA',
+    level: 4,
+    labelKey: 'concept.CORTE_DEL_KEIMA.label',
+    summaryKey: 'concept.CORTE_DEL_KEIMA.summary',
+    japaneseTerm: 'keima',
+    lessonId: 'n4-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'medium',
+  },
+  HANE_Y_CORTE: {
+    id: 'HANE_Y_CORTE',
+    level: 4,
+    labelKey: 'concept.HANE_Y_CORTE.label',
+    summaryKey: 'concept.HANE_Y_CORTE.summary',
+    japaneseTerm: 'hane',
+    lessonId: 'n4-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'medium',
+  },
+  EXTENSION_DESDE_PARED: {
+    id: 'EXTENSION_DESDE_PARED',
+    level: 4,
+    labelKey: 'concept.EXTENSION_DESDE_PARED.label',
+    summaryKey: 'concept.EXTENSION_DESDE_PARED.summary',
+    lessonId: 'n4-l4',
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',

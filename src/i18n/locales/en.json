@@ -441,7 +441,37 @@
   "lesson.n3-l8.title": "Empty triangle",
   "lesson.n3-l8.p1": "These three stones form an empty triangle: they occupy three points of a four-point square without needing to, much less efficient than extending toward new space on the board. It's the most common inefficient shape among beginners.",
   "lesson.n3-l8.diagram.caption": "The marked point is already effectively covered by the three stones: actually playing it would be redundant, which is why it's worth avoiding this triangle shape in the first place.",
-  "lesson.n3-l8.p2": "That's the end of Level 3, and the full curriculum of this version of Hoshi.",
+  "lesson.n3-l8.p2": "That's the end of Level 3. Level 4 continues on a bigger board (9x13), with the first ideas about shape.",
+
+  "lesson.n4-l1.title": "Efficient shape",
+  "lesson.n4-l1.p1": "Not every shape with the same number of stones is worth the same. These four stones bunched together (\"dango\") get in each other's way: several of their liberties overlap, so the whole group breathes less than it looks like.",
+  "lesson.n4-l1.diagram.dango.caption": "Four stones bunched together: only {{libs}} liberties total for the whole group.",
+  "lesson.n4-l1.diagram.spread.caption": "The same four stones, spread out in knight's-move (keima) jumps without touching: {{libs}} liberties total, double what the bunched shape had.",
+  "lesson.n4-l1.p2": "Same number of stones, double the breathing room. Spreading stones out instead of bunching them together is the core idea of efficient shape.",
+
+  "lesson.n4-l2.title": "The cut in a keima",
+  "lesson.n4-l2.p1": "A knight's move (keima) connects two stones at a distance, but unlike a solid connection, two real points are left open between them. The opponent can play at either one.",
+  "lesson.n4-l2.p2": "You're playing white. Touch one of the two points that separate the black stones.",
+  "lesson.n4-l2.demo.step1.prompt": "Find a point between the two black stones where white can play.",
+  "lesson.n4-l2.demo.step1.feedback": "The two black stones are no longer directly connected: the top one and the bottom one are now in separate groups. The keima looked like a connection, but it had a real gap to play into.",
+  "lesson.n4-l2.demo.complete": "That's how you spot the weak point of a keima. On to the hane.",
+
+  "lesson.n4-l3.title": "Hane and the risk of a cut",
+  "lesson.n4-l3.p1": "Wrapping around a stone (hane) gains ground, but it almost always leaves a real cutting point behind. Before you hane, it's worth knowing whether that cut favors you or your opponent.",
+  "lesson.n4-l3.p2": "You're playing black. Hane around the white stone.",
+  "lesson.n4-l3.demo.step1.prompt": "Hane around the white stone.",
+  "lesson.n4-l3.demo.step1.feedback": "You gained ground, but now there's a real cutting point right behind your move.",
+  "lesson.n4-l3.demo.auto.prompt": "White cuts immediately.",
+  "lesson.n4-l3.demo.auto.feedback": "White cut, just as feared. But that cutting stone only has two liberties, both toward the corner.",
+  "lesson.n4-l3.demo.step2.prompt": "Chase the cutting stone toward the corner.",
+  "lesson.n4-l3.demo.step2.feedback": "This is the first move of a real ladder: following this same pattern, the cutting stone gets trapped once it reaches the corner, with no liberties left.",
+  "lesson.n4-l3.demo.complete": "That's how a cut that runs into a ladder gets punished. On to the extension.",
+
+  "lesson.n4-l4.title": "Extension from a wall",
+  "lesson.n4-l4.p1": "A wall isn't worth the same whether you stay glued to it or extend too far away. Extending too short wastes part of the wall's strength; extending too far leaves a real gap the opponent can exploit.",
+  "lesson.n4-l4.diagram.short.caption": "Short extension: safe, but leaves ground unclaimed in front of the wall. Across full simulated games, this distance consistently came out worse than the balanced extension.",
+  "lesson.n4-l4.diagram.balanced.caption": "Balanced extension: neither glued to the wall nor too loose. Verified with full simulated games (not by hand): this distance gave the best average result among the ones tested.",
+  "lesson.n4-l4.p2": "There's no single exact rule that works for every wall, but the idea of aiming for the middle ground, neither too tight nor too loose, held up in the real comparison.",
 
   "concept.LIBERTADES.label": "Liberties",
   "concept.LIBERTADES.summary": "The empty points next to a stone or group.",
@@ -494,5 +524,13 @@
   "concept.PRIMERA_LINEA_TEMPRANA.label": "Early first line",
   "concept.PRIMERA_LINEA_TEMPRANA.summary": "Playing on the board's edge line early in the game, with no fight nearby.",
   "concept.JUGADA_LEJOS_DEL_COMBATE.label": "Move far from the fight",
-  "concept.JUGADA_LEJOS_DEL_COMBATE.summary": "Playing somewhere quiet while a group nearby still needs urgent attention."
+  "concept.JUGADA_LEJOS_DEL_COMBATE.summary": "Playing somewhere quiet while a group nearby still needs urgent attention.",
+  "concept.FORMA_EFICIENTE.label": "Efficient shape",
+  "concept.FORMA_EFICIENTE.summary": "Spreading stones out instead of bunching them together: the same number of stones breathes far more.",
+  "concept.CORTE_DEL_KEIMA.label": "Keima cut",
+  "concept.CORTE_DEL_KEIMA.summary": "The knight's move isn't a solid connection: it leaves real points where the opponent can cut.",
+  "concept.HANE_Y_CORTE.label": "Hane and the cut",
+  "concept.HANE_Y_CORTE.summary": "Wrapping around a stone gains ground but almost always leaves a real cutting point behind.",
+  "concept.EXTENSION_DESDE_PARED.label": "Extension from a wall",
+  "concept.EXTENSION_DESDE_PARED.summary": "Neither glued to the wall nor too loose: some extension distances are more balanced than others."
 }

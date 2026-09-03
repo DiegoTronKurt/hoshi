@@ -44,8 +44,8 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
           ) : (
             <figure key={index} className="lesson-diagram">
               <BoardCanvas
-                width={block.size}
-                height={block.size}
+                width={block.width}
+                height={block.height}
                 stones={block.stones}
                 lastMove={block.highlightPoint ?? null}
                 theme={theme}
@@ -63,19 +63,27 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
         <LessonPractice key={concept.id} concept={concept} onPracticeMore={() => onNavigateToExercises(concept.id)} />
       ))}
 
-      <section className="lesson-checkgame">
-        <h3>{t('learn.checkGame.title')}</h3>
-        <button
-          type="button"
-          onClick={() =>
-            onNavigateToPlay(
-              lesson.demo ? { size: lesson.demo.size, stones: lesson.demo.initialStones, toMove: lesson.demo.toMove } : undefined,
-            )
-          }
-        >
-          {t('learn.checkGame.cta')}
-        </button>
-      </section>
+      {/* PlaySeed (ui/play/playConfig.ts) todavia es solo `size: number`
+          (tablero cuadrado) -- generalizarlo a width/height es trabajo del
+          punto 5 (conectar Jugar a 13x13), no de este. Una demo rectangular
+          (Nivel 4 en adelante) no puede armar un seed valido todavia, asi
+          que el boton se oculta en vez de mandar a un tablero en blanco sin
+          relacion con la leccion. */}
+      {(!lesson.demo || lesson.demo.width === lesson.demo.height) && (
+        <section className="lesson-checkgame">
+          <h3>{t('learn.checkGame.title')}</h3>
+          <button
+            type="button"
+            onClick={() =>
+              onNavigateToPlay(
+                lesson.demo ? { size: lesson.demo.width, stones: lesson.demo.initialStones, toMove: lesson.demo.toMove } : undefined,
+              )
+            }
+          >
+            {t('learn.checkGame.cta')}
+          </button>
+        </section>
+      )}
     </div>
   )
 }

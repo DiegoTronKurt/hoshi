@@ -441,7 +441,37 @@
   "lesson.n3-l8.title": "Triángulo vacío",
   "lesson.n3-l8.p1": "Estas tres piedras forman un triángulo vacío: ocupan tres puntos de un cuadrado de cuatro sin necesidad, mucho menos eficiente que extenderse hacia un espacio nuevo del tablero. Es la forma ineficiente más común entre principiantes.",
   "lesson.n3-l8.diagram.caption": "El punto marcado ya está efectivamente cubierto por las tres piedras: jugarlo de verdad sería redundante, y por eso conviene evitar formar este triángulo desde el principio.",
-  "lesson.n3-l8.p2": "Con esto termina el Nivel 3, y el currículo completo de esta versión de Hoshi.",
+  "lesson.n3-l8.p2": "Con esto termina el Nivel 3. El Nivel 4 sigue en un tablero más grande (9x13), con las primeras ideas de forma.",
+
+  "lesson.n4-l1.title": "Forma eficiente",
+  "lesson.n4-l1.p1": "No todas las formas con la misma cantidad de piedras valen lo mismo. Estas cuatro piedras amontonadas (\"dango\") se estorban entre sí: varias de sus libertades están compartidas, así que el grupo entero respira menos de lo que parece.",
+  "lesson.n4-l1.diagram.dango.caption": "Cuatro piedras amontonadas: en total solo {{libs}} libertades para todo el grupo.",
+  "lesson.n4-l1.diagram.spread.caption": "Las mismas cuatro piedras, repartidas en saltos de caballo (keima) sin tocarse: {{libs}} libertades en total, el doble que amontonadas.",
+  "lesson.n4-l1.p2": "Misma cantidad de piedras, el doble de espacio para respirar. Repartir las piedras en vez de amontonarlas es la idea central de la forma eficiente.",
+
+  "lesson.n4-l2.title": "El corte del keima",
+  "lesson.n4-l2.p1": "El salto de caballo (keima) conecta dos piedras a la distancia, pero a diferencia de una conexión sólida, dos puntos reales quedan libres entre medio. El rival puede jugar en cualquiera de los dos.",
+  "lesson.n4-l2.p2": "Juegas con blanco. Toca uno de los dos puntos que separan a las piedras negras.",
+  "lesson.n4-l2.demo.step1.prompt": "Encuentra un punto entre las dos piedras negras donde blanco puede jugar.",
+  "lesson.n4-l2.demo.step1.feedback": "Las dos piedras negras ya no están directamente conectadas: la de arriba y la de abajo quedan en grupos separados. El keima parecía una conexión, pero tenía un punto real por donde entrar.",
+  "lesson.n4-l2.demo.complete": "Así se reconoce el punto débil de un keima. Sigamos con el hane.",
+
+  "lesson.n4-l3.title": "Hane y el riesgo de corte",
+  "lesson.n4-l3.p1": "Cabecear (hane) alrededor de una piedra rival gana terreno, pero casi siempre deja un punto de corte real detrás. Antes de cabecear conviene saber si ese corte te conviene a ti o al rival.",
+  "lesson.n4-l3.p2": "Juegas con negro. Cabecea alrededor de la piedra blanca.",
+  "lesson.n4-l3.demo.step1.prompt": "Cabecea alrededor de la piedra blanca.",
+  "lesson.n4-l3.demo.step1.feedback": "Ganaste terreno, pero ahora hay un punto de corte real justo detrás de tu jugada.",
+  "lesson.n4-l3.demo.auto.prompt": "Blanco corta de inmediato.",
+  "lesson.n4-l3.demo.auto.feedback": "Blanco cortó, tal como se temía. Pero esa piedra de corte tiene solo dos libertades, las dos hacia la esquina.",
+  "lesson.n4-l3.demo.step2.prompt": "Persigue a la piedra de corte empujándola hacia la esquina.",
+  "lesson.n4-l3.demo.step2.feedback": "Esta es la primera jugada de una escalera real: siguiendo este mismo patrón, la piedra de corte queda atrapada al llegar a la esquina, sin ninguna libertad más.",
+  "lesson.n4-l3.demo.complete": "Así se castiga un corte que corre hacia una escalera. Sigamos con la extensión.",
+
+  "lesson.n4-l4.title": "Extensión desde una pared",
+  "lesson.n4-l4.p1": "Una pared no vale lo mismo si te quedas pegado a ella o si te extiendes demasiado lejos. Extender demasiado corto desperdicia parte de la fuerza de la pared; extender demasiado lejos deja un hueco real que el rival puede aprovechar.",
+  "lesson.n4-l4.diagram.short.caption": "Extensión corta: segura, pero deja terreno sin reclamar frente a la pared. En partidas simuladas completas, esta distancia salió consistentemente peor que la extensión balanceada.",
+  "lesson.n4-l4.diagram.balanced.caption": "Extensión balanceada: ni pegada a la pared ni demasiado suelta. Verificado con partidas simuladas completas (no a mano): esta distancia dio el mejor resultado promedio de las probadas.",
+  "lesson.n4-l4.p2": "No hay una regla exacta que sirva siempre para toda pared: pero la idea de buscar el punto medio, ni muy pegado ni muy suelto, se sostuvo en la comparación real.",
 
   "concept.LIBERTADES.label": "Libertades",
   "concept.LIBERTADES.summary": "Los puntos vacíos junto a una piedra o grupo.",
@@ -494,5 +524,13 @@
   "concept.PRIMERA_LINEA_TEMPRANA.label": "Primera línea temprana",
   "concept.PRIMERA_LINEA_TEMPRANA.summary": "Jugar en la línea del borde del tablero temprano en la partida, sin combate cerca.",
   "concept.JUGADA_LEJOS_DEL_COMBATE.label": "Jugada lejos del combate",
-  "concept.JUGADA_LEJOS_DEL_COMBATE.summary": "Jugar en una zona tranquila mientras un grupo cercano todavía necesita atención urgente."
+  "concept.JUGADA_LEJOS_DEL_COMBATE.summary": "Jugar en una zona tranquila mientras un grupo cercano todavía necesita atención urgente.",
+  "concept.FORMA_EFICIENTE.label": "Forma eficiente",
+  "concept.FORMA_EFICIENTE.summary": "Repartir las piedras en vez de amontonarlas: el mismo número de piedras respira mucho más.",
+  "concept.CORTE_DEL_KEIMA.label": "Corte del keima",
+  "concept.CORTE_DEL_KEIMA.summary": "El salto de caballo no es una conexión sólida: deja puntos reales por donde el rival puede cortar.",
+  "concept.HANE_Y_CORTE.label": "Hane y el corte",
+  "concept.HANE_Y_CORTE.summary": "Cabecear gana terreno pero casi siempre deja un punto de corte real detrás.",
+  "concept.EXTENSION_DESDE_PARED.label": "Extensión desde una pared",
+  "concept.EXTENSION_DESDE_PARED.summary": "Ni pegada a la pared ni demasiado suelta: hay una distancia de extensión más equilibrada que otras."
 }
