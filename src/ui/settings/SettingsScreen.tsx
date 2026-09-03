@@ -55,7 +55,7 @@ interface SettingsScreenProps {
 }
 
 export function SettingsScreen({ onBack }: SettingsScreenProps) {
-  const { t } = useI18n()
+  const { language, setLanguage, t } = useI18n()
   const {
     themeId,
     setThemeId,
@@ -122,6 +122,22 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
         </button>
         <h2>{t('settings.title')}</h2>
       </div>
+
+      <section className="settings-section">
+        <h3>{t('language.label')}</h3>
+        <div className="language-switch" role="group" aria-label={t('language.label')}>
+          {(['en', 'es'] as const).map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              className={lang === language ? 'active' : ''}
+              onClick={() => setLanguage(lang)}
+            >
+              {t(lang === 'en' ? 'language.en' : 'language.es')}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="settings-section">
         <h3>{t('settings.appTheme.label')}</h3>

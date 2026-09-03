@@ -81,7 +81,12 @@ export function ProfileScreen() {
           <ul>
             {weakest.map((p) => (
               <li key={p.conceptId}>
-                {t(`concept.${p.conceptId}.label` as TranslationKey)} · {Math.round(p.score)}
+                {t('profile.weakest.item', {
+                  concept: t(`concept.${p.conceptId}.label` as TranslationKey),
+                  percent: Math.round(p.score),
+                  correct: p.correctCount,
+                  total: p.observationCount,
+                })}
               </li>
             ))}
           </ul>

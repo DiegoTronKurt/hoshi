@@ -138,6 +138,7 @@
 
   "profile.title": "Perfil",
   "profile.weakest": "Áreas más débiles",
+  "profile.weakest.item": "{{concept}} — {{percent}}% correcto ({{correct}} de {{total}})",
   "profile.noData": "Sin datos",
   "profile.level": "Nivel {{n}}",
   "profile.settings": "Ajustes",

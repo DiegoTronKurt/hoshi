@@ -55,7 +55,7 @@ function useSystemScheme(): 'light' | 'dark' {
 }
 
 function App() {
-  const { language, setLanguage, t } = useI18n()
+  const { t } = useI18n()
   const { appThemeId, appTheme } = useSettings()
   const systemScheme = useSystemScheme()
   const scheme = appThemeId === 'system' ? systemScheme : appTheme.scheme
@@ -97,18 +97,6 @@ function App() {
       <header className="app-header">
         <h1>{t('app.title')}</h1>
         <p className="tagline">{t('app.tagline')}</p>
-        <div className="language-switch" role="group" aria-label={t('language.label')}>
-          {(['en', 'es'] as const).map((lang) => (
-            <button
-              key={lang}
-              type="button"
-              className={lang === language ? 'active' : ''}
-              onClick={() => setLanguage(lang)}
-            >
-              {t(lang === 'en' ? 'language.en' : 'language.es')}
-            </button>
-          ))}
-        </div>
       </header>
 
       <main className="app-main">
