@@ -90,16 +90,31 @@ herramienta de navegador disponible en esta sesion) y la revision externa
 liviana de contenido (roadmap seccion 1.4), que ahora deberia incluir
 Niveles 4, 5 y 6 completos en su muestra.
 
-### Commit y push de la entrada anterior (Nivel 4 + Nivel 6)
+### Commit, push y AAB de release, los dos a pedido explicito del usuario
 
-A pedido explicito del usuario, el trabajo de la entrada "cont. 3"
-(Nivel 4 conectado, Nivel 6 completo, mas los datos de fondo ya listos de
-antes: `area-value.json` regenerado, `SELF_PLAY_GAMES` a 200) se
-commiteo (`4d040b8`) y se subio a `origin/master`. El trabajo de Nivel 5
-de esta entrada **todavia no esta commiteado** -- sigue la regla de solo
-commitear cuando se pide explicitamente, y el pedido anterior fue sobre el
-estado del repo en ese momento, no una autorizacion abierta para lo que
-viniera despues.
+Todo el trabajo de esta sesion (entradas "cont. 3" y "cont. 4": Nivel 4
+conectado, Nivel 6 completo, Nivel 5 completo, mas los datos de fondo ya
+listos de antes) esta commiteado y subido a `origin/master` de `hoshi`, en
+dos commits (`4d040b8`, `9eb4831`).
+
+AAB de release regenerado siguiendo el pipeline documentado
+(`hoshi-flutter/sync-webapp.ps1`): `npm run build` en `hoshi/` (limpio) ->
+sync -> bump manual de `pubspec.yaml` -> `flutter build appbundle
+--release` (`C:\flutter\bin\flutter.bat`, no esta en el PATH de esta
+maquina). Version `1.8.2+13 -> 1.9.0+14` (bump menor, no de parche: los
+tres niveles de v2 pasando de invisibles/inexistentes a completos y
+navegables es un cambio de feature real, mismo criterio que subidas
+anteriores como 1.6.0+9). Build firmado con la key de release real,
+56.3MB, en `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`
+(no trackeado por git, confirmado en `.gitignore`). Cambios de
+`hoshi-flutter/` (sync de assets + version) commiteados y subidos a su
+propio repo (`dbc1b87`, `origin/master` de `hoshi-flutter`).
+
+**No subido a Play Console** -- eso sigue siendo una decision y accion
+manual del usuario, no se hace automaticamente en cada build local. La
+ultima version confirmada subida por el usuario, segun el roadmap
+maestro seccion 4.3, sigue siendo 1.5.0+8 -- esta build (1.9.0+14) y
+varias anteriores (hasta 1.8.1+12) siguen sin subir.
 
 ---
 
