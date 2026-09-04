@@ -32,7 +32,8 @@ export function LessonPractice({ concept, onPracticeMore }: LessonPracticeProps)
     setLoaded(entry ? loadEntry(entry) : null)
   }, [entry])
 
-  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, handlePass } = useSolvableExercise(
+  const { game, lastMove, status, thinking, solverError, solutionMoves, handleIntersectionClick, handlePass } =
+    useSolvableExercise(
     entry,
     loaded,
     solverClient,
@@ -50,6 +51,7 @@ export function LessonPractice({ concept, onPracticeMore }: LessonPracticeProps)
           lastMove={lastMove}
           status={status}
           thinking={thinking}
+          solverError={solverError}
           solutionMoves={solutionMoves}
           theme={theme}
           onIntersectionClick={handleIntersectionClick}

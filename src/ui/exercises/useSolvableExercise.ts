@@ -27,6 +27,10 @@ export interface SolvableProblemState {
   lastMove: number | null
   status: ProblemStatus
   thinking: boolean
+  /** True si el ultimo intento de consultar al solucionador fallo (Worker
+   * caido o colgado) -- no es un intento incorrecto, es que no se pudo
+   * verificar la jugada. */
+  solverError: boolean
   solutionMoves: number | null
   isUserTurn: boolean
   handleIntersectionClick: (point: number) => void
@@ -79,6 +83,7 @@ export function useSolvableExercise(
   const [lastMove, setLastMove] = useState<number | null>(null)
   const [status, setStatus] = useState<ProblemStatus>('playing')
   const [thinking, setThinking] = useState(false)
+  const [solverError, setSolverError] = useState(false)
   const [solutionMoves, setSolutionMoves] = useState<number | null>(null)
 
   const wrongAttemptsRef = useRef(0)
@@ -106,6 +111,7 @@ export function useSolvableExercise(
     wrongAttemptsRef.current = 0
     recordedRef.current = false
     startTimeRef.current = null
+    setSolverError(false)
     if (!loaded) {
       setGame(null)
       setLastMove(null)
@@ -147,26 +153,32 @@ export function useSolvableExercise(
     async function countSolutionMoves() {
       let state = gameStateFromBoard(p.board, p.toMove)
       let studentMoves = 0
-      for (let ply = 0; ply < SOLVE_MAX_DEPTH; ply++) {
-        if (isResolved(state)) {
-          if (!cancelled) setSolutionMoves(studentMoves)
-          return
+      try {
+        for (let ply = 0; ply < SOLVE_MAX_DEPTH; ply++) {
+          if (isResolved(state)) {
+            if (!cancelled) setSolutionMoves(studentMoves)
+            return
+          }
+          const result = await c.solve({
+            board: state.board,
+            region: r,
+            targetPoints: p.targetPoints,
+            targetColor: p.targetColor,
+            toMove: state.toMove,
+            objective: p.objective,
+            maxDepth: SOLVE_MAX_DEPTH,
+            pruneAfterDecisive: true,
+          })
+          if (cancelled || !result.solved || result.root.move === null) return
+          if (state.toMove === p.toMove) studentMoves++
+          const applied = applyMove(state, result.root.move, { regionPoints: new Set(r) })
+          if (!applied.legal || !applied.state) return
+          state = applied.state
         }
-        const result = await c.solve({
-          board: state.board,
-          region: r,
-          targetPoints: p.targetPoints,
-          targetColor: p.targetColor,
-          toMove: state.toMove,
-          objective: p.objective,
-          maxDepth: SOLVE_MAX_DEPTH,
-          pruneAfterDecisive: true,
-        })
-        if (cancelled || !result.solved || result.root.move === null) return
-        if (state.toMove === p.toMove) studentMoves++
-        const applied = applyMove(state, result.root.move, { regionPoints: new Set(r) })
-        if (!applied.legal || !applied.state) return
-        state = applied.state
+      } catch {
+        // Es solo una pista opcional (cuantas jugadas faltan); si el Worker
+        // falla no hay nada que mostrarle al usuario, solutionMoves
+        // simplemente se queda sin dato en vez de propagar el error.
       }
     }
 
@@ -240,17 +252,25 @@ export function useSolvableExercise(
       if (!client) return
 
       setThinking(true)
-      const check = await client.solve({
-        board: result.state.board,
-        region,
-        targetPoints: problem.targetPoints,
-        targetColor: problem.targetColor,
-        toMove: result.state.toMove,
-        objective: problem.objective,
-        maxDepth: SOLVE_MAX_DEPTH,
-        pruneAfterDecisive: true,
-      })
-      setThinking(false)
+      setSolverError(false)
+      let check
+      try {
+        check = await client.solve({
+          board: result.state.board,
+          region,
+          targetPoints: problem.targetPoints,
+          targetColor: problem.targetColor,
+          toMove: result.state.toMove,
+          objective: problem.objective,
+          maxDepth: SOLVE_MAX_DEPTH,
+          pruneAfterDecisive: true,
+        })
+      } catch {
+        setSolverError(true)
+        return
+      } finally {
+        setThinking(false)
+      }
 
       if (!check.solved) {
         wrongAttemptsRef.current += 1
@@ -389,6 +409,7 @@ export function useSolvableExercise(
     if (!loaded) return
     wrongAttemptsRef.current = 0
     recordedRef.current = false
+    setSolverError(false)
     setGame(gameStateFromBoard(loaded.problem.board, initialToMove(loaded)))
     setLastMove(null)
     setStatus('playing')
@@ -400,5 +421,17 @@ export function useSolvableExercise(
     void recordOutcome(false)
   }
 
-  return { game, lastMove, status, thinking, solutionMoves, isUserTurn, handleIntersectionClick, handlePass, reset, giveUp }
+  return {
+    game,
+    lastMove,
+    status,
+    thinking,
+    solverError,
+    solutionMoves,
+    isUserTurn,
+    handleIntersectionClick,
+    handlePass,
+    reset,
+    giveUp,
+  }
 }

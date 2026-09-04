@@ -9,7 +9,11 @@ export type SolverResponse = SolveResult & { requestId: number }
 
 self.onmessage = (event: MessageEvent<SolverRequest>) => {
   const { requestId, ...request } = event.data
-  const result = solve(request)
-  const response: SolverResponse = { requestId, ...result }
-  postMessage(response)
+  try {
+    const result = solve(request)
+    const response: SolverResponse = { requestId, ...result }
+    postMessage(response)
+  } catch (err) {
+    postMessage({ requestId, error: err instanceof Error ? err.message : String(err) })
+  }
 }

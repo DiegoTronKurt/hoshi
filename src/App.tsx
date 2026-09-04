@@ -64,10 +64,23 @@ function App() {
   const [reviewGameId, setReviewGameId] = useState<number | undefined>(undefined)
   const [playSeed, setPlaySeed] = useState<PlaySeed | undefined>(undefined)
   const [playGameActive, setPlayGameActive] = useState(false)
+  const [exercisesActive, setExercisesActive] = useState(false)
   const [pendingNav, setPendingNav] = useState<PendingNavigation | null>(null)
   const [learnLessonId, setLearnLessonId] = useState<string | undefined>(undefined)
 
+  /** Se incrementa en cada navegacion real (aunque el destino sea la misma
+   * pestana ya activa) y se usa como `key` de las 4 pantallas con estado
+   * interno propio (Aprender/Jugar/Ejercicios/Revisar). Reactocar una
+   * pestana ya activa para volver a su raiz (p.ej. goToExercises(undefined)
+   * estando ya en Ejercicios) a veces no cambia ningun valor -- React
+   * entonces ni siquiera vuelve a invocar el componente hijo, asi que un
+   * useEffect mirando el prop nunca llega a dispararse. Un contador que
+   * siempre cambia fuerza el remount sin depender de que el valor en si
+   * haya cambiado. */
+  const [navToken, setNavToken] = useState(0)
+
   function applyNav(target: PendingNavigation) {
+    setNavToken((t) => t + 1)
     if (target.screen === 'exercises') setExercisesConcept(target.conceptId)
     if (target.screen === 'review') setReviewGameId(target.gameId)
     if (target.screen === 'play') setPlaySeed(target.playSeed)
@@ -76,10 +89,15 @@ function App() {
   }
 
   /** Toda navegacion entre pestanas pasa por aca: si Jugar tiene una partida
-   * sin terminar, pide confirmacion en pantalla antes de abandonarla en vez
-   * de desmontar PlayScreen en silencio. */
+   * sin terminar o Ejercicios tiene un intento en curso, pide confirmacion
+   * en pantalla antes de abandonarlo en vez de desmontar la pantalla en
+   * silencio -- incluye retocar la propia pestana activa, que gracias a
+   * navToken tambien la reinicia y por lo tanto tambien debe confirmar.
+   * Hoy y Aprender quedan afuera a proposito (ver plan de este pase):
+   * una tarjeta de repaso o una leccion leida son mucho mas baratas de
+   * repetir que una partida completa o un intento de tsumego. */
   function attemptNav(target: PendingNavigation) {
-    if (screen === 'play' && playGameActive && target.screen !== 'play') {
+    if ((screen === 'play' && playGameActive) || (screen === 'exercises' && exercisesActive)) {
       setPendingNav(target)
       return
     }
@@ -106,6 +124,7 @@ function App() {
         )}
         {screen === 'learn' && (
           <LearnScreen
+            key={navToken}
             initialLessonId={learnLessonId}
             onNavigateToExercises={(conceptId) => goToExercises(conceptId)}
             onNavigateToPlay={(seed) => attemptNav({ screen: 'play', playSeed: seed })}
@@ -113,18 +132,23 @@ function App() {
         )}
         {screen === 'play' && (
           <PlayScreen
+            key={navToken}
             onGameActiveChange={setPlayGameActive}
             onNavigateToToday={() => attemptNav({ screen: 'today' })}
             onNavigateToReview={(gameId) => attemptNav({ screen: 'review', gameId })}
             initialSeed={playSeed}
           />
         )}
-        {screen === 'exercises' && <ExercisesScreen initialConcept={exercisesConcept} />}
-        {screen === 'review' && <ReviewScreen onPracticeConcept={goToExercises} initialGameId={reviewGameId} />}
+        {screen === 'exercises' && (
+          <ExercisesScreen key={navToken} initialConcept={exercisesConcept} onActiveChange={setExercisesActive} />
+        )}
+        {screen === 'review' && (
+          <ReviewScreen key={navToken} onPracticeConcept={goToExercises} initialGameId={reviewGameId} />
+        )}
         {screen === 'profile' && <ProfileScreen />}
       </main>
 
-      <nav className="bottom-nav" role="navigation" aria-label={t('nav.today')}>
+      <nav className="bottom-nav" role="navigation" aria-label={t('nav.label')}>
         {NAV_ITEMS.map(({ id, labelKey, Icon }) => (
           <button
             key={id}
@@ -141,10 +165,10 @@ function App() {
 
       {pendingNav && (
         <ConfirmDialog
-          title={t('play.exitConfirm.title')}
-          message={t('play.exitConfirm.message')}
-          confirmLabel={t('play.exitConfirm.confirm')}
-          cancelLabel={t('play.exitConfirm.cancel')}
+          title={t(screen === 'play' ? 'play.exitConfirm.title' : 'exercises.exitConfirm.title')}
+          message={t(screen === 'play' ? 'play.exitConfirm.message' : 'exercises.exitConfirm.message')}
+          confirmLabel={t(screen === 'play' ? 'play.exitConfirm.confirm' : 'exercises.exitConfirm.confirm')}
+          cancelLabel={t(screen === 'play' ? 'play.exitConfirm.cancel' : 'exercises.exitConfirm.cancel')}
           onConfirm={() => {
             applyNav(pendingNav)
             setPendingNav(null)

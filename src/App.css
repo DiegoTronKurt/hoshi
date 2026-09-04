@@ -413,6 +413,10 @@
   color: var(--hoshi-danger);
 }
 
+.exercises-error {
+  color: var(--hoshi-danger);
+}
+
 .exercises-empty {
   text-align: center;
   color: var(--hoshi-text-faint);

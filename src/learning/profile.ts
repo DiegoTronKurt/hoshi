@@ -6,7 +6,6 @@ import { sgfToGameRecord } from '../core/sgf'
 import type { AttemptRecord, SavedGameRecord } from '../storage/db'
 
 const MIN_EXERCISE_ATTEMPTS = 5
-const MIN_GAMES = 3
 /** Cuantos puntos de puntaje resta cada error de este concepto por cada 100
  * jugadas totales. 10 se eligio para que la escala sea legible: un concepto
  * con un error cada 10 jugadas (bastante seguido) ya deja ese componente en
@@ -111,15 +110,24 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
     const exerciseAttempts = agg.byContext.exercise.correct + agg.byContext.exercise.incorrect
     const exerciseAccuracy = exerciseAttempts > 0 ? (agg.byContext.exercise.correct / exerciseAttempts) * 100 : null
     const gameMistakeCount = agg.byContext.game.incorrect
+    // Cuantas veces este concepto en particular aparecio en una partida real
+    // (acierto o error), no cuantas partidas se jugaron en total -- esa
+    // distincion es la que importa: games.length >= 3 es cierto para TODOS
+    // los conceptos aunque el concepto nunca haya ocurrido, lo que antes
+    // le regalaba un puntaje perfecto a un concepto sin ninguna evidencia
+    // real (ver NOTAS.md).
+    const gameObservations = agg.byContext.game.correct + agg.byContext.game.incorrect
 
-    const hasEvidence = exerciseAttempts >= MIN_EXERCISE_ATTEMPTS || games.length >= MIN_GAMES
+    const hasEvidence = exerciseAttempts >= MIN_EXERCISE_ATTEMPTS || gameObservations > 0
     if (!hasEvidence) {
       profiles[conceptId] = { conceptId, score: null, ...agg }
       continue
     }
 
     const errorPenaltyScore =
-      games.length > 0 ? clamp(100 - (gameMistakeCount / Math.max(totalMoves, 1)) * 100 * ERROR_RATE_FACTOR, 0, 100) : null
+      gameObservations > 0
+        ? clamp(100 - (gameMistakeCount / Math.max(totalMoves, 1)) * 100 * ERROR_RATE_FACTOR, 0, 100)
+        : null
 
     let score: number
     if (exerciseAccuracy !== null && errorPenaltyScore !== null) {

@@ -15,6 +15,14 @@ export const DEFAULT_SESSION_MINUTES = 10
  * planificador. */
 const SECONDS_PER_PROBLEM = 45
 
+/** Conversion inversa a la de sessionSize mas abajo: cuantos minutos toma
+ * resolver `itemCount` problemas, segun la misma estimacion. La usa Hoy
+ * para traducir la meta diaria (cantidad de problemas, ver
+ * ui/settings/index.tsx) a los minutos que pide planSession. */
+export function minutesForGoal(itemCount: number): number {
+  return (itemCount * SECONDS_PER_PROBLEM) / 60
+}
+
 export type SessionReason = 'overdue' | 'weak' | 'new'
 
 export interface SessionReasonDetail {

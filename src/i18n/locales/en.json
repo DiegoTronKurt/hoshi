@@ -47,7 +47,8 @@
   "play.config.title": "New game",
   "play.config.start": "Start game",
   "play.bot.label": "Bot: ~{{kyu}} kyu",
-  "play.thinking": "The bot is thinking",
+  "play.thinking": "Thinking...",
+  "engine.error": "Something went wrong. Try again.",
   "play.undo": "Undo",
   "play.count.button": "Count",
   "play.count.estimate": "Estimated score — Black {{black}} · White {{white}}",
@@ -68,6 +69,7 @@
   "play.savedGames.vsBot": "vs bot",
   "play.savedGames.local": "local",
 
+  "nav.label": "Main navigation",
   "nav.today": "Today",
   "nav.learn": "Learn",
   "nav.play": "Play",
@@ -95,6 +97,10 @@
   "exercises.solvesInOne": "Solves in 1 move",
   "exercises.solvesInMany": "Solves in {{count}} moves",
   "exercises.noProblems": "No exercises for this concept yet.",
+  "exercises.exitConfirm.title": "Leave this exercise?",
+  "exercises.exitConfirm.message": "You haven't finished this attempt yet. If you leave now, it won't be recorded.",
+  "exercises.exitConfirm.confirm": "Leave exercise",
+  "exercises.exitConfirm.cancel": "Keep practicing",
   "exercises.problemCount": "{{n}} problems",
   "exercises.backToConcepts": "Back to concepts",
 

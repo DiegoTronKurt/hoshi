@@ -21,7 +21,11 @@ export interface EngineResponse {
 
 self.onmessage = (event: MessageEvent<EngineRequest>) => {
   const { requestId, state, playouts, randomSeed, maxTimeMs, style } = event.data
-  const result = chooseMove(state, { playouts, randomSeed, maxTimeMs, style })
-  const response: EngineResponse = { requestId, ...result }
-  postMessage(response)
+  try {
+    const result = chooseMove(state, { playouts, randomSeed, maxTimeMs, style })
+    const response: EngineResponse = { requestId, ...result }
+    postMessage(response)
+  } catch (err) {
+    postMessage({ requestId, error: err instanceof Error ? err.message : String(err) })
+  }
 }

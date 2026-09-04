@@ -47,7 +47,8 @@
   "play.config.title": "Partida nueva",
   "play.config.start": "Comenzar partida",
   "play.bot.label": "Bot: ~{{kyu}} kyu",
-  "play.thinking": "El bot está pensando",
+  "play.thinking": "Pensando...",
+  "engine.error": "Algo salió mal. Intenta de nuevo.",
   "play.undo": "Deshacer",
   "play.count.button": "Contar",
   "play.count.estimate": "Puntaje estimado — Negro {{black}} · Blanco {{white}}",
@@ -68,6 +69,7 @@
   "play.savedGames.vsBot": "contra el bot",
   "play.savedGames.local": "local",
 
+  "nav.label": "Navegación principal",
   "nav.today": "Hoy",
   "nav.learn": "Aprender",
   "nav.play": "Jugar",
@@ -95,6 +97,10 @@
   "exercises.solvesInOne": "Se resuelve en 1 jugada",
   "exercises.solvesInMany": "Se resuelve en {{count}} jugadas",
   "exercises.noProblems": "Todavía no hay ejercicios para este concepto.",
+  "exercises.exitConfirm.title": "¿Salir de este ejercicio?",
+  "exercises.exitConfirm.message": "Todavía no terminaste este intento. Si sales ahora, no se va a registrar.",
+  "exercises.exitConfirm.confirm": "Salir del ejercicio",
+  "exercises.exitConfirm.cancel": "Seguir practicando",
   "exercises.problemCount": "{{n}} problemas",
   "exercises.backToConcepts": "Volver a conceptos",
 

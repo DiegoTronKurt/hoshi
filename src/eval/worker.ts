@@ -16,9 +16,13 @@ export interface EvalResponse {
 
 self.onmessage = async (event: MessageEvent<EvalRequest>) => {
   const { requestId, position, modelUrl } = event.data
-  const model = await loadModel(modelUrl)
-  const input = encodeInput(position)
-  const result = await evaluatePosition(model, input)
-  const response: EvalResponse = { requestId, result }
-  postMessage(response)
+  try {
+    const model = await loadModel(modelUrl)
+    const input = encodeInput(position)
+    const result = await evaluatePosition(model, input)
+    const response: EvalResponse = { requestId, result }
+    postMessage(response)
+  } catch (err) {
+    postMessage({ requestId, error: err instanceof Error ? err.message : String(err) })
+  }
 }

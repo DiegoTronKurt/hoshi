@@ -1,5 +1,130 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-04, cont. 10: auditoria completa + 7 bugs silenciosos corregidos, tras terminar el curriculo)
+
+Con los 11 niveles de contenido ya completos (cont. 9), el pedido cambio
+de tono: "que falta en la app? revisa todos los archivos, pensando
+bien". Tres subagentes en paralelo (roadmap/deuda tecnica, contenido,
+UI/UX) mas un cuarto dedicado solo al flujo de navegacion entre
+pantallas encontraron una familia de bugs con el mismo patron: nada
+tira error, nada rompe visualmente, cada uno simplemente hace lo
+incorrecto en silencio -- por eso ninguno habia salido a la luz todavia.
+El usuario aprobo un plan (`EnterPlanMode`/`ExitPlanMode`, guardado en
+`C:\Users\diego\.claude\plans\optimized-dazzling-pretzel.md`) validado
+ademas por un quinto subagente (Plan, dado los file:line exactos con la
+instruccion de validar, no re-descubrir) que corrigio dos de las
+soluciones propuestas antes de escribir una sola linea -- ver mas abajo.
+
+### Los 7 bugs corregidos, en orden de implementacion
+
+1. **Las 3 llamadas al Worker (motor, solver, eval) no tenian manejo de
+   error.** `engine/client.ts`, `solver/client.ts` y el recien descubierto
+   `eval/client.ts` (una red KataGo real -- V7, pesos `kata-b10c128` via
+   tfjs -- construida y probada pero sin ningun consumidor en `src/ui`
+   todavia) compartian el mismo patron: `new Promise((resolve) => ...)`
+   sin reject, sin timeout, sin `worker.onerror`. Si el Worker tiraba una
+   excepcion, la promesa quedaba colgada para siempre -- el indicador
+   "Pensando..." de Jugar y el candado de un ejercicio (`thinking`)
+   se trababan sin salida. Corregido con `src/workerRpc.ts`, una funcion
+   compartida (`createWorkerRpc`, composicion en vez de clase base --
+   no hay ningun patron de herencia en el resto del proyecto) que agrega
+   3 capas: try/catch dentro de cada `onmessage` del Worker (postea
+   `{requestId, error}` en vez de tirar -- necesario porque `worker.onerror`
+   NO se dispara para un rechazo async sin capturar dentro del Worker,
+   solo para un throw sincrono), `worker.onerror` como respaldo mas
+   grueso, y un timeout por pedido. Los 3 sitios de llamada
+   (`PlayGameScreen.tsx`, `useSolvableExercise.ts` x2) ahora capturan el
+   rechazo, liberan el estado de "pensando" y muestran `engine.error`.
+
+2. **`lessonId: 'transversal'` en dos conceptos no era un typo.**
+   `PRIMERA_LINEA_TEMPRANA` y `JUGADA_LEJOS_DEL_COMBATE` (ver cont. 8: ya
+   se habian revisado las 7 lecciones de Nivel 1 y las 8 de Nivel 2 sin
+   encontrar ninguna que cubra "primera linea temprano" o "tenuki de un
+   combate urgente"). El primer intento de solucion (apuntar a la leccion
+   mas cercana) lo descarto el subagente de validacion releyendo esta
+   misma nota: mostrarle al usuario una leccion que no ensena el error
+   que cometio es peor que el no-op actual. `Concept.lessonId` ahora es
+   `string | null`, ambos casos en `null`, `getLesson()` acepta `null` y
+   devuelve `null` directo. Escribir esas dos lecciones sigue pendiente,
+   a proponer aparte como todo el resto del contenido esta sesion.
+
+3. **Retocar una pestana ya activa para "volver al inicio" no hacia
+   nada -- y no era el bug obvio.** `goToExercises(undefined)` estando ya
+   en Ejercicios llama `setExercisesConcept(undefined)` sobre un valor
+   que YA es `undefined`: React descarta el render entero por
+   `Object.is`, así que el componente hijo ni siquiera se vuelve a
+   invocar. Ni un `useEffect` mirando el prop ni un `key={valor}` lo
+   arreglan, porque React nunca llega a evaluar ninguno de los dos.
+   Solucion real: un contador `navToken` en `App.tsx` que se incrementa
+   en CADA `applyNav` (cambie o no el valor) usado como `key` de las 4
+   pantallas con estado propio (Aprender/Jugar/Ejercicios/Revisar) --
+   fuerza el remount sin depender de que el valor en si haya cambiado.
+   Efecto secundario que hubo que cerrar: el guard de partida-en-curso de
+   Jugar (`playGameActive`) excluia a proposito el caso "retocar Jugar
+   estando ya en Jugar" (period porque antes no hacia nada); con
+   `navToken` ese mismo retoque ahora SI reinicia `PlayScreen` de
+   verdad, asi que el guard tuvo que dejar de tener esa excepcion.
+
+4. **La meta diaria de Ajustes no afectaba nada.** Solo alimentaba el
+   contador visual `{completadoHoy}/{meta}`; `TodayScreen` siempre
+   llamaba `planSession(..., DEFAULT_SESSION_MINUTES)`. Causa real:
+   `dailyGoal` es una cantidad de problemas, `planSession` pide minutos.
+   Agregado `minutesForGoal()` en `training-policy/session.ts`
+   (conversion inversa a la que ya existia adentro de `planSession`).
+   `DEFAULT_DAILY_GOAL` paso de 3 a 13 (a proposito: es la cantidad que
+   ya salia de `DEFAULT_SESSION_MINUTES=10` hoy, para que una instalacion
+   nueva no cambie de comportamiento el primer dia).
+
+5. **El `<nav>` de 6 pestanas tenia `aria-label` fijo en "Hoy" sin
+   importar cual estuviera activa.** Agregada `nav.label` generica en
+   los dos locales.
+
+6. **El perfil de habilidad le regalaba 100 a un concepto nunca
+   observado.** `computeProfiles` en `learning/profile.ts` usaba
+   `games.length >= 3` (global) como si fuera evidencia de CADA
+   concepto -- con `gameMistakeCount` en 0 para un concepto que nunca
+   ocurrio, el calculo daba un puntaje perfecto vacuo en vez de "sin
+   datos". Le pasa a casi todo Nivel 4-10 (casi nada ahi tiene detector
+   ni banco de ejercicios) pero no es un bug de nivel, es de formula --
+   en teoria le podia pasar a un concepto raro de Nivel 0-3 tambien
+   (KO si nunca hubo un ko en las primeras partidas). Corregido
+   exigiendo evidencia real por concepto (`agg.observationCount`, ya
+   calculado) en vez de la cuenta global de partidas -- tanto en el
+   gate `hasEvidence` como en el calculo de `errorPenaltyScore` mismo
+   (el segundo gate era el mismo bug escondido un nivel mas adentro: con
+   `hasEvidence` ya arreglado por el lado de ejercicios, el componente de
+   partida seguia pudiendo colarse en 100 vacuo dentro del promedio
+   ponderado).
+
+7. **Ejercicios no tenia guard de progreso sin guardar (solo Jugar).**
+   Agregado `exercisesActive` con el mismo patron que `playGameActive`
+   (`onActiveChange` en `ExercisesScreen`, activo mientras la vista
+   interna es `'practice'` -- misma granularidad gruesa que Jugar, sin
+   intentar medir "progreso real"). El dialogo de confirmacion ahora
+   muestra texto distinto segun de donde se sale (`play.exitConfirm.*`
+   vs `exercises.exitConfirm.*`, nuevo) en vez de reusar el texto de
+   "esta partida" para un ejercicio. Hoy y Aprender quedan sin guard a
+   proposito (mucho mas baratos de repetir).
+
+### Hallazgos que quedaron fuera de este pase, documentados para no perderlos
+
+- **Cero integracion con el boton Atras del sistema** (nada de
+  `history`/`popstate` en todo `src`) -- relevante en particular porque
+  esta PWA tambien se distribuye como app Android via el wrapper
+  WebView de `hoshi-flutter` (repo hermano), donde Atras es un gesto
+  esperado. Esfuerzo aparte, no se toco esta vez.
+- **La idea de motor** (un solo llamado a la red eval de `eval/` por
+  jugada real del bot, no por playout, para ordenar la expansion de
+  movimientos raiz en `mcts.ts` por prioridad en vez de al azar) quedo
+  en propuesta, no en codigo: las unicas mediciones de latencia que
+  existen (~1.0-1.25s) son de Node de escritorio sin GPU, explicitamente
+  marcadas como no representativas del dispositivo real (un celular
+  gama media dentro del WebView de Flutter). Paso siguiente si se
+  retoma: medir latencia real en navegador/dispositivo antes de escribir
+  ninguna linea -- ese numero decide si la idea sirve.
+- `SavedGamesList.tsx` renderiza las partidas guardadas como `<li>`
+  inertes, sin `onClick`. Menor, no tocado.
+
 ## Estado general del proyecto (2026-09-04, cont. 9: Nivel 9 (Yose) y Nivel 10 (Semeai) completos -- v3 y el currículo entero, terminados)
 
 Continuacion de la misma sesion tras cerrar Nivel 7/8 (commit `1bdafff`).

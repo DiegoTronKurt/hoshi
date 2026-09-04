@@ -94,7 +94,12 @@ export interface Concept {
   summaryKey: string
   /** Termino japones estandar, cuando corresponde. No se traduce. */
   japaneseTerm?: string
-  lessonId: string
+  /** null cuando el concepto todavia no tiene una leccion propia que lo
+   * cubra (ver PRIMERA_LINEA_TEMPRANA/JUGADA_LEJOS_DEL_COMBATE mas abajo:
+   * se revisaron todas las lecciones de su nivel y ninguna encaja -- no es
+   * un dato faltante por descuido, es contenido que todavia no se escribio,
+   * ver NOTAS.md). */
+  lessonId: string | null
   hasDetector: boolean
   generatesExercises: boolean
   severity: ConceptSeverity
@@ -355,7 +360,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     level: 1,
     labelKey: 'concept.PRIMERA_LINEA_TEMPRANA.label',
     summaryKey: 'concept.PRIMERA_LINEA_TEMPRANA.summary',
-    lessonId: 'transversal',
+    lessonId: null,
     hasDetector: true,
     generatesExercises: false,
     severity: 'low',
@@ -365,7 +370,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     level: 2,
     labelKey: 'concept.JUGADA_LEJOS_DEL_COMBATE.label',
     summaryKey: 'concept.JUGADA_LEJOS_DEL_COMBATE.summary',
-    lessonId: 'transversal',
+    lessonId: null,
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',

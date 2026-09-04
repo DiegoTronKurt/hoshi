@@ -53,7 +53,8 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
     setLoaded(entry ? loadEntry(entry) : null)
   }, [entry])
 
-  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, handlePass, reset } = useSolvableExercise(
+  const { game, lastMove, status, thinking, solverError, solutionMoves, handleIntersectionClick, handlePass, reset } =
+    useSolvableExercise(
     entry,
     loaded,
     solverClient,
@@ -88,6 +89,7 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
           lastMove={lastMove}
           status={status}
           thinking={thinking}
+          solverError={solverError}
           solutionMoves={solutionMoves}
           theme={theme}
           onIntersectionClick={handleIntersectionClick}

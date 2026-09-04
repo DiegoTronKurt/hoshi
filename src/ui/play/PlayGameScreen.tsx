@@ -59,6 +59,7 @@ export function PlayGameScreen({
   const [moves, setMoves] = useState<RecordedMove[]>([])
   const [message, setMessage] = useState<IllegalReason | null>(null)
   const [botThinking, setBotThinking] = useState(false)
+  const [botError, setBotError] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
   const [savedGameId, setSavedGameId] = useState<number | null>(null)
   const [showCount, setShowCount] = useState(false)
@@ -132,17 +133,25 @@ export function PlayGameScreen({
     const strength = STRENGTH_LEVELS.find((level) => level.id === config.strengthId) ?? STRENGTH_LEVELS[1]
     let cancelled = false
     setBotThinking(true)
+    setBotError(false)
 
-    engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle).then((response) => {
-      if (cancelled) return
-      setBotThinking(false)
-      const color = game.toMove
-      const result = applyMove(game, response.move)
-      if (!result.legal || !result.state) return
-      setMoves((prev) => [...prev, { color, point: response.move }])
-      setHistory((prev) => [...prev, result.state as GameState])
-      if (response.move !== null) playStoneSoundIfEnabled()
-    })
+    engine
+      .chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle)
+      .then((response) => {
+        if (cancelled) return
+        setBotThinking(false)
+        const color = game.toMove
+        const result = applyMove(game, response.move)
+        if (!result.legal || !result.state) return
+        setMoves((prev) => [...prev, { color, point: response.move }])
+        setHistory((prev) => [...prev, result.state as GameState])
+        if (response.move !== null) playStoneSoundIfEnabled()
+      })
+      .catch(() => {
+        if (cancelled) return
+        setBotThinking(false)
+        setBotError(true)
+      })
 
     return () => {
       cancelled = true
@@ -233,6 +242,7 @@ export function PlayGameScreen({
           <p className="turn">{t(turnKey)}</p>
         )}
         {message && <p className="illegal-message">{t(`board.illegal.${message}`)}</p>}
+        {botError && <p className="illegal-message">{t('engine.error')}</p>}
         <p className="captures">
           {t('board.captures')}: {t('board.captures.black')} {game.captures.black} · {t('board.captures.white')}{' '}
           {game.captures.white}

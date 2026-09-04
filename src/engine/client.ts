@@ -1,25 +1,21 @@
 import type { GameState } from '../core/types'
 import type { BotStyleId } from './botStyles'
+import { createWorkerRpc } from '../workerRpc'
 import type { EngineRequest, EngineResponse } from './worker'
 
 export type EngineMoveResult = Omit<EngineResponse, 'requestId'>
 
-export class EngineClient {
-  private worker: Worker
-  private nextRequestId = 1
-  private pending = new Map<number, (result: EngineMoveResult) => void>()
+/** Cota superior del propio motor si no se especifica maxTimeMs (ver
+ * DEFAULT_MAX_TIME_MS en engine/mcts.ts), mas margen para el viaje del
+ * mensaje. Si el motor tarda mas que esto, algo esta realmente colgado. */
+const FALLBACK_TIMEOUT_MS = 15000
+const TIMEOUT_GRACE_MS = 3000
 
-  constructor() {
-    this.worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
-    this.worker.onmessage = (event: MessageEvent<EngineResponse>) => {
-      const { requestId, ...result } = event.data
-      const resolve = this.pending.get(requestId)
-      if (resolve) {
-        resolve(result)
-        this.pending.delete(requestId)
-      }
-    }
-  }
+export class EngineClient {
+  private rpc = createWorkerRpc<EngineRequest, EngineResponse>(
+    () => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }),
+    FALLBACK_TIMEOUT_MS + TIMEOUT_GRACE_MS,
+  )
 
   chooseMove(
     state: GameState,
@@ -28,15 +24,13 @@ export class EngineClient {
     maxTimeMs?: number,
     style?: BotStyleId,
   ): Promise<EngineMoveResult> {
-    const requestId = this.nextRequestId++
-    const request: EngineRequest = { requestId, state, playouts, randomSeed, maxTimeMs, style }
-    return new Promise((resolve) => {
-      this.pending.set(requestId, resolve)
-      this.worker.postMessage(request)
-    })
+    return this.rpc.call(
+      { state, playouts, randomSeed, maxTimeMs, style },
+      (maxTimeMs ?? FALLBACK_TIMEOUT_MS) + TIMEOUT_GRACE_MS,
+    )
   }
 
   terminate(): void {
-    this.worker.terminate()
+    this.rpc.terminate()
   }
 }

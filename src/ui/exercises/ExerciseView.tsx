@@ -14,6 +14,7 @@ interface ExerciseViewProps {
   lastMove: number | null
   status: ProblemStatus
   thinking: boolean
+  solverError: boolean
   solutionMoves: number | null
   theme: BoardTheme
   onIntersectionClick: (point: number) => void
@@ -42,6 +43,7 @@ export function ExerciseView({
   lastMove,
   status,
   thinking,
+  solverError,
   solutionMoves,
   theme,
   onIntersectionClick,
@@ -92,6 +94,7 @@ export function ExerciseView({
           </div>
         )}
         {status === 'incorrect' && !thinking && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
+        {solverError && <p className="exercises-error">{t('engine.error')}</p>}
         {thinking && <p>{t('exercises.thinking')}</p>}
       </div>
     </>

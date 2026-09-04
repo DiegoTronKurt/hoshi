@@ -1,5 +1,11 @@
 import type { SolveRequest, SolveResult } from './tsumego'
+import { createWorkerRpc } from '../workerRpc'
 import type { SolverRequest, SolverResponse } from './worker'
+
+/** solve() no tiene cota de tiempo propia (solo maxDepth, ver
+ * solver/tsumego.ts), asi que este timeout es puramente un respaldo del
+ * lado del cliente para detectar un Worker realmente colgado. */
+const SOLVER_TIMEOUT_MS = 20000
 
 /**
  * El solucionador de vida-muerte puede tardar varios segundos en posiciones
@@ -7,32 +13,16 @@ import type { SolverRequest, SolverResponse } from './worker'
  * la interfaz no se congele mientras calcula la respuesta del rival.
  */
 export class SolverClient {
-  private worker: Worker
-  private nextRequestId = 1
-  private pending = new Map<number, (result: SolveResult) => void>()
-
-  constructor() {
-    this.worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
-    this.worker.onmessage = (event: MessageEvent<SolverResponse>) => {
-      const { requestId, ...result } = event.data
-      const resolve = this.pending.get(requestId)
-      if (resolve) {
-        resolve(result)
-        this.pending.delete(requestId)
-      }
-    }
-  }
+  private rpc = createWorkerRpc<SolverRequest, SolverResponse>(
+    () => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }),
+    SOLVER_TIMEOUT_MS,
+  )
 
   solve(request: SolveRequest): Promise<SolveResult> {
-    const requestId = this.nextRequestId++
-    const message: SolverRequest = { requestId, ...request }
-    return new Promise((resolve) => {
-      this.pending.set(requestId, resolve)
-      this.worker.postMessage(message)
-    })
+    return this.rpc.call(request)
   }
 
   terminate(): void {
-    this.worker.terminate()
+    this.rpc.terminate()
   }
 }

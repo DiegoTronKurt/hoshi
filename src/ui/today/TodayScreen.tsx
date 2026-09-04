@@ -10,7 +10,7 @@ import { countCompletedToday } from '../../learning/dailyProgress'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
 import { computeProfiles, currentLevel } from '../../learning/profile'
 import { computeStreak } from '../../learning/streak'
-import { DEFAULT_SESSION_MINUTES, planSession } from '../../training-policy/session'
+import { minutesForGoal, planSession } from '../../training-policy/session'
 import type { SessionItem, SessionPlan, SessionReason } from '../../training-policy/session'
 import { SolverClient } from '../../solver/client'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
@@ -109,8 +109,8 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
 
   const plan: SessionPlan | null = useMemo(() => {
     if (!loaded) return null
-    return planSession(entries, srsCards, profiles, new Date(), DEFAULT_SESSION_MINUTES)
-  }, [loaded, profiles, srsCards, entries])
+    return planSession(entries, srsCards, profiles, new Date(), minutesForGoal(dailyGoal))
+  }, [loaded, profiles, srsCards, entries, dailyGoal])
 
   const [sessionStarted, setSessionStarted] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -132,7 +132,8 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
     setLoadedProblem(currentEntry ? loadEntry(currentEntry) : null)
   }, [currentEntry])
 
-  const { game, lastMove, status, thinking, solutionMoves, handleIntersectionClick, handlePass, giveUp } = useSolvableExercise(
+  const { game, lastMove, status, thinking, solverError, solutionMoves, handleIntersectionClick, handlePass, giveUp } =
+    useSolvableExercise(
     currentEntry,
     loadedProblem,
     solverClient,
@@ -345,6 +346,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
         lastMove={lastMove}
         status={status}
         thinking={thinking}
+        solverError={solverError}
         solutionMoves={solutionMoves}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}

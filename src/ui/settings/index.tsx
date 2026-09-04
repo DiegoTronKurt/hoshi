@@ -11,7 +11,12 @@ const SOUND_STORAGE_KEY = 'hoshi-sound-enabled'
 const DAILY_GOAL_STORAGE_KEY = 'hoshi-daily-goal'
 const APP_THEME_STORAGE_KEY = 'hoshi-app-theme'
 const STREAK_STORAGE_KEY = 'hoshi-streak-enabled'
-export const DEFAULT_DAILY_GOAL = 3
+/** 13, no un numero redondo: es la cantidad de problemas que hoy planifica
+ * planSession con su DEFAULT_SESSION_MINUTES (10) antes de que la meta
+ * diaria realmente la determine (ver training-policy/session.ts). Asi una
+ * instalacion nueva arranca con el mismo tamano de sesion que tenia antes
+ * de que esta meta afectara la planificacion de verdad. */
+export const DEFAULT_DAILY_GOAL = 13
 const MIN_DAILY_GOAL = 1
 const MAX_DAILY_GOAL = 20
 const DEFAULT_APP_THEME_ID = 'system'
