@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CONCEPTS } from '../../analysis/concepts'
 import { applyMove, createGame, gameStateFromBoard } from '../../core/rules'
-import { computeAreaOwnership, computeAreaScore } from '../../core/scoring'
+import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../core/scoring'
+import type { AreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
@@ -29,6 +30,12 @@ const BOT_STYLE_LABEL_KEY: Record<string, TranslationKey> = {
   combative: 'play.botStyle.combative',
 }
 
+function computeScore(game: GameState, scoringRule: PlayConfig['scoringRule']): AreaScore {
+  return scoringRule === 'japanese'
+    ? computeTerritoryScore(game.board, game.komi, game.captures)
+    : computeAreaScore(game.board, game.komi)
+}
+
 interface PlayGameScreenProps {
   config: PlayConfig
   onExitToConfig: () => void
@@ -50,11 +57,11 @@ export function PlayGameScreen({
   const [history, setHistory] = useState<GameState[]>(() => [
     config.initialStones
       ? gameStateFromBoard(
-          { width: config.size, height: config.size, stones: config.initialStones },
+          { width: config.width, height: config.height, stones: config.initialStones },
           config.initialToMove ?? BLACK,
           KOMI,
         )
-      : createGame(config.size, config.size, KOMI),
+      : createGame(config.width, config.height, KOMI),
   ])
   const [moves, setMoves] = useState<RecordedMove[]>([])
   const [message, setMessage] = useState<IllegalReason | null>(null)
@@ -160,10 +167,10 @@ export function PlayGameScreen({
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null
-    return computeAreaScore(game.board, game.komi)
-  }, [game])
+    return computeScore(game, config.scoringRule)
+  }, [game, config.scoringRule])
 
-  const liveScore = useMemo(() => computeAreaScore(game.board, game.komi), [game])
+  const liveScore = useMemo(() => computeScore(game, config.scoringRule), [game, config.scoringRule])
 
   /** Solo se calcula al terminar la partida (y solo una vez, ya que `game`
    * deja de cambiar): BoardCanvas usa el cambio de referencia null -> array
@@ -177,17 +184,19 @@ export function PlayGameScreen({
 
     const winner: 'black' | 'white' = finalScore.black > finalScore.white ? 'black' : 'white'
     const strength = STRENGTH_LEVELS.find((level) => level.id === config.strengthId)
-    const sgf = gameRecordToSgf(config.size, config.size, KOMI, moves)
+    const sgf = gameRecordToSgf(config.width, config.height, KOMI, moves)
 
     saveGame({
       createdAt: new Date().toISOString(),
-      size: config.size,
+      width: config.width,
+      height: config.height,
       komi: KOMI,
       mode: config.mode,
       botPlayouts: config.mode === 'bot' ? strength?.playouts : undefined,
       botStrengthId: config.mode === 'bot' ? strength?.id : undefined,
       botStyle: config.mode === 'bot' ? config.botStyle : undefined,
       humanColor: config.mode === 'bot' ? config.humanColor : undefined,
+      scoringRule: config.scoringRule,
       result: { black: finalScore.black, white: finalScore.white, winner },
       sgf,
     }).then((id) => {
@@ -216,7 +225,7 @@ export function PlayGameScreen({
   return (
     <div className="play-game">
       <p className="play-game-header">
-        {config.size}x{config.size} ·{' '}
+        {config.width}x{config.height} ·{' '}
         {config.mode === 'bot'
           ? t('play.bot.label', { kyu: strengthLevel?.approxKyu ?? 0 })
           : t('play.mode.local')}
@@ -224,8 +233,8 @@ export function PlayGameScreen({
       </p>
 
       <BoardCanvas
-        width={config.size}
-        height={config.size}
+        width={config.width}
+        height={config.height}
         stones={game.board.stones}
         lastMove={lastMove}
         territory={territory}
@@ -275,6 +284,7 @@ export function PlayGameScreen({
               {finalScore.black > finalScore.white ? t('play.result.winnerBlack') : t('play.result.winnerWhite')})
             </p>
           )}
+          {config.scoringRule === 'japanese' && <p className="settings-description">{t('play.scoringRule.japaneseBadge')}</p>}
           {justSaved && <p className="saved-note">{t('play.saved')}</p>}
           <div className="play-end-actions">
             <button

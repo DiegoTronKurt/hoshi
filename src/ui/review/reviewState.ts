@@ -14,8 +14,8 @@ import { NN_LEN } from '../../eval/features'
  * que dependa de la perspectiva (ver ReviewMistakeBoard, que pide un
  * ply antes por esta misma razon). moveNumber <= 0 devuelve el estado
  * inicial sin tocar, sin necesidad de guardas aparte. */
-export function stateAtMove(size: number, komi: number, moves: RecordedMove[], moveNumber: number): GameState {
-  let state = createGame(size, size, komi)
+export function stateAtMove(width: number, height: number, komi: number, moves: RecordedMove[], moveNumber: number): GameState {
+  let state = createGame(width, height, komi)
   for (let i = 0; i < moveNumber && i < moves.length; i++) {
     const result = applyMove(state, moves[i].point)
     if (!result.legal || !result.state) break

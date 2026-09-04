@@ -1,4 +1,5 @@
 import { useI18n } from '../../i18n'
+import { gameHeight, gameWidth } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 
 interface SavedGamesListProps {
@@ -33,7 +34,9 @@ export function SavedGamesList({ games }: SavedGamesListProps) {
 
           return (
             <li key={game.id}>
-              {date} · {game.size}x{game.size} · {opponent} · {winnerLabel} {game.result.black} - {game.result.white}
+              {date} · {gameWidth(game)}x{gameHeight(game)} · {opponent} · {winnerLabel} {game.result.black} -{' '}
+              {game.result.white}
+              {game.scoringRule === 'japanese' && ` (${t('play.scoringRule.japaneseBadge')})`}
             </li>
           )
         })}

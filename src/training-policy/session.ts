@@ -5,6 +5,7 @@ import { sgfToGameRecord } from '../core/sgf'
 import { isDue } from '../learning/fsrs'
 import { weakestConcepts } from '../learning/profile'
 import type { ConceptProfile } from '../learning/profile'
+import { gameHeight, gameWidth } from '../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../storage/db'
 
 export const DEFAULT_SESSION_MINUTES = 10
@@ -136,7 +137,7 @@ export function findConceptsToReopen(games: SavedGameRecord[]): ConceptId[] {
   for (const game of recent) {
     const moves = sgfToGameRecord(game.sgf).moves
     const conceptsInThisGame = new Set(
-      analyzeGame(game.size, game.komi, moves)
+      analyzeGame(gameWidth(game), gameHeight(game), game.komi, moves)
         .filter((occ) => occ.result === 'incorrect')
         .map((occ) => occ.conceptId),
     )

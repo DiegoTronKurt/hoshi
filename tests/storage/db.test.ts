@@ -1,7 +1,17 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createCard } from '../../src/learning/fsrs'
-import { getSrsCard, listAttempts, listGames, listSrsCards, recordAttempt, saveGame, saveSrsCard } from '../../src/storage/db'
+import {
+  gameHeight,
+  gameWidth,
+  getSrsCard,
+  listAttempts,
+  listGames,
+  listSrsCards,
+  recordAttempt,
+  saveGame,
+  saveSrsCard,
+} from '../../src/storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../src/storage/db'
 
 function sampleRecord(overrides: Partial<SavedGameRecord> = {}): Omit<SavedGameRecord, 'id'> {
@@ -39,6 +49,26 @@ describe('almacenamiento de partidas', () => {
     const games = await listGames()
     expect(games.length).toBe(2)
     expect(games.map((g) => g.mode)).toEqual(['local', 'bot'])
+  })
+})
+
+describe('gameWidth/gameHeight', () => {
+  it('una partida guardada antes del tablero rectangular solo tiene size: cae a ese valor para ancho y alto', () => {
+    const game = sampleRecord({ size: 9 }) as SavedGameRecord
+    expect(gameWidth(game)).toBe(9)
+    expect(gameHeight(game)).toBe(9)
+  })
+
+  it('una partida nueva usa width/height directamente, sin depender de size', () => {
+    const game = sampleRecord({ size: undefined, width: 9, height: 13 }) as SavedGameRecord
+    expect(gameWidth(game)).toBe(9)
+    expect(gameHeight(game)).toBe(13)
+  })
+
+  it('si por algun motivo estan los dos, width/height gana sobre size', () => {
+    const game = sampleRecord({ size: 9, width: 9, height: 13 }) as SavedGameRecord
+    expect(gameWidth(game)).toBe(9)
+    expect(gameHeight(game)).toBe(13)
   })
 })
 

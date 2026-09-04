@@ -1,6 +1,132 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-04, cont. 11: Revisar consulta a la red de KataGo, primer uso real de eval/)
+## Estado general del proyecto (2026-09-04, cont. 12: bot pasa cuando corresponde, 19x19, tablero 9x13 y conteo japones en Jugar)
+
+Cuatro pedidos del usuario en un solo mensaje: texto "Pensando..." en Jugar
+(ya arreglado en cont. 10, sin trabajo nuevo), el bot sigue jugando cuando
+"deberia pasar y ganar", conteo japones como alternativa al chino, y
+confirmar/activar 13x13-19x19 mas tablero rectangular. Los ultimos tres
+eran reales.
+
+### El bot no pasaba aunque ya iba ganando
+
+`chooseMove` (engine/mcts.ts) trata "pasar" como una jugada mas entre
+decenas de candidatas, sin ningun sesgo hacia ella. Con pocos playouts
+(100-8000 segun `strengthLevels.ts`) repartidos entre todos los puntos
+vacios de un tablero grande ya asentado, "pasar" puede terminar sin ser
+el hijo mas visitado del arbol UCT aunque la partida este objetivamente
+resuelta -- en particular justo despues de que el rival pasa (ofreciendo
+terminarla), que es el disparador mas probable de lo que el usuario vio:
+la persona pasa, el bot no reciproca, la partida sigue.
+
+Arreglado con `shouldAcceptPass`, un chequeo previo a la busqueda (no
+dentro del arbol UCT): si `consecutivePasses === 1` (el rival acaba de
+pasar), no hay ninguna captura gratis ni grupo propio en atari
+(`findOneLibertyPoints`, la misma primitiva que ya usaba la politica de
+playout) y el puntaje de area actual (`computeAreaScore` sobre el
+tablero tal cual esta, sin marcar piedras muertas -- coincide exactamente
+con como se calcularia el puntaje final si la partida terminara ahora)
+ya favorece a quien le toca jugar, el bot pasa sin gastar playouts en
+redescubrirlo. Deliberadamente NO fuerza un pase proactivo cuando el
+rival todavia no paso (bajo reglas chinas, rellenar dame es una jugada
+real y positiva, no neutral -- seguir jugando ahi es correcto, no un bug).
+Tres tests nuevos en `tests/engine/mcts.test.ts`: acepta un pase en un
+tablero vacio (blanco ya gana por komi), NO acepta con una captura gratis
+disponible, NO acepta yendo perdiendo en el marcador -- los tres
+construidos jugada por jugada contra el motor real, no mockeados.
+
+### 19x19 desbloqueado, verificado con una partida real completa
+
+`PlayConfigScreen.tsx` tenia un comentario propio (2026-09-03) que decia
+"19x19 se desbloquea cuando el curriculo llegue a niveles 7-10 (v3)" --
+v3 se completo mas tarde ese mismo dia (`e28d865`, antes de que empezara
+esta conversacion) y nadie volvio a levantar la bandera de UI. Encontrado
+releyendo el propio comentario del codigo contra el estado real del
+curriculo, no por sospecha previa.
+
+Antes de confiar en el desbloqueo se corrio una partida bot-vs-bot REAL
+de principio a fin en 19x19 (60 playouts/jugada, sin atajos en la logica
+de eleccion de jugada) como test descartable
+(`tests/engine/_debug-19x19-integration.test.ts`, borrado despues):
+terminó en 542 jugadas via doble pase real (no por tope de jugadas),
+puntaje negro=180 blanco=185.5 sobre 371.5 puntos totales -- coherente.
+El test en si "fallo" por timeout de vitest (935s de duracion real contra
+un limite de 180s que yo le puse mal), pero el codigo sincrono corrio
+hasta el final sin tirar excepcion antes de que vitest pudiera siquiera
+interrumpirlo -- la corrida es valida, el limite estaba mal puesto.
+
+### Tablero rectangular 9x13 jugable en Jugar (antes solo en contenido de leccion)
+
+Un agente de exploracion audito el codigo antes de estimar el alcance:
+`analysis/mistakes.ts` (motor de deteccion de errores) y
+`ui/board/BoardCanvas.tsx` ya eran completamente genericos en ancho/alto
+-- ningun detector individual asumia tablero cuadrado (confirmado
+leyendo los 11, no solo grepeando), y `BoardCanvas` ya manejaba
+dimensiones distintas correctamente en dibujo y en el mapeo de clics a
+interseccion. Lo unico realmente cuadrado era que
+`SavedGameRecord`/`PlayConfig`/`PlaySeed`/`LastPlayConfig` guardaban un
+solo `size: number` en vez de `width`/`height` por separado. Como el
+motor de analisis no necesitaba cambios de logica, dar soporte completo
+a la revision de partidas rectangulares no costaba practicamente nada
+extra sobre simplemente "dejar jugarlas" -- no tenia sentido enviar una
+version recortada sin revision de errores.
+
+`SavedGameRecord.size` pasa a opcional/legado (partidas viejas en
+IndexedDB solo lo tienen); `width`/`height` opcionales tambien, con dos
+helpers nuevos en `storage/db.ts` (`gameWidth`/`gameHeight`, `?? size`
+como respaldo) que son el unico lugar que conoce ese fallback en vez de
+repetirlo en cada pantalla. `PlayConfig`/`PlaySeed`/`LastPlayConfig` (sin
+historial persistido real, o con guarda de forma que ya degrada con
+gracia) pasan a `width`/`height` obligatorios sin necesidad de
+compatibilidad hacia atras. `analyzeGame`/`stateAtMove` ganan un segundo
+parametro (`width, height` en vez de `size`). Efecto secundario gratis:
+`LessonScreen.tsx` ocultaba el boton "practicar en partida real" para
+cualquier leccion con demo rectangular (Nivel 4, 9x13) porque `PlaySeed`
+no podia representar esa forma todavia -- ya no hace falta ocultarlo.
+
+Verificado con dos tests "canario" nuevos (uno contra `analyzeGame`, uno
+contra `stateAtMove` en `tests/ui/review/reviewState.test.ts`, archivo
+que no existia -- `stateAtMove` no tenia ningun test antes de esto):
+una jugada en un punto que solo es valido si el alto es realmente 13
+(y directamente ilegal en una interpretacion cuadrada 9x9), confirmando
+que ancho y alto no se mezclan en ningun punto de la cadena.
+
+### Conteo japones como regla alternativa a la china
+
+`core/scoring.ts` gana `computeTerritoryScore(board, komi, captures)`:
+solo puntos originalmente vacios que quedan rodeados por un color (mismo
+flood-fill que `computeAreaOwnership`, ya existente) mas las capturas
+reales de la partida (`GameState.captures`), a diferencia del conteo de
+area donde las piedras propias tambien suman. Elegible por partida en
+Jugar (`PlayConfig.scoringRule`), guardado en `SavedGameRecord` para que
+Revisar pueda mostrar de que regla salio cada resultado.
+
+**Bug real encontrado por una revision de diseno antes de escribir
+codigo**: mi primer diseño le daba a `computeTerritoryScore` un parametro
+`deadStones` identico al de `computeAreaScore`, por paridad de firma.
+Pero marcar una piedra como muerta solo le da territorio al capturador
+via el flood-fill -- le falta sumar la piedra en si como prisionera, algo
+que en este codigo solo pasa durante la partida real (`core/rules.ts`),
+nunca via `deadStones`. Verificado contra el fixture existente de
+`tests/core/scoring.test.ts` (anillo negro + una piedra blanca marcada
+muerta): el conteo japones real de esa posicion es 10, mi formula daba 9.
+Como esta app no tiene ninguna pantalla de marcado de piedras muertas
+(nada llama a `computeAreaScore` con `deadStones` no vacio tampoco), el
+parametro no se agrego -- mas simple y correcto que enviar un resultado
+que se ve plausible pero esta mal. `core/sgf.ts` (siempre escribe
+`RU[Chinese]`), `eval/features.ts` (canal de regla de conteo de la red,
+fijo en area) y el propio `engine/mcts.ts` (puntaje de los playouts)
+quedan deliberadamente sin tocar -- China y Japon coinciden casi siempre
+en quien gana, es un recorte de alcance consciente, no un olvido.
+
+### Verificacion
+
+`npx tsc -b` limpio, `npx vitest run` en 1035/1035 (1025 antes de esta
+sesion + 10 tests nuevos), `npm run lint` sin warnings nuevos, `npm run
+build` sin cambios de tamaño de bundle (888KB hilo principal, tfjs
+aislado en su chunk de Worker). Sin browser tool disponible en este
+entorno para probar la UI en vivo -- se dejo un servidor de desarrollo
+corriendo para que el usuario lo revisara el mismo antes de pedir commit.
 
 Pedido directo del usuario tras explicarle la idea en criollo tres veces
 ("no entendi, explicamelo"): un boton "Preguntarle a la IA" en Revisar,

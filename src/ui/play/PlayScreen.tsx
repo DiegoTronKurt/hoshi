@@ -18,11 +18,15 @@ interface PlayScreenProps {
 
 function seededConfig(seed: PlaySeed): PlayConfig {
   return {
-    size: seed.size,
+    width: seed.width,
+    height: seed.height,
     mode: 'local',
     strengthId: 'normal',
     botStyle: 'standard',
     humanColor: BLACK,
+    // Una leccion no tiene nocion de regla de conteo propia: China es la
+    // misma regla por defecto que cualquier partida nueva sin elegir.
+    scoringRule: 'chinese',
     initialStones: seed.stones,
     initialToMove: seed.toMove,
   }

@@ -469,8 +469,8 @@ const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => ConceptOccurrence | nu
  * implementacion (documento de diseno, seccion 5.4): si un detector no
  * puede afirmar la condicion con certeza, no reporta.
  */
-export function analyzeGame(size: number, komi: number, moves: RecordedMove[]): ConceptOccurrence[] {
-  const states: GameState[] = [createGame(size, size, komi)]
+export function analyzeGame(width: number, height: number, komi: number, moves: RecordedMove[]): ConceptOccurrence[] {
+  const states: GameState[] = [createGame(width, height, komi)]
   const captured: number[][] = []
 
   for (const move of moves) {

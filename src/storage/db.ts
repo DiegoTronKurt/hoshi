@@ -11,7 +11,16 @@ const STORE_SRS = 'srs'
 export interface SavedGameRecord {
   id?: number
   createdAt: string
-  size: number
+  /** @deprecated Tablero cuadrado unicamente. Reemplazado por width/height
+   * para soportar tableros rectangulares (9x13); ya no se escribe en
+   * partidas nuevas, solo queda para leer partidas guardadas antes de ese
+   * cambio. Usar gameWidth()/gameHeight() en vez de leer este campo o
+   * width/height directamente. */
+  size?: number
+  /** Ausentes en partidas guardadas antes del soporte de tablero
+   * rectangular (esas solo tienen `size`). Usar gameWidth()/gameHeight(). */
+  width?: number
+  height?: number
   komi: number
   mode: 'local' | 'bot'
   botPlayouts?: number
@@ -30,8 +39,24 @@ export interface SavedGameRecord {
    * en partidas guardadas antes de este campo o en partidas locales
    * (mode: 'local', donde no aplica un solo "color humano"). */
   humanColor?: Color
+  /** Regla de conteo usada al terminar esta partida. Ausente en partidas
+   * guardadas antes de que existiera el conteo japones -- se asume 'chinese',
+   * la unica regla que existia entonces. */
+  scoringRule?: 'chinese' | 'japanese'
   result: { black: number; white: number; winner: 'black' | 'white' }
   sgf: string
+}
+
+/** Ancho/alto de una partida guardada, con volver a `size` (tablero
+ * cuadrado) para partidas guardadas antes del soporte de tablero
+ * rectangular -- toda partida real tiene uno de los dos campos, nunca
+ * ninguno. Unico lugar que conoce ese fallback, para no repetirlo en cada
+ * pantalla que muestra o analiza una partida guardada. */
+export function gameWidth(game: SavedGameRecord): number {
+  return game.width ?? game.size ?? 19
+}
+export function gameHeight(game: SavedGameRecord): number {
+  return game.height ?? game.size ?? 19
 }
 
 /** Un intento de ejercicio. Registra hechos crudos, no una calificacion FSRS:

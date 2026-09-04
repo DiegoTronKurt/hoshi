@@ -189,7 +189,7 @@ describe('findConceptsToReopen', () => {
     // si esto fallara, el resto del test seria verdad por una razon
     // equivocada (cualquier partida con 1 sola ocurrencia tambien cumple
     // "no llega a 3 partidas").
-    const occurrencesInGame = analyzeGame(SIZE, 0, threeInOneGame).filter(
+    const occurrencesInGame = analyzeGame(SIZE, SIZE, 0, threeInOneGame).filter(
       (e) => e.conceptId === 'AUTOATARI' && e.result === 'incorrect',
     )
     expect(occurrencesInGame.length).toBe(3)

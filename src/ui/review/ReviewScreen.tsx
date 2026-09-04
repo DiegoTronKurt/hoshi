@@ -7,7 +7,7 @@ import { BLACK } from '../../core/types'
 import { EvalClient } from '../../eval/client'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
-import { listGames } from '../../storage/db'
+import { gameHeight, gameWidth, listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
 import { ReviewMistakeBoard } from './ReviewMistakeBoard'
@@ -79,7 +79,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     for (const g of games) {
       if (g.id === undefined) continue
       const gameMoves = sgfToGameRecord(g.sgf).moves
-      map.set(g.id, analyzeGame(g.size, g.komi, gameMoves).filter(isMistake))
+      map.set(g.id, analyzeGame(gameWidth(g), gameHeight(g), g.komi, gameMoves).filter(isMistake))
     }
     return map
   }, [games])
@@ -93,7 +93,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
 
   const events = useMemo(() => {
     if (!selectedGame) return []
-    return analyzeGame(selectedGame.size, selectedGame.komi, moves).filter(isMistake)
+    return analyzeGame(gameWidth(selectedGame), gameHeight(selectedGame), selectedGame.komi, moves).filter(isMistake)
   }, [selectedGame, moves])
 
   // El evento de mayor severidad primero, en vez del orden cronologico: se
@@ -118,7 +118,9 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   const activeIndex = selectedEventIndex ?? (sortedEvents.length > 0 ? 0 : null)
   const selectedEvent = activeIndex !== null ? sortedEvents[activeIndex] : null
   const boardState =
-    selectedGame && selectedEvent ? stateAtMove(selectedGame.size, selectedGame.komi, moves, selectedEvent.moveNumber) : null
+    selectedGame && selectedEvent
+      ? stateAtMove(gameWidth(selectedGame), gameHeight(selectedGame), selectedGame.komi, moves, selectedEvent.moveNumber)
+      : null
 
   const locale = language === 'es' ? 'es' : 'en'
 
@@ -147,8 +149,9 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                   <li key={game.id}>
                     <button type="button" onClick={() => selectGame(game.id as number)}>
                       <span>
-                        {date} · {game.size}x{game.size} · {opponent} · {winnerLabel} {game.result.black} -{' '}
+                        {date} · {gameWidth(game)}x{gameHeight(game)} · {opponent} · {winnerLabel} {game.result.black} -{' '}
                         {game.result.white}
+                        {game.scoringRule === 'japanese' && ` (${t('play.scoringRule.japaneseBadge')})`}
                       </span>
                       {severity && (
                         <span className={`review-severity review-severity-${severity} review-game-severity`}>

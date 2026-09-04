@@ -71,3 +71,33 @@ export function computeAreaScore(board: BoardState, komi: number, deadStones: Re
 
   return { black, white: white + komi }
 }
+
+/**
+ * Conteo por territorio (reglas japonesas): a diferencia del conteo de área,
+ * las piedras propias en el tablero no suman punto por si solas -- solo los
+ * puntos originalmente vacios que quedan rodeados exclusivamente por un
+ * color (mismo flood-fill de computeAreaOwnership), mas las capturas ya
+ * hechas durante la partida (`captures`, ver GameState en core/types.ts).
+ * Sin parametro deadStones a proposito: una piedra marcada como muerta le
+ * daria territorio al capturador via el flood-fill, pero le faltaria sumar
+ * la piedra en si como prisionera (eso solo se registra durante la partida
+ * real, en applyMove) -- nada en la app marca piedras muertas todavia (no
+ * existe esa pantalla), asi que agregar el parametro ahora solo abriria la
+ * puerta a un resultado incorrecto sin necesidad real.
+ */
+export function computeTerritoryScore(board: BoardState, komi: number, captures: { black: number; white: number }): AreaScore {
+  const owner = computeAreaOwnership(board)
+
+  let blackTerritory = 0
+  let whiteTerritory = 0
+  for (let p = 0; p < owner.length; p++) {
+    if (board.stones[p] !== EMPTY) continue
+    if (owner[p] === BLACK) blackTerritory++
+    else if (owner[p] === WHITE) whiteTerritory++
+  }
+
+  return {
+    black: blackTerritory + captures.black,
+    white: whiteTerritory + captures.white + komi,
+  }
+}

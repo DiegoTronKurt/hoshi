@@ -63,27 +63,25 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
         <LessonPractice key={concept.id} concept={concept} onPracticeMore={() => onNavigateToExercises(concept.id)} />
       ))}
 
-      {/* PlaySeed (ui/play/playConfig.ts) todavia es solo `size: number`
-          (tablero cuadrado) -- generalizarlo a width/height es trabajo del
-          punto 5 (conectar Jugar a 13x13), no de este. Una demo rectangular
-          (Nivel 4 en adelante) no puede armar un seed valido todavia, asi
-          que el boton se oculta en vez de mandar a un tablero en blanco sin
-          relacion con la leccion. */}
-      {(!lesson.demo || lesson.demo.width === lesson.demo.height) && (
-        <section className="lesson-checkgame">
-          <h3>{t('learn.checkGame.title')}</h3>
-          <button
-            type="button"
-            onClick={() =>
-              onNavigateToPlay(
-                lesson.demo ? { size: lesson.demo.width, stones: lesson.demo.initialStones, toMove: lesson.demo.toMove } : undefined,
-              )
-            }
-          >
-            {t('learn.checkGame.cta')}
-          </button>
-        </section>
-      )}
+      {/* PlaySeed ya soporta ancho/alto por separado (ver playConfig.ts), asi
+          que una demo rectangular (Nivel 4 en adelante, 9x13) arma un seed
+          valido igual que una cuadrada -- ya no hace falta ocultar el boton
+          para esas lecciones. */}
+      <section className="lesson-checkgame">
+        <h3>{t('learn.checkGame.title')}</h3>
+        <button
+          type="button"
+          onClick={() =>
+            onNavigateToPlay(
+              lesson.demo
+                ? { width: lesson.demo.width, height: lesson.demo.height, stones: lesson.demo.initialStones, toMove: lesson.demo.toMove }
+                : undefined,
+            )
+          }
+        >
+          {t('learn.checkGame.cta')}
+        </button>
+      </section>
     </div>
   )
 }

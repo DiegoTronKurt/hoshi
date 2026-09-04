@@ -193,9 +193,38 @@ export interface MctsResult {
   playoutsRun: number
 }
 
+/**
+ * El rival acaba de pasar: pasar ahora terminaria la partida. La busqueda UCT
+ * no le da a "pasar" ninguna ventaja estructural sobre cualquier otra jugada
+ * legal -- compite por visitas igual que cualquier punto vacio del tablero, y
+ * con pocos playouts repartidos entre muchos candidatos (tableros grandes,
+ * territorio ya asentado) puede terminar sin ser el hijo mas visitado aunque
+ * la partida ya este decidida, dejando al bot jugando de mas en vez de
+ * cerrarla. Se decide esto ANTES de gastar playouts en redescubrirlo: si no
+ * hay ninguna jugada urgente ahora mismo (una captura gratis, o un grupo
+ * propio en atari que rescatar -- mismos puntos que ya usa la politica de
+ * playout, findOneLibertyPoints) y el puntaje de area de la posicion actual
+ * ya favorece a quien le toca jugar, pasar es correcto.
+ */
+function shouldAcceptPass(state: GameState): boolean {
+  if (state.consecutivePasses !== 1) return false
+
+  const { ownAtariPoints, oppCapturePoints } = findOneLibertyPoints(state)
+  if (ownAtariPoints.length > 0 || oppCapturePoints.length > 0) return false
+
+  const score = computeAreaScore(state.board, state.komi)
+  const myScore = state.toMove === BLACK ? score.black : score.white
+  const oppScore = state.toMove === BLACK ? score.white : score.black
+  return myScore >= oppScore
+}
+
 export function chooseMove(rootState: GameState, options: MctsOptions): MctsResult {
   if (rootState.gameOver) {
     return { move: null, visits: 0, winRate: 0, playoutsRun: 0 }
+  }
+
+  if (shouldAcceptPass(rootState)) {
+    return { move: null, visits: 0, winRate: 1, playoutsRun: 0 }
   }
 
   const random = createRng(options.randomSeed ?? Date.now())

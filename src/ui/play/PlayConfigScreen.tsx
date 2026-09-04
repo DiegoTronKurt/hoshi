@@ -9,23 +9,38 @@ import { computeAdaptiveStrength } from '../../learning/adaptiveDifficulty'
 import { ADAPTIVE_MIN_GAMES } from '../../learning/adaptiveDifficulty'
 import { listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
-import { LockIcon } from '../common/LockIcon'
-import type { DifficultyMode, GameMode, PlayConfig } from './playConfig'
+import type { DifficultyMode, GameMode, PlayConfig, ScoringRule } from './playConfig'
 import { loadLastPlayConfig, saveLastPlayConfig } from './playConfig'
 import { SavedGamesList } from './SavedGamesList'
 import { STRENGTH_LEVELS } from './strengthLevels'
 import type { StrengthLevel } from './strengthLevels'
 
-// 13x13 desbloqueado 2026-09-03: la deuda tecnica de tamaño de tablero
-// (roadmap maestro, seccion 8) resulto ya estar resuelta al verificarla de
-// nuevo (Zobrist/region/BOARD_TRANSFORMS ya eran genericos; confirmado
-// ademas con una partida bot-vs-bot completa de principio a fin, ver
-// NOTAS.md), y el curriculo ya llego a ese tamaño (niveles 4 a 6, Aprender).
-// 19x19 se suma cuando el curriculo llegue ahi (v3, niveles 7-10): sigue
-// bloqueado por eso, no por ninguna razon tecnica -- mismo principio que
-// los niveles 4-10 bloqueados en Aprender (LearnScreen.tsx).
-const BOARD_SIZES = [5, 7, 9, 13] as const
-const LOCKED_BOARD_SIZES = [19] as const
+// 13x13 desbloqueado 2026-09-03, 19x19 desbloqueado 2026-09-04: la deuda
+// tecnica de tamaño de tablero (roadmap maestro, seccion 8) resulto ya estar
+// resuelta al verificarla de nuevo (Zobrist/region/BOARD_TRANSFORMS ya eran
+// genericos), y en ambos casos el curriculo ya habia llegado a ese tamaño
+// (13x13: niveles 4 a 6; 19x19: niveles 7 a 10, v3 completo) -- mismo
+// principio que los niveles bloqueados en Aprender (LearnScreen.tsx).
+// Confirmado con una partida bot-vs-bot completa de principio a fin en cada
+// tamaño (9x9, 13x13 y 19x19), no solo unas pocas jugadas sin crashear -- ver
+// NOTAS.md. 9x13 agregado el mismo dia: unico tablero rectangular ya en uso
+// real en contenido (Nivel 4), misma orientacion que ui/board/hoshiPoints.ts
+// (width=9, height=13) -- BoardCanvas y el motor de deteccion de errores ya
+// eran genericos en ancho/alto, lo unico cuadrado era este selector.
+interface BoardPreset {
+  width: number
+  height: number
+  label: string
+}
+
+const BOARD_PRESETS: BoardPreset[] = [
+  { width: 5, height: 5, label: '5x5' },
+  { width: 7, height: 7, label: '7x7' },
+  { width: 9, height: 9, label: '9x9' },
+  { width: 13, height: 13, label: '13x13' },
+  { width: 19, height: 19, label: '19x19' },
+  { width: 9, height: 13, label: '9x13' },
+]
 
 const BOT_STYLE_LABEL_KEY: Record<BotStyleId, TranslationKey> = {
   standard: 'play.botStyle.standard',
@@ -42,12 +57,14 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
   const { t } = useI18n()
   const lastConfig = useMemo(() => loadLastPlayConfig(), [])
 
-  const [size, setSize] = useState(lastConfig?.size ?? 9)
+  const [width, setWidth] = useState(lastConfig?.width ?? 9)
+  const [height, setHeight] = useState(lastConfig?.height ?? 9)
   const [mode, setMode] = useState<GameMode>(lastConfig?.mode ?? 'local')
   const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(lastConfig?.difficultyMode ?? 'manual')
   const [strengthId, setStrengthId] = useState<StrengthLevel['id']>(lastConfig?.strengthId ?? 'normal')
   const [botStyle, setBotStyle] = useState<BotStyleId>(lastConfig?.botStyle ?? 'standard')
   const [humanColor, setHumanColor] = useState<Color>(lastConfig?.humanColor ?? BLACK)
+  const [scoringRule, setScoringRule] = useState<ScoringRule>(lastConfig?.scoringRule ?? 'chinese')
 
   const [savedGames, setSavedGames] = useState<SavedGameRecord[]>([])
   useEffect(() => {
@@ -61,8 +78,8 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
 
   function handleStart() {
     const resolvedStrengthId = difficultyMode === 'adaptive' ? adaptiveResult.strengthId : strengthId
-    saveLastPlayConfig({ size, mode, difficultyMode, strengthId, botStyle, humanColor })
-    onStart({ size, mode, strengthId: resolvedStrengthId, botStyle, humanColor })
+    saveLastPlayConfig({ width, height, mode, difficultyMode, strengthId, botStyle, humanColor, scoringRule })
+    onStart({ width, height, mode, strengthId: resolvedStrengthId, botStyle, humanColor, scoringRule })
   }
 
   return (
@@ -72,26 +89,47 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
       <div className="play-card-group">
         <span className="play-card-group-label">{t('board.size')}</span>
         <div className="play-card-row" role="group" aria-label={t('board.size')}>
-          {BOARD_SIZES.map((s) => (
-            <button
-              key={s}
-              type="button"
-              className={`play-size-card ${s === size ? 'active' : ''}`}
-              aria-pressed={s === size}
-              onClick={() => setSize(s)}
-            >
-              {s}x{s}
-            </button>
-          ))}
-          {LOCKED_BOARD_SIZES.map((s) => (
-            <div key={s} className="play-size-card play-size-card-locked" aria-disabled="true">
-              <LockIcon />
-              <span>
-                {s}x{s}
-              </span>
-            </div>
-          ))}
+          {BOARD_PRESETS.map((preset) => {
+            const active = preset.width === width && preset.height === height
+            return (
+              <button
+                key={preset.label}
+                type="button"
+                className={`play-size-card ${active ? 'active' : ''}`}
+                aria-pressed={active}
+                onClick={() => {
+                  setWidth(preset.width)
+                  setHeight(preset.height)
+                }}
+              >
+                {preset.label}
+              </button>
+            )
+          })}
         </div>
+      </div>
+
+      <div className="play-card-group">
+        <span className="play-card-group-label">{t('play.scoringRule.label')}</span>
+        <div className="play-card-row" role="group" aria-label={t('play.scoringRule.label')}>
+          <button
+            type="button"
+            className={`play-bot-card ${scoringRule === 'chinese' ? 'active' : ''}`}
+            aria-pressed={scoringRule === 'chinese'}
+            onClick={() => setScoringRule('chinese')}
+          >
+            <span>{t('play.scoringRule.chinese')}</span>
+          </button>
+          <button
+            type="button"
+            className={`play-bot-card ${scoringRule === 'japanese' ? 'active' : ''}`}
+            aria-pressed={scoringRule === 'japanese'}
+            onClick={() => setScoringRule('japanese')}
+          >
+            <span>{t('play.scoringRule.japanese')}</span>
+          </button>
+        </div>
+        <p className="settings-description">{t('play.scoringRule.disclaimer')}</p>
       </div>
 
       <div className="controls">

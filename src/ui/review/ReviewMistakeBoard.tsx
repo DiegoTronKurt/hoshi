@@ -7,6 +7,7 @@ import type { EvalClient } from '../../eval/client'
 import { legalPolicyDistribution } from '../../eval/policy'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
+import { gameHeight, gameWidth } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
 import type { BoardTheme } from '../board/themes'
@@ -50,11 +51,13 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
       // de la persona que lo cometio. Ver NOTAS.md para el detalle
       // completo de este hallazgo.
       const evalMoveNumber = event.moveNumber - 1
-      const evalState = stateAtMove(game.size, game.komi, moves, evalMoveNumber)
+      const width = gameWidth(game)
+      const height = gameHeight(game)
+      const evalState = stateAtMove(width, height, game.komi, moves, evalMoveNumber)
       const recentMoves = moves.slice(Math.max(0, evalMoveNumber - 5), evalMoveNumber)
       const priorBoards = [
-        stateAtMove(game.size, game.komi, moves, evalMoveNumber - 2).board,
-        stateAtMove(game.size, game.komi, moves, evalMoveNumber - 1).board,
+        stateAtMove(width, height, game.komi, moves, evalMoveNumber - 2).board,
+        stateAtMove(width, height, game.komi, moves, evalMoveNumber - 1).board,
       ]
 
       const output = await evalClient.evaluate({ state: evalState, recentMoves, priorBoards })
@@ -91,8 +94,8 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
   return (
     <div className="review-board">
       <BoardCanvas
-        width={game.size}
-        height={game.size}
+        width={gameWidth(game)}
+        height={gameHeight(game)}
         stones={boardState.board.stones}
         lastMove={event.point}
         hintMove={hintMove}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createBoard, toPoint } from '../../src/core/board'
-import { computeAreaOwnership, computeAreaScore } from '../../src/core/scoring'
+import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../src/core/scoring'
 import { BLACK, EMPTY, WHITE } from '../../src/core/types'
 import type { BoardState, Color } from '../../src/core/types'
 
@@ -47,6 +47,43 @@ describe('conteo de area', () => {
     const withMarking = computeAreaScore(board, 0, deadStones)
     expect(withMarking.black).toBe(25) // anillo (16) mas todo el interior (9)
     expect(withMarking.white).toBe(0)
+  })
+})
+
+describe('conteo de territorio (reglas japonesas)', () => {
+  it('las piedras propias no suman punto, solo el territorio vacio (a diferencia del conteo de area)', () => {
+    const board = createBoard(5)
+    place(board, BLACK, [
+      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0],
+      [0, 1], [1, 1], [2, 1], [3, 1], [4, 1],
+    ])
+    place(board, WHITE, [
+      [0, 3], [1, 3], [2, 3], [3, 3], [4, 3],
+      [0, 4], [1, 4], [2, 4], [3, 4], [4, 4],
+    ])
+    // Mismo tablero que el primer test de conteo de area (10 piedras cada
+    // uno, fila y=2 dame): ahi computeAreaScore daba black=10, white=16.5
+    // porque las piedras propias cuentan. Aca ninguno tiene territorio vacio
+    // propio (todos sus puntos son piedras, no territorio vacio), asi que
+    // sin capturas el puntaje es 0 para los dos mas el komi de blanco.
+
+    const score = computeTerritoryScore(board, 6.5, { black: 0, white: 0 })
+
+    expect(score.black).toBe(0)
+    expect(score.white).toBe(6.5)
+  })
+
+  it('cuenta el territorio vacio rodeado y suma las capturas ya hechas en la partida', () => {
+    const board = createBoard(5)
+    const ring: Array<[number, number]> = []
+    for (let x = 0; x < 5; x++) ring.push([x, 0], [x, 4])
+    for (let y = 1; y < 4; y++) ring.push([0, y], [4, y])
+    place(board, BLACK, ring) // anillo negro que rodea el tablero: 16 piedras, interior 3x3 (9 puntos) vacio y sin tocar blanco
+
+    const score = computeTerritoryScore(board, 0, { black: 3, white: 1 })
+
+    expect(score.black).toBe(9 + 3) // 9 puntos de territorio interior + 3 capturas
+    expect(score.white).toBe(1) // sin territorio propio, 1 captura, komi 0
   })
 })
 

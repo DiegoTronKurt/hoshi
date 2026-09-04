@@ -3,6 +3,7 @@ import type { ConceptId } from '../analysis/concepts'
 import { analyzeGame } from '../analysis/mistakes'
 import type { ConceptOccurrence, OccurrenceContext } from '../analysis/mistakes'
 import { sgfToGameRecord } from '../core/sgf'
+import { gameHeight, gameWidth } from '../storage/db'
 import type { AttemptRecord, SavedGameRecord } from '../storage/db'
 
 const MIN_EXERCISE_ATTEMPTS = 5
@@ -97,7 +98,7 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
   for (const game of games) {
     const { moves } = sgfToGameRecord(game.sgf)
     totalMoves += moves.length
-    const occurrences = analyzeGame(game.size, game.komi, moves)
+    const occurrences = analyzeGame(gameWidth(game), gameHeight(game), game.komi, moves)
     for (const occurrence of occurrences) {
       applyOccurrence(aggregateFor(occurrence.conceptId), occurrence, game.createdAt)
     }

@@ -12,11 +12,15 @@ export type DifficultyMode = 'manual' | 'adaptive'
  * partida -- nunca se vuelve a editar mientras se juega.
  */
 export interface PlayConfig {
-  size: number
+  width: number
+  height: number
   mode: GameMode
   strengthId: StrengthLevel['id']
   botStyle: BotStyleId
   humanColor: Color
+  /** Regla de conteo para esta partida: China (area, piedras + territorio) o
+   * Japonesa (solo territorio + capturas). Ver core/scoring.ts. */
+  scoringRule: ScoringRule
   /** Posicion inicial distinta de un tablero vacio (p.ej. la partida de
    * comprobacion de una leccion, que arranca con las fichas del ejemplo ya
    * puestas en vez de un tablero en blanco). Ausente en una partida normal. */
@@ -24,12 +28,17 @@ export interface PlayConfig {
   initialToMove?: Color
 }
 
+export type ScoringRule = 'chinese' | 'japanese'
+
 /** Posicion con la que arrancar una partida en vez de un tablero vacio --
  * mismo shape que DemoScript (content/lessons/types.ts), la usa el boton
  * "Partida de comprobacion" de una leccion para llevar a esa posicion en vez
- * de a un tablero en blanco desconectado del ejemplo. */
+ * de a un tablero en blanco desconectado del ejemplo. Sin scoringRule: una
+ * leccion no tiene nocion de regla de conteo, seededConfig la fija en
+ * 'chinese' como cualquier partida nueva por defecto. */
 export interface PlaySeed {
-  size: number
+  width: number
+  height: number
   stones: Int8Array
   toMove: Color
 }
@@ -41,24 +50,34 @@ const STORAGE_KEY = 'hoshi-last-play-config'
  * ya resuelto -- a diferencia de PlayConfig, esto es solo para precargar el
  * formulario la proxima vez, nunca viaja a la pantalla de partida. */
 export interface LastPlayConfig {
-  size: number
+  width: number
+  height: number
   mode: GameMode
   difficultyMode: DifficultyMode
   strengthId: StrengthLevel['id']
   botStyle: BotStyleId
   humanColor: Color
+  scoringRule: ScoringRule
 }
 
+// Un LastPlayConfig guardado antes del soporte de tablero rectangular o de
+// conteo japones solo tiene `size` (no width/height) y no tiene scoringRule.
+// isValidLastConfig los rechaza (devuelve null) en vez de intentar
+// migrarlos: loadLastPlayConfig ya esta preparado para eso (vuelve a los
+// valores por defecto del formulario), asi que un blob viejo simplemente se
+// descarta una vez en vez de necesitar codigo de migracion.
 function isValidLastConfig(value: unknown): value is LastPlayConfig {
   if (!value || typeof value !== 'object') return false
   const v = value as Record<string, unknown>
   return (
-    typeof v.size === 'number' &&
+    typeof v.width === 'number' &&
+    typeof v.height === 'number' &&
     (v.mode === 'local' || v.mode === 'bot') &&
     (v.difficultyMode === 'manual' || v.difficultyMode === 'adaptive') &&
     typeof v.strengthId === 'string' &&
     typeof v.botStyle === 'string' &&
-    (v.humanColor === 1 || v.humanColor === 2)
+    (v.humanColor === 1 || v.humanColor === 2) &&
+    (v.scoringRule === 'chinese' || v.scoringRule === 'japanese')
   )
 }
 

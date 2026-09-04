@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { applyMove, createGame } from '../../src/core/rules'
-import { EMPTY } from '../../src/core/types'
+import { EMPTY, WHITE } from '../../src/core/types'
 import { chooseMove } from '../../src/engine/mcts'
 
 describe('MCTS', () => {
@@ -40,5 +40,50 @@ describe('MCTS', () => {
 
     expect(result.playoutsRun).toBeLessThan(1_000_000)
     expect(result.playoutsRun).toBeGreaterThan(0)
+  })
+
+  it('acepta pasar sin buscar si el rival acaba de pasar y ya va ganando', () => {
+    let state = createGame(5, 5, 6.5)
+    state = applyMove(state, null).state! // negro pasa en el primerisimo turno: blanco ya gana por komi
+
+    const result = chooseMove(state, { playouts: 500, randomSeed: 1 })
+
+    expect(result.move).toBeNull()
+    expect(result.playoutsRun).toBe(0)
+  })
+
+  it('no acepta pasar si hay una captura gratis disponible, aunque el rival haya pasado', () => {
+    let state = createGame(5, 5, 6.5)
+    state = applyMove(state, 12).state! // B (2,2)
+    state = applyMove(state, 11).state! // W (1,2)
+    state = applyMove(state, 0).state! // B relleno, lejos
+    state = applyMove(state, 7).state! // W (2,1)
+    state = applyMove(state, 4).state! // B relleno, lejos
+    state = applyMove(state, 13).state! // W (3,2): la piedra negra de 12 queda en atari, unica libertad en 17
+    state = applyMove(state, null).state! // B pasa
+
+    expect(state.consecutivePasses).toBe(1)
+    expect(state.toMove).toBe(WHITE)
+
+    const result = chooseMove(state, { playouts: 20, randomSeed: 1 })
+    expect(result.playoutsRun).toBeGreaterThan(0) // no debe aceptar pasar habiendo una captura gratis
+  })
+
+  it('no acepta pasar si va perdiendo en el marcador, aunque el rival haya pasado', () => {
+    const blackPoints = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+    let state = createGame(5, 5, 6.5)
+    for (let i = 0; i < blackPoints.length; i++) {
+      state = applyMove(state, blackPoints[i]).state! // negro coloca una piedra
+      // blanco pasa en todos sus turnos salvo el ultimo (una piedra real evita
+      // terminar la partida por doble pase antes de llegar al pase final de negro)
+      state = applyMove(state, i === blackPoints.length - 1 ? 24 : null).state!
+    }
+    state = applyMove(state, null).state! // negro pasa: 10 piedras propias contra 1+komi de blanco
+
+    expect(state.consecutivePasses).toBe(1)
+    expect(state.toMove).toBe(WHITE)
+
+    const result = chooseMove(state, { playouts: 20, randomSeed: 1 })
+    expect(result.playoutsRun).toBeGreaterThan(0) // no debe aceptar pasar yendo perdiendo
   })
 })
