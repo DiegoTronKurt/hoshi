@@ -164,6 +164,26 @@ porque, a diferencia de TRIANGULO_VACIO, este concepto ya es verificable
 por motor (`computeAreaScore`/`computeAreaOwnership`), asi que la fuente
 sirve como respaldo/documentacion, no como insumo tecnico necesario.
 
+**Segunda relevancia, agregada 2026-09-03 — DIRECCION_LADO_GRANDE**: el
+libro NO tiene un capitulo dedicado a "direccion de juego" (ver *Other
+Books on Go*, contratapa p.137: eso es un libro aparte, *Direction of
+Play* de Kajiwara Takeo, no subido). Pero la misma distincion
+territorio-vs-esfera-de-influencia de este capitulo resulto ser
+exactamente lo que hacia falta para desbloquear el 5to concepto de Nivel 4
+(Forma), bloqueado desde el punto 1 de v2 porque ni el estimador de
+influencia ni partidas simuladas dieron una señal reproducible en el
+sentido correcto (ver `NOTAS.md`, "Direccion (lado grande) -- sigue sin
+verificarse"). El resultado invertido de ese experimento no era ruido: el
+diseño tenia el lado "grande" ya asegurado por una pared completa (bajo
+valor marginal reforzarlo, exactamente la regla de oro de la p.98, "don't
+use thickness to surround territory") y el lado "chico" todavia en
+disputa. La leccion `n4-l5` enseña la distincion territorio/esfera de
+influencia directamente en vez de "jugar del lado grande", verificada con
+`computeAreaScore` (no con partidas simuladas): un bolsillo ya cerrado no
+cambia el puntaje al jugar adentro (+0), un bolsillo mas chico pero
+todavia abierto suma varios puntos de una sola vez al cerrarlo (+5 en el
+ejemplo). Detalle completo en `NOTAS.md`.
+
 ---
 
 ## Capitulo 11 — "Endgame Pointers" (pp. 243-254, muestreado)

@@ -61,7 +61,7 @@ import { difficultyFromDepth, solutionDepth } from '../src/content/difficulty'
 import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
-const SELF_PLAY_GAMES = 64
+const SELF_PLAY_GAMES = 200
 const WEAK_PLAYOUTS = 100
 const STRONG_PLAYOUTS = 800
 const MAX_MOVE_TIME_MS = 3000

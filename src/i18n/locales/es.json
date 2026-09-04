@@ -474,6 +474,40 @@
   "lesson.n4-l4.diagram.balanced.caption": "Extensión balanceada: ni pegada a la pared ni demasiado suelta. Verificado con partidas simuladas completas (no a mano): esta distancia dio el mejor resultado promedio de las probadas.",
   "lesson.n4-l4.p2": "No hay una regla exacta que sirva siempre para toda pared: pero la idea de buscar el punto medio, ni muy pegado ni muy suelto, se sostuvo en la comparación real.",
 
+  "lesson.n4-l5.title": "El punto grande no siempre es el área grande",
+  "lesson.n4-l5.p1": "No toda el área abierta del tablero vale lo mismo. Parte de ella ya es tuya en la práctica: poner una piedra ahí no cambia nada. Otra parte todavía está sin decidir, y se la lleva quien juegue primero. El punto que más importa casi nunca es el que se ve más grande, sino el que sigue abierto.",
+  "lesson.n4-l5.diagram.secured.caption": "La esquina de negro (arriba a la izquierda) ya está cerrada. Jugar adentro, en el punto marcado, cambia el puntaje en {{delta}} puntos, verificado contando el área antes y después: ya era de negro.",
+  "lesson.n4-l5.diagram.contested.caption": "El bolsillo más chico de la derecha todavía tenía un punto abierto, marcado acá. Cerrarlo suma {{delta}} puntos de una sola vez, verificado de la misma forma: ese terreno todavía no estaba resuelto.",
+  "lesson.n4-l5.p2": "Esto no significa que un área chica siempre le gane a una grande: significa que el tamaño por sí solo no dice cuánto vale una jugada. Antes de comparar dos zonas, preguntate cuál de las dos sigue abierta. Ahí suele estar el punto que realmente importa.",
+
+  "lesson.n6-l1.title": "Qué es (y qué no es) un joseki",
+  "lesson.n6-l1.p1": "Un joseki es una secuencia de jugadas en una esquina que la teoría acepta como razonablemente equilibrada para ambos lados: nadie sale claramente perdiendo si se juega hasta el final. Pero un joseki correcto en abstracto no es lo mismo que la jugada correcta en tu partida. Hay un proverbio conocido: \"aprender joseki de memoria te hace dos piedras más débil\", porque copiar la secuencia sin entender por qué funciona cada jugada te deja sin poder reaccionar el día que el rival se desvía.",
+  "lesson.n6-l1.diagram.caption": "Un intercambio de apertura típico en una esquina: negro juega en el punto 4-4, blanco se acerca. A un intercambio así, en conjunto, se le llama un joseki.",
+  "lesson.n6-l1.p2": "Las próximas lecciones no son una lista de secuencias para memorizar. Son las preguntas que de verdad importan: ¿hacia dónde conviene bloquear? ¿cuándo conviene dejar la secuencia a medias? ¿por qué el punto 4-4 no asegura la esquina por sí solo?",
+
+  "lesson.n6-l2.title": "Bloquear hacia tu propio apoyo",
+  "lesson.n6-l2.p1": "Cuando el rival se acerca a tu piedra de esquina, casi siempre podés bloquear de dos lados. La pregunta que decide cuál es mejor no es geométrica, es: ¿hacia qué lado tengo algo que ya vale la pena reforzar?",
+  "lesson.n6-l2.diagram.support.caption": "Negro ya tiene una piedra más arriba, del mismo lado. Bloquear hacia ella (marcado) construye una pared que conecta con algo que ya vale: el bloqueo y la piedra de apoyo trabajan juntos.",
+  "lesson.n6-l2.diagram.empty.caption": "La misma aproximación, pero bloqueando hacia el otro lado (marcado): la pared apunta hacia la esquina, donde negro no tiene nada más que reforzar. La piedra de apoyo de arriba queda sin conexión con lo nuevo.",
+  "lesson.n6-l2.p2": "No es una regla absoluta (a veces el lado \"vacío\" es más urgente por otra razón) pero como punto de partida, bloqueá hacia donde ya tenés algo, no hacia donde no tenés nada.",
+
+  "lesson.n6-l3.title": "A veces, no terminar la secuencia es lo correcto",
+  "lesson.n6-l3.p1": "Tenuki significa jugar en otro lado del tablero en vez de responder localmente. Cada secuencia de esquina, en algún punto, deja de ser la jugada más grande disponible, y el resto del tablero sigue esperando.",
+  "lesson.n6-l3.diagram.caption": "Un intercambio recién empezado en una esquina. El resto del tablero de 13x13 sigue completamente vacío: ¿de verdad la jugada más grande está acá?",
+  "lesson.n6-l3.p2": "El proverbio clásico es \"jugada urgente antes que jugada grande\", pero un punto grande en otro lado también le gana a seguir una secuencia local que ya cumplió su propósito. Preguntate, en cada jugada: ¿esto sigue siendo lo más urgente, o ya lo era hace dos jugadas?",
+
+  "lesson.n6-l4.title": "El punto 4-4 no asegura la esquina solo",
+  "lesson.n6-l4.p1": "El punto 4-4 (hoshi) prioriza velocidad e influencia hacia las dos direcciones a la vez, a cambio de no asegurar territorio de verdad: a diferencia del punto 3-4, no hay ninguna piedra bloqueando el punto 3-3.",
+  "lesson.n6-l4.diagram.alone.caption": "Una sola piedra en el punto 4-4. El punto 3-3, en la esquina, sigue completamente libre.",
+  "lesson.n6-l4.diagram.invasion.caption": "Blanco puede jugar directamente en 3-3 (marcado). La piedra de negro en 4-4 no lo impide ni lo penaliza por sí sola: por eso la invasión en 3-3 contra un 4-4 es una técnica estándar, no una jugada arriesgada al azar.",
+  "lesson.n6-l4.p2": "Esto no quiere decir que 4-4 sea una mala jugada: la influencia que da vale mucho, sobre todo con más piedras alrededor. Pero jugar 4-4 es elegir explícitamente influencia por sobre seguridad inmediata en esa esquina.",
+
+  "lesson.n6-l5.title": "El mismo joseki, en cualquier esquina",
+  "lesson.n6-l5.p1": "Un tablero de Go tiene ocho simetrías: girarlo o reflejarlo no cambia ninguna regla. Si una secuencia es correcta en una esquina, la misma secuencia, girada o reflejada, es igual de correcta en cualquier otra.",
+  "lesson.n6-l5.diagram.original.caption": "El bloqueo hacia el apoyo de la lección anterior, en la esquina inferior izquierda.",
+  "lesson.n6-l5.diagram.rotated.caption": "La misma posición exacta, girada 180 grados por el motor, no redibujada a mano. Misma lógica, esquina opuesta.",
+  "lesson.n6-l5.p2": "Cuando una lección te muestra una forma en una esquina del diagrama, no memorices las coordenadas: memorizá la relación entre las piedras. Esa relación es la que se mantiene, sin importar en qué esquina real de la partida aparezca.",
+
   "concept.LIBERTADES.label": "Libertades",
   "concept.LIBERTADES.summary": "Los puntos vacíos junto a una piedra o grupo.",
   "concept.CAPTURA_SIMPLE.label": "Captura simple",
@@ -533,5 +567,19 @@
   "concept.HANE_Y_CORTE.label": "Hane y el corte",
   "concept.HANE_Y_CORTE.summary": "Cabecear gana terreno pero casi siempre deja un punto de corte real detrás.",
   "concept.EXTENSION_DESDE_PARED.label": "Extensión desde una pared",
-  "concept.EXTENSION_DESDE_PARED.summary": "Ni pegada a la pared ni demasiado suelta: hay una distancia de extensión más equilibrada que otras."
+  "concept.EXTENSION_DESDE_PARED.summary": "Ni pegada a la pared ni demasiado suelta: hay una distancia de extensión más equilibrada que otras.",
+
+  "concept.DIRECCION_LADO_GRANDE.label": "Leer el punto más grande",
+  "concept.DIRECCION_LADO_GRANDE.summary": "Un marco que se ve grande puede estar ya resuelto; un hueco chico puede seguir siendo el verdadero punto grande.",
+
+  "concept.QUE_ES_JOSEKI.label": "Qué es un joseki",
+  "concept.QUE_ES_JOSEKI.summary": "Una secuencia localmente equilibrada, no una respuesta memorizada que sirve en cualquier contexto.",
+  "concept.BLOQUEO_HACIA_APOYO.label": "Bloquear hacia el apoyo",
+  "concept.BLOQUEO_HACIA_APOYO.summary": "Frente a una aproximación, bloquear hacia una piedra propia suele valer más que bloquear hacia el vacío.",
+  "concept.TENUKI_JOSEKI.label": "Tenuki",
+  "concept.TENUKI_JOSEKI.summary": "Dejar una secuencia local sin terminar porque ya apareció una jugada más grande en otro lado.",
+  "concept.HOSHI_INVASION_3_3.label": "4-4 y la invasión en 3-3",
+  "concept.HOSHI_INVASION_3_3.summary": "El punto 4-4 prioriza influencia sobre territorio: el punto 3-3 queda abierto para el rival.",
+  "concept.JOSEKI_SIMETRIA.label": "Simetría del joseki",
+  "concept.JOSEKI_SIMETRIA.summary": "La misma secuencia, girada o reflejada, es igual de correcta en cualquier esquina del tablero."
 }

@@ -36,15 +36,22 @@ export type ConceptId =
   // Transversales
   | 'PRIMERA_LINEA_TEMPRANA'
   | 'JUGADA_LEJOS_DEL_COMBATE'
-  // Nivel 4 (Forma) -- DIRECCION_LADO_GRANDE (direccion) queda pendiente:
-  // ni el estimador de influencia ni partidas simuladas completas con el
-  // bot MCTS dieron todavia una diferencia real, reproducible y en el
-  // sentido correcto -- ver NOTAS.md, decision pendiente del usuario antes
-  // de agregarla.
+  // Nivel 4 (Forma)
   | 'FORMA_EFICIENTE'
   | 'CORTE_DEL_KEIMA'
   | 'HANE_Y_CORTE'
   | 'EXTENSION_DESDE_PARED'
+  | 'DIRECCION_LADO_GRANDE'
+  // Nivel 5 (Apertura): pendiente -- bloqueado en el libro real de respaldo
+  // (Kajiwara, "The Direction of Play", subido 2026-09-03 pero sin texto
+  // extraible todavia, ver NOTAS.md). No se inventan conceptos de nivel 5
+  // sin esa fuente.
+  // Nivel 6 (Joseki)
+  | 'QUE_ES_JOSEKI'
+  | 'BLOQUEO_HACIA_APOYO'
+  | 'TENUKI_JOSEKI'
+  | 'HOSHI_INVASION_3_3'
+  | 'JOSEKI_SIMETRIA'
 
 export type ConceptSeverity = 'high' | 'medium' | 'low'
 
@@ -378,6 +385,71 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     labelKey: 'concept.EXTENSION_DESDE_PARED.label',
     summaryKey: 'concept.EXTENSION_DESDE_PARED.summary',
     lessonId: 'n4-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  DIRECCION_LADO_GRANDE: {
+    id: 'DIRECCION_LADO_GRANDE',
+    level: 4,
+    labelKey: 'concept.DIRECCION_LADO_GRANDE.label',
+    summaryKey: 'concept.DIRECCION_LADO_GRANDE.summary',
+    lessonId: 'n4-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 6 (Joseki): mismo patron que Nivel 4 -- sin detector ni banco de
+  // ejercicios, la afirmacion vive en la leccion misma (content/lessons/n6.ts).
+  QUE_ES_JOSEKI: {
+    id: 'QUE_ES_JOSEKI',
+    level: 6,
+    labelKey: 'concept.QUE_ES_JOSEKI.label',
+    summaryKey: 'concept.QUE_ES_JOSEKI.summary',
+    japaneseTerm: 'joseki',
+    lessonId: 'n6-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  BLOQUEO_HACIA_APOYO: {
+    id: 'BLOQUEO_HACIA_APOYO',
+    level: 6,
+    labelKey: 'concept.BLOQUEO_HACIA_APOYO.label',
+    summaryKey: 'concept.BLOQUEO_HACIA_APOYO.summary',
+    lessonId: 'n6-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  TENUKI_JOSEKI: {
+    id: 'TENUKI_JOSEKI',
+    level: 6,
+    labelKey: 'concept.TENUKI_JOSEKI.label',
+    summaryKey: 'concept.TENUKI_JOSEKI.summary',
+    japaneseTerm: 'tenuki',
+    lessonId: 'n6-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  HOSHI_INVASION_3_3: {
+    id: 'HOSHI_INVASION_3_3',
+    level: 6,
+    labelKey: 'concept.HOSHI_INVASION_3_3.label',
+    summaryKey: 'concept.HOSHI_INVASION_3_3.summary',
+    japaneseTerm: 'hoshi',
+    lessonId: 'n6-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  JOSEKI_SIMETRIA: {
+    id: 'JOSEKI_SIMETRIA',
+    level: 6,
+    labelKey: 'concept.JOSEKI_SIMETRIA.label',
+    summaryKey: 'concept.JOSEKI_SIMETRIA.summary',
+    lessonId: 'n6-l5',
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',

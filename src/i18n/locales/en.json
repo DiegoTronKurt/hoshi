@@ -474,6 +474,40 @@
   "lesson.n4-l4.diagram.balanced.caption": "Balanced extension: neither glued to the wall nor too loose. Verified with full simulated games (not by hand): this distance gave the best average result among the ones tested.",
   "lesson.n4-l4.p2": "There's no single exact rule that works for every wall, but the idea of aiming for the middle ground, neither too tight nor too loose, held up in the real comparison.",
 
+  "lesson.n4-l5.title": "The Big Point Isn't Always the Big Area",
+  "lesson.n4-l5.p1": "Not all open ground on the board is worth the same. Some of it is already yours in every practical sense: adding a stone there doesn't change anything. Other ground is still undecided, and whoever plays there first gets it. The point that matters most usually isn't the one that looks biggest, it's the one that's still open.",
+  "lesson.n4-l5.diagram.secured.caption": "Black's corner (top-left) is already sealed. Playing inside it, at the marked point, changes the score by {{delta}} points, verified by counting area before and after: it was already Black's.",
+  "lesson.n4-l5.diagram.contested.caption": "The smaller-looking pocket on the right still had one open point, marked here. Closing it adds {{delta}} points at once, verified the same way: that ground wasn't settled yet.",
+  "lesson.n4-l5.p2": "This doesn't mean small areas always beat big ones, it means size on its own doesn't tell you the value of a move. Before comparing two areas, ask which one is still open. That's usually where the real points are.",
+
+  "lesson.n6-l1.title": "What a Joseki Is (and Isn't)",
+  "lesson.n6-l1.p1": "A joseki is a sequence of moves in a corner that theory accepts as roughly balanced for both sides: neither player comes out clearly behind if it's played to the end. But being correct in the abstract isn't the same as being the right move in your actual game. There's a well-known proverb: \"memorizing joseki makes you two stones weaker,\" because copying a sequence without understanding why each move works leaves you stuck the moment your opponent deviates from the book.",
+  "lesson.n6-l1.diagram.caption": "A typical opening exchange in a corner: Black plays the 4-4 point, White approaches. Together, an exchange like this is what's called a joseki.",
+  "lesson.n6-l1.p2": "The next lessons aren't a list of sequences to memorize. They're the questions that actually matter: which direction should you block? when is it right to leave a sequence unfinished? why doesn't the 4-4 point secure the corner on its own?",
+
+  "lesson.n6-l2.title": "Block Toward Your Own Support",
+  "lesson.n6-l2.p1": "When your opponent approaches your corner stone, you can almost always block from either side. The question that decides which is better isn't geometric, it's: which side already has something worth reinforcing?",
+  "lesson.n6-l2.diagram.support.caption": "Black already has a stone further up, on the same side. Blocking toward it (marked) builds a wall that connects toward something that already has value: the block and the support stone work together.",
+  "lesson.n6-l2.diagram.empty.caption": "The same approach, but blocking the other way (marked): the wall points toward the corner, where Black has nothing else to reinforce. The support stone above stays disconnected from the new wall.",
+  "lesson.n6-l2.p2": "It's not an absolute rule (sometimes the \"empty\" side is more urgent for some other reason) but as a starting point, block toward what you already have, not toward what you don't.",
+
+  "lesson.n6-l3.title": "Sometimes Not Finishing the Sequence Is Correct",
+  "lesson.n6-l3.p1": "Tenuki means playing elsewhere on the board instead of responding locally. Every corner sequence, at some point, stops being the biggest move available, and the rest of the board is still waiting.",
+  "lesson.n6-l3.diagram.caption": "An exchange that's barely started in one corner. The rest of the 13x13 board is still completely empty: is the biggest move really still here?",
+  "lesson.n6-l3.p2": "The classic proverb is \"urgent moves before big moves,\" but a big point elsewhere also beats continuing a local sequence that's already served its purpose. Ask yourself, on every move: is this still the most urgent thing, or was it two moves ago?",
+
+  "lesson.n6-l4.title": "The 4-4 Point Doesn't Secure the Corner Alone",
+  "lesson.n6-l4.p1": "The 4-4 point (hoshi) trades real territory for speed and influence in both directions at once: unlike the 3-4 point, there's no stone blocking the 3-3 point.",
+  "lesson.n6-l4.diagram.alone.caption": "A single stone on the 4-4 point. The 3-3 point, in the corner, is still completely open.",
+  "lesson.n6-l4.diagram.invasion.caption": "White can play directly at 3-3 (marked). Black's 4-4 stone doesn't prevent or punish it by itself: that's why the 3-3 invasion against a 4-4 point is a standard technique, not a random risky move.",
+  "lesson.n6-l4.p2": "This doesn't mean 4-4 is a bad move: the influence it gives is worth a lot, especially with more stones around it. But playing 4-4 is explicitly choosing influence over immediate safety in that corner.",
+
+  "lesson.n6-l5.title": "The Same Joseki, in Any Corner",
+  "lesson.n6-l5.p1": "A Go board has eight symmetries: rotating or reflecting it changes no rule of the game. If a sequence is correct in one corner, the same sequence, rotated or reflected, is equally correct in any other.",
+  "lesson.n6-l5.diagram.original.caption": "The block-toward-support shape from the previous lesson, in the bottom-left corner.",
+  "lesson.n6-l5.diagram.rotated.caption": "The exact same position, rotated 180 degrees by the engine, not redrawn by hand. Same logic, opposite corner.",
+  "lesson.n6-l5.p2": "When a lesson shows you a shape in one corner of the diagram, don't memorize the coordinates: memorize the relationship between the stones. That relationship is what stays constant, no matter which actual corner of the game it shows up in.",
+
   "concept.LIBERTADES.label": "Liberties",
   "concept.LIBERTADES.summary": "The empty points next to a stone or group.",
   "concept.CAPTURA_SIMPLE.label": "Simple capture",
@@ -533,5 +567,19 @@
   "concept.HANE_Y_CORTE.label": "Hane and the cut",
   "concept.HANE_Y_CORTE.summary": "Wrapping around a stone gains ground but almost always leaves a real cutting point behind.",
   "concept.EXTENSION_DESDE_PARED.label": "Extension from a wall",
-  "concept.EXTENSION_DESDE_PARED.summary": "Neither glued to the wall nor too loose: some extension distances are more balanced than others."
+  "concept.EXTENSION_DESDE_PARED.summary": "Neither glued to the wall nor too loose: some extension distances are more balanced than others.",
+
+  "concept.DIRECCION_LADO_GRANDE.label": "Reading the Bigger Point",
+  "concept.DIRECCION_LADO_GRANDE.summary": "A framework that looks big can already be settled; a small-looking gap can still be the real point.",
+
+  "concept.QUE_ES_JOSEKI.label": "What a Joseki Is",
+  "concept.QUE_ES_JOSEKI.summary": "A locally balanced sequence, not a memorized answer that works in any context.",
+  "concept.BLOQUEO_HACIA_APOYO.label": "Block Toward Support",
+  "concept.BLOQUEO_HACIA_APOYO.summary": "Facing an approach, blocking toward a friendly stone is usually worth more than blocking toward empty space.",
+  "concept.TENUKI_JOSEKI.label": "Tenuki",
+  "concept.TENUKI_JOSEKI.summary": "Leaving a local sequence unfinished because a bigger move has appeared elsewhere.",
+  "concept.HOSHI_INVASION_3_3.label": "4-4 and the 3-3 Invasion",
+  "concept.HOSHI_INVASION_3_3.summary": "The 4-4 point favors influence over territory: the 3-3 point stays open for the opponent.",
+  "concept.JOSEKI_SIMETRIA.label": "Joseki Symmetry",
+  "concept.JOSEKI_SIMETRIA.summary": "The same sequence, rotated or reflected, is equally correct in any corner of the board."
 }

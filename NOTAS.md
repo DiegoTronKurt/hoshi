@@ -1,5 +1,219 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-03, cont. 3: Nivel 4 conectado a Aprender, Nivel 6 -- Joseki -- cerrado y conectado)
+
+Reemplaza la version "cont. 2: Nivel 4 cerrado..." de mas abajo (dejada
+como registro historico). Continuacion de la misma sesion.
+
+### Punto 2 de v2 (roadmap seccion 9.2): Nivel 4 conectado a la interfaz real
+
+`LearnScreen.tsx`: `LEVELS` paso de `[0,1,2,3]` a `[0,1,2,3,4,6]` (ver mas
+abajo por que salta el 5) y su entrada salio de `LOCKED_LEVELS`. Las 5
+lecciones de Nivel 4 (incluida `n4-l5`) son alcanzables desde Aprender por
+primera vez. Cambio acotado a un solo archivo: se reviso
+`learning/profile.ts::currentLevel()` y `ui/profile/ProfileScreen.tsx`/
+`ui/today/TodayScreen.tsx` (que tambien tienen su propio `LEVELS`/
+`0|1|2|3`) y **a proposito no se tocaron** -- los 5 conceptos de Nivel 4
+tienen `hasDetector: false, generatesExercises: false` (confirmado en
+`analysis/concepts.ts`), asi que `conceptsWithEvidence()` ya los filtra
+fuera de esas pantallas por construccion, exactamente el mismo mecanismo
+ya establecido para KO/CONTEO_AREA en Nivel 1 (comentario ya existente en
+`concepts.ts` sobre ese caso). Ampliar esas pantallas habria sido alcance
+no pedido, sin efecto visible, y un riesgo real de regresion en la logica
+de "nivel actual" de Hoy.
+
+### Punto 3 de v2: Nivel 6 (Joseki, 13x13) -- 5 de 5 conceptos, cerrado y conectado
+
+El usuario pidio arrancar los puntos 2, 3 y 4 del roadmap (seccion 9.2) en
+la misma sesion, junto con reintentar la subida del libro de Kajiwara
+(*The Direction of Play*) que habia fallado como adjunto de chat. Encontre
+el PDF ya guardado en `Go_app/the_direction_of_play.pdf` (35MB) por pedido
+directo del usuario ("esta en la carpeta go_app"), pero es un escaneo sin
+capa de texto real: `pdftotext -layout` sobre el archivo completo extrajo
+0 caracteres de texto (confirmado dos veces, con y sin `-layout`), y no hay
+`pdftoppm` ni ningun OCR (`tesseract` ausente) instalado en esta maquina
+para leerlo como imagen. No se instalo nada para forzar una lectura --
+mismo criterio que la vez anterior con el libro de Kageyama: es una
+decision del usuario, no algo para resolver de forma silenciosa cambiando
+el entorno. El adjunto de chat (que si funciono con el PDF de Kageyama,
+tambien un escaneo viejo) sigue siendo el camino mas probable; queda
+pendiente que el usuario lo reintente.
+
+Como Nivel 5 (Apertura) es exactamente el tema de ese libro (direccion de
+juego en la apertura) y Nivel 4 ya mostro el costo real de inventar
+contenido de direccion sin una fuente (3 intentos de verificacion
+automatica fallidos antes del libro de Kageyama), se pospuso Nivel 5 hasta
+que el libro este legible, y se armo Nivel 6 (Joseki) en su lugar -- tema
+distinto, no afectado por ese libro. Lista de 5 conceptos propuesta al
+usuario y confirmada antes de escribir contenido (mismo criterio que ya
+existia informalmente para Nivel 4, ahora explicito):
+
+1. **QUE_ES_JOSEKI** (`n6-l1`): que es un joseki y por que no memorizarlo a
+   ciegas -- framing conceptual, proverbio real ("aprender joseki de
+   memoria te hace dos piedras mas debil").
+2. **BLOQUEO_HACIA_APOYO** (`n6-l2`): frente a una aproximacion, bloquear
+   hacia una piedra propia cercana vale mas que bloquear hacia el vacio.
+   Geometria deliberadamente simple (una sola columna, distancias parejas)
+   en vez de una secuencia de joseki de libro memorizada -- mismo criterio
+   de minimizar riesgo de un error geometrico sutil sin fuente para
+   verificar contra.
+3. **TENUKI_JOSEKI** (`n6-l3`): dejar una secuencia local sin terminar
+   porque aparecio algo mas grande en otro lado -- conceptual, proverbio
+   real ("jugada urgente antes que jugada grande").
+4. **HOSHI_INVASION_3_3** (`n6-l4`): el punto 4-4 no bloquea ni penaliza el
+   3-3 por si solo -- se muestra que 3-3 sigue siendo una jugada legal
+   normal contra un 4-4 solitario, sin afirmar que la invasion *vive* (esa
+   lectura de vida-muerte de esquina es mucho mas profunda que lo que este
+   proyecto verifica para contenido nivel 4-6; afirmar solo lo que se
+   puede respaldar).
+5. **JOSEKI_SIMETRIA** (`n6-l5`): la misma logica vale en cualquier esquina
+   del tablero, via las 8 simetrias diedrales. Reutiliza
+   `BOARD_TRANSFORMS`/`transformBoard`/`transformPoint` (`core/board.ts`,
+   ya construido para multiplicar el banco de problemas) para generar el
+   diagrama espejado **por codigo**, no redibujado a mano -- la seccion 8
+   del roadmap maestro ya preveia que esta utilidad iba a hacer falta aca.
+
+Todos con `hasDetector: false, generatesExercises: false, severity: 'low'`,
+mismo patron que Nivel 4. Verificado con un test de depuracion descartable
+(`tests/content/_debug-n6.test.ts`, borrado despues): las 5 lecciones
+existen en el orden correcto, los diagramas de `n6-l2` tienen exactamente 4
+piedras sin superposicion y el punto resaltado cae sobre una piedra negra
+real en ambas variantes, el punto resaltado de `n6-l4` cae sobre la piedra
+blanca de la invasion, y el diagrama girado de `n6-l5` es una rotacion de
+180 grados exacta del original (recalculada de forma independiente en el
+test, no solo confiando en la funcion de transformacion) incluida la
+piedra resaltada.
+
+`content/lessons/index.ts` suma `LESSONS_N6`, con un comentario explicito
+de que Nivel 5 se salta a proposito. `analysis/concepts.ts` suma los 5
+`ConceptId` nuevos mas un comentario explicando por que Nivel 5 no esta
+(bloqueado en el libro). `LearnScreen.tsx` conecta Nivel 6 (mismo cambio
+que Nivel 4, `LEVELS` ahora `[0,1,2,3,4,6]` -- salta el 5 porque no tiene
+contenido, no es un descuido). `i18n/locales/en.json` y `es.json` suman 23
+claves de leccion + 10 claves de concepto cada uno, paridad confirmada por
+conteo (`grep -c`, 33 y 33).
+
+### Accidente y recuperacion: este mismo archivo
+
+Un `Write` de este archivo (pensado para anteponer esta entrada) borro por
+error las ~3100 lineas existentes, incluida una entrada entera todavia sin
+commitear. Restaurado desde el ultimo commit y la entrada perdida
+reconstruida lo mejor posible -- detalle completo en la nota que sigue
+inmediatamente despues de esta entrada. Se documenta aca tambien para que
+quede en el resumen de la sesion, no solo en la nota tecnica de abajo.
+
+### Verificacion
+
+`npx tsc -b` limpio despues de cada cambio grande (Nivel 4 conectado,
+luego Nivel 6 completo). `npx oxlint`: sin warnings nuevos en
+`n6.ts`/`LearnScreen.tsx`/`concepts.ts`. `npx vitest run` completo,
+corrido dos veces (despues de conectar Nivel 4, y de nuevo despues de
+agregar Nivel 6 completo): 951/951 tests en verde las dos veces (35
+archivos).
+
+Sigue pendiente, sin cambios respecto a la entrada anterior: la pasada de
+Playwright en vivo (sin herramienta de navegador disponible en esta
+sesion) y la revision externa liviana de contenido (roadmap seccion 1.4),
+que ahora deberia incluir tambien Nivel 6 en su muestra, no solo Nivel 4.
+
+### Que falta de los puntos pedidos (2, 3, 4 del roadmap)
+
+- **Punto 2** (conectar Nivel 4): hecho, ver arriba.
+- **Punto 3** (Nivel 5, Apertura): pospuesto, bloqueado en el libro de
+  Kajiwara (PDF escaneado, sin OCR disponible en esta maquina). El usuario
+  puede reintentar el adjunto de chat (funciono con Kageyama) o pasar el
+  texto de otra forma.
+- **Punto 4** (Nivel 6, Joseki): hecho fuera de orden (antes que el punto
+  3) porque no depende del libro bloqueado, ver arriba.
+
+---
+
+## Nota sobre esta entrada y la siguiente (reconstruccion parcial, 2026-09-03)
+
+Un `Write` accidental sobre este archivo (deberia haber sido un `Edit` que
+antepone contenido nuevo) borro por completo la version en curso -- de
+~3100 lineas a 125 -- incluyendo una entrada entera todavia sin commitear
+("cont. 2: Nivel 4 cerrado -- DIRECCION_LADO_GRANDE resuelto con el libro
+de Kageyama"). Restaurado desde `git show HEAD:NOTAS.md` (el ultimo commit,
+`5ee6de4`, con las 3087 lineas de siempre) porque no habia forma de
+recuperar el estado exacto de la copia de trabajo: la copia de trabajo no
+estaba commiteada, y el historial local de VSCode no tenia nada guardado
+para este archivo (las escrituras de esta herramienta van directo a disco,
+sin pasar por el buffer de guardado del editor). La entrada "cont. 2" de
+abajo esta reconstruida a partir del resumen de la conversacion y de las
+primeras ~45 lineas que se habian leido literalmente unos minutos antes del
+accidente -- fiel en los hechos (verificados de nuevo contra
+`content/lessons/n4.ts` y `analysis/concepts.ts`, que nunca se tocaron y
+siguen intactos), pero no necesariamente palabra por palabra igual a la
+version perdida. Se documenta aca en vez de silenciarlo. La leccion
+`n4-l5` y el concepto `DIRECCION_LADO_GRANDE` en si nunca estuvieron en
+riesgo -- viven en archivos de codigo separados que este accidente no tocó.
+
+## Estado general del proyecto (2026-09-03, cont. 2: Nivel 4 cerrado -- DIRECCION_LADO_GRANDE resuelto con el libro de Kageyama) [reconstruida]
+
+Reemplaza la version "2026-09-03, banco +35..." de mas abajo (dejada como
+registro historico). Continuacion de la misma sesion.
+
+### El 5to concepto de Nivel 4 (direccion / lado grande), resuelto
+
+El usuario subio el PDF real del libro (`Toshiro Kageyama - Lessons in the
+Fundamentals of Go.pdf`, en `Go_app/`, fuera de este repo) directamente al
+chat, lo que permitio leerlo completo por primera vez (antes solo se habian
+muestreado paginas sueltas, ver `NOTAS-libro-kageyama.md`). Hallazgo clave:
+el libro NO tiene un capitulo dedicado a "direccion de juego" -- ese es un
+libro distinto (*Direction of Play*, Kajiwara Takeo, listado en el catalogo
+de la contratapa de este libro, pag. 137, que el usuario no habia subido
+todavia). Pero el capitulo 5 ("Territory and Spheres of Influence") da algo
+mejor que un diagrama especifico: su tesis central, citada literal, es que
+"inability to distinguish between [territory and spheres of influence] is
+one of the weaknesses of amateur go" (p.88), mas la regla de oro de la
+p.98, "don't use thickness to surround territory."
+
+Eso reencuadra el concepto entero. El experimento fallido de partidas
+simuladas de una entrada anterior ("Direccion (lado grande) -- sigue sin
+verificarse") no era ruido: ese diseño tenia el lado "grande" ya asegurado
+por una pared completa (bajo valor marginal reforzarlo) y el lado "chico"
+genuinamente en disputa (alto valor). Kageyama explica exactamente ese
+resultado en vez de contradecirlo.
+
+En vez de forzar la afirmacion original ("jugar del lado grande"), ya
+mostrada fragil/invertible con partidas simuladas, la leccion nueva
+(`n4-l5`, concepto `DIRECCION_LADO_GRANDE`) enseña la version correcta:
+comparar un area ya asegurada contra una todavia abierta, no por tamaño
+bruto sino por si el borde ya esta decidido. Verificado con
+`computeAreaScore` (conteo de area real, no partidas simuladas ni el motor
+de evaluacion) sobre dos bolsillos en el mismo tablero 9x13:
+
+- Bolsillo ya cerrado por negro (12 puntos, esquina arriba-izquierda):
+  jugar adentro cambia el puntaje en **0** -- ya contaba como de negro.
+- Bolsillo mas chico, con un solo punto sin cerrar (4 puntos interiores +
+  la jugada misma): cerrarlo suma **+5** de una sola vez -- todavia estaba
+  en disputa (bordeaba negro Y blanco antes del cierre).
+
+A proposito el bolsillo "grande" es mayor en puntos brutos que el "chico"
+-- asi el ejemplo refuta directamente la heuristica ingenua de "jugar donde
+se ve mas grande".
+
+### Archivos y verificacion
+
+`content/lessons/n4.ts` (constantes de geometria + deltas calculados al
+cargar el modulo, no escritos a mano, mas el bloque de la leccion `n4-l5`),
+`analysis/concepts.ts` (`ConceptId` + entrada `CONCEPTS.DIRECCION_LADO_GRANDE`,
+`hasDetector: false, generatesExercises: false, severity: 'low'`, mismo
+patron que sus hermanos de Nivel 4), `i18n/locales/en.json` y `es.json`
+(5 claves de leccion + 2 de concepto cada uno, paridad verificada). Un test
+de depuracion descartable en `tests/content/` se uso para verificar la
+geometria y los numeros antes de aceptarlos, despues se borro. `npx tsc -b`
+limpio, `npx vitest run` completo en verde, `npx oxlint` sin warnings
+nuevos. `NOTAS-libro-kageyama.md` y `go-trainer-roadmap-maestro.md`
+(seccion 9) se actualizaron en paralelo con el mismo hallazgo.
+
+Pendiente, explicitamente: no hubo forma de hacer una pasada de Playwright
+en vivo contra la leccion nueva (sin herramienta de navegador disponible en
+esta sesion) -- confirmacion visual en la UI real sigue abierta.
+
+---
+
 ## Estado general del proyecto (2026-09-03, banco +35 (+area de juego en progreso), mecanismo de reapertura, gate de v1 a medio cerrar)
 
 Reemplaza la version "2026-09-02, despues de v2 puntos 1 y 2" de mas abajo

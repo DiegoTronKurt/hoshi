@@ -14,28 +14,30 @@ import { AboutGoScreen } from './AboutGoScreen'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
 
-const LEVELS = [0, 1, 2, 3] as const
+// Nivel 5 (Apertura) todavia no tiene contenido -- bloqueado en el libro de
+// respaldo real, ver analysis/concepts.ts. Por eso LEVELS salta de 4 a 6: no
+// es un descuido, Nivel 6 (Joseki) se desbloqueo primero porque su
+// contenido no depende de ese libro (ver NOTAS.md 2026-09-03).
+const LEVELS = [0, 1, 2, 3, 4, 6] as const
 const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   0: 'learn.level.0',
   1: 'learn.level.1',
   2: 'learn.level.2',
   3: 'learn.level.3',
+  4: 'learn.level.4',
+  6: 'learn.level.6',
 }
 
 /**
- * Niveles 4 a 10 del curriculo (roadmap maestro, tabla de la especificacion
- * de pantallas): todavia bloqueados en esta etapa de la app (v1, niveles 0-3
- * nada mas -- el contenido real de Nivel 4 (Forma) ya existe en
- * content/lessons/n4.ts, pero desbloquearlo en esta pantalla es trabajo del
- * punto 5 de v2, no de este, asi que sigue listado aca como bloqueado por
- * ahora), pero se muestran con su nombre y tamano de tablero reales, no
- * ocultos ni inventados -- mismo principio que los tamanos de tablero
- * bloqueados en Jugar (play/PlayConfigScreen.tsx).
+ * Niveles 5, 7 a 10 del curriculo (roadmap maestro, tabla de la
+ * especificacion de pantallas): todavia bloqueados porque su contenido no
+ * existe todavia (Niveles 4 y 6 se desbloquearon 2026-09-03, ver LEVELS mas
+ * arriba). Se muestran con su nombre y tamano de tablero reales, no ocultos
+ * ni inventados -- mismo principio que los tamanos de tablero bloqueados en
+ * Jugar (play/PlayConfigScreen.tsx).
  */
 const LOCKED_LEVELS = [
-  { level: 4, titleKey: 'learn.level.4' as TranslationKey, boardSize: '9x13' },
   { level: 5, titleKey: 'learn.level.5' as TranslationKey, boardSize: '13x13' },
-  { level: 6, titleKey: 'learn.level.6' as TranslationKey, boardSize: '13x13' },
   { level: 7, titleKey: 'learn.level.7' as TranslationKey, boardSize: '19x19' },
   { level: 8, titleKey: 'learn.level.8' as TranslationKey, boardSize: '19x19' },
   { level: 9, titleKey: 'learn.level.9' as TranslationKey, boardSize: '19x19' },
@@ -52,7 +54,7 @@ interface LearnScreenProps {
 
 type View =
   | { kind: 'levels' }
-  | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 }
+  | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 | 4 | 6 }
   | { kind: 'lesson'; lessonId: string }
   | { kind: 'about' }
 
@@ -112,11 +114,11 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return (
       <LessonScreen
         lesson={lesson}
-        // Nivel 4-6 no son navegables desde esta pantalla todavia (LEVELS
-        // mas abajo sigue en 0-3, punto 3/5 de v2 pendiente) -- el cast es
-        // seguro porque ninguna lesson.level fuera de 0-3 puede llegar aca
-        // hoy, no un intento de esconder un caso real.
-        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 })}
+        // Nivel 5 no es navegable desde esta pantalla todavia (LEVELS mas
+        // arriba salta de 4 a 6, ver el comentario ahi) -- el cast es
+        // seguro porque ninguna lesson.level === 5 puede llegar aca hoy (no
+        // hay contenido de Nivel 5), no un intento de esconder un caso real.
+        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 | 4 | 6 })}
         onNavigateToExercises={onNavigateToExercises}
         onNavigateToPlay={onNavigateToPlay}
       />
