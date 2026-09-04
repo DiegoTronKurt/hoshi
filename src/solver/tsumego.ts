@@ -91,7 +91,7 @@ export function solve(request: SolveRequest): SolveResult {
   function search(state: GameState, plyBudget: number): RefutationNode {
     nodesSearched++
 
-    const positionHash = state.history[state.history.length - 1]
+    const positionHash = state.history.hash
     const key = `${positionHash}:${state.toMove}`
     const cached = cache.get(key)
     if (cached) return cached

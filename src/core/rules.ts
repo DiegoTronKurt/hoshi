@@ -1,7 +1,7 @@
 import { cloneBoard, createBoard, neighbors } from './board'
 import { getGroup } from './groups'
 import { BLACK, EMPTY, opponent } from './types'
-import type { BoardState, Color, GameState, MoveResult } from './types'
+import type { BoardState, Color, GameState, HistoryNode, MoveResult } from './types'
 import { getZobristTable, hashBoard, toggleStone } from './zobrist'
 
 export function createGame(width: number, height: number, komi: number): GameState {
@@ -19,12 +19,19 @@ export function gameStateFromBoard(board: BoardState, toMove: Color, komi = 0): 
     board: cloneBoard(board),
     toMove,
     komi,
-    history: [hashBoard(table, board)],
+    history: { hash: hashBoard(table, board), prev: null },
     moveNumber: 0,
     captures: { black: 0, white: 0 },
     consecutivePasses: 0,
     gameOver: false,
   }
+}
+
+function historyContains(node: HistoryNode | null, hash: bigint): boolean {
+  for (let n = node; n !== null; n = n.prev) {
+    if (n.hash === hash) return true
+  }
+  return false
 }
 
 export interface LocalSearchOptions {
@@ -102,12 +109,12 @@ export function applyMove(state: GameState, point: number | null, local?: LocalS
   }
 
   const table = getZobristTable(board.width, board.height)
-  let hash = toggleStone(table, state.history[state.history.length - 1], point, color)
+  let hash = toggleStone(table, state.history.hash, point, color)
   for (const stone of captured) {
     hash = toggleStone(table, hash, stone, opponent(color))
   }
 
-  if (state.history.includes(hash)) {
+  if (historyContains(state.history, hash)) {
     return { legal: false, reason: 'superko', captured: [] }
   }
 
@@ -119,7 +126,7 @@ export function applyMove(state: GameState, point: number | null, local?: LocalS
     board,
     toMove: opponent(color),
     komi: state.komi,
-    history: [...state.history, hash],
+    history: { hash, prev: state.history },
     moveNumber: state.moveNumber + 1,
     captures,
     consecutivePasses: 0,

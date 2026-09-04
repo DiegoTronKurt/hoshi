@@ -1,6 +1,171 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-03, cont. 4: libro de Kajiwara legible via OCR, Nivel 5 -- Apertura -- cerrado, v2 completo 6/6)
+## Estado general del proyecto (2026-09-03, cont. 5: plan v2.5 acordado, paso 1 -- rendimiento del bot -- investigado)
+
+Continuacion de la misma sesion. El usuario probo la app, pidio discutir
+que sigue antes de ver el detalle de sus pruebas. Se discutieron
+alternativas (tableros mas grandes, mas ejercicios, mas dificultades, mas
+contenido, bot mas rapido) y se acordo un plan secuenciado, escrito en
+`go-trainer-roadmap-maestro.md` seccion 13 (v2.5): 1) rendimiento del bot
+(la queja es latencia, no fuerza -- explicitamente sin meter la red de
+KataGo para esto), 2) practica dirigida a debilidades, 3) deuda de tamaño
+de tablero (v1.5), 4) tablero 13x13 jugable en Jugar, 5) mas contenido
+(profundizar 0-6 o arrancar v3, a decidir despues).
+
+### Paso 1, rendimiento del bot: perfilado real, mejora modesta (~10-15%)
+
+Mismo criterio de "verificar antes de escribir" aplicado esta vez a
+rendimiento en vez de contenido: un archivo de test descartable
+(`tests/engine/_debug-mcts-perf.test.ts`, borrado al terminar) midio con
+`performance.now()` en vez de asumir donde se iba el tiempo.
+
+Hallazgo principal: en 9x9, `chooseMove` gasta practicamente el 100% de su
+tiempo dentro de `simulatePlayout` (un playout aislado sin arbol UCT
+cuesta lo mismo por jugada que el promedio dentro de `chooseMove` real) --
+la maquinaria de seleccion/expansion UCT es insignificante en
+comparacion. Un playout en 9x9 dura en promedio ~110 jugadas (mediana 106,
+maximo observado 169), bien por debajo del tope artificial de 243 -- se
+descarto la hipotesis de que los playouts corrieran hasta ese tope por no
+pasar nunca.
+
+Atribucion del costo por jugada simulada, medida a mitad de partida
+(55 jugadas ya puestas): `findCapturingMoves` + `findAtariSavingMoves`
+(las heuristicas de captura/atari de la politica de playout) ~60%,
+armado de candidatas (`shuffledIndices` + `isSimpleEye`) ~28%,
+`applyMove` en si (clonar tablero, chequeo de suicidio, chequeo de
+superko) ~12% y creciendo con la profundidad del historial dentro de un
+mismo playout (confirmado con un test aparte: mismo punto, mismo tablero,
+el costo de `applyMove` crece con la cantidad de hashes ya jugados).
+
+Primera hipotesis equivocada, corregida por la medicion: se penso que
+`findCapturingMoves`/`findAtariSavingMoves` recorrian el tablero dos veces
+de forma redundante (una por color) y que fusionarlas en una sola pasada
+cortaria ese 60% a la mitad. Medido despues del cambio, la mejora fue casi
+nula -- las dos llamadas originales ya se repartian el trabajo por color,
+sin duplicar el flood-fill de ningun grupo. La fusion se dejo igual (mas
+prolija, cero riesgo, cero regresion) pero el verdadero cuello de botella
+resulto ser otro: `getGroup` (`core/groups.ts`), con BFS sobre `Set`
+nuevo en cada llamada, se invoca decenas de veces por jugada simulada
+(una vez por grupo distinto en el escaneo de captura/atari, mas varias
+veces mas dentro de cada `applyMove`), y para los grupos chicos tipicos
+de una partida al azar el costo fijo de crear y hashear un `Set` pesaba
+mas que el recorrido en si.
+
+Cambios aplicados, los tres de bajo riesgo (no tocan `core/rules.ts` mas
+alla de `groups.ts`, no cambian el contrato publico de ninguna funcion,
+956/956 tests pasan sin modificar ninguno):
+
+- `core/groups.ts`: `getGroup` usa un buffer `Uint8Array` reutilizable
+  entre llamadas en vez de un `Set` nuevo cada vez, limpiando solo los
+  indices tocados (no el tablero entero) al terminar. Seguro porque
+  `getGroup` es sincronico y no reentrante, y cada Web Worker tiene su
+  propia copia del modulo. `Group.liberties` sigue siendo `Set<number>`
+  (forma publica sin cambios; 10 archivos dependen de ella).
+- `engine/playoutPolicy.ts`: nueva `findOneLibertyPoints` hace en una
+  pasada lo que antes eran dos llamadas separadas a `groupsWithOneLiberty`
+  (una por color). `findCapturingMoves`/`findAtariSavingMoves` originales
+  se dejaron intactas (siguen probadas y usadas donde ya estaban).
+  `mcts.ts` ahora usa la version combinada.
+- `engine/random.ts`: `shuffledIndices` barajaba una copia (`shuffle()`
+  clona antes de barajar) cuando el array recien creado no tiene otro
+  dueño y se puede barajar en el lugar. `engine/mcts.ts` ademas ahora
+  baraja solo los puntos vacios del tablero (antes barajaba TODOS los
+  puntos y descartaba los ocupados adentro del loop).
+
+Resultado medido: `simulatePlayout` aislado bajo de ~3.0ms a ~2.6-2.7ms
+por playout (~10-15%, con ruido real entre corridas -- no es un numero
+exacto). No alcanza para que `veryStrong` (8000 playouts pedidos, tope de
+15000ms) deje de agotar su presupuesto de tiempo: sigue completando
+~4800-4900 de 8000 playouts pedidos, es decir, el usuario sigue esperando
+el tope completo de 15 segundos en ese nivel. El costo esta repartido en
+muchas operaciones chicas (decenas de llamadas a `getGroup`, varios
+escaneos del tablero, el chequeo de superko) que se repiten en cada una de
+las ~110 jugadas de cada uno de hasta 8000 playouts, no concentrado en un
+solo cuello de botella que alcance con arreglar una vez.
+
+El usuario pidio seguir insistiendo ("keep pushing, I know you can do
+it") en vez de pasar al paso 2 con la mejora modesta de arriba. Segunda
+ronda de investigacion:
+
+**`listLegalMoves` descartado con medicion directa, no estimacion.** Se
+instrumento temporalmente `createNode` (contador + acumulador de tiempo,
+retirado despues de medir) para confirmar cuanto pesa de verdad dentro de
+una busqueda real completa, en vez de dejarlo como la estimacion "2-5%
+sin confirmar" de la entrada anterior. Resultado: `nodosNuevos` es
+practicamente igual a `playoutsRun` (se crea un nodo nuevo por playout
+casi siempre, el arbol nunca se queda sin posiciones nuevas a estos
+volumenes) y el tiempo total en `listLegalMoves` es un consistente
+2.8-3.3% del total en los 4 niveles de fuerza. Confirmado chico, no vale
+el riesgo de reescribirlo.
+
+**El verdadero resto: el chequeo de superko crecia peor que lineal con la
+profundidad.** El test de "mismo punto, historial creciente" ya habia
+mostrado que el costo de `applyMove` no crecia parejo (de profundidad 50 a
+100, el costo crecio 4-5x, no 2x). Causa: `GameState.history` era un
+array (`bigint[]`) que se recorria entero (`.includes(hash)`) Y se copiaba
+entero (`[...history, hash]`) en cada jugada -- dos operaciones O(n)
+independientes en la misma jugada, sobre un array que crece durante todo
+un playout Y arrastra el historial real de la partida ya jugada (en una
+partida real de 100+ jugadas, cada playout empieza ya cargando ese
+prefijo).
+
+Se penso primero en pasar `history` a `Set<bigint>` para el chequeo O(1),
+pero copiar un Set entero en cada jugada (`new Set(history).add(hash)`)
+es el mismo costo asintotico que copiar el array -- no resuelve nada,
+podria incluso ser mas lento por el hashing. La solucion real: `history`
+pasa a ser una lista enlazada inmutable (`HistoryNode { hash, prev }`,
+`core/types.ts`) en vez de un array. Agregar un hash nuevo es
+`{ hash, prev: state.history }` -- **sin copiar nada**, O(1) real. El
+chequeo de superko (`historyContains` en `core/rules.ts`) sigue siendo un
+recorrido de principio a fin, pero ya no carga tambien el costo de la
+copia -- la mitad del problema resuelta de raiz, sin agregar riesgo:
+`GameState` sigue siendo inmutable (cada jugada devuelve un nodo nuevo
+que apunta al anterior, nunca se muta nada), y el unico otro lugar del
+codebase que leia `.history` (`solver/tsumego.ts`, solo el hash actual)
+se actualizo en el mismo cambio. `Group.liberties` y el resto de la forma
+publica de `applyMove` no cambiaron.
+
+Antes de implementarlo se confirmo que valia la pena con una medicion
+aparte: `chooseMove` a distintas profundidades reales de partida (jugada
+1, 40, 80, 120) NO mostro una tendencia clara de "se pone mas lento con
+la partida" (2.99 / 2.51 / 1.56 / 3.51 ms por playout) -- resultado
+ruidoso porque compite con un efecto contrario (el tablero mas lleno
+acorta los playouts). Se implemento igual porque el mecanismo (menos
+copias, mismo trabajo) nunca puede ser mas lento, solo igual o mejor, sin
+depender de que ese efecto se manifieste limpio en la medicion.
+
+Resultado medido, comparado contra la version original de esta sesion
+(antes de cualquiera de los dos cambios): `veryStrong` paso de completar
+~4818-4860 de 8000 playouts pedidos a **completar 5134** en el mismo tope
+de 15000ms (+6-7%); `strong` (2000 playouts fijos) bajo de 6327ms a
+5898ms (-6.8%); `normal` (500 playouts fijos) bajo de 1589ms a 1491ms
+(-6.2%). Sumado a la primera ronda, la mejora total ronda 15-20% segun la
+metrica, con la salvedad de siempre: estas mediciones tienen ruido real
+de corrida a corrida, no son un numero de laboratorio exacto. Sigue sin
+alcanzar para que `veryStrong` complete sus 8000 playouts pedidos dentro
+del tope de 15 segundos -- ese nivel va a seguir tardando el maximo
+configurado pase lo que pase, salvo que se le suba el tope de tiempo o se
+le baje el pedido de playouts (decision de producto, no de codigo).
+
+`tsc -b` limpio y 951/951 tests pasan sin modificar ninguno, incluida la
+bateria completa (no solo `engine`/`core`) porque `GameState.history` es
+un tipo compartido que toca el solucionador (`solver/tsumego.ts`),
+validacion de contenido y el resto de la UI de forma indirecta.
+
+**Con esto se cubrieron las 4 piezas del perfilado original** (60%
+escaneo de captura/atari, 28% armado de candidatas, 12% `applyMove`
+creciendo con el historial, ~3% `listLegalMoves`) -- no queda ningun
+cuello de botella identificado y sin tocar dentro de lo que el perfilado
+encontro. Seguir mas alla de aca significaria o bien un cambio de fondo
+(evitar el playout completo hasta el final de la partida, reemplazandolo
+por una evaluacion de posicion -- exactamente la opcion de meter la red
+de KataGo que el usuario ya descarto para este paso) o ajustar
+`maxTimeMs`/`playouts` por nivel (tradeoff de fuerza vs. latencia, decision
+de producto).
+
+Sin commitear todavia -- pendiente de reportar el resultado final al
+usuario y decidir si cerrar el paso 1 aca o seguir.
+
 
 Reemplaza la version "cont. 3: Nivel 4 conectado..." de mas abajo (dejada
 como registro historico). Continuacion de la misma sesion. Con esta

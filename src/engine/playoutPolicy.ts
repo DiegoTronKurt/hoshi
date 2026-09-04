@@ -66,6 +66,46 @@ export function findCapturingMoves(state: GameState): number[] {
   return groupsWithOneLiberty(state.board, opponent(state.toMove))
 }
 
+export interface OneLibertyPoints {
+  /** Puntos donde jugar salvaria un grupo propio en atari (ver findAtariSavingMoves). */
+  ownAtariPoints: number[]
+  /** Puntos donde jugar capturaria un grupo rival (ver findCapturingMoves). */
+  oppCapturePoints: number[]
+}
+
+/**
+ * Igual resultado que llamar findAtariSavingMoves(state) y
+ * findCapturingMoves(state) por separado, pero en una sola pasada del
+ * tablero: las dos funciones de arriba hacen cada una su propio recorrido
+ * completo con flood-fill de grupos, y en la politica de playout (llamada en
+ * cada jugada de cada simulacion) se ejecutan casi siempre las dos juntas.
+ * Perfilado en tests/engine/_debug-mcts-perf.test.ts: esta pasada doble era
+ * la porcion mas cara de choosePlayoutMove, alrededor del 60% del costo de
+ * una jugada simulada a mitad de partida.
+ */
+export function findOneLibertyPoints(state: GameState): OneLibertyPoints {
+  const board = state.board
+  const own = state.toMove
+  const seen = new Set<number>()
+  const ownAtariPoints: number[] = []
+  const oppCapturePoints: number[] = []
+
+  for (let p = 0; p < board.stones.length; p++) {
+    const color = board.stones[p]
+    if (color === EMPTY || seen.has(p)) continue
+    const group = getGroup(board, p)
+    if (!group) continue
+    for (const stone of group.stones) seen.add(stone)
+    if (group.liberties.size !== 1) continue
+
+    const [liberty] = group.liberties
+    if (color === own) ownAtariPoints.push(liberty)
+    else oppCapturePoints.push(liberty)
+  }
+
+  return { ownAtariPoints, oppCapturePoints }
+}
+
 /**
  * True si, despues de jugar en `point`, el grupo propio recien formado ahi
  * queda en atari (una sola libertad). Se usa para que la politica de

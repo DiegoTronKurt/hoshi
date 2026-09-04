@@ -24,8 +24,16 @@ export function shuffle<T>(items: readonly T[], random: RandomFn): T[] {
   return result
 }
 
+/** Igual que shuffle(range(count)), pero sin la copia extra de shuffle(): el
+ * array recien creado aca no tiene otro dueño, así que se puede barajar en
+ * el lugar en vez de clonarlo primero (mismo algoritmo, mismo consumo de
+ * random(), sin la asignacion de mas). */
 export function shuffledIndices(count: number, random: RandomFn): number[] {
   const indices = new Array<number>(count)
   for (let i = 0; i < count; i++) indices[i] = i
-  return shuffle(indices, random)
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1))
+    ;[indices[i], indices[j]] = [indices[j], indices[i]]
+  }
+  return indices
 }

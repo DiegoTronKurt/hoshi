@@ -1,12 +1,12 @@
 import { applyMove, listLegalMoves } from '../core/rules'
 import { computeAreaScore } from '../core/scoring'
 import { BLACK, EMPTY, WHITE, opponent } from '../core/types'
-import type { Color, GameState } from '../core/types'
+import type { BoardState, Color, GameState } from '../core/types'
 import { prepareStyleContext, styleWeight } from './botStyles'
 import type { BotStyleId, StyleContext } from './botStyles'
-import { createRng, shuffle, shuffledIndices } from './random'
+import { createRng, shuffle } from './random'
 import type { RandomFn } from './random'
-import { findAtariSavingMoves, findCapturingMoves, isSimpleEye, resultsInSelfAtari } from './playoutPolicy'
+import { findOneLibertyPoints, isSimpleEye, resultsInSelfAtari } from './playoutPolicy'
 
 const EXPLORATION_CONSTANT = 1.4
 const ATARI_RESPONSE_PROBABILITY = 0.9
@@ -93,18 +93,35 @@ function pickWeightedMove(state: GameState, points: number[], ctx: StyleContext,
   return fallback
 }
 
+/** Puntos vacios del tablero, sin ningun orden particular (quien llama
+ * decide si hace falta barajarlos). Separado de shuffle para no pagar el
+ * costo de barajar y despues descartar las piedras ya puestas: mas relevante
+ * a medida que avanza la partida y quedan menos puntos vacios que casillas
+ * totales. */
+function emptyPoints(board: BoardState): number[] {
+  const points: number[] = []
+  for (let p = 0; p < board.stones.length; p++) {
+    if (board.stones[p] === EMPTY) points.push(p)
+  }
+  return points
+}
+
 function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId): GameState {
-  const capturingMoves = findCapturingMoves(state)
-  if (capturingMoves.length > 0 && random() < CAPTURE_PROBABILITY) {
-    for (const point of shuffle(capturingMoves, random)) {
+  // Una sola pasada del tablero para las dos heuristicas de arriba (capturar,
+  // salvar un atari propio) en vez de una pasada independiente por cada una
+  // -- ver findOneLibertyPoints, es la porcion mas cara de una jugada
+  // simulada, perfilada en tests/engine/_debug-mcts-perf.test.ts.
+  const { ownAtariPoints, oppCapturePoints } = findOneLibertyPoints(state)
+
+  if (oppCapturePoints.length > 0 && random() < CAPTURE_PROBABILITY) {
+    for (const point of shuffle(oppCapturePoints, random)) {
       const result = applyMove(state, point)
       if (result.legal) return result.state as GameState
     }
   }
 
-  const atariSaves = findAtariSavingMoves(state)
-  if (atariSaves.length > 0 && random() < ATARI_RESPONSE_PROBABILITY) {
-    for (const point of shuffle(atariSaves, random)) {
+  if (ownAtariPoints.length > 0 && random() < ATARI_RESPONSE_PROBABILITY) {
+    for (const point of shuffle(ownAtariPoints, random)) {
       const result = applyMove(state, point)
       if (result.legal) return result.state as GameState
     }
@@ -117,8 +134,7 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
     // prefiere la primera que no sea auto-atari, pero guarda la primera
     // legal como respaldo por si todas lo fueran (jugada forzada).
     let fallback: GameState | null = null
-    for (const point of shuffledIndices(state.board.stones.length, random)) {
-      if (state.board.stones[point] !== EMPTY) continue
+    for (const point of shuffle(emptyPoints(state.board), random)) {
       if (isSimpleEye(state.board, point, state.toMove)) continue
       const result = applyMove(state, point)
       if (!result.legal || !result.state) continue
@@ -129,8 +145,7 @@ function choosePlayoutMove(state: GameState, random: RandomFn, style: BotStyleId
   }
 
   const candidates: number[] = []
-  for (const point of shuffledIndices(state.board.stones.length, random)) {
-    if (state.board.stones[point] !== EMPTY) continue
+  for (const point of shuffle(emptyPoints(state.board), random)) {
     if (isSimpleEye(state.board, point, state.toMove)) continue
     candidates.push(point)
   }
