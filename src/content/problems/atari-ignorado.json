@@ -2,25 +2,49 @@
   {
     "id": "atariignorado1",
     "conceptId": "ATARI_IGNORADO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ia][bb][fb][gb][ib][ac][ec][fc][gc][ic][ed][gd][hd][id][ae][ce][de][ee][fe][ge][ie][bf][cf][ff][gf][hf][if][ag][cg][dg][eg][ah][eh][fh][ci][ei][hi]AW[ba][ca][da][ea][ab][cb][eb][hb][cc][dc][hc][ad][bd][cd][dd][be][ef][gg][hg][ig][ch][gh][hh][ih][fi][gi]TR[ab]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bc]GW[1])",
-    "difficulty": "easy"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ea][fa][ga][ia][ab][bb][cb][db][eb][fb][ac][bc][dc][ec][fc][gc][ic][ad][fd][gd][hd][id][ae][de][fe][ge][he][af][bf][ff][gf][hf][if][ag][dg][fg][ig][ah][gh][hh][ih][fi][ii]AW[hb][ib][cc][bd][cd][dd][ed][be][ce][ee][cf][ef][bg][cg][eg][gg][bh][ch][dh][eh][fh][ai][bi][ci][ei]TR[fi]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gi]GB[1];W[di]GB[1];B[hg]GB[1])",
+    "difficulty": "medium"
   },
   {
     "id": "atariignorado2",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ha][ia][ab][cb][hb][ib][hc][ic][dd][hd][id][he][cf][if][bg][cg][bh][ch][dh][eh][ai][ci][di][fi][gi]AW[ca][ea][fa][ga][db][eb][gb][cc][ec][fc][gc][ad][bd][cd][ed][gd][ae][be][ce][de][ee][fe][ge][bf][df][ef][gf][hf][ag][dg][eg][fg][hg][ig][ah][fh][gh][hh][hi][ii]TR[ag][ah]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[af]GW[1];B[bi]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "atariignorado3",
     "conceptId": "ATARI_IGNORADO",
     "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][hb][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[ba][ca][da][cb]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ab]GB[1](;W[fa]GB[1](;B[aa]GB[1];W[eb]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[eb]GB[1](;B[aa]GB[1])(;B[ac]GB[1])))(;W[eb]GB[1](;B[aa]GB[1];W[fa]GB[1](;B[bb]GB[1])(;B[ac]GB[1]))(;B[bb]GB[1];W[fa]GB[1](;B[aa]GB[1])(;B[ac]GB[1]))))",
     "difficulty": "hard"
   },
   {
-    "id": "atariignorado3",
+    "id": "atariignorado4",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][cb][ib][bc][hc][ic][ad][cd][fd][gd][hd][id][ae][be][de][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][bg][cg][dg][fg][ig][dh][ih][ci][di][ei]AW[ea][ga][ha][ia][bb][db][fb][gb][hb][ac][cc][dc][ec][fc][gc][dd][ed][ee][hf][ag][eg][gg][hg][ah][bh][ch][eh][fh][hh][ai][fi][gi][hi][ii]TR[ac]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bd]GW[1](;B[aa]GW[1](;W[bc]GW[1](;B[ab]GW[1];W[ce]GW[1])(;B[ce]GW[1];W[ab]GW[1]))(;W[ce]GW[1];B[ab]GW[1];W[bc]GW[1]))(;B[ab]GW[1];W[bc]GW[1](;B[aa]GW[1];W[ce]GW[1])(;B[ce]GW[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "atariignorado5",
     "conceptId": "ATARI_IGNORADO",
     "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fb][ec][hc][cd][dd][ed][fd][hd][be][ce][de][ge][af][cf][df][ef][gf][hf][if][bg][cg][dg][fg][gg][ah][bh][ch][dh][gh][ih][ci][ei][fi][gi]AW[aa][ba][ea][ia][ab][bb][cb][db][eb][gb][hb][ac][bc][cc][dc][fc][ic][ad][bd][gd][id][ae][fe][ie][ff][ig][hh][hi]TR[fb]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gc]GB[1](;W[da]GB[1](;B[fa]GB[1](;W[ga]GB[1];B[fc]GB[1];W[ha]GB[1];B[gd]GB[1])(;W[ha]GB[1](;B[fc]GB[1];W[ga]GB[1];B[gd]GB[1])(;B[gd]GB[1];W[ga]GB[1];B[fc]GB[1])))(;B[ga]GB[1](;W[fa]GB[1];B[fc]GB[1];W[ha]GB[1];B[gd]GB[1];W[ga]GB[1])(;W[ha]GB[1](;B[fc]GB[1];W[fa]GB[1];B[gd]GB[1];W[ga]GB[1])(;B[gd]GB[1];W[fa]GB[1];B[fc]GB[1];W[ga]GB[1]))))(;W[fa]GB[1];B[fc]GB[1](;W[da]GB[1](;B[ga]GB[1];W[ha]GB[1];B[gd]GB[1];W[ga]GB[1])(;B[ha]GB[1];W[ga]GB[1];B[gd]GB[1];W[ha]GB[1]))(;W[ga]GB[1](;B[da]GB[1];W[ha]GB[1];B[gd]GB[1])(;B[gd]GB[1](;W[da]GB[1])(;W[ha]GB[1];B[da]GB[1])))))",
     "difficulty": "hard"
   },
   {
-    "id": "atariignorado4",
+    "id": "atariignorado6",
     "conceptId": "ATARI_IGNORADO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][fa][ga][ab][bb][cb][ib][ac][cc][hc][cd][ed][hd][id][be][ce][he][ie][bf][if][ag][bg][cg][hg][ig][bh][ih][ai][bi][hi]AW[ca][ea][ia][eb][fb][gb][hb][dc][ec][fc][bd][fd][gd][ae][de][ee][fe][ge][cf][ff][gf][hf][dg][eg][gg][ch][dh][eh][gh][hh][ci][di][fi][gi]TR[ca]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[da]GW[1](;B[aa]GW[1](;W[db]GW[1];B[bc]GW[1])(;W[bc]GW[1];B[db]GW[1]))(;B[db]GW[1];W[bc]GW[1];B[aa]GW[1]))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[eb][ad][ae][ce][de][af][bf][cf][bg][cg][dg][fg][ah][bh][ch][dh][eh][fh][ai][bi][ci][di][ei][hi]AW[aa][ba][ca][da][fa][ga][ha][ia][ab][cb][db][fb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][cd][dd][ed][gd][hd][id][be][ee][ge][he][ie][df][ef][ff][gf][hf][if][eg][gg][hg][ig][gh][hh][fi][ii]TR[be]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bd]GW[1];B[ag]GW[1])",
     "difficulty": "medium"
+  },
+  {
+    "id": "atariignorado7",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[eb][ad][ae][ce][de][af][bf][cf][bg][cg][dg][fg][ah][bh][ch][dh][eh][fh][ai][bi][ci][di][ei][hi]AW[aa][ba][ca][da][fa][ga][ha][ia][ab][cb][db][fb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][cd][dd][ed][gd][hd][id][be][ee][ge][he][ie][df][ef][ff][gf][hf][if][eg][gg][hg][ig][gh][hh][fi][ii]TR[fi]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[gi]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "atariignorado8",
+    "conceptId": "ATARI_IGNORADO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][ec][fc][gc][bd][ae][be][af][bf][ag][ah][bh][ai][bi][ei]AW[ba][ca][ea][fa][ib][dc][hc][ic][cd][ed][fd][gd][hd][id][ce][de][ee][fe][ge][he][ie][cf][df][ef][ff][hf][if][bg][cg][dg][eg][fg][gg][ig][ch][eh][fh][gh][hh][ih][ci][di][hi][ii]TR[dc]ZCONCEPT[ATARI_IGNORADO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[dd]GW[1];B[da]GW[1](;W[ba]GW[1](;B[ca]GW[1](;W[ea]GW[1](;B[ba]GW[1])(;B[fa]GW[1]))(;W[fa]GW[1](;B[ba]GW[1])(;B[ea]GW[1])))(;B[ea]GW[1]))(;W[ca]GW[1](;B[ba]GW[1](;W[ea]GW[1](;B[ca]GW[1])(;B[fa]GW[1]))(;W[fa]GW[1](;B[ca]GW[1])(;B[ea]GW[1])))(;B[ea]GW[1])))",
+    "difficulty": "hard"
   }
 ]
