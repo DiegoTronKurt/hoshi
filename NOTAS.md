@@ -1,5 +1,128 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-04, cont. 8: arranca v3 -- Nivel 7 y Nivel 8 construidos completos)
+
+Continuacion de la misma sesion despues de cerrar v2.5 (commits de los
+pasos 1+2 y del paso 3+4, ver "cont. 7" mas abajo). El usuario pidio
+"scopear v3" y ofrecio conseguir un libro nuevo si hacia falta.
+
+### Scoping: ningun libro nuevo hizo falta
+
+Antes de escribir nada se releyo el capitulo 6 completo de Kajiwara
+("Once Upon A Game", via un agente dedicado, despues corregido a mano
+releyendo el OCR crudo directamente -- ver mas abajo) y se revisaron
+puntualmente los capitulos 4 y 8, que ya estaban parcialmente
+muestreados de una sesion anterior. Entre los tres, mas el capitulo 5 ya
+usado para Nivel 6, salieron 10 citas verbatim, limpias, no superpuestas
+con lo ya citado para Nivel 5/6 -- suficiente para Nivel 7 (Fuseki) y
+Nivel 8 (Medio juego: ataque y defensa) completos. Detalle capitulo por
+capitulo, con cita y numero de linea del OCR, en
+`NOTAS-libro-direction-of-play.md`. Nivel 9 (Yose) y Nivel 10 (tablero
+completo) quedan sin investigar todavia -- Nivel 9 tiene ademas un
+candidato mecanico fuerte que no depende de ningun libro
+(`solver/areaValue.ts`, ya usado para el ejercicio de valor de area de
+Nivel 4).
+
+**Correccion de un error propio durante el scoping**: la primera lectura
+del capitulo 6 (por agente) uso un rango de lineas estimado a mano
+(2610-3164) que resulto estar corrido -- el rango real es ~2637-3174 (el
+marcador "CHAPTER 7" en el OCR aparece en 3164 pero el capitulo 6 sigue
+hasta 3174; 2610-2636 todavia es el cierre del capitulo 5). Antes de
+escribir contenido de leccion se releyo el rango corregido directamente
+(no de memoria del resumen del agente, que ya estaba comprimido por una
+compactacion de contexto de por medio) para citar con confianza.
+
+**Una cita descartada a proposito**: el capitulo 8 tiene una frase
+("Attacking from the direction in which one is strong goes against the
+logic of go") que a primera lectura parece contradecir el proverbio
+estandar de "atacar desde la fuerza". Leida en contexto contra su propio
+diagrama (que el OCR no reconstruye -- ver la nota general del principio
+de `NOTAS-libro-direction-of-play.md`) no queda claro que el sentido sea
+ese; la jugada correcta en la misma figura tambien sale "from the
+direction in which Black is thick". En vez de arriesgarse a ensenar una
+version simplificada que capture mal el punto, se descarto la cita sin
+construir ningun concepto sobre ella y se uso en su lugar una cita mas
+clara del capitulo 4 (profit vs. thickness) para el quinto concepto de
+Nivel 8.
+
+### Las 10 lecciones: mismo patron que Nivel 5/6, tablero 19x19
+
+`src/content/lessons/n7.ts` y `n8.ts`, 5 lecciones cada uno, mismo
+formato que `n5.ts`/`n6.ts` (parrafo + 1-2 diagramas + parrafo, sin
+`demo`). Conceptos nuevos en `analysis/concepts.ts`
+(`MOYO_NO_ES_TERRITORIO`, `JUICIO_LOCAL_VS_GLOBAL`,
+`RELACION_CON_PIEDRAS_PROPIAS`, `PACIENCIA_Y_MARGEN`,
+`DIRECCION_NO_ES_TODO` para Nivel 7; `ATACAR_CONSTRUYENDO`,
+`USAR_PIEDRAS_PROPIAS_PARA_ATACAR`, `NO_PELEAR_CON_DEBILIDAD`,
+`SACRIFICAR_LO_NECESARIO`, `NO_PELEAR_SIN_NECESIDAD` para Nivel 8), todos
+`hasDetector: false, generatesExercises: false` igual que Nivel 4-6 --
+la afirmacion vive en la leccion, no en un detector. `n7-l1` y `n7-l4`
+comparten exactamente la misma posicion de tablero (una invasion en un
+moyo), reutilizada por diseño, no redibujada -- misma tecnica que
+`n6-l2`/`n6-l5` compartiendo tablero via `transformBoard`.
+
+**Contenido de Nivel 8 (pelea) deliberadamente mas cauto que Nivel 5-7**:
+en vez de contrastar "jugada correcta vs incorrecta" con una afirmacion
+tactica especifica (que exigiria verificarla con el solucionador o
+arriesgarse a un error de lectura), los 5 diagramas de Nivel 8 son
+estructurales/cualitativos -- muestran relaciones espaciales
+(piedra de ataque apoyada vs. aislada, grupo propio asentado vs. suelto,
+territorio cerrado vs. pared mirando al centro) sin afirmar un resultado
+de vida o muerte concreto. Mismo nivel de rigor que ya usaba `n6-l4`
+(nunca afirma que la invasion en 3-3 vive, solo que el punto esta
+disponible).
+
+**Verificacion de geometria antes de publicar**: se escribio un test
+descartable (`tests/content/_debug-n7-n8-geometry.test.ts`, borrado al
+terminar) que (1) confirma por conteo de coordenadas -- no a ojo -- que
+en `n7-l1`/`n7-l4` los dos puntos naturales de extension de dos espacios
+desde la invasion caen en contacto ortogonal directo con una piedra
+negra; (2) confirma que `n7-l4` reutiliza literalmente el mismo array de
+piedras que `n7-l1`; (3) verifica que ningun diagrama de los dos niveles
+tiene piedras fuera de tablero ni duplicadas; (4) imprime los 20
+diagramas como ASCII para inspeccion visual directa (todos coinciden con
+el diseño pretendido); (5) confirma que los 10 conceptos nuevos apuntan
+cada uno a una leccion real y viceversa. Un segundo test descartable
+(`tests/content/_debug-n7-n8-i18n-keys.test.ts`) confirmo que las ~70
+keys de `titleKey`/`textKey`/`captionKey` referenciadas por las 10
+lecciones nuevas resuelven en `en.json` (la paridad exacta con `es.json`
+se confirmo aparte, contando keys con Node: 632 en cada archivo, cero
+diferencias).
+
+### Cambios de wiring
+
+`content/lessons/types.ts` (`Lesson.level`), `content/lessons/index.ts`
+(`lessonsForLevel`), `analysis/concepts.ts` (`Concept.level`) y
+`ui/lessons/LearnScreen.tsx` (`View`, el cast de `onBack`) extendidos de
+`0 | 1 | 2 | 3 | 4 | 5 | 6` a `... | 7 | 8`. En `LearnScreen.tsx`, Nivel 7
+y 8 se movieron de `LOCKED_LEVELS` a `LEVELS` (Nivel 9 y 10 siguen
+bloqueados, sin contenido todavia). `learning/profile.ts::currentLevel()`
+revisado y dejado intacto a proposito: su rango `[0,1,2,3]` es sobre
+niveles con detector de errores, no sobre el curriculo completo -- nunca
+incluyo Nivel 4-6 tampoco, no es una limitacion que mis cambios hayan
+introducido ni deba tocar aca.
+
+**Correccion de un placeholder desactualizado**: los titulos de Nivel 7
+y 8 en `learn.level.7`/`learn.level.8` (ambos idiomas) decian "Midgame" /
+"Intermediate life and death" desde que se stubearon `LOCKED_LEVELS` hace
+tiempo, sin relacion con el scoping real hecho hoy. Corregidos a "Fuseki"
+y "Medio juego: ataque y defensa" / "Midgame: Attack and Defense". Nivel
+9 ("Yose"/"Endgame") y Nivel 10 ("Tablero completo"/"Full board") no se
+tocaron -- siguen siendo consistentes con el plan actual.
+
+`npx tsc -b` limpio, `npx vitest run` 1022/1022 (35 archivos), sin tests
+nuevos rotos (nadie mas referencia todavia estas lecciones). `npm run
+lint` (oxlint) sin warnings nuevos en ningun archivo tocado -- los
+warnings preexistentes son todos en archivos no relacionados
+(`ExercisePracticeScreen.tsx`, `GuidedDemo.tsx`, etc., ya de antes).
+
+**Pendiente, no hecho todavia**: verificacion visual real en navegador
+(sin herramienta de browser disponible esta sesion); commit y push
+(no pedido todavia para este trabajo especifico); Nivel 9 y 10 sin
+scopear.
+
+---
+
 ## Estado general del proyecto (2026-09-03, cont. 7: pasos 3+4 del plan v2.5 -- tablero 13x13 desbloqueado en Jugar)
 
 Continuacion de la misma sesion, despues del paso 2 (commit `daf8e44`) y

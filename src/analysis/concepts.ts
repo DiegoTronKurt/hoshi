@@ -55,12 +55,25 @@ export type ConceptId =
   | 'TENUKI_JOSEKI'
   | 'HOSHI_INVASION_3_3'
   | 'JOSEKI_SIMETRIA'
+  // Nivel 7 (Fuseki): resuelto con el mismo libro de respaldo (Kajiwara,
+  // capitulo 6 -- ver NOTAS-libro-direction-of-play.md)
+  | 'MOYO_NO_ES_TERRITORIO'
+  | 'JUICIO_LOCAL_VS_GLOBAL'
+  | 'RELACION_CON_PIEDRAS_PROPIAS'
+  | 'PACIENCIA_Y_MARGEN'
+  | 'DIRECCION_NO_ES_TODO'
+  // Nivel 8 (Medio juego: ataque y defensa): capitulos 4 y 8 del mismo libro
+  | 'ATACAR_CONSTRUYENDO'
+  | 'USAR_PIEDRAS_PROPIAS_PARA_ATACAR'
+  | 'NO_PELEAR_CON_DEBILIDAD'
+  | 'SACRIFICAR_LO_NECESARIO'
+  | 'NO_PELEAR_SIN_NECESIDAD'
 
 export type ConceptSeverity = 'high' | 'medium' | 'low'
 
 export interface Concept {
   id: ConceptId
-  level: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
   /** Clave de traduccion para el nombre visible del concepto. */
   labelKey: string
   /** Clave de traduccion para la explicacion de una frase. */
@@ -508,6 +521,111 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     labelKey: 'concept.JOSEKI_SIMETRIA.label',
     summaryKey: 'concept.JOSEKI_SIMETRIA.summary',
     lessonId: 'n6-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 7 (Fuseki): mismo patron que Nivel 4 y Nivel 5/6 -- sin detector ni
+  // banco de ejercicios, la afirmacion vive en la leccion misma
+  // (content/lessons/n7.ts).
+  MOYO_NO_ES_TERRITORIO: {
+    id: 'MOYO_NO_ES_TERRITORIO',
+    level: 7,
+    labelKey: 'concept.MOYO_NO_ES_TERRITORIO.label',
+    summaryKey: 'concept.MOYO_NO_ES_TERRITORIO.summary',
+    japaneseTerm: 'moyo',
+    lessonId: 'n7-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  JUICIO_LOCAL_VS_GLOBAL: {
+    id: 'JUICIO_LOCAL_VS_GLOBAL',
+    level: 7,
+    labelKey: 'concept.JUICIO_LOCAL_VS_GLOBAL.label',
+    summaryKey: 'concept.JUICIO_LOCAL_VS_GLOBAL.summary',
+    lessonId: 'n7-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  RELACION_CON_PIEDRAS_PROPIAS: {
+    id: 'RELACION_CON_PIEDRAS_PROPIAS',
+    level: 7,
+    labelKey: 'concept.RELACION_CON_PIEDRAS_PROPIAS.label',
+    summaryKey: 'concept.RELACION_CON_PIEDRAS_PROPIAS.summary',
+    lessonId: 'n7-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  PACIENCIA_Y_MARGEN: {
+    id: 'PACIENCIA_Y_MARGEN',
+    level: 7,
+    labelKey: 'concept.PACIENCIA_Y_MARGEN.label',
+    summaryKey: 'concept.PACIENCIA_Y_MARGEN.summary',
+    lessonId: 'n7-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  DIRECCION_NO_ES_TODO: {
+    id: 'DIRECCION_NO_ES_TODO',
+    level: 7,
+    labelKey: 'concept.DIRECCION_NO_ES_TODO.label',
+    summaryKey: 'concept.DIRECCION_NO_ES_TODO.summary',
+    lessonId: 'n7-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 8 (Medio juego: ataque y defensa): mismo patron.
+  ATACAR_CONSTRUYENDO: {
+    id: 'ATACAR_CONSTRUYENDO',
+    level: 8,
+    labelKey: 'concept.ATACAR_CONSTRUYENDO.label',
+    summaryKey: 'concept.ATACAR_CONSTRUYENDO.summary',
+    lessonId: 'n8-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  USAR_PIEDRAS_PROPIAS_PARA_ATACAR: {
+    id: 'USAR_PIEDRAS_PROPIAS_PARA_ATACAR',
+    level: 8,
+    labelKey: 'concept.USAR_PIEDRAS_PROPIAS_PARA_ATACAR.label',
+    summaryKey: 'concept.USAR_PIEDRAS_PROPIAS_PARA_ATACAR.summary',
+    lessonId: 'n8-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  NO_PELEAR_CON_DEBILIDAD: {
+    id: 'NO_PELEAR_CON_DEBILIDAD',
+    level: 8,
+    labelKey: 'concept.NO_PELEAR_CON_DEBILIDAD.label',
+    summaryKey: 'concept.NO_PELEAR_CON_DEBILIDAD.summary',
+    lessonId: 'n8-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  SACRIFICAR_LO_NECESARIO: {
+    id: 'SACRIFICAR_LO_NECESARIO',
+    level: 8,
+    labelKey: 'concept.SACRIFICAR_LO_NECESARIO.label',
+    summaryKey: 'concept.SACRIFICAR_LO_NECESARIO.summary',
+    lessonId: 'n8-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  NO_PELEAR_SIN_NECESIDAD: {
+    id: 'NO_PELEAR_SIN_NECESIDAD',
+    level: 8,
+    labelKey: 'concept.NO_PELEAR_SIN_NECESIDAD.label',
+    summaryKey: 'concept.NO_PELEAR_SIN_NECESIDAD.summary',
+    lessonId: 'n8-l5',
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',
