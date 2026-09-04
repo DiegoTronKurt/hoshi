@@ -50,7 +50,7 @@ export interface DemoScript {
 export interface Lesson {
   /** Coincide con Concept.lessonId, p.ej. 'n0-l1'. */
   id: string
-  level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+  level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
   order: number
   titleKey: TranslationKey
   blocks: LessonBlock[]

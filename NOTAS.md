@@ -1,5 +1,129 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-04, cont. 9: Nivel 9 (Yose) y Nivel 10 (Semeai) completos -- v3 y el currículo entero, terminados)
+
+Continuacion de la misma sesion tras cerrar Nivel 7/8 (commit `1bdafff`).
+El usuario pidio directamente "go level 9 and 10 please" sin pedir
+scoping previo por separado esta vez -- se investigo la infraestructura
+disponible primero (sin libro nuevo a la vista) y se construyo directo,
+verificando cada afirmacion con el motor real en vez de una fuente
+externa (a diferencia de Nivel 5-8, que se apoyaban en el libro de
+Kajiwara).
+
+### Nivel 9 (Yose): sin libro, con `solver/areaValue.ts`
+
+Confirmado el candidato que ya estaba anotado en el roadmap
+(`areaDeltaForPoint`, el mismo que usa `n4-l5`): alcanzo para las 5
+lecciones (`EL_FINAL_TAMBIEN_ES_GRANDE`, `SENTE_Y_GOTE`,
+`SENTE_ANTES_QUE_GOTE`, `COMPARAR_VALOR_REAL`, `CONTAR_PARA_DECIDIR`),
+vocabulario de sente/gote incluido -- no hizo falta citar ningun
+principio de memoria, todo se calcula sobre el tablero real.
+
+**Un hallazgo tecnico real durante la exploracion**: `computeAreaScore`
+NO usa el algoritmo de Benson (pass-alive) para nada -- es un conteo de
+area ingenuo (una region vacia es de un color si todos sus vecinos son
+de ese color, si no queda neutral). Eso simplifico bastante el diseño de
+posiciones, pero llevo a un error propio: una pared en L (como las que
+ya usan `n6`/`n7` para cerrar una esquina) queda sellada SIN necesidad de
+llenar el punto diagonal donde se encuentran los dos segmentos (la
+diagonal no es adyacencia ortogonal, no filtra). El primer intento de
+`n9-l1` dejo ese punto diagonal como "el hueco a sellar" y midio delta=0
+(porque nunca fue un hueco real -- el bolsillo ya estaba cerrado sin
+el). Corregido acortando uno de los dos segmentos de la pared en vez de
+usar el punto diagonal, lo que crea un hueco ortogonal de verdad; delta
+real verificado: 26 puntos. Se dejo un comentario explicito en
+`n9.ts` marcando la diferencia para no repetir el error si se agrega mas
+contenido despues. Segundo hallazgo menor: sin ninguna piedra rival en
+absoluto en el tablero, TODO el vacio cuenta como "rodeado solo por un
+color" (vacuamente) -- hacen falta piedras del otro color en algun lado,
+aunque esten lejos, para que un sellado de verdad cambie algo.
+
+### Nivel 10 (Semeai): hueco real del curriculo, tambien sin libro
+
+Nivel 3 cubre tecnicas de captura puntuales (escalera, geta, snapback)
+pero nunca la mecanica de contar y comparar libertades entre dos grupos
+enfrentados sin dos ojos -- semeai es un tema clasico que nunca tuvo
+lugar en el curriculo hasta ahora. Igual que Nivel 9, se decidio
+verificarlo con el motor real (`core/rules.ts::applyMove`,
+`core/groups.ts::getGroup`) en vez de buscar un libro, jugando cada
+secuencia de verdad antes de aceptar una posicion:
+
+- `QUE_ES_SEMEAI` (n10-l1): escena simetrica (2 piedras cada lado, cara a
+  cara, libertades compartidas + de afuera).
+- `CONTAR_LIBERTADES_ANTES_DE_JUGAR` (n10-l2): misma pareja negra, pero
+  blanco ya jugo 3 piedras mas achicandole las libertades de afuera a
+  negro (3 contra 6). Se jugo la carrera completa contra el motor: negro
+  ataca de todos modos y termina capturado, aunque mueva primero --
+  confirma la regla estandar (mas libertades gana, sin importar el
+  turno, salvo empate) en vez de darla por sabida.
+- `LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO` (n10-l3): reutiliza la
+  escena simetrica de l1, foco en identificar cuales libertades son
+  compartidas. Se descarto a proposito un diseño mas ambicioso (probar
+  que el ORDEN de relleno cambia el resultado de la carrera): la
+  aritmetica real, verificada jugada por jugada, no daba una reversion
+  limpia con libertades compartidas iguales -- en vez de forzar una
+  afirmacion sutil y quedar sin verificarla del todo con confianza, se
+  bajo el alcance de la leccion a algo mas simple y sí completamente
+  verificado (categorizar libertades), seccion "que no hacer" aplicada a
+  contenido de Go, no solo a codigo.
+- `UN_OJO_GANA` (n10-l4): un anillo negro de 8 piedras alrededor de un
+  punto real (blanco no tiene jugada legal ahi -- suicidio puro,
+  confirmado con `applyMove`), con exactamente 2 libertades de afuera,
+  contra una piedra blanca suelta con las mismas 2 libertades de afuera,
+  sin ninguna compartida. Carrera completa jugada con BLANCO empezando
+  (el peor caso posible para negro en libertades puras): el anillo
+  sobrevive con su ojo intacto, la piedra blanca termina capturada.
+  Demostracion completa del principio clasico "un ojo vale una libertad
+  extra que el rival nunca puede tocar", verificada de punta a punta en
+  vez de citada.
+- `CONECTAR_EN_VEZ_DE_PELEAR` (n10-l5): dos grupos negros de 2 piedras
+  separados por un punto -- jugarlo los funde en un grupo de 5 piedras
+  con 12 libertades, verificado con `getGroup` antes y despues.
+
+### Mismo patron de wiring que Nivel 7/8, mismo estandar de verificacion final
+
+`content/lessons/types.ts`, `content/lessons/index.ts`,
+`analysis/concepts.ts`, `ui/lessons/LearnScreen.tsx` extendidos de
+`... | 7 | 8` a `... | 7 | 8 | 9 | 10`. `LOCKED_LEVELS` en
+`LearnScreen.tsx` queda vacio (ya no hay niveles bloqueados por falta de
+contenido) en vez de eliminarse -- mismo principio que
+`LOCKED_BOARD_SIZES` en `PlayConfigScreen.tsx`, se deja el mecanismo por
+si hace falta bloquear contenido futuro otra vez. Corregido tambien un
+titulo placeholder desactualizado: `learn.level.10` decia "Tablero
+completo"/"Full board" desde antes de que existiera ningun scoping real
+-- corregido a "Semeai" en ambos idiomas, junto con la correccion
+simetrica ya hecha para Nivel 7/8 la vez pasada.
+
+Los numeros que aparecen en las lecciones de Nivel 9 (cuanto vale un
+punto de yose, cuantas libertades le quedan a un grupo) NO se escriben a
+mano en ningun lado: `n9.ts` los calcula el mismo, en tiempo de carga
+del modulo, con `areaDeltaForPoint`/`countLiberties`/`computeAreaScore`
+sobre el tablero real -- mismo patron exacto que `n4-l5` ya establecia
+(`captionParams` interpola el numero real en la traduccion). Antes de
+aceptar cada posicion se escribio un script descartable
+(`tests/content/_debug-n9-yose-explore.test.ts`,
+`_debug-n10-semeai-explore.test.ts`, `_debug-n10-l5-connect.test.ts`,
+los tres borrados al terminar) que renderiza el tablero como ASCII y
+corre las funciones reales -- el primer intento de varias posiciones
+salio mal (ver el hallazgo de la pared en L arriba) y se corrigio
+iterando contra el motor, no contra la intuicion. Al final, un test
+descartable mas (`_debug-n9-n10-verify.test.ts`, tambien borrado)
+reverifico las 10 lecciones ya publicadas (no el scratch de diseño) leyendo
+directo `LESSONS_N9`/`LESSONS_N10`: los deltas de area, el atari y la
+captura del hane, la carrera completa del ojo con blanco jugando
+primero, la fusion de grupos al conectar, y que las ~70 keys de i18n
+resuelven. `npx tsc -b` limpio, `npx vitest run` 1022/1022 (mismo numero
+que antes -- nadie mas referencia estas lecciones todavia), `npm run
+lint` sin warnings nuevos.
+
+**Pendiente, no hecho todavia**: verificacion visual real en navegador
+(sin herramienta de browser disponible esta sesion); commit y push (no
+pedido todavia para este trabajo especifico). Con esto, los 11 niveles
+del curriculo maestro (0 a 10) tienen contenido real -- no queda ningun
+nivel bloqueado por falta de contenido en `LearnScreen.tsx`.
+
+---
+
 ## Estado general del proyecto (2026-09-04, cont. 8: arranca v3 -- Nivel 7 y Nivel 8 construidos completos)
 
 Continuacion de la misma sesion despues de cerrar v2.5 (commits de los

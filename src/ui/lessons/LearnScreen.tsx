@@ -14,7 +14,7 @@ import { AboutGoScreen } from './AboutGoScreen'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
 
-const LEVELS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const
+const LEVELS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
 const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   0: 'learn.level.0',
   1: 'learn.level.1',
@@ -25,20 +25,19 @@ const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   6: 'learn.level.6',
   7: 'learn.level.7',
   8: 'learn.level.8',
+  9: 'learn.level.9',
+  10: 'learn.level.10',
 }
 
 /**
- * Niveles 9 y 10 del curriculo (roadmap maestro, seccion 10): todavia
- * bloqueados porque su contenido no existe todavia (Niveles 7 y 8 se
- * desbloquearon 2026-09-04, ver LEVELS mas arriba). Se muestran con su
- * nombre y tamano de tablero reales, no ocultos ni inventados -- mismo
- * principio que los tamanos de tablero bloqueados en Jugar
- * (play/PlayConfigScreen.tsx).
+ * Ya no quedan niveles bloqueados por falta de contenido: los 11 niveles
+ * (0 a 10) del curriculo maestro estan completos (Nivel 9 y 10
+ * desbloqueados 2026-09-04, ver LEVELS mas arriba). Se deja el array
+ * vacio en vez de eliminar todo el mecanismo -- mismo principio que
+ * LOCKED_BOARD_SIZES en play/PlayConfigScreen.tsx, que sigue existiendo
+ * por si hace falta bloquear contenido futuro otra vez.
  */
-const LOCKED_LEVELS = [
-  { level: 9, titleKey: 'learn.level.9' as TranslationKey, boardSize: '19x19' },
-  { level: 10, titleKey: 'learn.level.10' as TranslationKey, boardSize: '19x19' },
-] as const
+const LOCKED_LEVELS: ReadonlyArray<{ level: number; titleKey: TranslationKey; boardSize: string }> = []
 
 interface LearnScreenProps {
   /** Leccion preseleccionada al entrar (p.ej. desde el aviso de reapertura
@@ -50,7 +49,7 @@ interface LearnScreenProps {
 
 type View =
   | { kind: 'levels' }
-  | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 }
+  | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 }
   | { kind: 'lesson'; lessonId: string }
   | { kind: 'about' }
 
@@ -110,7 +109,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return (
       <LessonScreen
         lesson={lesson}
-        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 })}
+        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 })}
         onNavigateToExercises={onNavigateToExercises}
         onNavigateToPlay={onNavigateToPlay}
       />

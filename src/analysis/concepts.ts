@@ -68,12 +68,26 @@ export type ConceptId =
   | 'NO_PELEAR_CON_DEBILIDAD'
   | 'SACRIFICAR_LO_NECESARIO'
   | 'NO_PELEAR_SIN_NECESIDAD'
+  // Nivel 9 (Yose): sin libro -- verificado con el motor real
+  // (solver/areaValue.ts, core/groups.ts), mismo estandar que niveles 0-3.
+  | 'EL_FINAL_TAMBIEN_ES_GRANDE'
+  | 'SENTE_Y_GOTE'
+  | 'SENTE_ANTES_QUE_GOTE'
+  | 'COMPARAR_VALOR_REAL'
+  | 'CONTAR_PARA_DECIDIR'
+  // Nivel 10 (Semeai): sin libro -- verificado jugada por jugada con el
+  // motor real (core/rules.ts::applyMove, core/groups.ts).
+  | 'QUE_ES_SEMEAI'
+  | 'CONTAR_LIBERTADES_ANTES_DE_JUGAR'
+  | 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO'
+  | 'UN_OJO_GANA'
+  | 'CONECTAR_EN_VEZ_DE_PELEAR'
 
 export type ConceptSeverity = 'high' | 'medium' | 'low'
 
 export interface Concept {
   id: ConceptId
-  level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+  level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
   /** Clave de traduccion para el nombre visible del concepto. */
   labelKey: string
   /** Clave de traduccion para la explicacion de una frase. */
@@ -626,6 +640,113 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     labelKey: 'concept.NO_PELEAR_SIN_NECESIDAD.label',
     summaryKey: 'concept.NO_PELEAR_SIN_NECESIDAD.summary',
     lessonId: 'n8-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 9 (Yose): mismo patron -- sin detector ni banco de ejercicios,
+  // la afirmacion vive en la leccion (content/lessons/n9.ts), pero ahi
+  // cada numero se calcula con el motor real en vez de citarse de un libro.
+  EL_FINAL_TAMBIEN_ES_GRANDE: {
+    id: 'EL_FINAL_TAMBIEN_ES_GRANDE',
+    level: 9,
+    labelKey: 'concept.EL_FINAL_TAMBIEN_ES_GRANDE.label',
+    summaryKey: 'concept.EL_FINAL_TAMBIEN_ES_GRANDE.summary',
+    lessonId: 'n9-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  SENTE_Y_GOTE: {
+    id: 'SENTE_Y_GOTE',
+    level: 9,
+    labelKey: 'concept.SENTE_Y_GOTE.label',
+    summaryKey: 'concept.SENTE_Y_GOTE.summary',
+    japaneseTerm: 'sente / gote',
+    lessonId: 'n9-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  SENTE_ANTES_QUE_GOTE: {
+    id: 'SENTE_ANTES_QUE_GOTE',
+    level: 9,
+    labelKey: 'concept.SENTE_ANTES_QUE_GOTE.label',
+    summaryKey: 'concept.SENTE_ANTES_QUE_GOTE.summary',
+    lessonId: 'n9-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  COMPARAR_VALOR_REAL: {
+    id: 'COMPARAR_VALOR_REAL',
+    level: 9,
+    labelKey: 'concept.COMPARAR_VALOR_REAL.label',
+    summaryKey: 'concept.COMPARAR_VALOR_REAL.summary',
+    lessonId: 'n9-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  CONTAR_PARA_DECIDIR: {
+    id: 'CONTAR_PARA_DECIDIR',
+    level: 9,
+    labelKey: 'concept.CONTAR_PARA_DECIDIR.label',
+    summaryKey: 'concept.CONTAR_PARA_DECIDIR.summary',
+    lessonId: 'n9-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 10 (Semeai): mismo patron.
+  QUE_ES_SEMEAI: {
+    id: 'QUE_ES_SEMEAI',
+    level: 10,
+    labelKey: 'concept.QUE_ES_SEMEAI.label',
+    summaryKey: 'concept.QUE_ES_SEMEAI.summary',
+    japaneseTerm: 'semeai',
+    lessonId: 'n10-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  CONTAR_LIBERTADES_ANTES_DE_JUGAR: {
+    id: 'CONTAR_LIBERTADES_ANTES_DE_JUGAR',
+    level: 10,
+    labelKey: 'concept.CONTAR_LIBERTADES_ANTES_DE_JUGAR.label',
+    summaryKey: 'concept.CONTAR_LIBERTADES_ANTES_DE_JUGAR.summary',
+    lessonId: 'n10-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO: {
+    id: 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO',
+    level: 10,
+    labelKey: 'concept.LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO.label',
+    summaryKey: 'concept.LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO.summary',
+    japaneseTerm: 'dame',
+    lessonId: 'n10-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  UN_OJO_GANA: {
+    id: 'UN_OJO_GANA',
+    level: 10,
+    labelKey: 'concept.UN_OJO_GANA.label',
+    summaryKey: 'concept.UN_OJO_GANA.summary',
+    lessonId: 'n10-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  CONECTAR_EN_VEZ_DE_PELEAR: {
+    id: 'CONECTAR_EN_VEZ_DE_PELEAR',
+    level: 10,
+    labelKey: 'concept.CONECTAR_EN_VEZ_DE_PELEAR.label',
+    summaryKey: 'concept.CONECTAR_EN_VEZ_DE_PELEAR.summary',
+    lessonId: 'n10-l5',
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',
