@@ -1,14 +1,15 @@
 import * as tf from '@tensorflow/tfjs'
 import type { EncodedInput } from './features'
 import { NN_LEN } from './features'
+import { POLICY_PASS_INDEX } from './policy'
+
+export { POLICY_PASS_INDEX, legalPolicyDistribution } from './policy'
 
 const INPUT_BIN = 'swa_model/bin_inputs'
 const INPUT_GLOBAL = 'swa_model/global_inputs'
 const OUTPUT_POLICY = 'swa_model/policy_output'
 const OUTPUT_VALUE = 'swa_model/value_output'
 const OUTPUT_OWNERSHIP = 'swa_model/ownership_output'
-
-export const POLICY_PASS_INDEX = NN_LEN * NN_LEN
 
 export interface RawEvalOutput {
   /** Distribucion de probabilidad (softmax ya aplicado) sobre los 361
@@ -99,29 +100,4 @@ export async function evaluatePosition(model: tf.GraphModel, input: EncodedInput
     binInputs.dispose()
     globalInputs.dispose()
   }
-}
-
-/**
- * Redistribuye la politica cruda sobre solo las jugadas legales (mismo
- * criterio que aplica cualquier UI real: mostrar "esta jugada es
- * candidata" solo entre lo que de verdad se puede jugar). Si ninguna
- * jugada legal tiene probabilidad (caso degenerado, no deberia pasar en la
- * practica), reparte parejo entre las legales para no devolver NaN.
- */
-export function legalPolicyDistribution(policy: Float32Array, legalPoints: number[], legalPass: boolean): Map<number | null, number> {
-  let sum = 0
-  for (const p of legalPoints) sum += policy[p]
-  if (legalPass) sum += policy[POLICY_PASS_INDEX]
-
-  const result = new Map<number | null, number>()
-  if (sum <= 0) {
-    const uniform = 1 / (legalPoints.length + (legalPass ? 1 : 0))
-    for (const p of legalPoints) result.set(p, uniform)
-    if (legalPass) result.set(null, uniform)
-    return result
-  }
-
-  for (const p of legalPoints) result.set(p, policy[p] / sum)
-  if (legalPass) result.set(null, policy[POLICY_PASS_INDEX] / sum)
-  return result
 }

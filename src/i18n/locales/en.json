@@ -116,6 +116,12 @@
   "review.primaryMistake": "Main mistake",
   "review.practiceConcept": "Practice this concept",
   "review.otherMistakes": "Other mistakes",
+  "review.askAi": "Ask the AI",
+  "review.aiThinking": "Asking the AI...",
+  "review.aiSuggestedMove": "Blue ring: the AI's suggested move instead.",
+  "review.aiWinProbability": "Win probability ({{color}}): {{percent}}%",
+  "review.aiAgreesWithMove": "The AI's top pick matches the move that was played.",
+  "review.aiDisclaimer": "AI opinion, not a verified fact — the network's evaluation hasn't been checked against real KataGo.",
 
   "today.title": "Today",
   "today.streak.days": "{{n}}-day streak",

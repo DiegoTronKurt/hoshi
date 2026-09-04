@@ -1,5 +1,94 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-04, cont. 11: Revisar consulta a la red de KataGo, primer uso real de eval/)
+
+Pedido directo del usuario tras explicarle la idea en criollo tres veces
+("no entendi, explicamelo"): un boton "Preguntarle a la IA" en Revisar,
+sobre la posicion de un error ya marcado. `eval/` es una red KataGo real
+(V7, pesos `kata-b10c128`) que estaba construida y probada desde una
+sesion anterior pero sin un solo consumidor en `src/ui` -- esta es su
+primera conexion real a una pantalla.
+
+**Por que Revisar y no Jugar/el bot**: una evaluacion cuesta ~1-1.25s,
+ya medido y descartado para cualquier uso en vivo (por playout o por
+jugada real del bot) en sesiones anteriores. Revisar es la unica pantalla
+sin reloj: el usuario ya esta detenido mirando una jugada especifica, un
+segundo de espera no cuesta nada ahi.
+
+### Bug real encontrado por el subagente de diseno antes de escribir codigo
+
+La forma obvia de implementar esto (mandarle a la red el mismo `boardState`
+que ya se usa para dibujar) le manda la posicion equivocada desde la
+perspectiva equivocada. `stateAtMove(size, komi, moves, moveNumber)`
+aplica `moves[0..moveNumber-1]` INCLUSIVE de la jugada del error (porque
+`mistakes.ts` guarda `moveNumber = indice_del_error + 1`), y `applyMove`
+siempre invierte `toMove` -- asi que `boardState.toMove` es el RIVAL de
+quien se equivoco, no la misma persona, para 9 de los 10 detectores
+(la unica excepcion, `GRUPO_MURIO_SIN_OJOS`, guarda `color` como la
+victima de una captura en vez de quien jugo, lo que por casualidad
+invierte de vuelta y si calza). Mandarle `boardState` a la red le habria
+devuelto "como aprovechar este error" en vez de "que deberia haber jugado
+quien se equivoco" -- una pregunta distinta a la que la pantalla dice
+estar respondiendo, en silencio.
+
+Arreglado con un segundo estado, un ply antes, calculado solo para la
+consulta a la red (`evalMoveNumber = event.moveNumber - 1`), sin tocar
+`boardState` para nada (sigue siendo la vista correcta para dibujar: "ya
+jugaste esto, mira el anillo de lo que debiste jugar en su lugar").
+`GRUPO_MURIO_SIN_OJOS` queda explícitamente excluido del boton -- correr
+el ply hacia atras rompería el unico caso donde `boardState` sin tocar
+ya es correcto, y "que deberias haber jugado en su lugar" no tiene un
+equivalente limpio para un concepto agregado anclado en una captura.
+
+**Verificado empiricamente, no solo razonado**: un test descartable
+(`tests/ui/_debug-review-ai.test.ts`, borrado despues de confirmar)
+corrio una partida simulada de 4 jugadas contra `stateAtMove` real y
+confirmo `boardState.toMove !== moves[2].color` pero
+`evalState.toMove === moves[2].color` exactamente como predecia el
+analisis. Otro test corrio `bucketOwnership` contra el modelo real
+vendorizado (mismo mecanismo de carga que `tests/eval/model.test.ts`)
+sobre una posicion muy unilateral y confirmo que el territorio embolsado
+favorece claramente al color dominante, sin escribir nunca fuera de
+rango en un tablero mas chico que 19x19.
+
+### Segundo bug real: la conversion inflaba el bundle principal de 885KB a 1.75MB
+
+`eval/model.ts` importa `@tensorflow/tfjs` en su primera linea.
+Importar `legalPolicyDistribution` desde ahi (una funcion pura, sin
+ninguna dependencia real de tfjs) arrastraba el modulo entero -- y con
+el, tfjs completo -- al hilo principal por primera vez, exactamente lo
+que el diseño de Worker separado (`eval/worker.ts`) existe para evitar.
+Separado a `eval/policy.ts` (solo depende de `eval/features.ts`, que
+tampoco importa tfjs); `eval/model.ts` reexporta `legalPolicyDistribution`
+para quien ya la importaba desde ahi, pero `ReviewMistakeBoard.tsx` la
+importa directo de `policy.ts`. Confirmado con `vite build`: bundle
+principal de vuelta a 888KB (mismo tamaño que antes de esta sesion, mas
+unos pocos KB de codigo nuevo real), tfjs queda aislado en su propio
+chunk de Worker (1.83MB) que solo se descarga si Revisar realmente lo pide.
+
+### Archivos nuevos
+
+- `src/ui/review/ReviewMistakeBoard.tsx`: el boton + panel, extraido de
+  los dos bloques de tablero casi identicos que ya tenia ReviewScreen
+  (agregar el panel de IA a ambos por separado habria triplicado esa
+  duplicacion en vez de duplicarla). Se remonta por `key` al cambiar de
+  evento (mismo patron de `navToken` de la sesion anterior) en vez de un
+  `useEffect` de reset manual.
+- `src/ui/review/reviewState.ts`: `stateAtMove` (con un comentario nuevo
+  documentando el limite inclusive, que no existia y es exactamente como
+  se pudo haber cometido este mismo error) y `bucketOwnership`, separados
+  de los archivos que exportan componentes (evita el warning de Fast
+  Refresh de oxlint, `react(only-export-components)`).
+- `src/eval/policy.ts`: `legalPolicyDistribution`/`POLICY_PASS_INDEX`,
+  separados de `model.ts` especificamente para no arrastrar tfjs (ver
+  arriba).
+
+Framing deliberado en la copia de la UI: "opinion de la IA, no un hecho
+verificado" -- el orden de la cabeza de valor de la red esta asumido, no
+confirmado contra un KataGo real (ver `eval/model.ts`), a diferencia de
+los detectores basados en reglas de esta misma pantalla, que solo
+reportan cuando pueden probar la condicion con certeza.
+
 ## Estado general del proyecto (2026-09-04, cont. 10: auditoria completa + 7 bugs silenciosos corregidos, tras terminar el curriculo)
 
 Con los 11 niveles de contenido ya completos (cont. 9), el pedido cambio

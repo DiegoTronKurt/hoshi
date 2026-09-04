@@ -116,6 +116,12 @@
   "review.primaryMistake": "Error principal",
   "review.practiceConcept": "Practicar este concepto",
   "review.otherMistakes": "Otros errores",
+  "review.askAi": "Preguntarle a la IA",
+  "review.aiThinking": "Preguntando...",
+  "review.aiSuggestedMove": "Anillo azul: jugada sugerida por la IA en su lugar.",
+  "review.aiWinProbability": "Probabilidad de victoria ({{color}}): {{percent}}%",
+  "review.aiAgreesWithMove": "La jugada favorita de la IA coincide con la que se jugó.",
+  "review.aiDisclaimer": "Opinión de la IA, no un hecho verificado -- su evaluación no se comparó con KataGo real.",
 
   "today.title": "Hoy",
   "today.streak.days": "Racha de {{n}} días",

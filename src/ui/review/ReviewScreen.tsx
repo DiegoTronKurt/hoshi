@@ -2,27 +2,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { analyzeGame } from '../../analysis/mistakes'
 import type { ConceptOccurrence } from '../../analysis/mistakes'
 import type { ConceptId, ConceptSeverity } from '../../analysis/concepts'
-import { applyMove, createGame } from '../../core/rules'
 import { sgfToGameRecord } from '../../core/sgf'
-import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
-import type { GameState } from '../../core/types'
+import { EvalClient } from '../../eval/client'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
-import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
+import { ReviewMistakeBoard } from './ReviewMistakeBoard'
+import { stateAtMove } from './reviewState'
 
-function stateAtMove(size: number, komi: number, moves: RecordedMove[], moveNumber: number): GameState {
-  let state = createGame(size, size, komi)
-  for (let i = 0; i < moveNumber && i < moves.length; i++) {
-    const result = applyMove(state, moves[i].point)
-    if (!result.legal || !result.state) break
-    state = result.state
-  }
-  return state
-}
+const EVAL_MODEL_URL = `${import.meta.env.BASE_URL}models/kata-b10c128/model.json`
 
 const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
   high: 'review.severity.high',
@@ -32,7 +23,7 @@ const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
 
 const SEVERITY_ORDER: Record<ConceptSeverity, number> = { high: 0, medium: 1, low: 2 }
 
-type Mistake = ConceptOccurrence & { result: 'incorrect'; severity: ConceptSeverity; moveNumber: number }
+export type Mistake = ConceptOccurrence & { result: 'incorrect'; severity: ConceptSeverity; moveNumber: number }
 
 function isMistake(occurrence: ConceptOccurrence): occurrence is Mistake {
   return occurrence.result === 'incorrect'
@@ -68,6 +59,19 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     listGames()
       .then(setGames)
       .catch(() => setGames([]))
+  }, [])
+
+  // Un solo EvalClient para toda la vida de la pantalla (mismo patron que
+  // SolverClient en TodayScreen/ExercisePracticeScreen/LessonPractice y
+  // EngineClient en PlayGameScreen): recrearlo por cada mistake
+  // reconsultado obligaria a recargar el modelo (~11.5MB) cada vez. Estado
+  // (no solo ref) porque ReviewMistakeBoard lo recibe como prop y necesita
+  // re-renderizar cuando pasa de null al cliente real, tras el mount.
+  const [evalClient, setEvalClient] = useState<EvalClient | null>(null)
+  useEffect(() => {
+    const client = new EvalClient(EVAL_MODEL_URL)
+    setEvalClient(client)
+    return () => client.terminate()
   }, [])
 
   const gameMistakes = useMemo(() => {
@@ -184,20 +188,15 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
               </div>
 
               {boardState && selectedEvent && selectedEvent === primaryEvent && (
-                <div className="review-board">
-                  <BoardCanvas
-                    width={selectedGame.size}
-                    height={selectedGame.size}
-                    stones={boardState.board.stones}
-                    lastMove={selectedEvent.point}
-                    hintMove={selectedEvent.suggestedPoint ?? null}
-                    theme={theme}
-                    onIntersectionClick={() => {}}
-                  />
-                  {selectedEvent.suggestedPoint !== undefined && (
-                    <p className="review-hint-legend">{t('review.suggestedMove')}</p>
-                  )}
-                </div>
+                <ReviewMistakeBoard
+                  key={`${selectedGame.id}-${activeIndex}`}
+                  game={selectedGame}
+                  moves={moves}
+                  event={selectedEvent}
+                  boardState={boardState}
+                  theme={theme}
+                  evalClient={evalClient}
+                />
               )}
 
               <p className="review-mistake-move">
@@ -249,18 +248,15 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
           )}
 
           {boardState && selectedEvent && selectedEvent !== primaryEvent && (
-            <div className="review-board">
-              <BoardCanvas
-                width={selectedGame.size}
-                height={selectedGame.size}
-                stones={boardState.board.stones}
-                lastMove={selectedEvent.point}
-                hintMove={selectedEvent.suggestedPoint ?? null}
-                theme={theme}
-                onIntersectionClick={() => {}}
-              />
-              {selectedEvent.suggestedPoint !== undefined && <p className="review-hint-legend">{t('review.suggestedMove')}</p>}
-            </div>
+            <ReviewMistakeBoard
+              key={`${selectedGame.id}-${activeIndex}`}
+              game={selectedGame}
+              moves={moves}
+              event={selectedEvent}
+              boardState={boardState}
+              theme={theme}
+              evalClient={evalClient}
+            />
           )}
         </>
       )}

@@ -608,6 +608,43 @@
   margin: 0;
 }
 
+.review-ask-ai {
+  min-height: 40px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.review-ai-error {
+  font-size: 0.85rem;
+  color: var(--hoshi-danger);
+  margin: 0;
+}
+
+.review-ai-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.review-ai-winprob {
+  margin: 0;
+  font-weight: 600;
+}
+
+.review-ai-disclaimer {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--hoshi-text-faint);
+}
+
 .review-primary-mistake {
   width: 100%;
   display: flex;
