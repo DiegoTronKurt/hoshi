@@ -42,10 +42,13 @@ export type ConceptId =
   | 'HANE_Y_CORTE'
   | 'EXTENSION_DESDE_PARED'
   | 'DIRECCION_LADO_GRANDE'
-  // Nivel 5 (Apertura): pendiente -- bloqueado en el libro real de respaldo
-  // (Kajiwara, "The Direction of Play", subido 2026-09-03 pero sin texto
-  // extraible todavia, ver NOTAS.md). No se inventan conceptos de nivel 5
-  // sin esa fuente.
+  // Nivel 5 (Apertura): resuelto con el libro de respaldo real (Kajiwara,
+  // "The Direction of Play", capitulo 1 -- ver NOTAS-libro-direction-of-play.md)
+  | 'PUNTO_ESTRELLA_DOS_DIRECCIONES'
+  | 'PUNTO_3_4_DEPENDE_ESQUINAS'
+  | 'PUNTO_3_3_SIN_DIRECCION'
+  | 'PUERTA_PRINCIPAL_TRASERA'
+  | 'COMBINAR_DIRECCIONES'
   // Nivel 6 (Joseki)
   | 'QUE_ES_JOSEKI'
   | 'BLOQUEO_HACIA_APOYO'
@@ -395,6 +398,61 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     labelKey: 'concept.DIRECCION_LADO_GRANDE.label',
     summaryKey: 'concept.DIRECCION_LADO_GRANDE.summary',
     lessonId: 'n4-l5',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  // Nivel 5 (Apertura): mismo patron que Nivel 4 -- sin detector ni banco de
+  // ejercicios, la afirmacion vive en la leccion misma (content/lessons/n5.ts).
+  PUNTO_ESTRELLA_DOS_DIRECCIONES: {
+    id: 'PUNTO_ESTRELLA_DOS_DIRECCIONES',
+    level: 5,
+    labelKey: 'concept.PUNTO_ESTRELLA_DOS_DIRECCIONES.label',
+    summaryKey: 'concept.PUNTO_ESTRELLA_DOS_DIRECCIONES.summary',
+    japaneseTerm: 'hoshi',
+    lessonId: 'n5-l1',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  PUNTO_3_4_DEPENDE_ESQUINAS: {
+    id: 'PUNTO_3_4_DEPENDE_ESQUINAS',
+    level: 5,
+    labelKey: 'concept.PUNTO_3_4_DEPENDE_ESQUINAS.label',
+    summaryKey: 'concept.PUNTO_3_4_DEPENDE_ESQUINAS.summary',
+    japaneseTerm: 'komoku',
+    lessonId: 'n5-l2',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  PUNTO_3_3_SIN_DIRECCION: {
+    id: 'PUNTO_3_3_SIN_DIRECCION',
+    level: 5,
+    labelKey: 'concept.PUNTO_3_3_SIN_DIRECCION.label',
+    summaryKey: 'concept.PUNTO_3_3_SIN_DIRECCION.summary',
+    lessonId: 'n5-l3',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  PUERTA_PRINCIPAL_TRASERA: {
+    id: 'PUERTA_PRINCIPAL_TRASERA',
+    level: 5,
+    labelKey: 'concept.PUERTA_PRINCIPAL_TRASERA.label',
+    summaryKey: 'concept.PUERTA_PRINCIPAL_TRASERA.summary',
+    lessonId: 'n5-l4',
+    hasDetector: false,
+    generatesExercises: false,
+    severity: 'low',
+  },
+  COMBINAR_DIRECCIONES: {
+    id: 'COMBINAR_DIRECCIONES',
+    level: 5,
+    labelKey: 'concept.COMBINAR_DIRECCIONES.label',
+    summaryKey: 'concept.COMBINAR_DIRECCIONES.summary',
+    japaneseTerm: 'nirensei',
+    lessonId: 'n5-l5',
     hasDetector: false,
     generatesExercises: false,
     severity: 'low',

@@ -1,5 +1,108 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-03, cont. 4: libro de Kajiwara legible via OCR, Nivel 5 -- Apertura -- cerrado, v2 completo 6/6)
+
+Reemplaza la version "cont. 3: Nivel 4 conectado..." de mas abajo (dejada
+como registro historico). Continuacion de la misma sesion. Con esta
+entrada, los 6 niveles de v2 (Forma, Apertura, Joseki) tienen 5/5
+conceptos con leccion real, verificada, y conectada a Aprender.
+
+### El libro de Kajiwara, legible: Poppler + Tesseract via winget
+
+El usuario pidio "leer el PDF de otra forma" despues de que el intento
+anterior (adjunto de chat) no llegara. El PDF (`Go_app/the_direction_of_play.pdf`,
+130 paginas) es un escaneo sin capa de texto, confirmado con `pdftotext`
+(0 caracteres extraidos). Se instalaron dos herramientas via `winget`:
+
+- **Poppler** (`oschwartz10612.Poppler`) ya estaba instalado pero no en el
+  PATH de la sesion de Bash; se ubico el binario directo en
+  `AppData\Local\Microsoft\WinGet\Packages\...\poppler-25.07.0\Library\bin\`
+  y se invoco por ruta completa. `pdftoppm -png -r 150` renderizo las 130
+  paginas a imagenes.
+- **Tesseract OCR** (`UB-Mannheim.TesseractOCR`, version 5.4.0) no estaba
+  instalado; la primera instalacion silenciosa fallo (`0x800704c7`,
+  probable prompt de UAC cancelado), la segunda con `--force` funciono.
+
+Con las 130 imagenes, un loop de `tesseract ... --psm 6` genero un texto
+corrido de 226KB. Calidad buena en la prosa (parrafos legibles con
+errores menores tipicos de OCR), pero los diagramas de tablero (dibujados
+con caracteres ASCII/box-drawing en el original) salen como ruido
+ilegible -- no se intento leerlos, solo el texto en prosa. Cobertura:
+capitulo 1 completo ("The Direction Of Play In The Opening: The Corner
+Stones") y capitulo 5 completo ("The Direction Of Play And Josekis"); el
+resto (capitulos 2-4, 6-8) muestreado solo parcialmente. Detalle completo,
+citas literales y su aplicacion en `NOTAS-libro-direction-of-play.md`
+(documento nuevo, mismo formato que `NOTAS-libro-kageyama.md`).
+
+Hallazgo notable: el capitulo 1 confirma palabra por palabra, sin
+necesidad de corregir nada, el diseño ya hecho de `n6-l4`
+(`HOSHI_INVASION_3_3`, escrito ANTES de poder leer este libro) -- "a
+stone on the star point... there is no possibility of closing off the
+territory... a weakness, namely the three-three point." El capitulo 5
+tambien confirma, con un ejemplo real con nombre propio (una variante del
+taisha), el diseño ya hecho de `n6-l1`/`n6-l3` sobre que un joseki
+correcto en abstracto no es lo mismo que la jugada correcta para el
+tablero completo. Ninguno de los dos niveles construidos antes de leer el
+libro necesito cambios despues de leerlo.
+
+### Nivel 5 (Apertura, 13x13): 5 de 5 conceptos, cerrado y conectado
+
+Lista de conceptos reemplazada por una version mas precisa que la
+propuesta original (hecha sin la fuente): cada uno cita o parafrasea
+directamente el capitulo 1 del libro.
+
+1. **PUNTO_ESTRELLA_DOS_DIRECCIONES** (`n5-l1`): una piedra en 4-4
+   declara interes en dos direcciones a la vez, sin cerrar territorio.
+2. **PUNTO_3_4_DEPENDE_ESQUINAS** (`n5-l2`): la direccion principal de un
+   3-4 vale lo que valga el resto del tablero en ese lado -- diagrama
+   "sola" vs "con blanco ya en el camino de su direccion principal".
+3. **PUNTO_3_3_SIN_DIRECCION** (`n5-l3`): contraste directo con el
+   concepto 1 -- "there is no direction of play from the 3-3 point."
+4. **PUERTA_PRINCIPAL_TRASERA** (`n5-l4`): tras un cerco de esquina, la
+   direccion principal ("front door") deja una forma mas compacta
+   ("caja") que la secundaria ("back door", "bandeja") -- verificado con
+   un test de depuracion que la huella de la variante "caja" es
+   aproximadamente cuadrada (4x4) y la de "bandeja" claramente alargada
+   (1x7), no solo confiando en la geometria a ojo.
+5. **COMBINAR_DIRECCIONES** (`n5-l5`): dos piedras cuya direccion apunta
+   al mismo lado se refuerzan (nirensei); si apuntan a lados opuestos, no
+   de la misma forma.
+
+Mismo patron que Niveles 4 y 6: `hasDetector: false, generatesExercises:
+false, severity: 'low'`, geometria simple a proposito (aritmetica de una
+sola fila o columna) en vez de reproducir diagramas de joseki de memoria,
+verificado con un test de depuracion descartable (borrado despues) antes
+de aceptar los numeros. `content/lessons/n5.ts` (nuevo), `index.ts` suma
+`LESSONS_N5`, `analysis/concepts.ts` suma los 5 `ConceptId` (con el
+comentario de "pendiente" reemplazado), `i18n/locales/en.json` y `es.json`
+suman 25 claves de leccion + 10 de concepto cada uno (paridad confirmada
+por conteo, 35 y 35). `LearnScreen.tsx`: `LEVELS` vuelve a ser contiguo,
+`[0,1,2,3,4,5,6]` -- ya no hace falta saltar el 5.
+
+### Verificacion
+
+`npx tsc -b` limpio. `npx oxlint`: sin warnings nuevos en
+`n5.ts`/`LearnScreen.tsx`/`concepts.ts`. `npx vitest run` completo:
+951/951 en verde (35 archivos).
+
+Sigue pendiente, sin cambios: la pasada de Playwright en vivo (sin
+herramienta de navegador disponible en esta sesion) y la revision externa
+liviana de contenido (roadmap seccion 1.4), que ahora deberia incluir
+Niveles 4, 5 y 6 completos en su muestra.
+
+### Commit y push de la entrada anterior (Nivel 4 + Nivel 6)
+
+A pedido explicito del usuario, el trabajo de la entrada "cont. 3"
+(Nivel 4 conectado, Nivel 6 completo, mas los datos de fondo ya listos de
+antes: `area-value.json` regenerado, `SELF_PLAY_GAMES` a 200) se
+commiteo (`4d040b8`) y se subio a `origin/master`. El trabajo de Nivel 5
+de esta entrada **todavia no esta commiteado** -- sigue la regla de solo
+commitear cuando se pide explicitamente, y el pedido anterior fue sobre el
+estado del repo en ese momento, no una autorizacion abierta para lo que
+viniera despues.
+
+---
+
 ## Estado general del proyecto (2026-09-03, cont. 3: Nivel 4 conectado a Aprender, Nivel 6 -- Joseki -- cerrado y conectado)
 
 Reemplaza la version "cont. 2: Nivel 4 cerrado..." de mas abajo (dejada
