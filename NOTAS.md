@@ -128,6 +128,13 @@ aislado en su chunk de Worker). Sin browser tool disponible en este
 entorno para probar la UI en vivo -- se dejo un servidor de desarrollo
 corriendo para que el usuario lo revisara el mismo antes de pedir commit.
 
+### Commit, push y AAB de release, los tres a pedido explicito del usuario
+
+hoshi: `b2d9e07`. hoshi-flutter: `d13edac`, version `1.12.0+17`,
+`app-release.aab` de 54.0MB (mismo orden de tamaño que builds anteriores,
+sin sorpresas). Subir a Play Console queda, como siempre, del lado del
+usuario.
+
 Pedido directo del usuario tras explicarle la idea en criollo tres veces
 ("no entendi, explicamelo"): un boton "Preguntarle a la IA" en Revisar,
 sobre la posicion de un error ya marcado. `eval/` es una red KataGo real
