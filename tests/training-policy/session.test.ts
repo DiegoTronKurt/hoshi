@@ -8,10 +8,14 @@ import type { BankEntry } from '../../src/content/problemBank'
 import { Rating, createCard, reviewCard } from '../../src/learning/fsrs'
 import type { ConceptProfile } from '../../src/learning/profile'
 import { analyzeGame } from '../../src/analysis/mistakes'
-import { findConceptsToReopen, planSession } from '../../src/training-policy/session'
-import type { SavedGameRecord, SrsCardRecord } from '../../src/storage/db'
+import { findConceptsToReopen, findConceptsToReopenFromExercises, planSession } from '../../src/training-policy/session'
+import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../src/storage/db'
 
 const NOW = new Date('2026-01-10T00:00:00Z')
+
+function day(n: number): string {
+  return new Date(2026, 0, n).toISOString()
+}
 
 function entry(id: string, conceptId: ConceptId): BankEntry {
   return { id, conceptId, sgf: '', difficulty: 'easy' }
@@ -121,10 +125,6 @@ describe('findConceptsToReopen', () => {
     }
   }
 
-  function day(n: number): string {
-    return new Date(2026, 0, n).toISOString()
-  }
-
   it('reabre el concepto cuando aparece en 3 de las ultimas 5 partidas', () => {
     const games = [
       savedGame(AUTOATARI_MOVES, day(1)),
@@ -202,5 +202,66 @@ describe('findConceptsToReopen', () => {
       savedGame(CLEAN_MOVES, day(5)),
     ]
     expect(findConceptsToReopen(games)).not.toContain('AUTOATARI')
+  })
+})
+
+describe('findConceptsToReopenFromExercises', () => {
+  function attempt(conceptId: ConceptId, solved: boolean, createdAt: string): AttemptRecord {
+    return { problemId: 'p', conceptId, createdAt, solved, wrongAttempts: solved ? 0 : 1 }
+  }
+
+  it('reabre el concepto con 3 fallos entre los ultimos 5 intentos DE ESE concepto', () => {
+    const attempts = [
+      attempt('AUTOATARI', false, day(1)),
+      attempt('AUTOATARI', true, day(2)),
+      attempt('AUTOATARI', false, day(3)),
+      attempt('AUTOATARI', true, day(4)),
+      attempt('AUTOATARI', false, day(5)),
+    ]
+    expect(findConceptsToReopenFromExercises(attempts)).toContain('AUTOATARI')
+  })
+
+  it('no reabre con solo 2 fallos de 5', () => {
+    const attempts = [
+      attempt('AUTOATARI', false, day(1)),
+      attempt('AUTOATARI', true, day(2)),
+      attempt('AUTOATARI', false, day(3)),
+      attempt('AUTOATARI', true, day(4)),
+      attempt('AUTOATARI', true, day(5)),
+    ]
+    expect(findConceptsToReopenFromExercises(attempts)).not.toContain('AUTOATARI')
+  })
+
+  it('la ventana es por concepto, no global: intentos de otro concepto no cuentan ni desplazan la ventana', () => {
+    const attempts = [
+      attempt('AUTOATARI', false, day(1)),
+      attempt('AUTOATARI', false, day(2)),
+      attempt('DOS_OJOS', false, day(3)),
+      attempt('DOS_OJOS', false, day(4)),
+      attempt('DOS_OJOS', false, day(5)),
+      attempt('AUTOATARI', false, day(6)),
+    ]
+    expect(findConceptsToReopenFromExercises(attempts)).toContain('AUTOATARI')
+    expect(findConceptsToReopenFromExercises(attempts)).toContain('DOS_OJOS')
+  })
+
+  it('solo mira los ultimos 5 intentos del concepto, no cualquier 3 fallos en toda la historia', () => {
+    const attempts = [
+      attempt('AUTOATARI', false, day(1)),
+      attempt('AUTOATARI', false, day(2)),
+      attempt('AUTOATARI', false, day(3)),
+      // Los 5 mas recientes de AUTOATARI son estos de aca, todos resueltos.
+      attempt('AUTOATARI', true, day(4)),
+      attempt('AUTOATARI', true, day(5)),
+      attempt('AUTOATARI', true, day(6)),
+      attempt('AUTOATARI', true, day(7)),
+      attempt('AUTOATARI', true, day(8)),
+    ]
+    expect(findConceptsToReopenFromExercises(attempts)).not.toContain('AUTOATARI')
+  })
+
+  it('con menos de 5 intentos del concepto, el umbral de 3 igual dispara', () => {
+    const attempts = [attempt('AUTOATARI', false, day(1)), attempt('AUTOATARI', false, day(2)), attempt('AUTOATARI', false, day(3))]
+    expect(findConceptsToReopenFromExercises(attempts)).toContain('AUTOATARI')
   })
 })

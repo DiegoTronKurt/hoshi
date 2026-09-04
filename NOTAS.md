@@ -1,6 +1,95 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-03, cont. 5: plan v2.5 acordado, paso 1 -- rendimiento del bot -- investigado)
+## Estado general del proyecto (2026-09-03, cont. 6: paso 2 del plan v2.5 -- practica dirigida a debilidades)
+
+Continuacion de la misma sesion, despues de cerrar el paso 1 (commit
+`a6f259a`, ver entrada anterior). Antes de escribir nada se investigo con
+un agente Explore que tan cierto seguia siendo el texto original del paso
+2 en la seccion 13 del roadmap -- resultado: bastante menos nuevo de lo
+que decia el plan, buena parte ya estaba construida.
+
+### Lo que ya existia y no se toco
+
+- `planSession()` (`training-policy/session.ts`) ya reserva un 25% del
+  cupo de la sesion diaria a los conceptos con peor puntaje del perfil
+  (`weakestConcepts`, puntaje TODO EL TIEMPO, no reciente).
+- `findConceptsToReopen()` ya reabre una leccion cuando su concepto
+  aparece con error real en 3 de las ultimas 5 PARTIDAS -- disparado una
+  sola vez, justo despues de guardar una partida nueva en
+  `PlayGameScreen.tsx` (a proposito no en Hoy, para no re-marcar sin leer
+  de nuevo una leccion ya reabierta).
+
+No se toco `computeProfiles()`/el puntaje de perfil (formula
+`0.6*precisionEjercicios + 0.4*penalizacionErrorPartidas`, TODO EL
+TIEMPO, sin ventana reciente): ese puntaje tambien alimenta
+`ProfileScreen`/`currentLevel()`, cambiar su significado es una decision
+mas grande y mas sensible que "practica dirigida a debilidades" por si
+sola, no se metio de prepo.
+
+### Lo que se construyo: el mismo mecanismo de reapertura, pero desde ejercicios
+
+Hueco real encontrado: `findConceptsToReopen` solo mira PARTIDAS. Alguien
+que falla el mismo concepto una y otra vez en Ejercicios o en Hoy, sin
+jugar nunca una partida completa donde el error tambien aparezca, no
+recibia ningun aviso de releer la leccion -- la cola SRS lo sigue
+reprogramando en silencio, pero nada dice "esto no esta entrando".
+
+`findConceptsToReopenFromExercises(attempts)` (misma seccion de
+`training-policy/session.ts`): mismo criterio que la version de partidas
+(ventana de 5, umbral de 3), pero la ventana es de los ultimos 5 intentos
+DE CADA CONCEPTO (no los ultimos 5 intentos en general) -- un ejercicio ya
+viene etiquetado con su concepto (`BankEntry.conceptId`), asi que no hace
+falta un detector ni volver a analizar nada, solo agrupar por concepto y
+contar `solved === false` (mismo booleano que ya usa `computeProfiles`
+para "incorrecto"). Conectado en `useSolvableExercise.ts::recordOutcome`,
+mismo lugar y mismo patron que `PlayGameScreen.tsx` (evaluar una vez, justo
+despues de guardar el intento nuevo, dentro del mismo try/catch que ya
+trata el registro de aprendizaje como best-effort). Como ese hook es
+compartido entre Ejercicios y Hoy, funciona en los dos sin duplicar nada.
+La tarjeta de "leccion reabierta" en TodayScreen ya lee las reaperturas de
+forma generica (no le importa que mecanismo la disparo), asi que no hizo
+falta tocar nada de UI.
+
+A proposito NO se intento generar esta misma señal para los conceptos de
+nivel 4 a 6 via el motor de evaluacion (la idea original, mas vaga, de la
+seccion 13): esos conceptos son juicio de direccion, mas dificiles de leer
+para la red que los tacticos que ya midio el roadmap con mal resultado
+(0-3% top1 en lectura exhaustiva) -- inventar un "detector" ahi con una
+señal poco confiable arriesgaba decirle a un usuario real que se equivoco
+cuando no era cierto, exactamente el tipo de afirmacion de contenido sin
+verificar que este proyecto evita en todos lados. Sigue sin haber forma de
+detectar una debilidad real en niveles 4-6 -- gap conocido, no resuelto.
+
+Tests nuevos en `tests/training-policy/session.test.ts` (14/14, mismo
+estilo que los de `findConceptsToReopen`). Un error propio en el primer
+intento: el helper `day()` estaba definido dentro del `describe` viejo,
+no visible desde el nuevo -- se subio a scope de modulo, sin cambiar su
+comportamiento.
+
+### Dos hallazgos aparte, documentados pero no resueltos ahora
+
+- **Bug real encontrado por el agente Explore**: `PRIMERA_LINEA_TEMPRANA`
+  (unico concepto "transversal" con `hasDetector:true`, el otro es
+  `JUGADA_LEJOS_DEL_COMBATE`) tiene `lessonId: 'transversal'` -- un
+  placeholder que nunca se resolvio a una leccion real, `getLesson()`
+  devuelve null. Si este concepto llega a cruzar el umbral de reapertura
+  en una partida real, `PlayGameScreen.tsx` ya lo maneja sin romperse
+  (`if (lesson) reopenLesson(...)`), pero en silencio: no pasa nada, sin
+  aviso. Se revisaron las 7 lecciones de nivel 1 y ninguna cubre "jugar en
+  la primera linea temprano" -- no es un typo con arreglo facil, es una
+  leccion que nunca se escribio. No se escribio ahora (es contenido nuevo,
+  una decision aparte); queda documentado como pendiente real.
+- **Correccion sobre respaldo de datos**: en la discusion de ideas de esta
+  sesion se le dijo al usuario que la exportacion/importacion "todavia no
+  existia". Era incorrecto -- ya estaba hecha (`storage/backup.ts` +
+  `SettingsScreen.tsx`, commit `3dc7b89`, 2026-09-01), la seccion 5 del
+  roadmap maestro simplemente nunca se actualizo para reflejarlo (mismo
+  tipo de error que la seccion 1.2 con `OJO_FALSO`). Corregido en el
+  roadmap y aca.
+
+`tsc -b` limpio, 956/956 tests (5 nuevos de `findConceptsToReopenFromExercises`
++ los 951 que ya existian, ninguno modificado). Commiteado.
+
 
 Continuacion de la misma sesion. El usuario probo la app, pidio discutir
 que sigue antes de ver el detalle de sus pruebas. Se discutieron
@@ -163,8 +252,45 @@ de KataGo que el usuario ya descarto para este paso) o ajustar
 `maxTimeMs`/`playouts` por nivel (tradeoff de fuerza vs. latencia, decision
 de producto).
 
-Sin commitear todavia -- pendiente de reportar el resultado final al
-usuario y decidir si cerrar el paso 1 aca o seguir.
+Commiteado (`a6f259a`, no subido todavia a origin).
+
+### Se investigo conectar la red de KataGo al MCTS -- descartado por ahora, no por siempre
+
+El usuario pregunto directamente si valia la pena, ya que la red esta
+empaquetada pero solo corre para lecciones (seccion 9.1 de
+`go-trainer-roadmap-maestro.md`). Antes de opinar, se midio de verdad:
+se cargo el mismo modelo vendorizado que usan los tests de
+`tests/eval/model.test.ts` (`public/models/kata-b10c128/`, mismo
+mecanismo de carga que ese archivo) y se corrio `encodeInput` +
+`evaluatePosition` sobre una posicion realista de mitad de partida en
+9x9.
+
+Resultado: `encodeInput` es barato (0.64ms/llamada). `evaluatePosition`
+(la inferencia real) cuesta **~1043ms por llamada** en el backend CPU de
+Node (sin WebGL disponible en el entorno de test) -- unas 400 veces mas
+que un playout completo de MCTS entero (~2.6ms, con las mejoras de mas
+arriba). Aunque ese numero es pesimista (el navegador real usaria
+WebGL/GPU, mas rapido), la brecha es demasiado grande para que importe:
+incluso con una aceleracion generosa de 50-100x por GPU -- optimista para
+un WebView movil, donde las GPUs son mucho mas debiles que un desktop --
+seguiria constando 10-20ms por llamada, todavia 4-8x mas lento que un
+playout completo hoy. Usarla adentro de cada playout (la forma simple de
+"conectarla") haria el bot mas lento, no mas rapido -- lo opuesto a lo que
+se pidio este paso.
+
+Conclusion: descartado para el objetivo de latencia de este paso, pero
+NO descartado para siempre -- el usuario pidio dejarlo anotado como
+mejora futura. La version que si tendria sentido (motores reales como
+AlphaZero/KataGo lo hacen asi) es reemplazar miles de rollouts aleatorios
+por un puñado de simulaciones guiadas por la red -- un rediseño del
+algoritmo, no un simple "conectar la red adentro del loop actual", y que
+necesitaria medir la latencia real en navegador (no Node) antes de
+decidir si vale la pena -- no se pudo hacer en esta sesion, sin
+herramienta de navegador disponible.
+
+**Con esto, paso 1 del plan v2.5 queda cerrado.** El usuario decidio pasar
+al paso 2 (practica dirigida a debilidades) en vez de seguir insistiendo
+en rendimiento.
 
 
 Reemplaza la version "cont. 3: Nivel 4 conectado..." de mas abajo (dejada

@@ -5,7 +5,7 @@ import { sgfToGameRecord } from '../core/sgf'
 import { isDue } from '../learning/fsrs'
 import { weakestConcepts } from '../learning/profile'
 import type { ConceptProfile } from '../learning/profile'
-import type { SavedGameRecord, SrsCardRecord } from '../storage/db'
+import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../storage/db'
 
 export const DEFAULT_SESSION_MINUTES = 10
 /** Estimacion de cuanto tarda una persona en resolver un problema de este
@@ -138,4 +138,42 @@ export function findConceptsToReopen(games: SavedGameRecord[]): ConceptId[] {
   }
 
   return [...gamesWithMistake.entries()].filter(([, count]) => count >= REOPEN_MISTAKE_THRESHOLD).map(([conceptId]) => conceptId)
+}
+
+export const REOPEN_EXERCISE_WINDOW = 5
+export const REOPEN_EXERCISE_THRESHOLD = 3
+
+/**
+ * Mismo criterio que findConceptsToReopen, pero con intentos de ejercicio
+ * como evidencia en vez de partidas: de los ultimos REOPEN_EXERCISE_WINDOW
+ * intentos DE CADA CONCEPTO (no del total general), cuenta cuantos no se
+ * resolvieron (attempt.solved === false, el mismo booleano que ya usa
+ * computeProfiles para "incorrecto"). >= REOPEN_EXERCISE_THRESHOLD reabre
+ * la leccion. A diferencia de una partida, un intento de ejercicio ya viene
+ * etiquetado con su concepto de antemano (BankEntry.conceptId) -- no hace
+ * falta un detector ni volver a analizar nada, solo agrupar y contar. Cubre
+ * el hueco real que dejaba findConceptsToReopen: alguien que falla el mismo
+ * concepto una y otra vez en Ejercicios o en Hoy, sin jugar nunca una
+ * partida completa donde ese error tambien aparezca, hoy no recibe ningun
+ * aviso de volver a leer la leccion.
+ */
+export function findConceptsToReopenFromExercises(attempts: AttemptRecord[]): ConceptId[] {
+  const byConceptId = new Map<ConceptId, AttemptRecord[]>()
+  for (const attempt of attempts) {
+    const list = byConceptId.get(attempt.conceptId)
+    if (list) list.push(attempt)
+    else byConceptId.set(attempt.conceptId, [attempt])
+  }
+
+  const toReopen: ConceptId[] = []
+  for (const [conceptId, conceptAttempts] of byConceptId) {
+    const recent = conceptAttempts
+      .slice()
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, REOPEN_EXERCISE_WINDOW)
+    const failures = recent.filter((a) => !a.solved).length
+    if (failures >= REOPEN_EXERCISE_THRESHOLD) toReopen.push(conceptId)
+  }
+
+  return toReopen
 }

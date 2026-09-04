@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { CONCEPTS } from '../../analysis/concepts'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
+import { getLesson } from '../../content/lessons'
 import { getGroup } from '../../core/groups'
 import { gameStateFromBoard, applyMove } from '../../core/rules'
 import { opponent } from '../../core/types'
@@ -11,7 +13,9 @@ import { isGroupPassAlive } from '../../solver/tsumego'
 import { simulateLadder, solveLadder } from '../../solver/ladder'
 import { isDoubleAtariMove } from '../../solver/doubleAtari'
 import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isOwnTerritory } from '../../solver/areaValue'
-import { getSrsCard, recordAttempt, saveSrsCard } from '../../storage/db'
+import { getSrsCard, listAttempts, recordAttempt, saveSrsCard } from '../../storage/db'
+import { findConceptsToReopenFromExercises } from '../../training-policy/session'
+import { reopenLesson } from '../lessons/readProgress'
 import { useSettings } from '../settings'
 
 export type ProblemStatus = 'playing' | 'incorrect' | 'solved'
@@ -191,6 +195,16 @@ export function useSolvableExercise(
         const baseCard = existing?.card ?? createCard()
         const updatedCard = reviewCard(baseCard, grade)
         await saveSrsCard({ problemId: entry.id, conceptId: entry.conceptId, card: updatedCard })
+
+        // Chequeo de reapertura (mismo patron que PlayGameScreen.tsx tras
+        // guardar una partida): un intento nuevo es un evento real, asi que
+        // se evalua aca, una vez por intento, no cada vez que se abre Hoy.
+        // listAttempts() para incluir este intento recien guardado.
+        const allAttempts = await listAttempts()
+        for (const conceptId of findConceptsToReopenFromExercises(allAttempts)) {
+          const lesson = getLesson(CONCEPTS[conceptId].lessonId)
+          if (lesson) reopenLesson(lesson.id, conceptId)
+        }
       } catch {
         // Sin IndexedDB disponible (o algun otro fallo de almacenamiento), el
         // ejercicio en si ya funciono para la persona; solo se pierde el
