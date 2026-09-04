@@ -125,6 +125,21 @@ soluciones propuestas antes de escribir una sola linea -- ver mas abajo.
 - `SavedGamesList.tsx` renderiza las partidas guardadas como `<li>`
   inertes, sin `onClick`. Menor, no tocado.
 
+### Commit, push y AAB de release, los tres a pedido explicito del usuario
+
+`hoshi` (`1d456f8`) y `hoshi-flutter` (`c2bffcd`) commiteados y pusheados
+por separado. AAB regenerado siguiendo el mismo pipeline de siempre
+(`npm run build` en `hoshi/` -> `sync-webapp.ps1` -> bump de
+`pubspec.yaml` -> `flutter build appbundle --release` via
+`C:\flutter\bin\flutter.bat`, no esta en el PATH de esta maquina):
+`1.9.0+14 -> 1.10.0+15` (minor, cambios funcionales reales de esta
+sesion, no un parche). `app-release.aab`, 53.7MB (mas grande que el
+rango historico de 42-45MB porque ahora incluye los pesos de la red de
+evaluacion `eval/`, agregados en una sesion anterior a esta). Mismo
+firmado de siempre (`android.keystore`, alias `upload`, via
+`android/key.properties`). Todavia no subido a Play Console -- queda
+del lado del usuario, igual que en cada sesion anterior.
+
 ## Estado general del proyecto (2026-09-04, cont. 9: Nivel 9 (Yose) y Nivel 10 (Semeai) completos -- v3 y el currículo entero, terminados)
 
 Continuacion de la misma sesion tras cerrar Nivel 7/8 (commit `1bdafff`).
