@@ -16,12 +16,16 @@ import { SavedGamesList } from './SavedGamesList'
 import { STRENGTH_LEVELS } from './strengthLevels'
 import type { StrengthLevel } from './strengthLevels'
 
-const BOARD_SIZES = [5, 7, 9] as const
-// 13x13 y 19x19 se suman cuando el curriculo llegue a esos niveles (roadmap
-// maestro, seccion 2.2; flujo-pantallas.md seccion 3.1): mientras tanto se
-// muestran bloqueados, no ocultos, mismo principio que los niveles 4-10
-// bloqueados en Aprender (LearnScreen.tsx).
-const LOCKED_BOARD_SIZES = [13, 19] as const
+// 13x13 desbloqueado 2026-09-03: la deuda tecnica de tamaño de tablero
+// (roadmap maestro, seccion 8) resulto ya estar resuelta al verificarla de
+// nuevo (Zobrist/region/BOARD_TRANSFORMS ya eran genericos; confirmado
+// ademas con una partida bot-vs-bot completa de principio a fin, ver
+// NOTAS.md), y el curriculo ya llego a ese tamaño (niveles 4 a 6, Aprender).
+// 19x19 se suma cuando el curriculo llegue ahi (v3, niveles 7-10): sigue
+// bloqueado por eso, no por ninguna razon tecnica -- mismo principio que
+// los niveles 4-10 bloqueados en Aprender (LearnScreen.tsx).
+const BOARD_SIZES = [5, 7, 9, 13] as const
+const LOCKED_BOARD_SIZES = [19] as const
 
 const BOT_STYLE_LABEL_KEY: Record<BotStyleId, TranslationKey> = {
   standard: 'play.botStyle.standard',

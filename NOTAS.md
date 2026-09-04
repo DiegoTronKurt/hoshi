@@ -1,6 +1,74 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-03, cont. 6: paso 2 del plan v2.5 -- practica dirigida a debilidades)
+## Estado general del proyecto (2026-09-03, cont. 7: pasos 3+4 del plan v2.5 -- tablero 13x13 desbloqueado en Jugar)
+
+Continuacion de la misma sesion, despues del paso 2 (commit `daf8e44`) y
+de commitear/subir aparte un banco de problemas regenerado que llevaba
+horas corriendo en segundo plano desde antes en la sesion (commit
+`61e7023`, ya pusheado junto con los pasos 1 y 2).
+
+### El paso 3 (deuda de tamaño de tablero) ya estaba resuelto -- iba a repetir trabajo
+
+Antes de tocar codigo se investigo con un agente Explore, explicitamente
+pidiendole que NO confiara en el texto de la seccion 8 del roadmap
+maestro (despues de encontrar dos veces en esta misma sesion contenido
+del roadmap desactualizado -- OJO_FALSO y respaldo de datos). Resultado:
+**tambien estaba desactualizado, y esta vez de forma mas llamativa** --
+el propio `NOTAS.md` de una sesion anterior ya documenta la conclusion
+("no hay nada fijo a 9x9 ahi, contrario a lo que el roadmap maestro
+seccion 8 daba a entender"), pero la seccion 8 nunca se corrigio para
+reflejarlo. Confirmado con el codigo actual: `createBoard`/`BoardState`
+usan `Int8Array(width*height)` dinamico, `getZobristTable(width,height)`
+cachea por tamaño sin ningun limite fijo, `solver/region.ts` deriva todo
+de `board.width`/`board.height`, y `BOARD_TRANSFORMS`/`applicableTransforms`
+ya manejan cualquier tamaño (incluido un tablero rectangular real, 9x13,
+del nivel 4). Los cuatro items que la seccion 13 de este mismo roadmap
+(escrita HOY mas temprano) planeaba como "paso 3" ya estaban hechos, con
+tests propios (`tests/core/board.test.ts`, `tests/solver/region.test.ts`)
+cubriendo 9/13/19 explicitamente. **Error propio**: al escribir el plan
+v2.5 esta manana no se volvio a verificar la seccion 8 antes de copiarla
+como paso 3, a pesar de que el patron de contenido desactualizado ya
+llevaba dos casos en la misma sesion -- deberia haber sido mas
+sospechoso antes, no despues.
+
+Con esto, el paso 3 real se redujo a lo que en realidad era el paso 4:
+`PlayConfigScreen.tsx` bloqueaba 13x13/19x19 solo por una bandera de UI
+("se suman cuando el curriculo llegue a esos niveles"), sin ninguna
+razon tecnica de por medio -- confirmado leyendo el propio comentario del
+codigo y trazando `size` desde `handleStart()` hasta `createGame()` sin
+ningun clamp ni caso especial en el medio.
+
+### Verificacion real antes de desbloquear: una partida completa, no solo modulos sueltos
+
+Que cada pieza este probada por separado no prueba que una partida real
+completa funcione de punta a punta. Se armo un test descartable
+(`tests/engine/_debug-13x13-integration.test.ts`, borrado al terminar)
+que juega una partida bot-vs-bot REAL en 13x13 hasta el final (`chooseMove`
++ `applyMove` en un loop, sin atajos) y otra en 19x19 (20 jugadas, sin
+terminarla, solo para confirmar que tampoco hay nada roto ahi aunque no
+se vaya a desbloquear todavia). Resultado, reproducible con la misma
+semilla en dos corridas: 13x13 termina en 112 jugadas, resultado
+negro=58 blanco=63.5 (puntaje coherente, area total bajo el limite del
+tablero); el SGF hace roundtrip completo (`gameRecordToSgf` ->
+`sgfToGameRecord`, mismo mecanismo que usa `PlayGameScreen.tsx` al
+guardar). 19x19 con 20 jugadas: sin crashear, puntaje coherente. Dos
+intentos previos fallaron por el tope de tiempo del test (60s) mal
+calibrado contra lo que de verdad tarda una partida asi (13x13 real:
+~165-176s con estos parametros) -- error de calibracion del test, no del
+motor, corregido subiendo el tope a 240s.
+
+### Cambio real: `PlayConfigScreen.tsx`
+
+`BOARD_SIZES` ahora incluye 13 (`[5, 7, 9, 13]`), `LOCKED_BOARD_SIZES`
+queda solo con 19 (`[19]`). El layout hoshi de 13x13 ya estaba completo en
+`ui/board/hoshiPoints.ts` (4 esquinas + tengen, convencion estandar) desde
+antes de esta sesion. Sin cambios en ningun otro archivo de motor/reglas
+-- no hacia falta, como confirma todo lo de arriba.
+
+Roadmap maestro: seccion 8 corregida (marcada resuelta, con nota de
+correccion explicando el desfase), seccion 13 paso 3 marcado
+tachado/hecho y fusionado con el paso 4 (ya no quedaba nada aparte que
+hacer en el paso 4 una vez resuelto el 3).
 
 Continuacion de la misma sesion, despues de cerrar el paso 1 (commit
 `a6f259a`, ver entrada anterior). Antes de escribir nada se investigo con
