@@ -89,6 +89,16 @@ confirmado contra un KataGo real (ver `eval/model.ts`), a diferencia de
 los detectores basados en reglas de esta misma pantalla, que solo
 reportan cuando pueden probar la condicion con certeza.
 
+### Commit, push y AAB de release, los tres a pedido explicito del usuario
+
+`hoshi` (`1b09481`) y `hoshi-flutter` (`88a9d1e`) commiteados y pusheados
+por separado, mismo pipeline de siempre (`npm run build` -> `sync-webapp.ps1`
+-> bump de `pubspec.yaml` -> `flutter build appbundle --release`).
+`1.10.0+15 -> 1.11.0+16` (minor, funcionalidad real nueva, no un parche).
+`app-release.aab`, 54.0MB (el chunk de Worker con tfjs se descarga real
+por primera vez desde una pantalla, ver arriba). Mismo firmado de siempre.
+Todavia no subido a Play Console -- queda del lado del usuario.
+
 ## Estado general del proyecto (2026-09-04, cont. 10: auditoria completa + 7 bugs silenciosos corregidos, tras terminar el curriculo)
 
 Con los 11 niveles de contenido ya completos (cont. 9), el pedido cambio
