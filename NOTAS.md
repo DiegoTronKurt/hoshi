@@ -197,6 +197,16 @@ patron que el resto de la base de codigo). i18n: 717 claves en `en.json` y
 boton atras en un dispositivo real (sin automatizacion de navegador en este
 entorno) -- dicho explicitamente en vez de asumido.
 
+### Commit, push y AAB de release, los tres a pedido explicito del usuario
+
+hoshi: commit `18655d2` ("Ejercicios de yose/semeai, boton atras de Android,
+revision de fuerza y contenido"), pusheado a `master` (`9cfd239..18655d2`).
+hoshi-flutter: `npm run build` -> `sync-webapp.ps1` -> `pubspec.yaml` de
+`1.12.0+17` a `1.13.0+18` -> `flutter build appbundle --release` ->
+`app-release.aab` de 54.0MB (mismo orden de magnitud que builds previas) ->
+commit `277cab9` ("Sube a 1.13.0+18..."), pusheado a `master`
+(`d13edac..277cab9`). Subir a Play Console sigue siendo un paso del usuario.
+
 ## Estado general del proyecto (2026-09-04, cont. 12: bot pasa cuando corresponde, 19x19, tablero 9x13 y conteo japones en Jugar)
 
 Cuatro pedidos del usuario en un solo mensaje: texto "Pensando..." en Jugar
