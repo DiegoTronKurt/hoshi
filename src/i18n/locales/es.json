@@ -129,7 +129,7 @@
   "review.aiSuggestedMove": "Anillo azul: jugada sugerida por la IA en su lugar.",
   "review.aiWinProbability": "Probabilidad de victoria ({{color}}): {{percent}}%",
   "review.aiAgreesWithMove": "La jugada favorita de la IA coincide con la que se jugó.",
-  "review.aiDisclaimer": "Opinión de la IA, no un hecho verificado -- su evaluación no se comparó con KataGo real.",
+  "review.aiDisclaimer": "Opinión de la IA, no un hecho verificado -- su codificación se comparó contra una instalación real de KataGo, pero la evaluación en sí sigue siendo una opinión, no una verdad objetiva.",
 
   "today.title": "Hoy",
   "today.streak.days": "Racha de {{n}} días",
@@ -149,6 +149,8 @@
   "today.exercisePreview.start": "Practicar",
   "today.reopen.detail": "Repetiste el error de {{concept}} en varias de tus últimas partidas. Vale la pena repasar «{{lesson}}» de nuevo.",
   "today.reopen.cta": "Repasar lección",
+  "today.reopen.summary": "Lecciones para repasar ({{count}})",
+  "today.reopen.collapse": "Ocultar lecciones para repasar",
   "today.reason.overdue": "Repaso",
   "today.reason.weak": "Área débil",
   "today.reason.new": "Nuevo",
@@ -161,7 +163,8 @@
 
   "profile.title": "Perfil",
   "profile.weakest": "Áreas más débiles",
-  "profile.weakest.item": "{{concept}} — {{percent}}% correcto ({{correct}} de {{total}})",
+  "profile.weakest.caption": "El porcentaje es un puntaje de dominio (mezcla ejercicios y partidas reales, no un simple acierto/total); el número entre paréntesis es cuántos intentos hay registrados en total, para saber si el porcentaje ya es confiable.",
+  "profile.weakest.item": "{{concept}} — {{percent}}% de dominio ({{correct}} de {{total}} intentos correctos)",
   "profile.noData": "Sin datos",
   "profile.level": "Nivel {{n}}",
   "profile.settings": "Ajustes",

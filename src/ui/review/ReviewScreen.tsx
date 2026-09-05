@@ -55,7 +55,6 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   const { theme } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(initialGameId ?? null)
-  const [selectedEventIndex, setSelectedEventIndex] = useState<number | null>(null)
 
   useEffect(() => {
     listGames()
@@ -109,18 +108,14 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
 
   function selectGame(id: number) {
     setSelectedGameId(id)
-    setSelectedEventIndex(null)
   }
 
   function backToList() {
     setSelectedGameId(null)
-    setSelectedEventIndex(null)
   }
 
   // Boton fisico "atras" de Android: detalle de partida -> lista -- ver
-  // navigation/localBack.ts. selectedEventIndex no cuenta como nivel propio:
-  // es solo que error queda resaltado dentro de la misma pantalla de
-  // detalle, no una vista distinta que navegar.
+  // navigation/localBack.ts.
   useEffect(() => {
     reportLocalBack(() => {
       if (selectedGameId === null) return false
@@ -130,12 +125,16 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     return () => reportLocalBack(null, 0)
   }, [selectedGameId])
 
-  const activeIndex = selectedEventIndex ?? (sortedEvents.length > 0 ? 0 : null)
-  const selectedEvent = activeIndex !== null ? sortedEvents[activeIndex] : null
-  const boardState =
-    selectedGame && selectedEvent
-      ? stateAtMove(gameWidth(selectedGame), gameHeight(selectedGame), selectedGame.komi, moves, selectedEvent.moveNumber)
-      : null
+  // Un tablero por error, no solo el seleccionado -- cada mistake (principal
+  // y secundarios) muestra su propio ReviewMistakeBoard con su propio botón
+  // "Preguntar a la IA" (perezoso, ver ReviewMistakeBoard::askAi), asi que
+  // calcular los N tableros de mas no dispara N evaluaciones de la red.
+  const eventBoardStates = useMemo(() => {
+    if (!selectedGame) return []
+    return sortedEvents.map((event) =>
+      stateAtMove(gameWidth(selectedGame), gameHeight(selectedGame), selectedGame.komi, moves, event.moveNumber),
+    )
+  }, [selectedGame, moves, sortedEvents])
 
   const locale = language === 'es' ? 'es' : 'en'
 
@@ -196,7 +195,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
         <p className="review-empty">{t('review.noMistakes')}</p>
       ) : (
         <>
-          {primaryEvent && (
+          {primaryEvent && eventBoardStates[0] && (
             <section className="review-primary-mistake">
               <div className="review-primary-mistake-header">
                 <span className="review-primary-mistake-title">{t('review.primaryMistake')}</span>
@@ -205,17 +204,15 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                 </span>
               </div>
 
-              {boardState && selectedEvent && selectedEvent === primaryEvent && (
-                <ReviewMistakeBoard
-                  key={`${selectedGame.id}-${activeIndex}`}
-                  game={selectedGame}
-                  moves={moves}
-                  event={selectedEvent}
-                  boardState={boardState}
-                  theme={theme}
-                  evalClient={evalClient}
-                />
-              )}
+              <ReviewMistakeBoard
+                key={`${selectedGame.id}-0`}
+                game={selectedGame}
+                moves={moves}
+                event={primaryEvent}
+                boardState={eventBoardStates[0]}
+                theme={theme}
+                evalClient={evalClient}
+              />
 
               <p className="review-mistake-move">
                 {t('review.moveNumber', { n: primaryEvent.moveNumber })} ·{' '}
@@ -236,45 +233,45 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
           {secondaryEvents.length > 0 && (
             <div className="review-secondary-mistakes">
               <h3>{t('review.otherMistakes')}</h3>
-              <ul className="review-mistakes-list">
-                {secondaryEvents.map((event) => {
-                  const index = sortedEvents.indexOf(event)
-                  const conceptLabelKey = `concept.${event.conceptId}.label` as TranslationKey
-                  const conceptSummaryKey = `concept.${event.conceptId}.summary` as TranslationKey
-                  const colorKey = event.color === BLACK ? 'color.black' : 'color.white'
-                  return (
-                    <li key={index}>
-                      <button
-                        type="button"
-                        className={index === activeIndex ? 'active' : ''}
-                        onClick={() => setSelectedEventIndex(index)}
-                      >
-                        <span className="review-mistake-move">
-                          {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
-                        </span>
-                        <span className="review-mistake-concept">{t(conceptLabelKey)}</span>
-                        <span className={`review-severity review-severity-${event.severity}`}>
-                          {t(SEVERITY_KEY[event.severity])}
-                        </span>
-                        <span className="review-mistake-summary">{t(conceptSummaryKey)}</span>
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          )}
+              {secondaryEvents.map((event, i) => {
+                const index = i + 1
+                const boardState = eventBoardStates[index]
+                if (!boardState) return null
+                const colorKey = event.color === BLACK ? 'color.black' : 'color.white'
+                return (
+                  <section key={index} className="review-secondary-mistake-card">
+                    <div className="review-secondary-mistake-header">
+                      <span className={`review-severity review-severity-${event.severity}`}>
+                        {t(SEVERITY_KEY[event.severity])}
+                      </span>
+                    </div>
 
-          {boardState && selectedEvent && selectedEvent !== primaryEvent && (
-            <ReviewMistakeBoard
-              key={`${selectedGame.id}-${activeIndex}`}
-              game={selectedGame}
-              moves={moves}
-              event={selectedEvent}
-              boardState={boardState}
-              theme={theme}
-              evalClient={evalClient}
-            />
+                    <ReviewMistakeBoard
+                      key={`${selectedGame.id}-${index}`}
+                      game={selectedGame}
+                      moves={moves}
+                      event={event}
+                      boardState={boardState}
+                      theme={theme}
+                      evalClient={evalClient}
+                    />
+
+                    <p className="review-mistake-move">
+                      {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
+                    </p>
+                    <p className="review-mistake-concept">{t(`concept.${event.conceptId}.label` as TranslationKey)}</p>
+                    <p className="review-mistake-summary">{t(`concept.${event.conceptId}.summary` as TranslationKey)}</p>
+                    <button
+                      type="button"
+                      className="review-practice-concept"
+                      onClick={() => onPracticeConcept(event.conceptId)}
+                    >
+                      {t('review.practiceConcept')}
+                    </button>
+                  </section>
+                )
+              })}
+            </div>
           )}
         </>
       )}

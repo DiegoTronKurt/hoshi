@@ -1,6 +1,204 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-04, cont. 13: ejercicios de yose y semeai, boton atras de Android, revision de fuerza del bot y de contenido)
+## Estado general del proyecto (2026-09-05, cont. 14: colapsar tarjetas de Hoy, todos los errores con tablero+IA en Revisar, verificacion real de la codificacion de KataGo, cuatro lecturas nuevas de motor/IA)
+
+El usuario reporto dos cosas usando la app y agrego una tanda de lecturas de
+referencia (papers + un libro, subidos a `Go_app/`, fuera de este repo): (1)
+en Hoy, cuando hay varias lecciones para repasar, aparece una tarjeta por
+cada una -- pidio colapsarlas en una sola, como ya se hace con "ver el resto
+del plan". (2) en Revisar, solo el error principal muestra tablero + opinion
+de IA; pidio que los demas errores tengan lo mismo. Tambien pregunto
+directamente que significa el comentario "no se comparo con KataGo real" del
+panel de IA, y si se podia proceder con esa verificacion.
+
+### Hoy: lecciones para repasar colapsadas en una sola tarjeta cuando son 2+
+
+`TodayScreen.tsx`: con 1 sola leccion reabierta, sigue exactamente igual que
+antes (la tarjeta con la frase completa + boton). Con 2 o mas, ahora es una
+sola tarjeta con un boton-resumen tipo "Lecciones para repasar (N)" (mismo
+patron visual y de codigo que `today-plan-toggle`/`today-plan-list`, que ya
+colapsaba el resto del plan de sesion en este mismo archivo) que al expandir
+muestra una fila compacta por leccion (titulo + concepto + boton "Repasar
+leccion" propio). Dos claves nuevas de i18n (`today.reopen.summary`,
+`today.reopen.collapse`), en paridad ES/EN.
+
+### Revisar: cada error tiene su propio tablero + boton de IA, no solo el principal
+
+`ReviewScreen.tsx`: antes, `selectedEventIndex` controlaba cual de los
+errores (principal o uno de la lista secundaria) mostraba su
+`ReviewMistakeBoard` -- solo uno a la vez, el resto eran botones de texto
+sin tablero. Se elimino ese estado por completo: ahora `sortedEvents.map`
+calcula un `stateAtMove` por cada error (memoizado) y cada uno -- principal
+y secundarios -- monta su propio `ReviewMistakeBoard` completo, con su
+propio boton "Preguntar a la IA" (perezoso: `ReviewMistakeBoard::askAi` solo
+corre la red si el usuario lo pide, asi que mostrar N tableros de mas no
+dispara N evaluaciones de la red automaticamente) y su propio boton
+"Practicar este concepto". El error principal conserva su titulo/resaltado
+distintivo; los secundarios ahora son tarjetas completas en vez de una lista
+de botones de resumen. CSS: se elimino `.review-mistakes-list` (muerta) y se
+agrego `.review-secondary-mistake-card`/`.review-secondary-mistake-header`
+calcados de `.review-primary-mistake` sin el titulo "ERROR PRINCIPAL".
+
+### La pregunta real: verificar la codificacion de KataGo contra KataGo de verdad
+
+El comentario que vio el usuario (`review.aiDisclaimer`) se referia a que
+`src/eval/features.ts` -- la codificacion de entrada V7 para la red
+preentrenada de KataGo que da la "opinion de IA" en Revisar -- fue
+reconstruida a mano a partir de la especificacion publica de KataGo, pero
+nunca se habia comparado su salida real contra una instalacion real de
+KataGo. Se decidio proceder de verdad, no solo explicar el comentario.
+
+**Metodo.** Se descargo KataGo v1.18.1 real (build `eigenavx2`, CPU puro, sin
+necesitar GPU/CUDA/driver especial -- las releases mas nuevas de GitHub solo
+traen CUDA, esta si tiene eigen) y, de `katagoarchive.org`, la red exacta que
+ya usa esta app: `g170e-b10c128-s1141046784-d204142634.bin.gz` (confirmado
+al arrancar KataGo: `Model name: g170-b10c128-s1141046784-d204142634`,
+identico al nombre citado en `public/models/kata-b10c128/ATTRIBUTION.md`).
+Se uso el comando GTP `kata-raw-nn` (evaluacion cruda de la red, sin
+busqueda -- exactamente equivalente a una sola pasada, lo mismo que hace
+`evaluatePosition` de Hoshi) sobre 3 posiciones, comparando contra el propio
+pipeline de Hoshi (`encodeInput` + `evaluatePosition`) corrido con
+`vite-node` contra el mismo modelo TF.js ya vendorizado en el repo (servido
+por un `vite dev` temporal en `localhost:5183`, apagado al terminar):
+
+1. Tablero vacio 19x19, negro a jugar, komi 7.5.
+2. Una apertura real de 4 jugadas (Q16/R17/R16/Q17 en notacion GTP) con
+   historial real, para ejercitar los canales de "ultimas jugadas".
+3. Una escalera real (misma forma relativa que el fixture ya verificado en
+   `tests/solver/ladder.test.ts`, reubicada cerca de una esquina de 19x19),
+   para ejercitar especificamente los canales de escaleras (14-17, la logica
+   mas compleja y a medida de todo el archivo).
+
+**Resultado: coincide, con precision de 4 a 6 cifras significativas, en las
+3 posiciones.** Ejemplo (tablero vacio): KataGo real da
+`whiteWin=0.541254 whiteLoss=0.458746`; Hoshi da
+`value=[0.458651, 0.541143, ...]` (perspectiva de negro: P(gana)=P(pierde
+blanco)) -- diferencia de ~0.0001, tipica de comparar TensorFlow.js contra
+Eigen/C++ nativo con los mismos pesos, no un error de codificacion. La
+politica coincide punto por punto: en tablero vacio, los 4 puntos 4-4
+(D4/Q4/Q16/D16) salen con los mismos valores en ambos lados hasta la sexta
+cifra decimal (0.136920, 0.128826, 0.122316, 0.118667). En la apertura, el
+mejor punto de ambos (`O17`) coincide en 0.586671 vs 0.586672. En la
+escalera, `E17` coincide en 0.671438 vs 0.671441. El territorio (`ownership`)
+coincide en magnitud en las 361 casillas de las 3 posiciones, con signo
+invertido exacto y esperado (KataGo reporta siempre en perspectiva de
+blanco; Hoshi en perspectiva de quien pidio la evaluacion -- documentado en
+ambos lados, no es una discrepancia).
+
+**Que queda sin probar especificamente**: superko real (canal 6) y
+territorio pass-alive ya asentado (canales 18-19) no tuvieron una posicion
+dedicada -- las 3 posiciones probadas eran todas tempranas, sin territorio
+asentado ni ko. Las 3 posiciones SI cubren piedras/libertades, historial de
+jugadas y escaleras (los canales mas propensos a un error de indices/signo).
+Documentado como alcance explicito, no una verificacion total, en el
+comentario de `features.ts` y en `NOTAS-libro-katago-accelerating-selfplay.md`.
+
+**Cambios de codigo, solo documentacion, ninguna logica tocada**:
+- `src/eval/model.ts` y `src/eval/features.ts`: comentarios actualizados
+  para citar esta verificacion en vez de decir "no hay forma de
+  verificarlo".
+- `review.aiDisclaimer` (es/en): ya no dice "no se comparo con KataGo real"
+  (ahora falso); dice que la codificacion SI se comparo, pero que la
+  evaluacion en si sigue siendo una opinion de un modelo, no un hecho --
+  la duda que sigue siendo real (¿la red se equivoca en esta posicion
+  particular?) es distinta de la que ya se resolvio (¿la codificacion de
+  entrada es correcta?).
+- Ningun cambio a `src/eval/features.ts` mas alla del comentario: la
+  verificacion no encontro ningun error que corregir.
+
+Script y datos de la verificacion (KataGo descargado, red, consultas GTP)
+quedaron en el scratchpad de la sesion, no en el repo -- son ~17MB de
+binarios/pesos que no aportan nada versionados, y el hallazgo real ya esta
+documentado aca y en el codigo. El script temporal en el repo
+(`tools/_debug-katago-verify.ts`) se borro despues de extraer los numeros,
+mismo criterio que cualquier `_debug-*` de sesiones anteriores.
+
+### Cuatro lecturas nuevas subidas por el usuario a `Go_app/` (fuera de este repo)
+
+Ademas de la pregunta puntual de KataGo, el usuario subio 4 archivos de
+referencia nuevos. Se leyeron y documentaron 3 de los 4 (los relevantes al
+motor/IA, no a contenido de lecciones), cada uno en su propio
+`NOTAS-libro-*.md` en la raiz del repo, mismo formato que los dos libros de
+teoria de Go ya documentados (Kageyama, Kajiwara):
+
+- **`NOTAS-libro-alphago-nature16.md`** -- el paper original de AlphaGo
+  (Silver et al. 2016, Nature). Confirma que el bot real de Hoshi
+  (`engine/mcts.ts`) es arquitectonicamente un predecesor de AlphaGo (UCT +
+  heuristicas a mano, sin ninguna red), no una version reducida de el.
+- **`NOTAS-libro-survey-mcts.md`** -- la survey clasica de MCTS (Browne et
+  al. 2012). Explica por que la constante `1.4` de `mcts.ts` no es un error
+  (es la convencion UCB1 de bandit plano, una convencion real y distinta de
+  la formula "de arbol" que da el propio paper, ninguna demostrablemente
+  mejor sin medir). Identifica RAVE/AMAF y Last Good Reply como mejoras
+  clasicas (sin red neuronal) potencialmente aplicables al motor real,
+  ninguna implementada todavia -- solo quedan anotadas.
+- **`NOTAS-libro-katago-accelerating-selfplay.md`** -- el paper que describe
+  KataGo en si (Wu 2020), escrito por el mismo autor cuya red usa esta app.
+  Resuelve una incertidumbre real que tenia el codigo (orden de la cabeza de
+  valor, ver arriba) y confirma que la idea ya anotada en
+  `go-trainer-roadmap-maestro.md` (usar la red para ordenar jugadas raiz del
+  bot, una vez por jugada real, no por playout) es, literalmente, como
+  funciona KataGo/AlphaZero -- pero el roadmap ya identifico correctamente
+  que falta medir latencia real en navegador/WebView antes de escribir
+  codigo, y eso sigue sin hacerse (sin herramienta de automatizacion de
+  navegador en este entorno).
+- **Pendiente, no leido esta sesion**: `go-a-complete-introduction-to-the-game-cho-chi-kun_compress.pdf`
+  (libro de Go de Cho Chikun, principiantes) -- a diferencia de los otros
+  3, es contenido de teoria de Go (como Kageyama/Kajiwara), no de motor/IA.
+  Es un escaneo sin capa de texto (72 paginas, necesita renderizado a imagen
+  para leerse, mismo caso que el libro de Kajiwara). Se prioritzo lo que el
+  usuario pregunto directamente (KataGo) y las 3 lecturas de motor/IA sobre
+  esta cuarta lectura por alcance de la sesion -- queda para una proxima.
+
+### `yose-value.json` regenerado: se decidio conservarlo
+
+El banco de yose ya tenia una version distinta sin commitear en el disco
+(197 problemas, 147/50 entre los dos conceptos) antes de que empezara esta
+sesion -- ni el `.ts` generador ni ningun codigo del que depende (`mcts.ts`,
+`areaValue.ts`) estaban modificados, asi que no fue esta sesion quien lo
+genero. Lectura mas probable: alguna sesion anterior llego a probar la
+mejora que el propio generador deja anotada como pendiente ("subir el
+umbral repartiria mejor los dos conceptos, a costa de otra corrida
+completa") y el resultado quedo sin commitear cuando esa sesion se cerro.
+Se verifico que las 197 entradas pasan la validacion real contra el
+solucionador (`tests/content/problem-bank.test.ts`, ya corrido como parte
+de la bateria completa) antes de preguntarle al usuario -- no se iba a
+proponer conservar un archivo sin confirmar que es valido. El usuario pidio
+conservarlo y commitearlo tal cual esta en disco.
+
+### Perfil: que significa el porcentaje y el numero entre parentesis
+
+El usuario no entendia "Areas mas debiles" (`ProfileScreen.tsx`): un renglon
+tipo "CONCEPTO -- 45% correcto (5 de 11)" sugiere que 5/11 deberia dar 45%,
+pero casi nunca coincide exactamente. Causa real, leyendo `learning/profile.ts`:
+el porcentaje NO es un simple acierto/total -- es
+`0.6 * precisionEnEjercicios + 0.4 * (100 - tasaDeErrorEnPartidas*factor)`
+cuando hay evidencia de ambos contextos (o solo una de las dos partes si
+falta la otra). El numero entre parentesis, en cambio, es un conteo crudo
+combinado (aciertos y intentos totales sumando ejercicios + partidas), sin
+ninguna ponderacion. Son dos medidas distintas a proposito (documento de
+diseno, seccion 5.5), pero mostradas una al lado de la otra sin explicar
+que difieren -- el mismo tipo de confusion honesta que "676 problemas" en
+Ejercicios (sesion anterior), no un bug.
+
+Arreglo: (1) el texto ya no dice "% correcto" (afirmacion falsa de lo que
+en realidad se calcula) sino "% de dominio"; (2) nueva linea de una
+oracion debajo del titulo de la seccion (`profile.weakest.caption`)
+explicando en lenguaje simple que el porcentaje mezcla ejercicios y
+partidas reales, y que el numero entre parentesis es solo cuanta evidencia
+hay acumulada, no el calculo del porcentaje. Paridad ES/EN mantenida.
+
+### Verificacion
+
+`npx tsc -b`, `npx vitest run` (2802 tests, 40 archivos, todos pasan),
+`npx oxlint` (mismos warnings preexistentes de siempre, ninguno nuevo).
+Paridad de claves i18n ES/EN confirmada con un script (720 claves cada uno,
++1 por `profile.weakest.caption`). No se corrio ningun servidor de
+desarrollo mas alla del temporal para la verificacion de KataGo (ya
+apagado). No se hizo commit ni push -- no se pidio
+esta vez.
+
+
 
 Pregunta reflexiva del usuario ("¿alguien puede aprender Go de verdad con
 esta app?") derivo en tres pedidos propios, en orden de prioridad: (1)

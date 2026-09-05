@@ -116,6 +116,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
   const [currentIndex, setCurrentIndex] = useState(0)
   const [solvedCount, setSolvedCount] = useState(0)
   const [planExpanded, setPlanExpanded] = useState(false)
+  const [reopenExpanded, setReopenExpanded] = useState(false)
 
   const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
   useEffect(() => {
@@ -290,19 +291,55 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
           </button>
         )}
 
-        {reopenedLessons.map(({ lesson, conceptId }) => (
-          <section key={lesson.id} className="today-reopen-card">
+        {reopenedLessons.length === 1 && (
+          <section className="today-reopen-card">
             <p className="today-reopen-detail">
               {t('today.reopen.detail', {
-                concept: t(`concept.${conceptId}.label` as TranslationKey),
-                lesson: t(lesson.titleKey),
+                concept: t(`concept.${reopenedLessons[0].conceptId}.label` as TranslationKey),
+                lesson: t(reopenedLessons[0].lesson.titleKey),
               })}
             </p>
-            <button type="button" onClick={() => onNavigateToLearn(lesson.id)}>
+            <button
+              type="button"
+              className="today-reopen-cta"
+              onClick={() => onNavigateToLearn(reopenedLessons[0].lesson.id)}
+            >
               {t('today.reopen.cta')}
             </button>
           </section>
-        ))}
+        )}
+
+        {reopenedLessons.length > 1 && (
+          <section className="today-reopen-card">
+            <button
+              type="button"
+              className="today-reopen-toggle"
+              aria-expanded={reopenExpanded}
+              onClick={() => setReopenExpanded((v) => !v)}
+            >
+              {reopenExpanded
+                ? t('today.reopen.collapse')
+                : t('today.reopen.summary', { count: reopenedLessons.length })}
+            </button>
+            {reopenExpanded && (
+              <ul className="today-reopen-list">
+                {reopenedLessons.map(({ lesson, conceptId }) => (
+                  <li key={lesson.id}>
+                    <span className="today-reopen-lesson">
+                      <span className="today-reopen-lesson-title">{t(lesson.titleKey)}</span>
+                      <span className="today-reopen-lesson-concept">
+                        {t(`concept.${conceptId}.label` as TranslationKey)}
+                      </span>
+                    </span>
+                    <button type="button" onClick={() => onNavigateToLearn(lesson.id)}>
+                      {t('today.reopen.cta')}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
 
         {topInsight && (
           <section className="today-insight-card">

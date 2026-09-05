@@ -22,6 +22,19 @@ import { solveLadder } from '../solver/ladder'
  * boton), asi que esos canales colapsan a una constante fija en vez de a
  * logica condicional -- no es un feature faltante, es un feature que nunca
  * varia en esta app. Documentado canal por canal abajo.
+ *
+ * Verificado empiricamente (no solo por lectura de fuente) contra una
+ * instalacion real de KataGo v1.18.1 (backend eigenavx2, misma red exacta
+ * `g170-b10c128-s1141046784-d204142634` que usa esta app) via
+ * `katago.exe kata-raw-nn`, sin busqueda -- mismo tipo de comparacion
+ * (una sola pasada de la red, sin MCTS) que evaluatePosition en model.ts.
+ * 3 posiciones (tablero vacio, apertura con historial real, escalera real
+ * cerca de una esquina), acuerdo a 4-6 cifras significativas en
+ * policy/value/ownership. Cubre las secciones de piedras/libertades,
+ * historial de jugadas, escaleras y reglas/komi; NO se probo
+ * especificamente superko real ni territorio pass-alive asentado (canales
+ * 6, 18-19) con una posicion dedicada. Ver NOTAS.md, sesion 2026-09-05,
+ * para el detalle completo y el script de verificacion usado.
  */
 
 const NN_LEN = 19

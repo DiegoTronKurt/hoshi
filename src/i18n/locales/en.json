@@ -129,7 +129,7 @@
   "review.aiSuggestedMove": "Blue ring: the AI's suggested move instead.",
   "review.aiWinProbability": "Win probability ({{color}}): {{percent}}%",
   "review.aiAgreesWithMove": "The AI's top pick matches the move that was played.",
-  "review.aiDisclaimer": "AI opinion, not a verified fact — the network's evaluation hasn't been checked against real KataGo.",
+  "review.aiDisclaimer": "AI opinion, not a verified fact — its encoding was checked against a real KataGo installation, but the evaluation itself is still an opinion, not an objective truth.",
 
   "today.title": "Today",
   "today.streak.days": "{{n}}-day streak",
@@ -149,6 +149,8 @@
   "today.exercisePreview.start": "Practice",
   "today.reopen.detail": "You've repeated the {{concept}} mistake in several of your recent games. It's worth revisiting \"{{lesson}}\" again.",
   "today.reopen.cta": "Revisit lesson",
+  "today.reopen.summary": "Lessons to revisit ({{count}})",
+  "today.reopen.collapse": "Hide lessons to revisit",
   "today.reason.overdue": "Review",
   "today.reason.weak": "Weak area",
   "today.reason.new": "New",
@@ -161,7 +163,8 @@
 
   "profile.title": "Profile",
   "profile.weakest": "Weakest areas",
-  "profile.weakest.item": "{{concept}} — {{percent}}% correct ({{correct}} of {{total}})",
+  "profile.weakest.caption": "The percentage is a mastery score (it blends exercises and real games, not a simple correct/total); the number in parentheses is how many attempts are on record in total, so you can tell whether the percentage is reliable yet.",
+  "profile.weakest.item": "{{concept}} — {{percent}}% mastery ({{correct}} of {{total}} attempts correct)",
   "profile.noData": "No data yet",
   "profile.level": "Level {{n}}",
   "profile.settings": "Settings",

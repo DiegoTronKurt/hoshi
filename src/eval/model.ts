@@ -19,10 +19,15 @@ export interface RawEvalOutput {
    * legalPolicyDistribution). */
   policy: Float32Array
   /** [P(gana quien pidio la evaluacion), P(pierde), P(sin resultado)],
-   * softmax ya aplicado. Orden asumido de la cabeza de valor de KataGo
-   * (win/loss/noResult); no hay forma de verificarlo de forma
-   * independiente sin una instalacion real de KataGo para comparar, asi
-   * que la sanidad se corrobora indirectamente en
+   * softmax ya aplicado. Orden de la cabeza de valor de KataGo
+   * (win/loss/noResult) confirmado dos veces: (1) por el propio paper de
+   * KataGo (Wu 2020, apendice A.5, ver NOTAS-libro-katago-accelerating-selfplay.md)
+   * y (2) empiricamente -- todo el pipeline de encodeInput+evaluatePosition
+   * comparado contra una instalacion real de KataGo (mismos pesos exactos,
+   * `katago.exe kata-raw-nn`, sin busqueda) en 3 posiciones (tablero vacio,
+   * una apertura con historial real, una escalera real), acuerdo a 4-6
+   * cifras significativas en value/policy/ownership -- ver NOTAS.md, sesion
+   * 2026-09-05. La sanidad tambien se corrobora indirectamente en
    * tests/eval/model.test.ts con una posicion obviamente ganada. */
   value: [number, number, number]
   /** Ownership por punto de la grilla 19x19 (aplanado y*19+x), en [-1,1]

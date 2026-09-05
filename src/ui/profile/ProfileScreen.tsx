@@ -81,6 +81,7 @@ export function ProfileScreen() {
       {weakest.length > 0 && (
         <section className="profile-weakest">
           <h3>{t('profile.weakest')}</h3>
+          <p className="profile-weakest-caption">{t('profile.weakest.caption')}</p>
           <ul>
             {weakest.map((p) => (
               <li key={p.conceptId}>

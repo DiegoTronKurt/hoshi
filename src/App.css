@@ -527,34 +527,6 @@
   margin-left: auto;
 }
 
-.review-mistakes-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.review-mistakes-list button {
-  width: 100%;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--hoshi-border);
-  background: var(--hoshi-surface);
-  color: var(--hoshi-text);
-  cursor: pointer;
-}
-
-.review-mistakes-list button.active {
-  border-color: var(--hoshi-accent);
-}
-
 .review-mistake-move {
   font-size: 0.8rem;
   color: var(--hoshi-text-muted);
@@ -687,12 +659,33 @@
 
 .review-secondary-mistakes {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .review-secondary-mistakes h3 {
   font-size: 0.85rem;
   color: var(--hoshi-text-faint);
-  margin: 0 0 0.4rem;
+  margin: 0;
+}
+
+.review-secondary-mistake-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+}
+
+.review-secondary-mistake-header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .today {
@@ -996,6 +989,80 @@
 .today-reopen-detail {
   margin: 0;
   font-size: 0.85rem;
+}
+
+.today-reopen-cta {
+  align-self: flex-start;
+  min-height: 40px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.today-reopen-toggle {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--hoshi-text);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.today-reopen-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.today-reopen-list li {
+  border: 1px solid var(--hoshi-border);
+  border-radius: 12px;
+  padding: 0.6rem 0.8rem;
+  background: var(--hoshi-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.today-reopen-lesson {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+}
+
+.today-reopen-lesson-title {
+  font-weight: 600;
+}
+
+.today-reopen-lesson-concept {
+  font-size: 0.75rem;
+  color: var(--hoshi-text-muted);
+}
+
+.today-reopen-list button {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
 .today-insight-card {
@@ -1488,6 +1555,12 @@
 .profile h3 {
   font-size: 0.95rem;
   margin: 0 0 0.5rem;
+}
+
+.profile-weakest-caption {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
 }
 
 .profile-weakest ul {
