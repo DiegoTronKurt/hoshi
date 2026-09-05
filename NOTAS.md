@@ -1,5 +1,162 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-05, cont. 17: handicap y pistas en Jugar, autorango en Perfil, costo en puntos de errores en Revisar, demo de bienvenida en n0-l1)
+
+Pregunta abierta del usuario en otra conversacion, tras la sesion cont.16:
+"que otra cosa mejoraria la app". De varias ideas propuestas y ya
+comentadas ahi, el usuario aprobo 5 juntas para esta sesion, con dos
+condiciones explicitas: handicap y pista deben ser opcionales, elegidas en
+Configurar partida antes de arrancar; la pista tiene un tope de 5 usos por
+partida. Dado el tamano (5 features, varias tocando el motor real: komi,
+ciclo de vida de EvalClient, deteccion de errores), esta sesion se planifico
+formalmente antes de tocar codigo: 3 agentes Explore en paralelo (uno por
+area: Jugar/motor/eval, Revisar/scoring/solver, Perfil/onboarding/nav) mas 1
+agente Plan, seguido de verificacion directa de los archivos de mas riesgo
+antes de fijar el plan -- mismo criterio que cont.16 con el bot guiado por
+red.
+
+### 1. Handicap (2-9 piedras) y pista de red, opcionales en Configurar partida
+
+`PlayConfig` suma `handicapStones?: number[]` (puntos resueltos, campo
+distinto de `initialStones` que sigue siendo solo para la partida de
+comprobacion de una leccion) y `hintsEnabled: boolean`. Nuevo
+`ui/board/handicapPoints.ts::getHandicapPoints(width, height, count)`: tabla
+real de handicap (no la misma que `getHoshiPoints`, que es solo para dibujar
+puntos y no sirve para elegir subconjuntos por cantidad) -- 9x9/13x13 llegan
+hasta 5 piedras (sus unicos 5 puntos hoshi reales), 19x19 llega al rango
+completo 2-9 (sus 9 puntos hoshi reales); el tengen solo se suma en 5/7/9,
+nunca en 6/8, siguiendo la convencion real de Go. Decision del usuario:
+inventar puntos 6-9 en los tableros chicos quedaba descartado por no tener
+respaldo en ninguna convencion real.
+
+`PlayConfigScreen.tsx`: nuevo grupo de tarjetas "Handicap" (solo visible en
+los tamanos con tabla real), que fuerza `humanColor = BLACK` y esconde el
+selector de color cuando hay handicap contra el bot (en partida local no
+aplica un solo "color humano"); nuevo grupo "Pistas en partida" (Apagadas/
+Prendidas), disponible en cualquier modo y fuerza, no solo contra el bot --
+es una ayuda de aprendizaje, no algo atado a la dificultad del bot.
+
+`PlayGameScreen.tsx`: komi pasa a ser `0.5` (antes `6.5`) cuando hay piedras
+de handicap -- variable derivada, no un campo nuevo en `PlayConfig`. El
+tablero inicial se arma con las piedras de handicap puestas y Blanco
+moviendo primero, antes de mirar `initialStones`. La pista NO reusa
+`evalRef` (el cliente de red del bot, que solo existe si
+`mode==='bot' && netInfluence>0` -- nunca en partida local ni en fuerza
+`weak`): tiene su propio `hintEvalRef`, creado recien al primer clic (no de
+arranque), para no pagar la carga del modelo (~11.5MB) en partidas donde
+nunca se pide una pista. Reusa el mismo mecanismo ya verificado de Revisar
+(`ReviewMistakeBoard.askAi`): `evaluate` -> `listLegalMoves` ->
+`legalPolicyDistribution` -> jugada de mayor probabilidad, mostrada con
+`hintMove` en `BoardCanvas` (sin cambios en ese componente, un solo punto
+alcanza). Timeout: el default de 20s de `EvalClient`, no
+`EVAL_TIMEOUT_IN_GAME_MS` (5s), que es a proposito corto solo para el paso
+invisible antes de la jugada del bot -- la pista es un clic manual y
+tolerante. `MAX_HINTS_PER_GAME = 5`, contador que nunca se resta con undo
+(una pista gastada queda gastada, para no poder esquivar el tope
+deshaciendo).
+
+### 2. Autorango en Perfil
+
+Nuevo `learning/selfRank.ts::computeSelfRankKyu(profiles, games)`: combina
+un kyu por dominio (promedio de los ejes del radar, interpolado linealmente
+sobre la misma escala 10-25 de `strengthLevels.ts`) con un kyu por tasa de
+victoria real contra el bot (reusa `computeAdaptiveStrength`, la misma
+funcion que ya usa Configurar partida para la dificultad adaptativa -- una
+sola fuente de verdad, no dos calculos de tasa de victoria por separado).
+Promedia ambos si los dos estan disponibles (`confidence: 'blended'`), usa
+el que haya si falta el otro (`'low'`), o no muestra numero si no hay
+ninguno (`'none'`). Mismo aviso de "estimado, no calibrado" que ya lleva
+`approxKyu`. Nota de precedente (sin bloquear nada, el usuario ya aprobo
+esto en esta misma sesion): una metrica derivada parecida (`firstWin`/
+`firstOpen`, tiempo hasta la primera victoria) se habia construido y
+borrado por completo a pedido explicito en una sesion anterior -- esta es
+distinta en contenido (dominio de conceptos + kyu, no tiempo hasta ganar),
+se deja anotado solo para que quede claro que no fue un descuido.
+
+### 3. Costo en puntos del error en Revisar -- real cuando se puede, honesto cuando no
+
+El usuario corrigio el enfoque inicial: Revisar analiza una partida ya
+terminada, con el historial completo disponible -- no hace falta adivinar
+con un solo ply cuando el dato real ya esta ahi. Quedaron dos mecanismos
+segun el concepto:
+
+- **Costo real** (`solver/areaValue.ts::realizedAreaCost`, antes/despues de
+  una captura REAL que ya ocurrio en la partida grabada, mismo mecanismo de
+  `computeAreaScore` que ya usaba `detectPasePrematuro`, aplicado a dos
+  estados reales en vez de uno candidato): `ATARI_IGNORADO` (busca el
+  indice real de la captura futura con el nuevo `findCaptureMoveIndex`),
+  `AUTOATARI` (solo si el grupo autoatari termino realmente capturado --
+  si sobrevive, sin pointCost, no "0", para no afirmar un dano que no
+  paso), `GRUPO_MURIO_SIN_OJOS` (el indice de captura ya es el mismo que
+  usa el detector).
+- **Costo potencial** (`solver/areaValue.ts::estimateMoveCost`, un solo ply
+  contra la mejor alternativa disponible en esa posicion, cuando nunca hubo
+  una captura real que medir): `PASE_PREMATURO` y `CAPTURA_PERDIDA` (ya
+  tenian el delta calculado internamente, solo hubo que exponerlo),
+  `RELLENO_OJO_PROPIO`, `RELLENO_TERRITORIO_PROPIO`, `TRIANGULO_VACIO`,
+  `PRIMERA_LINEA_TEMPRANA`.
+- **Sin numero, a proposito** (`concepts.ts::Concept.costKind` ausente):
+  `CORTE_NO_DEFENDIDO` (reconectar dos cadenas no cambia el area bajo
+  reglas chinas, el dano real si existe ya aparece con su propio costo en
+  otro concepto) y `ESCALERA_FALLIDA` (consecuencia difusa, sin una
+  captura unica atribuible). Documentado en un comentario junto a cada
+  detector para que no se lea como un olvido.
+
+`ConceptOccurrence` suma `pointCost?: number`; `ReviewScreen.tsx` agrega una
+linea de margen ("X gano por Y") siempre que se abre una partida, y una
+linea de costo por error con una de dos redacciones segun `costKind`
+("termino costando" vs. "hubiera valido"), con un solo aviso compartido de
+que es una estimacion del conteo de area propio, no un recuento certificado.
+
+### 4. Demo de bienvenida antes de n0-l1
+
+Nuevo `ui/lessons/IntroDemo.tsx`: posicion 7x7 ya asentada a proposito (muro
+de Negro pegado a un muro de Blanco, sin ningun punto vacio entre ambos
+colores, asi que cada region vacia toca solo un color -- Negro 35 puntos,
+Blanco 14, sin ambiguedad de dame), territorio calculado con
+`computeAreaOwnership` (mas seguro que escribirlo a mano: garantiza
+consistencia con las piedras). Reusa `BoardCanvas` sin interaccion (mismo
+patron ya usado en `LearnScreen`/`LessonScreen` para previews) y su
+animacion de revelado de 450ms ya existente, con un pequeno respiro de
+300ms antes de calcular el territorio para que la animacion realmente se
+vea. Boton "Continuar" visible desde el arranque mas auto-avance de 12s de
+respaldo, para no ser una pantalla muerta ni aburrir a quien solo quiere
+jugar. Gatillado en `LearnScreen.tsx` con `!isLessonRead('n0-l1')` --
+deliberadamente SIN un flag nuevo de "primer uso" a nivel app: uno asi
+(`learning/firstOpen.ts`) se habia borrado por completo a pedido del
+usuario para la funcionalidad ahora eliminada de tiempo-hasta-primera-
+victoria, y `isLessonRead` (ya existente, marcada por `LessonScreen` al
+montarse) alcanza sola sin resucitar nada de eso.
+
+### Verificacion
+
+`npx tsc -b` limpio, `npx vitest run` (2838 tests, 43 archivos, todos
+pasan -- 30 nuevos: 7 en `handicapPoints.test.ts`, 7 en `selfRank.test.ts`,
+4 en `areaValue.test.ts`, 12 en `mistakes.test.ts`), `npx oxlint` (2 avisos
+nuevos, ambos `set-state-in-effect` en los efectos de reset de
+`PlayConfigScreen.tsx` -- mismo tipo de aviso ya preexistente en mas de 10
+lugares del proyecto, patron ya aceptado, no una categoria nueva de
+problema). Verificacion real en Chromium via Playwright (script
+descartable, borrado al terminar): partida contra el bot en 9x9 con
+handicap de 4 piedras arranca con Blanco a mover (confirma piedras y turno),
+selector de color desaparece, boton de pista aparece y baja de "5 quedan" a
+"4 quedan" tras un clic; partida local con pistas activas prueba el camino
+perezoso de `hintEvalRef` por separado del bot; partida terminada por doble
+pase muestra en Revisar la linea de margen y una linea de costo en puntos;
+Perfil muestra el autorango; Aprender muestra la demo de bienvenida la
+primera vez que se abre n0-l1 y no la repite en una segunda visita. Cero
+errores de consola en todo el recorrido.
+
+### Commit, push y AAB de release
+
+`hoshi`: commit `75ac038` ("Handicap y pistas en Jugar, autorango en
+Perfil, costo en puntos de errores en Revisar, demo de bienvenida en
+n0-l1"), pusheado a `master` (`9166ef2..75ac038`). `hoshi-flutter`: `npm run
+build` + `sync-webapp.ps1`, version subida a `1.17.0+22`, commit `15a3bdc`,
+pusheado (`0216f6a..15a3bdc`). AAB firmado regenerado: `app-release.aab`
+(54.0MB) en `hoshi-flutter/build/app/outputs/bundle/release/`. Subir a Play
+Console sigue siendo un paso del usuario.
+
 ## Estado general del proyecto (2026-09-05, cont. 16: el bot real se guia por la red de KataGo en la raiz, una vez por jugada -- bloqueo de latencia por fin medido)
 
 Pregunta abierta del usuario: "que otra cosa mejoraria la app para aprender
