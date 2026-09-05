@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
+import { goBack } from '../../navigation/backNav'
+import { reportLocalBack } from '../../navigation/localBack'
 import { ExercisesConceptScreen } from './ExercisesConceptScreen'
 import { ExercisePracticeScreen } from './ExercisePracticeScreen'
 
@@ -31,11 +33,21 @@ export function ExercisesScreen({ initialConcept, onActiveChange }: ExercisesScr
     return () => onActiveChange(false)
   }, [view.kind, onActiveChange])
 
+  // Boton fisico "atras" de Android: un nivel local (practica -> concepto)
+  // antes de que la pantalla de arriba (App.tsx) considere salir de la
+  // pestana -- ver navigation/localBack.ts.
+  useEffect(() => {
+    reportLocalBack(() => {
+      if (view.kind !== 'practice') return false
+      setView({ kind: 'concept' })
+      return true
+    }, view.kind === 'practice' ? 1 : 0)
+    return () => reportLocalBack(null, 0)
+  }, [view])
+
   if (view.kind === 'concept') {
     return <ExercisesConceptScreen onPickConcept={(id) => setView({ kind: 'practice', conceptFilter: id })} />
   }
 
-  return (
-    <ExercisePracticeScreen conceptFilter={view.conceptFilter} onBackToConcepts={() => setView({ kind: 'concept' })} />
-  )
+  return <ExercisePracticeScreen conceptFilter={view.conceptFilter} onBackToConcepts={goBack} />
 }

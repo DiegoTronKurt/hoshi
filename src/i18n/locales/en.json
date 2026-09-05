@@ -88,6 +88,8 @@
   "exercises.toMove": "To move",
   "exercises.objective.live": "Live",
   "exercises.objective.kill": "Kill",
+  "exercises.objective.behindGroup": "Click the group that's behind in the race",
+  "exercises.objective.sharedLiberty": "Click a shared liberty",
   "exercises.correct": "Correct, that solves it.",
   "exercises.incorrect": "That does not solve it, try again.",
   "exercises.giveUp": "Show solution",
@@ -107,6 +109,7 @@
   "exercises.exitConfirm.confirm": "Leave exercise",
   "exercises.exitConfirm.cancel": "Keep practicing",
   "exercises.problemCount": "{{n}} problems",
+  "exercises.allProblemCount": "{{n}} problems in {{categories}} categories",
   "exercises.backToConcepts": "Back to concepts",
 
   "review.title": "Review",

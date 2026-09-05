@@ -88,6 +88,8 @@
   "exercises.toMove": "Le toca a",
   "exercises.objective.live": "Vivir",
   "exercises.objective.kill": "Matar",
+  "exercises.objective.behindGroup": "Toca el grupo que va perdiendo la carrera",
+  "exercises.objective.sharedLiberty": "Toca una libertad compartida",
   "exercises.correct": "Correcto, eso lo resuelve.",
   "exercises.incorrect": "Eso no lo resuelve, intenta de nuevo.",
   "exercises.giveUp": "Mostrar solución",
@@ -107,6 +109,7 @@
   "exercises.exitConfirm.confirm": "Salir del ejercicio",
   "exercises.exitConfirm.cancel": "Seguir practicando",
   "exercises.problemCount": "{{n}} problemas",
+  "exercises.allProblemCount": "{{n}} problemas en {{categories}} categorías",
   "exercises.backToConcepts": "Volver a conceptos",
 
   "review.title": "Revisar",

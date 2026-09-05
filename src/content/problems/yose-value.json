@@ -1,0 +1,320 @@
+[
+  {
+    "id": "yoseValue1",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][da][ga][ha][bb][cb][db][hb][bc][cc][ec][gc][ad][dd][fd][gd][hd][id][de][ee][af][ag][dg][ah][bh][ch][dh][eh][gh][bi][ci][ei][gi]AW[ea][fa][eb][fb][gb][ic][cd][ae][be][ce][fe][ge][he][ie][bf][df][ef][ff][hf][cg][eg][fg][gg][ig][ih][fi][hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue2",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][da][ga][ha][bb][cb][db][hb][bc][cc][ec][gc][ad][dd][fd][gd][hd][id][de][ee][af][ag][dg][hg][ah][bh][ch][dh][eh][gh][bi][ci][ei][gi]AW[ea][fa][eb][fb][gb][ic][cd][ae][be][ce][fe][ge][he][ie][bf][df][ef][ff][hf][cg][eg][fg][gg][ig][ih][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue3",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][da][ga][ha][bb][cb][db][hb][ib][bc][cc][ec][gc][ad][dd][fd][gd][hd][id][de][ee][af][ag][dg][ah][bh][ch][dh][eh][gh][bi][ci][ei][gi]AW[ea][fa][eb][fb][gb][ic][cd][ae][be][ce][fe][ge][he][ie][bf][df][ef][ff][hf][cg][eg][fg][gg][ig][hh][ih][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue4",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][da][ga][ha][bb][cb][db][hb][ib][bc][cc][ec][gc][hc][ad][dd][fd][gd][hd][id][de][ee][af][ag][dg][ah][bh][ch][dh][eh][bi][ci][ei]AW[ea][fa][eb][fb][gb][cd][ae][be][ce][fe][ge][he][ie][bf][df][ef][ff][hf][cg][eg][fg][gg][ig][fh][hh][ih][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue5",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][da][ga][ha][bb][cb][db][hb][ib][bc][cc][ec][gc][hc][ad][dd][fd][gd][hd][id][de][ee][af][ag][dg][ah][bh][ch][dh][eh][bi][ci][ei][gi]AW[ea][fa][eb][fb][gb][cd][ae][be][ce][fe][ge][he][ie][bf][df][ef][ff][hf][cg][eg][fg][gg][ig][fh][hh][ih][fi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue6",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[da][ea][fa][ga][ia][ab][eb][fb][gb][ac][cc][dc][ec][fc][gc][ic][cd][dd][ed][hd][id][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][cb][db][bc][ad][bd][ae][be][ce][ge])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue7",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[da][ea][fa][ga][ia][ab][eb][fb][gb][ac][cc][dc][ec][fc][gc][ic][cd][dd][ed][gd][hd][id][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][cb][db][bc][ad][bd][ae][be][ce])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue8",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[da][ea][fa][ga][ia][ab][eb][fb][gb][hb][ac][cc][dc][ec][fc][gc][ic][cd][dd][ed][gd][hd][id][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][cb][db][bc][ad][bd][ae][be][ce])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue9",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[da][ea][fa][ga][ia][eb][fb][gb][hb][cc][dc][ec][fc][gc][ic][cd][dd][ed][gd][hd][id][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][ab][bb][cb][db][bc][ad][bd][ae][be][ce])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue10",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[da][ea][fa][ga][ia][eb][fb][gb][hb][cc][dc][ec][fc][gc][ic][cd][dd][ed][fd][gd][hd][id][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][ab][bb][cb][db][bc][ad][bd][ae][be][ce])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue11",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][ec][fc][gc][hc][ic][ad][bd][cd][dd][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][gf][ag][bg][cg][eg][fg][gg][ah][bh][ch][dh][eh][ai][bi][ci][di][ei]AW[cc][if][hg][ig][fh][gh][hh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue12",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ba][da][ea][ab][bb][cb][db][dc][ec][fc][dd][fd][gd][ae][ee][ge][he][af][bf][ef][ff][gf][hf][if][ag][cg][eg][ig][bh][ch][dh][hh][ih][ci][di][ei][fi][gi]AW[fa][ga][eb][fb][gb][hb][ib][ac][bc][cc][gc][hc][ic][bd][cd][id][be][ce][de][ie][df][dg][fg][gg][hg][ah][fh][gh][ai])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue13",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ba][da][ea][ab][bb][cb][db][dc][ec][fc][dd][fd][gd][ae][ee][ge][he][af][bf][ef][ff][gf][hf][if][ag][cg][eg][ig][bh][ch][dh][hh][ih][ci][di][ei][fi][gi][hi]AW[fa][ga][eb][fb][gb][hb][ib][ac][bc][cc][gc][hc][ic][bd][cd][id][be][ce][de][ie][cf][df][dg][fg][gg][hg][ah][fh][gh][ai])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue14",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ba][da][ea][ab][bb][cb][db][dc][ec][fc][dd][fd][gd][ae][ee][ge][he][af][bf][ef][ff][gf][hf][if][ag][cg][eg][ig][bh][ch][dh][hh][ih][bi][ci][di][ei][fi][gi][hi]AW[fa][ga][ha][eb][fb][gb][hb][ib][ac][bc][cc][gc][hc][ic][bd][cd][id][be][ce][de][ie][cf][df][dg][fg][gg][hg][fh][gh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue15",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ba][da][ea][ab][bb][cb][db][dc][ec][fc][dd][fd][gd][ae][ee][ge][he][af][bf][ef][ff][gf][hf][if][ag][cg][eg][ig][bh][ch][dh][hh][ih][bi][ci][di][ei][fi][gi][hi]AW[fa][ga][ha][ia][eb][fb][gb][hb][ib][ac][bc][cc][gc][hc][ic][bd][cd][id][be][ce][de][ie][cf][df][dg][fg][gg][hg][fh][gh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue16",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ba][da][ea][ab][bb][cb][db][dc][ec][fc][dd][fd][gd][ae][ee][ge][he][af][bf][ef][ff][gf][hf][if][ag][cg][eg][ig][bh][ch][dh][hh][ih][bi][ci][di][ei][fi][gi][hi]AW[fa][ga][ha][ia][eb][fb][gb][hb][ib][ac][bc][cc][gc][hc][ic][bd][cd][id][be][ce][de][ie][cf][df][dg][fg][gg][hg][ah][fh][gh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue17",
+    "conceptId": "COMPARAR_VALOR_REAL",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[COMPARAR_VALOR_REAL]PL[W]AB[ba][ca][da][ha][ab][bc][bd][ie][ef][dg][eg][fg][ig][fh]AW[ea][fa][ga][bb][cb][db][eb][hb][ib][ac][cc][dc][ec][gc][hc][ic][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][fe][af][bf][df][ff][gf][hf][ag][bg][cg][gg][ah][ch][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue18",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[ba][ca][da][ha][ab][bc][fc][bd][ie][ef][dg][eg][fg][ig][fh]AW[ea][fa][ga][bb][cb][db][eb][hb][ib][ac][cc][dc][ec][gc][hc][ic][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][fe][af][bf][df][ff][gf][hf][ag][bg][cg][gg][ah][ch][eh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue19",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[ba][ca][da][ha][ab][bc][fc][bd][ie][ef][if][dg][eg][fg][ig][fh]AW[ea][fa][ga][bb][cb][db][eb][hb][ib][ac][cc][dc][ec][gc][hc][ic][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][fe][af][bf][cf][df][ff][gf][hf][ag][bg][cg][gg][ah][ch][eh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue20",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[ba][ca][da][ha][ab][gb][bc][fc][bd][ie][ef][if][dg][eg][fg][ig][fh]AW[ea][fa][ga][bb][cb][db][eb][hb][ib][ac][cc][dc][ec][gc][hc][ic][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][fe][ge][af][bf][cf][df][ff][gf][hf][ag][bg][cg][gg][ah][ch][eh][gh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue21",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][db][fb][ac][cc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][af][bf][df][ef][cg][dg][eg][fg][ah][ch][dh][eh][fh][gh][ai][bi][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue22",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][db][eb][fb][ac][cc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][af][bf][df][ef][bg][cg][dg][eg][fg][ah][ch][dh][eh][fh][gh][ai][bi][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue23",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][db][eb][fb][ac][cc][dc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][af][bf][df][ef][bg][cg][dg][eg][fg][ah][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue24",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][db][eb][fb][ac][bc][cc][dc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][af][bf][df][ef][bg][cg][dg][eg][fg][ah][bh][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue25",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][be][af][bf][df][ef][bg][cg][dg][eg][fg][ah][bh][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue26",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][ad][bd][cd][dd][ed][fd][gd][id][ae][ce][de][ee][fe][ge][he][ie][cf][ff][gf][hf][gg][ig][hh][ih][hi][ii]AW[fa][ga][ia][gb][hb][ib][gc][hc][ic][hd][be][af][bf][df][ef][bg][cg][dg][eg][fg][ah][bh][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue27",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][fa][cb][eb][gb][hb][ac][dc][gc][hc][bd][cd][dd][ed][gd][ae][be][ce][de][df][if][bg][fg][gg][hg][ig][eh][fh][gh]AW[ha][ia][ab][bb][fb][ib][bc][ec][fc][ic][fd][hd][ee][fe][ge][he][ie][af][bf][cf][ef][gf][ag][cg][dg][eg][ah][ch][dh][hh][ih][bi][ci][di][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue28",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][fa][cb][eb][gb][hb][ac][dc][gc][hc][bd][cd][dd][ed][gd][ae][be][ce][de][df][if][bg][fg][gg][hg][ig][eh][fh][gh]AW[ha][ia][ab][bb][fb][ib][bc][ec][fc][ic][fd][hd][ee][fe][ge][he][ie][af][bf][cf][ef][gf][ag][cg][dg][eg][ah][ch][dh][hh][ih][bi][ci][di][ei][fi][gi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue29",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][gg][ah][bh][ch][gh][hh][ih][ai][bi][ci][di][ei][ii]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue30",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[gb]AW[aa][ba][ca][ab][bb][eb][ac][bc][cc][dc][ec][gc][ad][bd][cd][dd][ed][fd][gd][hd][be][ce][ee][af][bf][df][hf][ag][bg][cg][hg][ah][bh][dh][eh][ai][bi][ci][di][ei][fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue31",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[gb][hb]AW[aa][ba][ca][fa][ab][bb][eb][ac][bc][cc][dc][ec][gc][ad][bd][cd][dd][ed][fd][gd][hd][be][ce][ee][af][bf][df][hf][ag][bg][cg][hg][ah][bh][dh][eh][ai][bi][ci][di][ei][fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue32",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[gb][hb][ii]AW[aa][ba][ca][fa][ab][bb][eb][ac][bc][cc][dc][ec][gc][ad][bd][cd][dd][ed][fd][gd][hd][be][ce][ee][he][af][bf][df][hf][ag][bg][cg][hg][ah][bh][dh][eh][ai][bi][ci][di][ei][fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue33",
+    "conceptId": "COMPARAR_VALOR_REAL",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[COMPARAR_VALOR_REAL]PL[B]AB[aa][ba][ca][da][ea][ga][ha][ia][bb][cb][db][eb][fb][hb][bc][cc][ec][fc][gc][hc][ic][cd][fd][gd][hd][id][ae][be][ce][de][ee][fe][ie][bf][cf][ef][gf][hf][if][gg][hg][ig][ih]AW[ac][dc][ad][bd][dd][ge][af][df][ff][ag][bg][cg][dg][eg][fg][ch][dh][fh][gh][hh][ai][bi][ci][di][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue34",
+    "conceptId": "COMPARAR_VALOR_REAL",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[COMPARAR_VALOR_REAL]PL[B]AB[aa][ba][ca][da][ea][ga][ha][ia][bb][cb][db][eb][fb][hb][ib][bc][cc][ec][fc][gc][hc][ic][cd][fd][gd][hd][id][ae][be][ce][de][ee][fe][ie][bf][cf][ef][gf][hf][if][gg][hg][ig][ih]AW[ac][dc][ad][bd][dd][ge][af][df][ff][ag][bg][cg][dg][eg][fg][ch][dh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue35",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][ga][ha][ia][ab][bb][cb][db][eb][fb][hb][ib][bc][cc][ec][fc][gc][hc][ic][ad][cd][fd][gd][hd][id][ae][be][ce][de][ee][fe][ie][bf][cf][ef][gf][hf][if][gg][hg][ig][ih]AW[dc][dd][ge][af][df][ff][ag][bg][cg][dg][eg][fg][ah][bh][ch][dh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue36",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][ga][ha][ia][ab][bb][cb][db][eb][fb][hb][ib][bc][cc][ec][fc][gc][hc][ic][ad][cd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ie][bf][cf][ef][gf][hf][if][gg][hg][ig][ih]AW[dd][ge][af][df][ff][ag][bg][cg][dg][eg][fg][ah][bh][ch][dh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue37",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][ga][ha][ia][ab][bb][cb][db][eb][fb][hb][ib][bc][cc][ec][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ie][bf][cf][ef][gf][hf][if][gg][hg][ig][ih]AW[dd][ge][af][df][ff][ag][bg][cg][dg][eg][fg][ah][bh][ch][dh][fh][gh][hh][ai][bi][ci][di][ei][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue38",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[ea][ga][fb][gb][hb][ib][bc][cc][dc][fc][hc][cd][dd][fd][gd][id][ee][he][ef][ff][gf][if][dg][eg][fg][gg][hg][ig][ch][dh][eh][gh][hh][ih][ci][di][ei][gi][hi][ii]AW[aa][ba][ca][da][ia][ab][bb][cb][db][eb][ac][ec][ed][be][ce][af][cf][df][ag][bg][cg][ah][bh][bi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue39",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[ea][ga][ic][ed][id][he][ie][hf][ag][dg][fg][hg][ig][ah][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][hi][ii]AW[aa][ba][ca][da][ha][bb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][fd][gd][hd][ae][be][ce][de][fe][ge][af][bf][cf][df][ef][ff][gf][bg][cg][eg][gg][bh][hh][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue40",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[ic][ed][id][he][ie][hf][ag][dg][fg][hg][ig][ah][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][hi][ii]AW[aa][ba][ca][da][fa][ha][bb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][fd][gd][hd][ae][be][ce][de][fe][ge][af][bf][cf][df][ef][ff][gf][bg][cg][eg][gg][bh][hh][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue41",
+    "conceptId": "COMPARAR_VALOR_REAL",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[COMPARAR_VALOR_REAL]PL[W]AB[hb][bc][gc][ed][gd][id][ee][df][ef][ff][cg][dg][eg][fg][ch][dh][fh][gh][hh][ih][bi][ci][di][ei][fi][gi][ii]AW[aa][ca][ea][ga][ha][ia][cb][db][eb][fb][ib][ac][dc][ec][fc][ic][ad][bd][dd][fd][hd][ae][ce][de][fe][ge][he][bf][gf][ag][bg][hg][ig][ah][bh][ai])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue42",
+    "conceptId": "COMPARAR_VALOR_REAL",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[COMPARAR_VALOR_REAL]PL[W]AB[hb][bc][cc][gc][ed][gd][id][ee][df][ef][ff][cg][dg][eg][fg][ch][dh][fh][gh][hh][ih][bi][ci][di][ei][fi][gi][ii]AW[aa][ca][ea][ga][ha][ia][cb][db][eb][fb][ib][ac][dc][ec][fc][ic][ad][bd][dd][fd][hd][ae][ce][de][fe][ge][he][bf][gf][ag][bg][gg][hg][ig][ah][bh][ai])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue43",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ca][ea][bb][cb][db][eb][fb][gb][ib][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][ce][de][ee][fe][ie][af][bf][cf][df][ef][bg][cg][ah][bh][ch][ai][bi][ci][di][ei]AW[ac][ad][gd][ge][he][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][dh][eh][fh][gh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue44",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][ea][bb][cb][db][eb][fb][gb][ib][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][ce][de][ee][fe][ie][af][bf][cf][df][ef][bg][cg][ah][bh][ch][ai][bi][ci][di][ei]AW[ac][ad][gd][ge][he][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][dh][eh][fh][gh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue45",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][ea][ga][bb][cb][db][eb][fb][gb][ib][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][ce][de][ee][fe][ie][af][bf][cf][df][ef][bg][cg][ah][bh][ch][ai][bi][ci][di][ei]AW[ia][ac][ad][gd][ge][he][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][dh][eh][fh][gh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue46",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][ea][fa][ga][bb][cb][db][eb][fb][gb][ib][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][ce][de][ee][fe][ie][af][bf][cf][df][ef][bg][cg][ah][bh][ch][ai][bi][ci][di][ei]AW[ia][ac][ad][gd][ge][he][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][dh][eh][fh][gh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue47",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[B]AB[aa][ba][ca][da][ea][fa][ga][bb][cb][db][eb][fb][gb][ib][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][ce][de][ee][fe][ie][af][bf][cf][df][ef][bg][cg][ah][bh][ch][ai][bi][ci][di][ei]AW[ia][hb][ac][ad][gd][ge][he][ff][gf][hf][if][dg][eg][fg][gg][hg][ig][dh][eh][fh][gh][ih][fi][gi][hi][ii])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue48",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ac][cc][ec][gc][gd][id][ae][ee][fe][ge][he][af][bf][ff][if][gg][hg][ig][hh][hi][ii]AW[ea][bb][fb][ib][dc][fc][ic][ad][bd][cd][dd][ed][fd][hd][be][ce][de][cf][df][ef][hf][bg][dg][eg][fg][ah][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue49",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ac][cc][ec][gc][gd][id][ae][ee][fe][ge][he][af][bf][ff][if][gg][hg][ig][hh][ih][hi][ii]AW[ea][bb][fb][ib][dc][fc][ic][ad][bd][cd][dd][ed][fd][hd][be][ce][de][cf][df][ef][hf][bg][dg][eg][fg][ah][bh][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue50",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ac][cc][ec][gc][hc][gd][id][ae][ee][fe][ge][he][af][bf][ff][if][gg][hg][ig][hh][ih][hi][ii]AW[ea][fa][bb][fb][dc][fc][ad][bd][cd][dd][ed][fd][be][ce][de][cf][df][ef][hf][bg][dg][eg][fg][ah][bh][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue51",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ib][ac][cc][ec][gc][hc][gd][id][ee][fe][ge][he][ff][if][gg][hg][ig][hh][ih][hi][ii]AW[ea][fa][bb][fb][dc][fc][ad][bd][cd][dd][ed][fd][be][ce][de][cf][df][ef][hf][ag][bg][dg][eg][fg][ah][bh][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue52",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ib][ac][cc][ec][gc][hc][gd][id][ee][fe][ge][he][ie][ff][if][gg][hg][ig][hh][ih][hi][ii]AW[ea][fa][bb][fb][dc][fc][ad][bd][cd][dd][ed][fd][be][ce][de][cf][df][ef][hf][ag][bg][dg][eg][fg][ah][bh][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "yoseValue53",
+    "conceptId": "EL_FINAL_TAMBIEN_ES_GRANDE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[EL_FINAL_TAMBIEN_ES_GRANDE]PL[W]AB[aa][ba][ca][da][ga][ha][ia][ab][cb][db][eb][gb][hb][ib][ac][cc][ec][gc][hc][gd][id][ee][fe][ge][he][ie][ff][if][gg][hg][ig][hh][ih][hi][ii]AW[ea][fa][bb][fb][dc][fc][ad][bd][cd][dd][ed][fd][ae][be][ce][de][cf][df][ef][hf][ag][bg][dg][eg][fg][ah][bh][ch][dh][eh][gh][ai][bi][ci][ei][fi][gi])",
+    "difficulty": "easy"
+  }
+]

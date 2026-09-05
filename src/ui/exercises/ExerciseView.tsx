@@ -27,6 +27,7 @@ function displayColor(loaded: LoadedProblem) {
   if (loaded.kind === 'tsumego') return loaded.problem.toMove
   if (loaded.kind === 'ladder') return loaded.problem.chaserColor
   if (loaded.kind === 'areaValue') return loaded.problem.toMove
+  if (loaded.kind === 'semeaiLiberty') return loaded.problem.toMove
   return loaded.problem.color
 }
 
@@ -64,6 +65,17 @@ export function ExerciseView({
           </>
         )}
         {loaded.kind === 'ladder' && <> · {t('exercises.objective.kill')}</>}
+        {loaded.kind === 'semeaiLiberty' && (
+          <>
+            {' '}
+            ·{' '}
+            {t(
+              loaded.problem.conceptId === 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO'
+                ? 'exercises.objective.sharedLiberty'
+                : 'exercises.objective.behindGroup',
+            )}
+          </>
+        )}
         {solutionMoves !== null && (
           <> · {solutionMoves === 1 ? t('exercises.solvesInOne') : t('exercises.solvesInMany', { count: solutionMoves })}</>
         )}

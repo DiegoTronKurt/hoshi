@@ -13,6 +13,7 @@ import { isGroupPassAlive } from '../../solver/tsumego'
 import { simulateLadder, solveLadder } from '../../solver/ladder'
 import { isDoubleAtariMove } from '../../solver/doubleAtari'
 import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isOwnTerritory } from '../../solver/areaValue'
+import { raceBehindColor, sharedLibertiesOf } from '../../solver/semeai'
 import { getSrsCard, listAttempts, recordAttempt, saveSrsCard } from '../../storage/db'
 import { findConceptsToReopenFromExercises } from '../../training-policy/session'
 import { reopenLesson } from '../lessons/readProgress'
@@ -48,6 +49,7 @@ function initialToMove(loaded: LoadedProblem): Color {
   if (loaded.kind === 'tsumego') return loaded.problem.toMove
   if (loaded.kind === 'ladder') return loaded.problem.chaserColor
   if (loaded.kind === 'areaValue') return loaded.problem.toMove
+  if (loaded.kind === 'semeaiLiberty') return loaded.problem.toMove
   return loaded.problem.color
 }
 
@@ -131,7 +133,7 @@ export function useSolvableExercise(
     setSolutionMoves(null)
     if (!loaded) return
 
-    if (loaded.kind === 'doubleAtari' || loaded.kind === 'areaValue') {
+    if (loaded.kind === 'doubleAtari' || loaded.kind === 'areaValue' || loaded.kind === 'semeaiLiberty') {
       setSolutionMoves(1)
       return
     }
@@ -366,10 +368,47 @@ export function useSolvableExercise(
         return
       }
 
+      // EL_FINAL_TAMBIEN_ES_GRANDE/COMPARAR_VALOR_REAL (nivel 9, yose) son
+      // mas estrictos que RELLENO_TERRITORIO_PROPIO/PASE_PREMATURO: ahi
+      // alcanza con cualquier punto que supere el umbral, aca la gracia es
+      // encontrar EL mejor, no cualquiera que sirva -- se recalcula en vivo,
+      // igual que el resto de este bloque, nunca contra una etiqueta guardada.
+      if (
+        (problem.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' || problem.conceptId === 'COMPARAR_VALOR_REAL') &&
+        bestAreaMove(game.board, problem.toMove)?.point !== point
+      ) {
+        wrongAttemptsRef.current += 1
+        setStatus('incorrect')
+        return
+      }
+
       const result = applyMove(game, point)
       if (!result.legal || !result.state) return
       playStoneSoundIfEnabled()
       setGame(result.state)
+      setLastMove(point)
+      setStatus('solved')
+      return
+    }
+
+    if (loaded.kind === 'semeaiLiberty') {
+      // Clic de reconocimiento, no una jugada: nunca se llama a applyMove
+      // aca, solo se compara contra las mismas funciones que usa el
+      // generador (solver/semeai.ts), recalculadas en vivo sobre el tablero
+      // actual -- primero y unico tipo de ejercicio en este archivo que no
+      // coloca una piedra.
+      const problem = loaded.problem
+      const correct =
+        problem.conceptId === 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO'
+          ? (sharedLibertiesOf(game.board, problem.groupAPoint, problem.groupBPoint)?.has(point) ?? false)
+          : getGroup(game.board, point)?.color === raceBehindColor(game.board, problem.groupAPoint, problem.groupBPoint)
+
+      if (!correct) {
+        wrongAttemptsRef.current += 1
+        setStatus('incorrect')
+        return
+      }
+
       setLastMove(point)
       setStatus('solved')
       return

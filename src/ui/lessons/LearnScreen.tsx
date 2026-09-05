@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
 import { getLesson, lessonsForLevel } from '../../content/lessons'
 import type { Lesson } from '../../content/lessons'
@@ -6,6 +6,8 @@ import { createBoard, toPoint } from '../../core/board'
 import { BLACK, WHITE } from '../../core/types'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
+import { goBack } from '../../navigation/backNav'
+import { reportLocalBack } from '../../navigation/localBack'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { minimoTheme } from '../board/themes'
 import { LockIcon } from '../common/LockIcon'
@@ -96,8 +98,28 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return { total, read }
   }, [lessonsByLevel])
 
+  // Boton fisico "atras" de Android: about/lessonList estan a un nivel de
+  // levels, lesson siempre a dos (lessonList de su propio nivel, aunque se
+  // haya entrado directo via initialLessonId) -- ver navigation/localBack.ts.
+  useEffect(() => {
+    const depth = view.kind === 'lesson' ? 2 : view.kind === 'lessonList' || view.kind === 'about' ? 1 : 0
+    reportLocalBack(() => {
+      if (view.kind === 'lesson') {
+        const level = (getLesson(view.lessonId)?.level ?? 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+        setView({ kind: 'lessonList', level })
+        return true
+      }
+      if (view.kind === 'lessonList' || view.kind === 'about') {
+        setView({ kind: 'levels' })
+        return true
+      }
+      return false
+    }, depth)
+    return () => reportLocalBack(null, 0)
+  }, [view])
+
   if (view.kind === 'about') {
-    return <AboutGoScreen onBack={() => setView({ kind: 'levels' })} />
+    return <AboutGoScreen onBack={goBack} />
   }
 
   if (view.kind === 'lesson') {
@@ -109,7 +131,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return (
       <LessonScreen
         lesson={lesson}
-        onBack={() => setView({ kind: 'lessonList', level: lesson.level as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 })}
+        onBack={goBack}
         onNavigateToExercises={onNavigateToExercises}
         onNavigateToPlay={onNavigateToPlay}
       />
@@ -123,7 +145,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return (
       <div className="learn">
         <div className="lesson-header">
-          <button type="button" onClick={() => setView({ kind: 'levels' })}>
+          <button type="button" onClick={goBack}>
             {t('learn.backToLevels')}
           </button>
           <h2>{t(LEVEL_TITLE_KEY[view.level])}</h2>

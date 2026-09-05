@@ -5,6 +5,8 @@ import { useI18n } from './i18n'
 import type { TranslationKey } from './i18n'
 import { ExercisesIcon, LearnIcon, PlayIcon, ProfileIcon, ReviewIcon, TodayIcon } from './ui/icons/NavIcons'
 import { ConfirmDialog } from './ui/common/ConfirmDialog'
+import { goBack, installBackNavigation, onRealBack, setDesiredDepth } from './navigation/backNav'
+import { subscribeLocalDepth, tryLocalBack } from './navigation/localBack'
 import { ExercisesScreen } from './ui/exercises/ExercisesScreen'
 import { LearnScreen } from './ui/lessons/LearnScreen'
 import { PlayScreen } from './ui/play/PlayScreen'
@@ -67,6 +69,7 @@ function App() {
   const [exercisesActive, setExercisesActive] = useState(false)
   const [pendingNav, setPendingNav] = useState<PendingNavigation | null>(null)
   const [learnLessonId, setLearnLessonId] = useState<string | undefined>(undefined)
+  const [localDepth, setLocalDepth] = useState(0)
 
   /** Se incrementa en cada navegacion real (aunque el destino sea la misma
    * pestana ya activa) y se usa como `key` de las 4 pantallas con estado
@@ -107,6 +110,37 @@ function App() {
   function goToExercises(conceptId?: ConceptId) {
     attemptNav({ screen: 'exercises', conceptId })
   }
+
+  // Boton fisico "atras" de Android: hoshi-flutter/lib/main.dart ya hace lo
+  // correcto (goBack() si canGoBack(), si no cierra la app) pero necesita
+  // historial real para trabajar con -- ver src/navigation/backNav.ts.
+  useEffect(() => installBackNavigation(), [])
+  useEffect(() => subscribeLocalDepth(setLocalDepth), [])
+
+  // Profundidad logica total: lejos de Hoy cuenta un nivel, un dialogo de
+  // confirmacion abierto otro, mas lo que reporte la sub-navegacion propia
+  // de la pantalla activa. Recalculada entera en un efecto (nunca en el
+  // sitio donde cambia cada pieza de estado) porque los setters de React no
+  // son sincronicos -- leer "el valor actual" justo despues de un setScreen
+  // todavia veria el valor viejo.
+  useEffect(() => {
+    setDesiredDepth((screen !== 'today' ? 1 : 0) + (pendingNav ? 1 : 0) + localDepth)
+  }, [screen, pendingNav, localDepth])
+
+  // El unico resolver de cada pop real: nunca reproduce una grabacion,
+  // siempre pregunta el estado actual. Se vuelve a registrar cada vez que
+  // cambia algo que lee, para no cerrar sobre estado viejo.
+  useEffect(() => {
+    onRealBack(() => {
+      if (pendingNav) {
+        setPendingNav(null)
+        return
+      }
+      if (tryLocalBack()) return
+      if (screen !== 'today') attemptNav({ screen: 'today' })
+    })
+    return () => onRealBack(null)
+  }, [screen, pendingNav, attemptNav])
 
   return (
     <div className="app" data-app-theme={appThemeId} data-scheme={scheme}>
@@ -173,7 +207,7 @@ function App() {
             applyNav(pendingNav)
             setPendingNav(null)
           }}
-          onCancel={() => setPendingNav(null)}
+          onCancel={goBack}
         />
       )}
     </div>

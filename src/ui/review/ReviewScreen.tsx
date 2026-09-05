@@ -7,6 +7,8 @@ import { BLACK } from '../../core/types'
 import { EvalClient } from '../../eval/client'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
+import { goBack } from '../../navigation/backNav'
+import { reportLocalBack } from '../../navigation/localBack'
 import { gameHeight, gameWidth, listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
@@ -115,6 +117,19 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     setSelectedEventIndex(null)
   }
 
+  // Boton fisico "atras" de Android: detalle de partida -> lista -- ver
+  // navigation/localBack.ts. selectedEventIndex no cuenta como nivel propio:
+  // es solo que error queda resaltado dentro de la misma pantalla de
+  // detalle, no una vista distinta que navegar.
+  useEffect(() => {
+    reportLocalBack(() => {
+      if (selectedGameId === null) return false
+      backToList()
+      return true
+    }, selectedGameId === null ? 0 : 1)
+    return () => reportLocalBack(null, 0)
+  }, [selectedGameId])
+
   const activeIndex = selectedEventIndex ?? (sortedEvents.length > 0 ? 0 : null)
   const selectedEvent = activeIndex !== null ? sortedEvents[activeIndex] : null
   const boardState =
@@ -171,7 +186,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   return (
     <div className="review">
       <div className="review-header">
-        <button type="button" onClick={backToList}>
+        <button type="button" onClick={goBack}>
           {t('review.backToList')}
         </button>
         <h2>{t('review.title')}</h2>

@@ -17,7 +17,7 @@ import type { BoardState, Color } from '../core/types'
  * jugada real): la validacion en si es identica para ambos.
  */
 export interface AreaValueProblem {
-  conceptId: 'RELLENO_TERRITORIO_PROPIO' | 'PASE_PREMATURO'
+  conceptId: 'RELLENO_TERRITORIO_PROPIO' | 'PASE_PREMATURO' | 'EL_FINAL_TAMBIEN_ES_GRANDE' | 'COMPARAR_VALOR_REAL'
   board: BoardState
   toMove: Color
 }

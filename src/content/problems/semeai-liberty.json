@@ -1,0 +1,2642 @@
+[
+  {
+    "id": "semeaiLiberty1",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty2",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty3",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty4",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty5",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty6",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty7",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty8",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty9",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty10",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty11",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty12",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty13",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty14",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty15",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty16",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty17",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty18",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty19",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty20",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty21",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty22",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty23",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty24",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty25",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty26",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty27",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty28",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty29",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty30",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hi][hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty31",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty32",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[il][jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty33",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty34",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty35",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty36",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty37",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty38",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty39",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty40",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty41",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty42",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty43",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty44",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty45",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty46",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty47",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty48",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty49",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty50",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty51",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty52",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty53",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty54",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty55",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty56",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty57",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty58",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty59",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty60",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty61",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty62",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty63",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty64",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty65",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty66",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty67",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty68",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty69",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty70",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty71",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty72",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty73",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty74",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty75",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty76",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty77",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty78",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hi][hj][hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty79",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty80",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[il][jl][kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty81",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty82",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty83",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty84",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty85",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty86",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty87",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty88",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty89",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty90",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty91",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty92",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty93",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty94",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty95",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty96",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty97",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj][fk]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty98",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[if][jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty99",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[ni][nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty100",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn][kn]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty101",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj][nk]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty102",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fi][fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty103",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf][kf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty104",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[in][jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty105",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty106",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty107",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty108",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty109",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty110",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty111",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty112",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty113",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj][fk]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty114",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[if][jf][kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty115",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[ni][nj][nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty116",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn][kn]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty117",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj][nk]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty118",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fi][fj][fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty119",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf][kf]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty120",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[in][jn][kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty121",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi][hj]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty122",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jh][kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty123",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[lj][lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty124",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il][jl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty125",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li][lj]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty126",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hj][hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty127",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih][jh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty128",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jl][kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty129",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty130",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[if][jf][kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty131",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[ni][nj][nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty132",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty133",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty134",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fi][fj][fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty135",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty136",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[in][jn][kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty137",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty138",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty139",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty140",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty141",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty142",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty143",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty144",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty145",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj][fk][fl]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty146",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hf][if][jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty147",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[nh][ni][nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty148",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn][kn][ln]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty149",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj][nk][nl]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty150",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fh][fi][fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty151",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf][kf][lf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty152",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hn][in][jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty153",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty154",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty155",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty156",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty157",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty158",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty159",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty160",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty161",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj][fk][fl]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty162",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hf][if][jf][kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty163",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[nh][ni][nj][nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty164",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn][kn][ln]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty165",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj][nk][nl]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty166",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fh][fi][fj][fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty167",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf][kf][lf]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty168",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hn][in][jn][kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty169",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi][hj]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty170",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jh][kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty171",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[lj][lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty172",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il][jl]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty173",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li][lj]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty174",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hj][hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty175",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih][jh]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty176",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jl][kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty177",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[fi][fj][fk][fl]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty178",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hf][if][jf][kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty179",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[nh][ni][nj][nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty180",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[W]AB[in][jn][kn][ln]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty181",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[ni][nj][nk][nl]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty182",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[fh][fi][fj][fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty183",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[if][jf][kf][lf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty184",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hn][in][jn][kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty185",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[hi][hj][hk]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty186",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[ih][jh][kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty187",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[li][lj][lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty188",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[in]ZGROUPB[il]PL[B]AB[il][jl][kl]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty189",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[li][lj][lk]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty190",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[hi][hj][hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty191",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[ih][jh][kh]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty192",
+    "conceptId": "CONTAR_LIBERTADES_ANTES_DE_JUGAR",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[CONTAR_LIBERTADES_ANTES_DE_JUGAR]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[il][jl][kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty193",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty194",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty195",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty196",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty197",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty198",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty199",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty200",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty201",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty202",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty203",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty204",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty205",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty206",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty207",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty208",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty209",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty210",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty211",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty212",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty213",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty214",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty215",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty216",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty217",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty218",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty219",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty220",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty221",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty222",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty223",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty224",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty225",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty226",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty227",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty228",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty229",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty230",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty231",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty232",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty233",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty234",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty235",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty236",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty237",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty238",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hi][hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty239",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty240",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[il][jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty241",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty242",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty243",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty244",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty245",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty246",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty247",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty248",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty249",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty250",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty251",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty252",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty253",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty254",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty255",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty256",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty257",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty258",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty259",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty260",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty261",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty262",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty263",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty264",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty265",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty266",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty267",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty268",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty269",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty270",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty271",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty272",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty273",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty274",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty275",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty276",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty277",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty278",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty279",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty280",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty281",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty282",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jh][kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty283",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lj][lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty284",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty285",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty286",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hj][hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty287",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty288",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jl][kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty289",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty290",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty291",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty292",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty293",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty294",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty295",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty296",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty297",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty298",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty299",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty300",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty301",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty302",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hi][hj][hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty303",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty304",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[il][jl][kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty305",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty306",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[jf][kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty307",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nj][nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty308",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty309",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty310",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fj][fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty311",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty312",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[jn][kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty313",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi][fj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty314",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty315",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty316",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in][jn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty317",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni][nj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty318",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty319",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if][jf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty320",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty321",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty322",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[if][jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty323",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[ni][nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty324",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty325",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty326",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fi][fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty327",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty328",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[in][jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty329",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty330",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty331",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty332",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty333",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty334",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty335",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty336",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty337",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty338",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[if][jf][kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty339",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[ni][nj][nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty340",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty341",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty342",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fi][fj][fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty343",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty344",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[in][jn][kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty345",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty346",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jh][kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty347",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lj][lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty348",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty349",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty350",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hj][hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty351",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty352",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jl][kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty353",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty354",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[if][jf][kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty355",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[ni][nj][nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty356",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty357",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty358",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty359",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty360",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty361",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty362",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[if][jf][kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty363",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[ni][nj][nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty364",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty365",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty366",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fi][fj][fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty367",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty368",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[in][jn][kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty369",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty370",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty371",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty372",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty373",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty374",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty375",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty376",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty377",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk][fl]AW[hi])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty378",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[hf][if][jf][kf]AW[kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty379",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nh][ni][nj][nk]AW[lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty380",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn][ln]AW[il])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty381",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk][nl]AW[li])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty382",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fh][fi][fj][fk]AW[hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty383",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf][lf]AW[ih])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty384",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[hn][in][jn][kn]AW[kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty385",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty386",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty387",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty388",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty389",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty390",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty391",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty392",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty393",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk][fl]AW[hi][hj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty394",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[hf][if][jf][kf]AW[jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty395",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nh][ni][nj][nk]AW[lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty396",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn][ln]AW[il][jl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty397",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk][nl]AW[li][lj])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty398",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fh][fi][fj][fk]AW[hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty399",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf][lf]AW[ih][jh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty400",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[hn][in][jn][kn]AW[jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty401",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty402",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[jh][kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty403",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lj][lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty404",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty405",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty406",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hj][hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty407",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty408",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[jl][kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty409",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk][fl]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty410",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[hf][if][jf][kf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty411",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nh][ni][nj][nk]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty412",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn][ln]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty413",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk][nl]AW[li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty414",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fh][fi][fj][fk]AW[hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty415",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf][lf]AW[ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty416",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[hn][in][jn][kn]AW[il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty417",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty418",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[ih][jh][kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty419",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[li][lj][lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty420",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty421",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty422",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hi][hj][hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty423",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty424",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[il][jl][kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty425",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[B]AB[fi][fj][fk][fl]AW[hi][hj][hk][hl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty426",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[B]AB[hf][if][jf][kf]AW[hh][ih][jh][kh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty427",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[B]AB[nh][ni][nj][nk]AW[lh][li][lj][lk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty428",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[B]AB[in][jn][kn][ln]AW[il][jl][kl][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty429",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[B]AB[ni][nj][nk][nl]AW[li][lj][lk][ll])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty430",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[B]AB[fh][fi][fj][fk]AW[hh][hi][hj][hk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty431",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[B]AB[if][jf][kf][lf]AW[ih][jh][kh][lh])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty432",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[B]AB[hn][in][jn][kn]AW[hl][il][jl][kl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty433",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fi]ZGROUPB[hi]PL[W]AB[hi][hj][hk][hl]AW[fi][fj][fk][fl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty434",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kf]ZGROUPB[kh]PL[W]AB[hh][ih][jh][kh]AW[hf][if][jf][kf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty435",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[nk]ZGROUPB[lk]PL[W]AB[lh][li][lj][lk]AW[nh][ni][nj][nk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty436",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[in]ZGROUPB[il]PL[W]AB[il][jl][kl][ll]AW[in][jn][kn][ln])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty437",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[ni]ZGROUPB[li]PL[W]AB[li][lj][lk][ll]AW[ni][nj][nk][nl])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty438",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[fk]ZGROUPB[hk]PL[W]AB[hh][hi][hj][hk]AW[fh][fi][fj][fk])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty439",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[if]ZGROUPB[ih]PL[W]AB[ih][jh][kh][lh]AW[if][jf][kf][lf])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "semeaiLiberty440",
+    "conceptId": "LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO",
+    "sgf": "(;GM[1]FF[4]SZ[19]ZKIND[semeaiLiberty]ZCONCEPT[LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO]ZGROUPA[kn]ZGROUPB[kl]PL[W]AB[hl][il][jl][kl]AW[hn][in][jn][kn])",
+    "difficulty": "easy"
+  }
+]

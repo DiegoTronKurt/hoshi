@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { entryKind, listBankEntries, loadProblem } from '../../src/content/problemBank'
+import { entryKind, listBankEntries, loadEntry, loadProblem } from '../../src/content/problemBank'
 import { computeRegion } from '../../src/solver/region'
 import { solve } from '../../src/solver/tsumego'
+import { bestAreaMove, isOwnTerritory } from '../../src/solver/areaValue'
+import { raceBehindColor, sharedLibertiesOf } from '../../src/solver/semeai'
 
 describe('banco de problemas: invariante del generador', () => {
   const entries = listBankEntries()
@@ -72,4 +74,52 @@ describe('banco de problemas: invariante del generador', () => {
     },
     30000,
   )
+
+  // areaValue (PASE_PREMATURO/RELLENO_TERRITORIO_PROPIO/EL_FINAL_TAMBIEN_ES_
+  // GRANDE/COMPARAR_VALOR_REAL) y semeaiLiberty no tenian ningun re-chequeo
+  // al cargar, a diferencia de tsumego arriba -- llenando ese hueco con el
+  // mismo patron: re-verificar cada entrada con la MISMA funcion que la
+  // valida en vivo (useSolvableExercise.ts), para que un problema mal
+  // generado no pueda colarse sin que esto lo note.
+  const areaValueEntries = entries.filter((e) => entryKind(e) === 'areaValue')
+  it.each(areaValueEntries.map((e) => [e.id, e] as const))('%s sigue siendo un problema de valor de area valido', (_id, entry) => {
+    const loaded = loadEntry(entry)
+    if (loaded.kind !== 'areaValue') throw new Error('entryKind/loadEntry en desacuerdo')
+    const { board, toMove, conceptId } = loaded.problem
+    const best = bestAreaMove(board, toMove)
+
+    if (conceptId === 'RELLENO_TERRITORIO_PROPIO') {
+      expect(best).toBeNull()
+      // La trampa de este concepto es jugar dentro del propio territorio ya
+      // sellado: tiene que existir de verdad, si no el ejercicio no ensena
+      // nada especifico (mismo criterio que el generador).
+      let hasOwnTerritory = false
+      for (let p = 0; p < board.stones.length; p++) {
+        if (isOwnTerritory(board, p, toMove)) {
+          hasOwnTerritory = true
+          break
+        }
+      }
+      expect(hasOwnTerritory).toBe(true)
+    } else {
+      // PASE_PREMATURO, EL_FINAL_TAMBIEN_ES_GRANDE, COMPARAR_VALOR_REAL: las
+      // tres afirman que hay una jugada real que vale la pena.
+      expect(best).not.toBeNull()
+    }
+  })
+
+  const semeaiLibertyEntries = entries.filter((e) => entryKind(e) === 'semeaiLiberty')
+  it.each(semeaiLibertyEntries.map((e) => [e.id, e] as const))('%s sigue siendo un problema de libertades de semeai valido', (_id, entry) => {
+    const loaded = loadEntry(entry)
+    if (loaded.kind !== 'semeaiLiberty') throw new Error('entryKind/loadEntry en desacuerdo')
+    const { board, conceptId, groupAPoint, groupBPoint } = loaded.problem
+
+    if (conceptId === 'CONTAR_LIBERTADES_ANTES_DE_JUGAR') {
+      expect(raceBehindColor(board, groupAPoint, groupBPoint)).not.toBeNull()
+    } else {
+      const shared = sharedLibertiesOf(board, groupAPoint, groupBPoint)
+      expect(shared).not.toBeNull()
+      expect(shared?.size).toBeGreaterThan(0)
+    }
+  })
 })

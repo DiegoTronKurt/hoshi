@@ -6,6 +6,8 @@ import { computeProfiles, weakestConcepts } from '../../learning/profile'
 import type { ConceptProfile } from '../../learning/profile'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
+import { goBack } from '../../navigation/backNav'
+import { reportLocalBack } from '../../navigation/localBack'
 import { listAttempts, listGames } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord } from '../../storage/db'
 import { SettingsScreen } from '../settings/SettingsScreen'
@@ -43,10 +45,21 @@ export function ProfileScreen() {
   const axisScores = useMemo(() => computeAxisScores(profiles), [profiles])
   const insights = useMemo(() => computeKnowledgeApplicationInsights(profiles), [profiles])
 
+  // Boton fisico "atras" de Android: settings -> profile -- ver
+  // navigation/localBack.ts.
+  useEffect(() => {
+    reportLocalBack(() => {
+      if (view !== 'settings') return false
+      setView('profile')
+      return true
+    }, view === 'settings' ? 1 : 0)
+    return () => reportLocalBack(null, 0)
+  }, [view])
+
   if (!loaded) return null
 
   if (view === 'settings') {
-    return <SettingsScreen onBack={() => setView('profile')} />
+    return <SettingsScreen onBack={goBack} />
   }
 
   return (

@@ -1,5 +1,202 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-04, cont. 13: ejercicios de yose y semeai, boton atras de Android, revision de fuerza del bot y de contenido)
+
+Pregunta reflexiva del usuario ("¿alguien puede aprender Go de verdad con
+esta app?") derivo en tres pedidos propios, en orden de prioridad: (1)
+extender ejercicios/repeticion espaciada mas alla de Nivel 3, (2) el propio
+roadmap se autoseñala "nadie que juegue Go de verdad reviso el contenido"
+como su riesgo abierto mas grande, (3) revisar si hay margen real en la
+fuerza del bot. A mitad de la planificacion el usuario agrego dos pedidos
+concretos mas: el boton fisico "atras" de Android cierra la app de un salto
+en vez de navegar las pantallas, y dos cosas que noto usando la app ("19x19
+sigue bloqueado", "dice 676 problemas pero cada categoria muestra bastante
+menos").
+
+### Ejercicios nuevos: 4 conceptos de Nivel 9-10, 6 declinados a proposito
+
+Investigacion (lectura directa + un agente Explore + dos rondas de revision
+con un agente Plan, una por cada mitad del trabajo) antes de escribir
+codigo. Los niveles 4 a 8 (Forma/Apertura/Joseki/Fuseki/Medio juego) siguen
+sin banco de ejercicios -- son juicio de libro, no tienen una respuesta
+computable por el motor, y `concepts.ts` ya lo dice en sus propios
+comentarios. Nivel 9 (Yose) y 10 (Semeai) son distintos: sus comentarios
+dicen "verificado con el motor real... mismo estandar que niveles 0-3", y
+la revision confirmo exactamente cuales de sus 10 conceptos tienen de
+verdad una respuesta mecanica.
+
+**Yose (`EL_FINAL_TAMBIEN_ES_GRANDE`, `COMPARAR_VALOR_REAL`)**: reutilizan
+la maquinaria existente de `areaValue` (`content/areaValueProblem.ts`,
+`solver/areaValue.ts`) en vez de un tipo de problema paralelo -- la unica
+diferencia real con `PASE_PREMATURO`/`RELLENO_TERRITORIO_PROPIO` es que la
+validacion exige EL punto que iguala `bestAreaMove(...).point`, no
+cualquiera que supere el umbral. `tools/generate-yose-value-problems.ts`
+(nuevo, mismo autojuego 9x9 debil-vs-fuerte que
+`generate-area-value-problems.ts`) clasifica cada posicion candidata por el
+delta de su mejor jugada. Se descarto `CONTAR_PARA_DECIDIR` de este lote en
+la revision: su leccion (n9-l5) ensena a leer el marcador agregado para
+elegir estrategia, no a identificar una jugada -- forzarlo en el mecanismo
+de "elegir el mejor punto" lo etiquetaria mal, y el `conceptId` guardado
+alimenta directo a `findConceptsToReopenFromExercises` y las tarjetas FSRS,
+asi que una etiqueta incorrecta si importa. Corrida real (20 partidas,
+semilla 9000+): 53 problemas (48 `EL_FINAL_TAMBIEN_ES_GRANDE` + 5
+`COMPARAR_VALOR_REAL`) -- distribucion real de mejores deltas p50=4 p75=12
+p90=22 max=26, el umbral de "grande" (6) quedo mas generoso de lo pensado
+(ver comentario en el generador), asi que `COMPARAR_VALOR_REAL` salio un
+banco chico -- correcto igual (cada entrada paso por el motor real), parejo
+con otros bancos chicos que ya existian (`OJO_FALSO`=4, `atari-ignorado`=8).
+
+**Semeai (`CONTAR_LIBERTADES_ANTES_DE_JUGAR`,
+`LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO`)**: nuevo `solver/semeai.ts`
+(`raceBehindColor`, `sharedLibertiesOf`, ambas puras sobre `getGroup`) mas
+`content/semeaiLibertyProblem.ts` y `tools/generate-semeai-liberty-problems.ts`
+-- generacion procedural (no autojuego: una carrera aislada y limpia no
+aparece de forma confiable jugando al azar), cadenas rectas enfrentadas con
+un hueco de una columna, barriendo largos 1-4 y las 8 transformaciones
+diedrales. El diseño original de `LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO`
+(pedia una posicion donde ignorar libertades compartidas cambiara el
+ganador) resulto matematicamente imposible -- sumar la misma constante
+compartida a ambos lados nunca invierte cual es menor -- y lo atajo la
+revision antes de escribir el generador, no en produccion. Mecanica
+corregida: tocar una libertad compartida real (interseccion de conjuntos,
+sin logica de quien gana). `CONTAR_LIBERTADES_ANTES_DE_JUGAR` exige brecha
+>= 2 (una brecha de 1 depende de quien juega primero) MAS una simulacion de
+confirmacion jugando la carrera de verdad con `applyMove` real en los dos
+ordenes de salida. Bug real encontrado y arreglado durante esa
+implementacion: `simulateRace` devuelve el color que termina CAPTURADO (el
+que pierde), pero la primera version de `classifyBehind` lo comparaba
+contra el ganador esperado en vez del perdedor esperado -- rechazaba el
+100% de las posiciones validas (0 generadas) hasta que un trace manual con
+un script descartable lo encontro. Filtro de "sin ojos" via
+`computeAreaOwnership` en cada libertad de ambos grupos, no `bensonPassAlive`
+(que solo detecta vida incondicional con dos ojos -- el caso peligroso es
+exactamente el de un ojo real, ver `UN_OJO_GANA`, fuera de alcance). Corrida
+real: 440 problemas (192 + 248).
+
+**Los otros 6 conceptos quedan lesson-only a proposito**: `SENTE_Y_GOTE`/
+`SENTE_ANTES_QUE_GOTE` (necesitarian comparar "valor si se ignora" contra
+"valor si se responde", una evaluacion a 2-3 jugadas que no existe),
+`QUE_ES_SEMEAI` (definicion, no una habilidad para practicar), `UN_OJO_GANA`
+(necesitaria un solucionador real de vida-muerte del espacio de ojo),
+`CONECTAR_EN_VEZ_DE_PELEAR` (su leccion ni siquiera muestra una carrera
+real) y `CONTAR_PARA_DECIDIR` (ver arriba). La revision confirmo que ninguno
+de los 6 era en realidad facil con las herramientas existentes.
+
+Se aprovecho para llenar un hueco de test previo (encontrado por la
+revision, no nuevo de este pase): `solver/areaValue.ts` y
+`content/areaValueProblem.ts` no tenian ningun test, y `problem-bank.test.ts`
+solo re-verificaba entradas `tsumego` al cargar, nunca `areaValue`. Ahora
+`tests/solver/areaValue.test.ts` (nuevo) y una extension de
+`problem-bank.test.ts` re-verifican cada entrada `areaValue`/`semeaiLiberty`
+contra su validador en vivo, mismo patron que ya existia para tsumego.
+
+### Boton fisico "atras" de Android navega la app en vez de cerrarla
+
+Causa real, confirmada leyendo el codigo (no supuesta): `App.tsx` nunca
+tocaba la API de historial (cero `pushState`/`popstate` en todo `src`).
+`hoshi-flutter/lib/main.dart` ya tenia la logica correcta en su `PopScope`
+(`goBack()` si `controller.canGoBack()`, si no `SystemNavigator.pop()`),
+revisada de nuevo en cada pulsacion -- pero `canGoBack()` estaba siempre en
+false porque el historial de la WebView nunca crecia mas alla de la carga
+inicial. **Cero cambios en Flutter/Dart** -- el arreglo es entero del lado
+web, poblando historial real para que la logica nativa que ya existia
+empiece a funcionar sola.
+
+Diseño pasado por una segunda revision con un agente Plan enfocada
+especificamente en la mecanica de browser/WebView (mi primer borrador --
+una pila de closures de "deshacer" grabados por navegacion -- quedaba
+obsoleta si el usuario saltaba de pestaña en vez de volver, silenciando una
+pulsacion futura sin efecto visible). Diseño final, nuevo
+`src/navigation/backNav.ts` + `src/navigation/localBack.ts`: profundidad
+real de historial reconciliada contra una profundidad logica recalculada
+entera en un efecto de `App.tsx` (nunca en el sitio donde cambia cada pieza
+de estado, porque los setters de React no son sincronicos), colapsando
+varios niveles en un solo `history.go()` cuando hace falta en vez de un
+bucle. Cada pop real se resuelve preguntando el estado actual en vivo
+(dialogo abierto? la pantalla activa puede bajar un nivel? si no, volver a
+Hoy), nunca reproduciendo una grabacion. La revision encontro, y este
+diseño cubre ademas, un segundo caso del mismo patron en
+`PlayGameScreen.tsx` (su propio dialogo de confirmar salida, independiente
+del `pendingNav` de `App.tsx`) y la necesidad de separar profundidad "base"
+(pantalla + dialogo, en `App.tsx`) de profundidad "local" (reportada por la
+pantalla activa, que puede arrancar ya un nivel adentro via
+`initialLessonId`/`initialConcept`).
+
+Aplicado a las 5 pantallas con sub-navegacion propia: Ejercicios, Aprender,
+Jugar (+ el dialogo de `PlayGameScreen`), Perfil/Ajustes y Revisar (esta
+ultima no estaba en el plan original -- se sumo al notar que
+`selectedGameId` sigue exactamente el mismo patron lista/detalle que las
+otras cuatro, dejarla afuera habria sido una inconsistencia arbitraria).
+Nuevo `tests/navigation/backNav.test.ts` prueba la reconciliacion de
+profundidad contra un `window.history` simulado (no el real de jsdom, dificil
+de resetear entre tests), incluyendo la carrera que encontro la revision
+(un `history.go()` en vuelo mas un pedido nuevo antes de que su popstate
+aterrice). Sin poder probar la sensacion real en un dispositivo Android
+(no hay automatizacion de navegador/WebView en este entorno) -- en un
+navegador de escritorio, atras/adelante y Alt+Izquierda ya ejercitan el
+mismo camino de codigo, asi que sirve como primer chequeo sin necesitar el
+telefono.
+
+### Revision de fuerza del bot: sin cambios, con evidencia real
+
+`STRENGTH_LEVELS.maxTimeMs` es un techo incondicional independiente de
+`playouts` (`mcts.ts` corta al primero de los dos que se cumpla) -- en
+teoria, si un nivel termina comodo bajo su techo, subir `playouts` no puede
+empeorar nada en un dispositivo lento. Medido con un test descartable
+(`tests/engine/_debug-strength-timing.test.ts`, borrado despues) en una
+posicion de medio juego 19x19 real (no vacia, 40 jugadas de autojuego
+previas): **los 4 niveles ya topan su techo de tiempo al 100-101%**, ninguno
+tiene margen -- `weak` pide 100 playouts y ejecuta 50, `veryStrong` pide
+8000 y ejecuta apenas 227. Subir los numeros de `playouts` no cambiaria nada
+en la practica (el techo de tiempo ya es el limite real, no el numero
+configurado) -- sin cambios en `strengthLevels.ts`, una edicion ahi habria
+sido ruido, no una mejora. El cuello de botella real es velocidad por
+playout (`findOneLibertyPoints`, ya documentado en `engine/playoutPolicy.ts`
+como ~60% del costo), no la configuracion -- fuera de alcance de este pase.
+
+### Revision de contenido Nivel 4-8: sin errores encontrados, no reemplaza revision real
+
+Lectura completa de las 25 lecciones de Nivel 4 a 8 (texto en español,
+contra conocimiento general de Go) buscando afirmaciones incorrectas o
+engañosas. No se encontro ninguna -- los conceptos son estandar (4-4 no
+asegura la esquina, moyo no es territorio todavia, atacar tiene que
+construir algo, etc.), varios citan un libro real (Kajiwara, "The Direction
+of Play") en vez de inventarse, y las partes genuinamente dependientes de
+juicio (n4-l4, n6-l2) se plantean con la cautela correcta en vez de una
+regla falsa. **Esto no reemplaza lo que el roadmap pide** (revision por
+alguien que de verdad juega Go, marcado ahi como el riesgo abierto mas
+grande, todavia sin resolver ni siquiera de forma liviana) -- es un mejor
+esfuerzo de respaldo, no un sustituto. Cero cambios de contenido.
+
+### Dos cosas que el usuario noto usando la app, confirmadas contra el codigo
+
+- **"19x19 sigue bloqueado"**: releido `PlayConfigScreen.tsx` -- `BOARD_PRESETS`
+  ya incluye 19x19 sin ningun icono de candado ni estado deshabilitado, y un
+  grep del repo entero confirma cero codigo de bloqueo restante en Jugar (lo
+  unico que queda es el bloqueo de niveles de Aprender, algo distinto e
+  intencional). El codigo esta bien -- la explicacion mas probable es que el
+  dispositivo todavia tiene una build de antes del desbloqueo de hoy mismo
+  (la app de Flutter empaqueta su propia copia de los archivos web, sin red
+  de por medio, asi que instalar el nuevo AAB es lo que hace falta).
+- **"dice 676 problemas pero cada categoria muestra bastante menos"**: la
+  aritmetica ya era correcta (el total cuenta las 676 entradas de TODO el
+  banco, cada categoria las suyas, y las 16 categorias sumaban exactamente
+  676) -- lo confuso era real: 466 de esas 676 (69%) son solo 2 conceptos
+  (`PASE_PREMATURO`/`RELLENO_TERRITORIO_PROPIO`, autogenerados). Arreglo
+  chico: nueva clave `exercises.allProblemCount` que muestra tambien cuantas
+  categorias hay ("X problemas en N categorías"), para que el numero grande
+  se explique solo en la misma tarjeta.
+
+### Verificacion
+
+`npx tsc -b`, `npx vitest run` (2401 tests, todos verdes, incluyendo los
+nuevos), `npx oxlint` (sin advertencias nuevas mas alla de una ya esperada
+por el estilo existente del proyecto -- funciones sin `useCallback`, mismo
+patron que el resto de la base de codigo). i18n: 717 claves en `en.json` y
+`es.json`, paridad exacta. Sin poder probar visualmente la sensacion del
+boton atras en un dispositivo real (sin automatizacion de navegador en este
+entorno) -- dicho explicitamente en vez de asumido.
+
 ## Estado general del proyecto (2026-09-04, cont. 12: bot pasa cuando corresponde, 19x19, tablero 9x13 y conteo japones en Jugar)
 
 Cuatro pedidos del usuario en un solo mensaje: texto "Pensando..." en Jugar

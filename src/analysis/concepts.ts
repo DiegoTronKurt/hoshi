@@ -649,9 +649,19 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     generatesExercises: false,
     severity: 'low',
   },
-  // Nivel 9 (Yose): mismo patron -- sin detector ni banco de ejercicios,
-  // la afirmacion vive en la leccion (content/lessons/n9.ts), pero ahi
-  // cada numero se calcula con el motor real en vez de citarse de un libro.
+  // Nivel 9 (Yose): la mayoria sigue el mismo patron -- sin detector ni banco
+  // de ejercicios, la afirmacion vive en la leccion (content/lessons/n9.ts),
+  // pero ahi cada numero se calcula con el motor real en vez de citarse de un
+  // libro. EL_FINAL_TAMBIEN_ES_GRANDE y COMPARAR_VALOR_REAL si tienen banco
+  // (tools/generate-yose-value-problems.ts + solver/areaValue.ts, mismo
+  // mecanismo que PASE_PREMATURO/RELLENO_TERRITORIO_PROPIO en nivel 1):
+  // "cual es la mejor jugada aca" tiene una respuesta unica y verificable.
+  // SENTE_Y_GOTE/SENTE_ANTES_QUE_GOTE y CONTAR_PARA_DECIDIR quedan afuera a
+  // proposito -- sente/gote necesitaria comparar "valor si se ignora" contra
+  // "valor si se responde" (una evaluacion a 2-3 jugadas, no un solo delta), y
+  // CONTAR_PARA_DECIDIR ensena a leer el marcador agregado para elegir
+  // estrategia, no a identificar una jugada -- forzarlo en el mismo mecanismo
+  // de "elegir el mejor punto" etiquetaria mal el concepto (ver NOTAS.md).
   EL_FINAL_TAMBIEN_ES_GRANDE: {
     id: 'EL_FINAL_TAMBIEN_ES_GRANDE',
     level: 9,
@@ -659,7 +669,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.EL_FINAL_TAMBIEN_ES_GRANDE.summary',
     lessonId: 'n9-l1',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   SENTE_Y_GOTE: {
@@ -690,7 +700,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.COMPARAR_VALOR_REAL.summary',
     lessonId: 'n9-l4',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   CONTAR_PARA_DECIDIR: {
@@ -703,7 +713,16 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     generatesExercises: false,
     severity: 'low',
   },
-  // Nivel 10 (Semeai): mismo patron.
+  // Nivel 10 (Semeai): la mayoria sigue sin banco de ejercicios, misma razon
+  // que en nivel 9. CONTAR_LIBERTADES_ANTES_DE_JUGAR y
+  // LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO si tienen banco
+  // (tools/generate-semeai-liberty-problems.ts + solver/semeai.ts): contar
+  // libertades y reconocer cuales son compartidas es 100% mecanico con
+  // core/groups.ts, sin necesitar resolver quien gana la carrera. QUE_ES_SEMEAI
+  // (definicion, no una habilidad para practicar), UN_OJO_GANA (necesitaria un
+  // solucionador real de vida-muerte del espacio de ojo, no conteo de
+  // libertades) y CONECTAR_EN_VEZ_DE_PELEAR (su leccion ni siquiera muestra una
+  // carrera real) quedan afuera a proposito -- ver NOTAS.md.
   QUE_ES_SEMEAI: {
     id: 'QUE_ES_SEMEAI',
     level: 10,
@@ -722,7 +741,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.CONTAR_LIBERTADES_ANTES_DE_JUGAR.summary',
     lessonId: 'n10-l2',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO: {
@@ -733,7 +752,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     japaneseTerm: 'dame',
     lessonId: 'n10-l3',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   UN_OJO_GANA: {

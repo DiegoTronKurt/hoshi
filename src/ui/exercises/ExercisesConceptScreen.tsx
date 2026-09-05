@@ -40,7 +40,9 @@ export function ExercisesConceptScreen({ onPickConcept }: ExercisesConceptScreen
       <div className="exercises-concept-grid">
         <button type="button" className="exercises-concept-card" onClick={() => onPickConcept('all')}>
           <span className="exercises-concept-label">{t('exercises.allConcepts')}</span>
-          <span className="exercises-concept-meta">{t('exercises.problemCount', { n: listBankEntries().length })}</span>
+          <span className="exercises-concept-meta">
+            {t('exercises.allProblemCount', { n: listBankEntries().length, categories: concepts.length })}
+          </span>
         </button>
         {concepts.map((concept) => {
           const count = listBankEntries(concept.id).length

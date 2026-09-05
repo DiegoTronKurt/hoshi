@@ -11,6 +11,8 @@ import { EngineClient } from '../../engine/client'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { getLesson } from '../../content/lessons'
+import { goBack } from '../../navigation/backNav'
+import { reportLocalBack } from '../../navigation/localBack'
 import { listGames, saveGame } from '../../storage/db'
 import { findConceptsToReopen } from '../../training-policy/session'
 import { BoardCanvas } from '../board/BoardCanvas'
@@ -74,6 +76,28 @@ export function PlayGameScreen({
 
   const game = history[history.length - 1]
   const lastMove = moves.length > 0 ? moves[moves.length - 1].point : null
+
+  // Boton fisico "atras" de Android: con la partida en curso, primero abre
+  // el mismo dialogo de confirmacion que el boton de salir en pantalla (no
+  // se sale en silencio de una partida sin terminar); con la partida ya
+  // terminada no hay nada que proteger, se sale directo -- ver
+  // navigation/localBack.ts. Nivel aparte del de PlayScreen (config <-> game):
+  // este componente es el que esta montado de verdad mientras se juega.
+  useEffect(() => {
+    reportLocalBack(() => {
+      if (showExitConfirm) {
+        setShowExitConfirm(false)
+        return true
+      }
+      if (game.gameOver) {
+        onExitToConfig()
+        return true
+      }
+      setShowExitConfirm(true)
+      return true
+    }, showExitConfirm ? 2 : 1)
+    return () => reportLocalBack(null, 0)
+  }, [showExitConfirm, game.gameOver, onExitToConfig])
 
   const engineRef = useRef<EngineClient | null>(null)
   const savedThisGameRef = useRef(false)
@@ -314,7 +338,7 @@ export function PlayGameScreen({
             setShowExitConfirm(false)
             onExitToConfig()
           }}
-          onCancel={() => setShowExitConfirm(false)}
+          onCancel={goBack}
         />
       )}
     </div>
