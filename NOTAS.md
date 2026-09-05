@@ -87,7 +87,28 @@ mismo numero que la sesion anterior; no hizo falta ningun test nuevo,
 `TodayScreen`/`ReviewScreen` no tienen tests de componente en este
 proyecto), `npx oxlint` (mismos avisos preexistentes de siempre, ninguno
 nuevo). Paridad de claves i18n ES/EN confirmada (721 claves cada uno, +1 por
-`play.savedGames.vsBotKyu`).
+`play.savedGames.vsBotKyu`). Ademas, verificacion visual real con
+Playwright headless (sin herramienta de automatizacion de navegador
+persistente en este entorno, asi que se armo un script descartable): los 4
+cambios se probaron en pantalla, no solo por lectura de codigo -- tocar la
+tarjeta destacada y una fila de la lista en Hoy saltan al ejercicio
+correcto, el boton dice exactamente "Jugar", y una partida contra el bot
+sembrada directo en IndexedDB (SGF minimo con dos jugadas de borde
+tempranas, para generar un error principal y uno secundario de verdad)
+mostro "contra el bot (~20 kyu)" en la lista y el error secundario
+colapsado, con tablero completo solo al tocarlo. Script y datos de prueba
+no quedaron en el repo (mismo criterio que cualquier `_debug-*`).
+
+### Commit, push y AAB de release, a pedido explicito del usuario
+
+`hoshi`: commit `7221593` ("Hoy: recomendados navegables y boton Jugar
+simple; Revisar: kyu en vez de playouts y errores secundarios
+colapsados"), pusheado a `master` (`481e7cd..7221593`). `hoshi-flutter`:
+`npm run build` + `sync-webapp.ps1`, version subida a `1.15.0+20`, commit
+`c004407`, pusheado (`373155f..c004407`). AAB firmado regenerado:
+`app-release.aab` (54.0MB) en
+`hoshi-flutter/build/app/outputs/bundle/release/`. Subir a Play Console
+sigue siendo un paso del usuario.
 
 ## Estado general del proyecto (2026-09-05, cont. 14: colapsar tarjetas de Hoy, todos los errores con tablero+IA en Revisar, verificacion real de la codificacion de KataGo, cuatro lecturas nuevas de motor/IA)
 
