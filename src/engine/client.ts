@@ -23,9 +23,10 @@ export class EngineClient {
     randomSeed?: number,
     maxTimeMs?: number,
     style?: BotStyleId,
+    rootPriors?: Map<number | null, number>,
   ): Promise<EngineMoveResult> {
     return this.rpc.call(
-      { state, playouts, randomSeed, maxTimeMs, style },
+      { state, playouts, randomSeed, maxTimeMs, style, rootPriors },
       (maxTimeMs ?? FALLBACK_TIMEOUT_MS) + TIMEOUT_GRACE_MS,
     )
   }

@@ -144,10 +144,12 @@ function App() {
 
   return (
     <div className="app" data-app-theme={appThemeId} data-scheme={scheme}>
-      <header className="app-header">
-        <h1>{t('app.title')}</h1>
-        <p className="tagline">{t('app.tagline')}</p>
-      </header>
+      {screen === 'today' && (
+        <header className="app-header">
+          <h1>{t('app.title')}</h1>
+          <p className="tagline">{t('app.tagline')}</p>
+        </header>
+      )}
 
       <main className="app-main">
         {screen === 'today' && (

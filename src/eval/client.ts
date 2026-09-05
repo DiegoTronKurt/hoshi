@@ -28,8 +28,12 @@ export class EvalClient {
     this.modelUrl = modelUrl
   }
 
-  async evaluate(position: EvalPosition): Promise<RawEvalOutput> {
-    const { result } = await this.rpc.call({ position, modelUrl: this.modelUrl })
+  /** `timeoutMs`: respaldo por defecto EVAL_TIMEOUT_MS (pensado para el
+   * clic manual de Revisar, tolerante). PlayGameScreen pasa uno mucho mas
+   * corto: ahi la evaluacion es una mejora invisible antes de que el bot
+   * juegue, no debe poder colgar la partida por mucho tiempo si falla. */
+  async evaluate(position: EvalPosition, timeoutMs?: number): Promise<RawEvalOutput> {
+    const { result } = await this.rpc.call({ position, modelUrl: this.modelUrl }, timeoutMs)
     return result
   }
 

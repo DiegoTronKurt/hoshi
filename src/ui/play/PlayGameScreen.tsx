@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CONCEPTS } from '../../analysis/concepts'
-import { applyMove, createGame, gameStateFromBoard } from '../../core/rules'
+import { applyMove, createGame, gameStateFromBoard, listLegalMoves } from '../../core/rules'
 import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../core/scoring'
 import type { AreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
@@ -8,6 +8,9 @@ import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
 import type { GameState, IllegalReason } from '../../core/types'
 import { EngineClient } from '../../engine/client'
+import { EvalClient } from '../../eval/client'
+import { EVAL_MODEL_URL } from '../../eval/modelUrl'
+import { blendWithUniform, legalPolicyDistribution } from '../../eval/policy'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { getLesson } from '../../content/lessons'
@@ -22,6 +25,15 @@ import { useSettings } from '../settings'
 import { PlayInGameControls } from './PlayInGameControls'
 import type { PlayConfig } from './playConfig'
 import { STRENGTH_LEVELS } from './strengthLevels'
+
+/** Respaldo corto para la evaluacion de red DENTRO de una partida: es una
+ * mejora invisible antes de que el bot juegue, no debe poder trabar el
+ * turno por mucho tiempo si falla o el dispositivo es lento -- muy por
+ * debajo del respaldo de 20s de EvalClient, pensado para el clic manual y
+ * tolerante de Revisar. Medido en esta sesion con Chromium/WebGL real:
+ * ~350ms en caliente, ~2.1s la primera vez (carga del modelo) -- 5000ms deja
+ * margen de sobra para ambos casos en un dispositivo bastante mas lento. */
+const EVAL_TIMEOUT_IN_GAME_MS = 5000
 
 const KOMI = 6.5
 
@@ -100,12 +112,32 @@ export function PlayGameScreen({
   }, [showExitConfirm, game.gameOver, onExitToConfig])
 
   const engineRef = useRef<EngineClient | null>(null)
+  const evalRef = useRef<EvalClient | null>(null)
   const savedThisGameRef = useRef(false)
+  // Captura el tablero inicial una sola vez, para precalentar la red sin
+  // depender de `history` (que cambia en cada jugada -- no queremos que el
+  // efecto de abajo se repita por eso).
+  const initialGameRef = useRef(history[0])
 
   useEffect(() => {
     engineRef.current = new EngineClient()
     return () => engineRef.current?.terminate()
   }, [])
+
+  useEffect(() => {
+    if (config.mode !== 'bot') return
+    const strength = STRENGTH_LEVELS.find((level) => level.id === config.strengthId) ?? STRENGTH_LEVELS[1]
+    if (strength.netInfluence <= 0) return
+
+    const client = new EvalClient(EVAL_MODEL_URL)
+    evalRef.current = client
+    // Precalienta el modelo (~11.5MB, ~2s la primera vez, ver
+    // EVAL_TIMEOUT_IN_GAME_MS) apenas arranca la partida, para que la
+    // primera jugada real del bot no pague esa carga completa -- resultado
+    // ignorado a proposito, es pura carga en caliente.
+    client.evaluate({ state: initialGameRef.current }).catch(() => {})
+    return () => client.terminate()
+  }, [config.mode, config.strengthId])
 
   useEffect(() => {
     onActiveChange(!game.gameOver)
@@ -156,6 +188,12 @@ export function PlayGameScreen({
   }
 
   // El bot juega automaticamente cuando le toca a el en modo "Contra el bot".
+  // Si el nivel de fuerza pide guia de red (netInfluence > 0), primero le
+  // pregunta a la red por una prioridad de jugadas de raiz (una sola
+  // evaluacion, no una por playout -- ver engine/mcts.ts::MctsOptions.rootPriors)
+  // y se la pasa al motor; si eso falla o tarda demasiado, sigue con MCTS
+  // llano sin avisar -- es una mejora invisible, su falla no debe alarmar ni
+  // trabar al bot.
   useEffect(() => {
     if (config.mode !== 'bot' || game.gameOver || game.toMove === config.humanColor) return
     const engine = engineRef.current
@@ -166,9 +204,29 @@ export function PlayGameScreen({
     setBotThinking(true)
     setBotError(false)
 
-    engine
-      .chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle)
-      .then((response) => {
+    async function playBotMove(engine: EngineClient) {
+      let rootPriors: Map<number | null, number> | undefined
+      const evalClient = evalRef.current
+      if (evalClient && strength.netInfluence > 0) {
+        try {
+          const recentMoves = moves.slice(Math.max(0, moves.length - 5))
+          const priorBoards = [history[history.length - 3]?.board, history[history.length - 2]?.board].filter(
+            (b): b is GameState['board'] => b !== undefined,
+          )
+          const output = await evalClient.evaluate({ state: game, recentMoves, priorBoards }, EVAL_TIMEOUT_IN_GAME_MS)
+          const legal = listLegalMoves(game)
+          const legalPoints = legal.filter((p): p is number => p !== null)
+          const legalPass = legal.includes(null)
+          const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass, game.board.width)
+          rootPriors = blendWithUniform(distribution, strength.netInfluence)
+        } catch {
+          rootPriors = undefined
+        }
+      }
+      if (cancelled) return
+
+      try {
+        const response = await engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle, rootPriors)
         if (cancelled) return
         setBotThinking(false)
         const color = game.toMove
@@ -177,17 +235,19 @@ export function PlayGameScreen({
         setMoves((prev) => [...prev, { color, point: response.move }])
         setHistory((prev) => [...prev, result.state as GameState])
         if (response.move !== null) playStoneSoundIfEnabled()
-      })
-      .catch(() => {
+      } catch {
         if (cancelled) return
         setBotThinking(false)
         setBotError(true)
-      })
+      }
+    }
+
+    playBotMove(engine)
 
     return () => {
       cancelled = true
     }
-  }, [game, config.mode, config.humanColor, config.strengthId, config.botStyle, playStoneSoundIfEnabled])
+  }, [game, moves, history, config.mode, config.humanColor, config.strengthId, config.botStyle, playStoneSoundIfEnabled])
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null

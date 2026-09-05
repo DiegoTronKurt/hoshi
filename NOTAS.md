@@ -1,5 +1,136 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-05, cont. 16: el bot real se guia por la red de KataGo en la raiz, una vez por jugada -- bloqueo de latencia por fin medido)
+
+Pregunta abierta del usuario: "que otra cosa mejoraria la app para aprender
+Go y la experiencia de usuario". La recomendacion elegida (de varias
+consideradas) fue la de mayor apalancamiento real: el bot contra el que se
+juega (`engine/mcts.ts`) es MCTS/UCT llano, sin entendimiento posicional,
+completamente desconectado de la red de KataGo ya integrada y verificada la
+sesion anterior (`eval/*`) -- que hasta ahora solo se usaba para la opinion
+de IA post-partida en Revisar. El roadmap y NOTAS.md ya venian anotando esta
+idea exacta (usar la red para ordenar las jugadas de la RAIZ, una vez por
+jugada real, no por playout) pero quedaba bloqueada por una sola cosa nunca
+hecha: medir la latencia real de inferencia en navegador/WebView, no en
+Node. Esta sesion si hay Chromium headless via Playwright disponible (ya
+usado hoy mismo para los 4 cambios de UI), asi que se pudo resolver de una.
+
+Trabajo hecho con una sesion completa de modo plan (Explore + Plan agent)
+antes de tocar codigo, dado el tamano y el riesgo de tocar el motor real.
+
+### Paso 0: se midio la latencia real -- ya no es un supuesto
+
+Script Playwright descartable, `EvalClient.evaluate()` real (WebGL, no CPU
+de Node) sobre un tablero 19x19 y uno 9x9 vacios: **~350ms por llamada en
+caliente, ~2.1s la primera vez** (carga del modelo, ~11.5MB). El unico dato
+anterior (~1043ms, Node/CPU) resulto ser ~3x mas pesimista que la realidad
+en navegador. Con presupuestos de 3000-15000ms por jugada, un costo fijo de
+~350ms (mas ~2.1s una sola vez al arrancar la partida, mitigado
+precalentando el modelo apenas empieza) es perfectamente pagable en
+`normal`/`strong`/`veryStrong` -- la duda real que queda no es de latencia,
+es de diseño de dificultad (ver mas abajo, nivel `weak`).
+
+### Bug real encontrado de paso, no relacionado, arreglado primero
+
+Investigando el pipeline de la red para este trabajo goto por
+`eval/policy.ts`: `legalPolicyDistribution` indexaba `policy[p]` con `p` en
+la convencion del TABLERO real (`y*width+x`), pero `policy` viene indexada
+en la grilla FIJA de la red (`y*19+x`) -- coinciden solo si `width===19` o
+en la fila 0. El unico llamador, `ReviewMistakeBoard.tsx` (el anillo azul
+"jugada sugerida por la IA" en Revisar), le pasaba tableros de cualquier
+tamano -- asi que para cualquier partida 9x9/9x13/13x13 revisada, ese
+anillo estaba senalando el punto EQUIVOCADO del tablero desde que se
+implemento. Nadie lo noto porque la verificacion contra KataGo real de la
+sesion anterior solo probo posiciones 19x19. Contraste: `bucketOwnership`
+(el territorio que SI se pinta bien) ya hacia esta conversion correctamente
+-- solo la lectura de politica se habia salteado el paso.
+
+Arreglo: nueva `gamePointToNNIndex(width, point)` en `features.ts`;
+`legalPolicyDistribution` gana un 4to parametro `width` y convierte antes de
+indexar; `ReviewMistakeBoard.tsx` le pasa el ancho real. Nuevo
+`tests/eval/policy.test.ts` (4 casos: fila>0 con ancho!=19 -- el caso que
+rompia --, fila 0, ancho 19 como identidad, y el caso degenerado de reparto
+uniforme).
+
+### El bot real: prioridad de red solo en la raiz, nunca por playout
+
+`engine/mcts.ts`: `MctsOptions` gana `rootPriors?: Map<number|null,number>`,
+usado en dos lugares, ambos restringidos a `node === root` (nunca en un nodo
+mas profundo -- solo hay una evaluacion de red por jugada real, jamas una
+por nodo del arbol):
+- **Orden de expansion**: nueva `pickPriorWeightedIndex` reemplaza el
+  `Math.floor(random() * ...)` de siempre cuando hay prioridad de raiz --
+  ruleta ponderada por la red en vez de uniforme.
+- **Sesgo tipo PUCT en `selectUctChild`**: nuevo termino
+  `ROOT_PRIOR_WEIGHT * prior / (1 + visitas)` (constante sin calibrar, mismo
+  criterio que ya se aplico a `EXPLORATION_CONSTANT`), sumado al score solo
+  para hijos de la raiz.
+
+Sin `rootPriors` (todo el codigo/tests existentes), el comportamiento queda
+bit a bit igual a antes -- confirmado corriendo la bateria completa sin
+tocar ningun test viejo. Nuevo test explicito: con pocos playouts (menos que
+puntos legales -- el caso real de nivel `weak`) y una prioridad muy sesgada
+hacia un punto que el MCTS llano NO elige de forma consistente sin ayuda
+(confirmado con el mismo escenario sin prioridad, 5 semillas, 5 resultados
+distintos), la jugada favorecida termina siendo siempre la elegida.
+
+`engine/worker.ts` y `engine/client.ts` pasan `rootPriors` de punta a punta
+sin que `engine/` importe nada de `eval/` -- el `Map` cruza el limite de
+Worker sin problema (structured clone lo soporta nativo, igual que ya cruza
+el `Int8Array` del tablero). Quien arma el `Map` es `PlayGameScreen.tsx`, en
+el hilo principal, con su propio `EvalClient` (mismo patron que ya usa
+Revisar) y la funcion ya arreglada `legalPolicyDistribution`.
+
+### `PlayGameScreen.tsx`: le pregunta a la red antes de cada jugada del bot (si el nivel lo pide)
+
+Nuevo `evalRef` (mismo patron que `engineRef`), con precalentamiento del
+modelo apenas arranca una partida contra el bot (resultado descartado, solo
+para que la primera jugada real no pague los ~2.1s de carga). Antes de
+llamar a `engine.chooseMove`, si `netInfluence` del nivel es mayor a 0: le
+pide a la red la politica de la posicion actual (con `recentMoves` y
+`priorBoards` ya disponibles en el `history: GameState[]` que esta pantalla
+ya mantenia -- sin reconstruir nada), la redistribuye entre las jugadas
+legales, la mezcla con una uniforme segun `netInfluence` (nueva
+`blendWithUniform` en `policy.ts`), y se la pasa a `chooseMove`. Si falla o
+tarda mas de `EVAL_TIMEOUT_IN_GAME_MS` (5000ms, generoso frente a los
+~350ms/~2.1s medidos): sigue con MCTS llano, sin avisar -- es una mejora
+invisible, su falla no debe alarmar ni trabar al bot. La latencia de la red
+NO cuenta contra `maxTimeMs` (que sigue intacto): es tiempo agregado antes
+de la busqueda, no restado del presupuesto de playouts.
+
+### Cuanto pesa la red en cada nivel de fuerza -- decision de producto explicita
+
+Nuevo `netInfluence` (0..1) en cada `StrengthLevel`: **`weak: 0`** (nunca
+llama a la red en este nivel, ni paga la latencia), `normal: 0.4`,
+`strong: 0.7`, `veryStrong: 1`. Razon especifica de `weak`, no generica:
+mide (sesion anterior) que ese nivel pide 100 playouts pero solo completa
+~50 dentro de sus 3000ms -- con tan pocos playouts, cual jugada termina "mas
+visitada" depende casi todo del ORDEN de expansion, sin tiempo real para que
+UCT lo corrija. Eso hace que `weak` sea, paradojicamente, el nivel MAS
+sensible a un sesgo de apertura -- justo el que tiene que seguir siendo
+vencible por un principiante. Los demas numeros son puntos de partida
+razonados, no calibrados jugando partidas reales -- marcados como tales en
+el comentario del codigo, igual que `approxKyu` ya lo esta. **Pendiente de
+feedback real del usuario jugando partidas**, que es justamente lo que
+pidio.
+
+### Verificacion
+
+`npx tsc -b`, `npx vitest run` (2808 tests, 41 archivos, todos pasan -- 6
+nuevos: 4 en `tests/eval/policy.test.ts`, 2 en `tests/engine/mcts.test.ts`),
+`npx oxlint` (mismos avisos preexistentes, ninguno nuevo). Verificacion real
+en navegador con Playwright: partida completa contra el bot en 9x9 nivel
+`normal` (el que ejercita el nuevo camino de codigo), el bot respondio
+correctamente a cada jugada, cero errores de consola. Scripts descartables
+(medicion de latencia y la partida de prueba) borrados al terminar.
+
+### Pendiente
+
+Sin commitear ni pushear todavia -- el usuario pidio explicitamente jugar y
+dar feedback antes de dar esto por terminado, asi que se deja para despues
+de esa vuelta (los numeros de `netInfluence`/`ROOT_PRIOR_WEIGHT` son los que
+mas probablemente cambien con ese feedback).
+
 ## Estado general del proyecto (2026-09-05, cont. 15: recomendados de Hoy navegables, dificultad en kyu en Revisar/Jugar, errores secundarios colapsados de nuevo, boton "Jugar" simplificado)
 
 El usuario probo la app tras la sesion anterior y devolvio 4 ajustes de

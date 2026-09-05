@@ -12,6 +12,13 @@ const EXPLORATION_CONSTANT = 1.4
 const ATARI_RESPONSE_PROBABILITY = 0.9
 const CAPTURE_PROBABILITY = 0.9
 const DEFAULT_MAX_TIME_MS = 15000
+/** Peso del termino de prioridad de red al elegir entre hijos de la RAIZ
+ * (estilo PUCT de AlphaZero/KataGo, ver NOTAS-libro-katago-accelerating-selfplay.md).
+ * Valor de partida sin calibrar contra partidas reales -- a diferencia de
+ * EXPLORATION_CONSTANT (1.4, respaldado por la convencion UCB1 clasica, ver
+ * NOTAS-libro-survey-mcts.md), este numero se ajusta con feedback real de
+ * juego, no con una referencia externa. */
+const ROOT_PRIOR_WEIGHT = 2.0
 
 interface MctsNode {
   move: number | null
@@ -35,13 +42,18 @@ function createNode(move: number | null, parent: MctsNode | null, state: GameSta
   }
 }
 
-function selectUctChild(node: MctsNode, random: RandomFn): MctsNode {
+/** `priors`: solo se pasa para hijos de la RAIZ (ver chooseMove) -- nunca
+ * hay una evaluacion de red por nodo mas profundo, solo una por jugada
+ * real. Sin `priors`, `priorTerm` da exactamente 0 y el score queda
+ * identico al de antes de que existiera este parametro. */
+function selectUctChild(node: MctsNode, random: RandomFn, priors?: Map<number | null, number>): MctsNode {
   let best: MctsNode | null = null
   let bestScore = -Infinity
   for (const child of shuffle(node.children, random)) {
     const exploitation = child.wins / child.visits
     const exploration = EXPLORATION_CONSTANT * Math.sqrt(Math.log(node.visits) / child.visits)
-    const score = exploitation + exploration
+    const priorTerm = priors ? (ROOT_PRIOR_WEIGHT * (priors.get(child.move) ?? 0)) / (1 + child.visits) : 0
+    const score = exploitation + exploration + priorTerm
     if (score > bestScore) {
       bestScore = score
       best = child
@@ -91,6 +103,24 @@ function pickWeightedMove(state: GameState, points: number[], ctx: StyleContext,
   }
 
   return fallback
+}
+
+/** Elige el indice de `moves` a expandir a continuacion, ponderado por
+ * `priors` en vez de uniforme -- solo se usa para las jugadas sin probar de
+ * la RAIZ cuando hay una prioridad de red disponible (ver chooseMove). Si
+ * `priors` no tiene peso para ninguna (suma <= 0, caso degenerado), cae de
+ * vuelta a uniforme en vez de dividir por cero. */
+function pickPriorWeightedIndex(moves: Array<number | null>, priors: Map<number | null, number>, random: RandomFn): number {
+  const weights = moves.map((m) => priors.get(m) ?? 0)
+  const total = weights.reduce((sum, w) => sum + w, 0)
+  if (total <= 0) return Math.floor(random() * moves.length)
+
+  let roll = random() * total
+  for (let i = 0; i < weights.length; i++) {
+    roll -= weights[i]
+    if (roll <= 0) return i
+  }
+  return moves.length - 1
 }
 
 /** Puntos vacios del tablero, sin ningun orden particular (quien llama
@@ -184,6 +214,12 @@ export interface MctsOptions {
   /** Estilo de juego elegido a mano para el bot (ver engine/botStyles.ts).
    * 'standard' por defecto: el comportamiento de siempre, sin sesgo. */
   style?: BotStyleId
+  /** Prioridad de la red de KataGo sobre las jugadas de la RAIZ unicamente
+   * (ver eval/policy.ts::legalPolicyDistribution) -- nunca se pide una
+   * evaluacion por nodo mas profundo, solo una por jugada real del bot.
+   * Ausente: chooseMove es identico bit a bit al comportamiento anterior a
+   * este campo (ver selectUctChild y el punto de expansion mas abajo). */
+  rootPriors?: Map<number | null, number>
 }
 
 export interface MctsResult {
@@ -242,13 +278,17 @@ export function chooseMove(rootState: GameState, options: MctsOptions): MctsResu
     const path: MctsNode[] = [node]
 
     while (node.untriedMoves.length === 0 && node.children.length > 0) {
-      node = selectUctChild(node, random)
+      const priors = node === root ? options.rootPriors : undefined
+      node = selectUctChild(node, random, priors)
       state = applyMove(state, node.move).state as GameState
       path.push(node)
     }
 
     if (node.untriedMoves.length > 0) {
-      const index = Math.floor(random() * node.untriedMoves.length)
+      const index =
+        node === root && options.rootPriors
+          ? pickPriorWeightedIndex(node.untriedMoves, options.rootPriors, random)
+          : Math.floor(random() * node.untriedMoves.length)
       const move = node.untriedMoves[index]
       node.untriedMoves.splice(index, 1)
       state = applyMove(state, move).state as GameState

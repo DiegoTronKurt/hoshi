@@ -83,6 +83,18 @@ function nnPos(x: number, y: number): number {
   return y * NN_LEN + x
 }
 
+/** Convierte un punto en la convencion del tablero real (`toPoint` de
+ * core/board.ts, `y*width+x`) al indice de la grilla fija de la red
+ * (`y*19+x`) -- distintas convenciones que coinciden por casualidad solo
+ * cuando `width===19` o en la fila 0. Necesario para leer `policy`/
+ * `ownership` (indexados en espacio de grilla) usando puntos que vienen en
+ * espacio de tablero, como los de `listLegalMoves`. Ver bucketOwnership en
+ * ui/review/reviewState.ts para el mismo patron ya aplicado a ownership. */
+export function gamePointToNNIndex(width: number, point: number): number {
+  const [x, y] = toXY(width, point)
+  return nnPos(x, y)
+}
+
 function setSpatial(spatial: Float32Array, posNN: number, channel: number, value = 1): void {
   spatial[posNN * NUM_SPATIAL_FEATURES + channel] = value
 }

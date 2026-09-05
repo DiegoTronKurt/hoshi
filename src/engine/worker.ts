@@ -9,6 +9,8 @@ export interface EngineRequest {
   randomSeed?: number
   maxTimeMs?: number
   style?: BotStyleId
+  /** Ver MctsOptions::rootPriors en engine/mcts.ts. */
+  rootPriors?: Map<number | null, number>
 }
 
 export interface EngineResponse {
@@ -20,9 +22,9 @@ export interface EngineResponse {
 }
 
 self.onmessage = (event: MessageEvent<EngineRequest>) => {
-  const { requestId, state, playouts, randomSeed, maxTimeMs, style } = event.data
+  const { requestId, state, playouts, randomSeed, maxTimeMs, style, rootPriors } = event.data
   try {
-    const result = chooseMove(state, { playouts, randomSeed, maxTimeMs, style })
+    const result = chooseMove(state, { playouts, randomSeed, maxTimeMs, style, rootPriors })
     const response: EngineResponse = { requestId, ...result }
     postMessage(response)
   } catch (err) {

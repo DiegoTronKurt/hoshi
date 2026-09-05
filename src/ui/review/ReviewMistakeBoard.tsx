@@ -65,7 +65,7 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
       const legal = listLegalMoves(evalState)
       const legalPoints = legal.filter((p): p is number => p !== null)
       const legalPass = legal.includes(null)
-      const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass)
+      const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass, width)
       let topPoint: number | null = null
       let topProbability = -1
       for (const [point, probability] of distribution) {

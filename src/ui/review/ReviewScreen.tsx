@@ -5,6 +5,7 @@ import type { ConceptId, ConceptSeverity } from '../../analysis/concepts'
 import { sgfToGameRecord } from '../../core/sgf'
 import { BLACK } from '../../core/types'
 import { EvalClient } from '../../eval/client'
+import { EVAL_MODEL_URL } from '../../eval/modelUrl'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
@@ -15,8 +16,6 @@ import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
 import { ReviewMistakeBoard } from './ReviewMistakeBoard'
 import { stateAtMove } from './reviewState'
-
-const EVAL_MODEL_URL = `${import.meta.env.BASE_URL}models/kata-b10c128/model.json`
 
 const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
   high: 'review.severity.high',

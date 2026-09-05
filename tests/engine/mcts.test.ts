@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { toPoint } from '../../src/core/board'
 import { applyMove, createGame } from '../../src/core/rules'
 import { EMPTY, WHITE } from '../../src/core/types'
 import { chooseMove } from '../../src/engine/mcts'
@@ -67,6 +68,30 @@ describe('MCTS', () => {
 
     const result = chooseMove(state, { playouts: 20, randomSeed: 1 })
     expect(result.playoutsRun).toBeGreaterThan(0) // no debe aceptar pasar habiendo una captura gratis
+  })
+
+  it('con pocos playouts (menos que puntos legales) y una prioridad de raiz muy sesgada, esa jugada termina siendo la elegida', () => {
+    // Con 10 playouts y 25 puntos legales, ningun nodo alcanza a expandirse
+    // dos veces -- exactamente el caso real de bajo presupuesto (nivel
+    // "weak", ver strengthLevels.ts) donde el orden de expansion decide casi
+    // todo, sin tiempo para que UCT lo corrija despues. Esquina (0,0) a
+    // proposito: una jugada que el MCTS llano NO elige de forma consistente
+    // sin ayuda (confirmado con el mismo escenario sin prior, mas abajo).
+    const state = createGame(5, 5, 6.5)
+    const favored = toPoint(5, 0, 0)
+    const rootPriors = new Map<number | null, number>([[favored, 0.97]])
+
+    for (const seed of [1, 7, 42, 99, 123]) {
+      const result = chooseMove(state, { playouts: 10, randomSeed: seed, rootPriors })
+      expect(result.move).toBe(favored)
+    }
+  })
+
+  it('sin prioridad de raiz, el mismo escenario de pocos playouts NO converge siempre a la misma jugada', () => {
+    const state = createGame(5, 5, 6.5)
+    const moves = [1, 7, 42, 99, 123].map((seed) => chooseMove(state, { playouts: 10, randomSeed: seed }).move)
+
+    expect(new Set(moves).size).toBeGreaterThan(1)
   })
 
   it('no acepta pasar si va perdiendo en el marcador, aunque el rival haya pasado', () => {
