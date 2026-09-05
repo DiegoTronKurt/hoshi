@@ -124,12 +124,25 @@ en navegador con Playwright: partida completa contra el bot en 9x9 nivel
 correctamente a cada jugada, cero errores de consola. Scripts descartables
 (medicion de latencia y la partida de prueba) borrados al terminar.
 
-### Pendiente
+### Encabezado "Hoshi / Aprende Go..." solo en Hoy
 
-Sin commitear ni pushear todavia -- el usuario pidio explicitamente jugar y
-dar feedback antes de dar esto por terminado, asi que se deja para despues
-de esa vuelta (los numeros de `netInfluence`/`ROOT_PRIOR_WEIGHT` son los que
-mas probablemente cambien con ese feedback).
+Pedido aparte del usuario, mientras esto se planificaba: `App.tsx` mostraba
+el `<header>` con titulo y lema en TODAS las pantallas; ahora solo se
+renderiza cuando `screen === 'today'`. Verificado en navegador real
+(Playwright): presente en Hoy, ausente en Aprender/Jugar/Ejercicios/Revisar/Perfil.
+
+### Commit, push y AAB de release, a pedido explicito del usuario
+
+El usuario aprobo el resultado ("top job!") sin pedir ajustes a
+`netInfluence`/`ROOT_PRIOR_WEIGHT` todavia -- esos numeros siguen abiertos a
+cambiar con el feedback de partidas reales, pero no bloquean esta release.
+`hoshi`: commit `edc6258` ("El bot real ahora se guia por la red de KataGo
+en la raiz, una vez por jugada"), pusheado a `master` (`b0dfa11..edc6258`).
+`hoshi-flutter`: `npm run build` + `sync-webapp.ps1`, version subida a
+`1.16.0+21`, commit `0216f6a`, pusheado (`c004407..0216f6a`). AAB firmado
+regenerado: `app-release.aab` (54.0MB) en
+`hoshi-flutter/build/app/outputs/bundle/release/`. Subir a Play Console
+sigue siendo un paso del usuario.
 
 ## Estado general del proyecto (2026-09-05, cont. 15: recomendados de Hoy navegables, dificultad en kyu en Revisar/Jugar, errores secundarios colapsados de nuevo, boton "Jugar" simplificado)
 
