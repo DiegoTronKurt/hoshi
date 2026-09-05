@@ -195,8 +195,17 @@ hay acumulada, no el calculo del porcentaje. Paridad ES/EN mantenida.
 Paridad de claves i18n ES/EN confirmada con un script (720 claves cada uno,
 +1 por `profile.weakest.caption`). No se corrio ningun servidor de
 desarrollo mas alla del temporal para la verificacion de KataGo (ya
-apagado). No se hizo commit ni push -- no se pidio
-esta vez.
+apagado).
+
+### Commit, push y AAB de release, a pedido explicito del usuario
+
+`hoshi`: commit `6ec3aee` ("Colapsar tarjetas de repaso en Hoy, tablero+IA
+para todos los errores en Revisar, verificacion real de la codificacion de
+KataGo, aclarar puntaje de Perfil"), pusheado a `master`. `hoshi-flutter`:
+`npm run build` + `sync-webapp.ps1`, version subida a `1.14.0+19`, commit
+`373155f`, pusheado. AAB firmado regenerado: `app-release.aab` (54.0MB) en
+`hoshi-flutter/build/app/outputs/bundle/release/`. Subir a Play Console
+sigue siendo un paso del usuario.
 
 
 
