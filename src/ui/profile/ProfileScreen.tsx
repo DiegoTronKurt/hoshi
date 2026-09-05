@@ -4,6 +4,7 @@ import { AXIS_LABEL_KEY, computeAxisScores } from '../../analysis/axes'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
 import { computeProfiles, weakestConcepts } from '../../learning/profile'
 import type { ConceptProfile } from '../../learning/profile'
+import { computeSelfRankKyu } from '../../learning/selfRank'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
@@ -44,6 +45,7 @@ export function ProfileScreen() {
   const concepts = useMemo(() => conceptsWithEvidence(), [])
   const axisScores = useMemo(() => computeAxisScores(profiles), [profiles])
   const insights = useMemo(() => computeKnowledgeApplicationInsights(profiles), [profiles])
+  const selfRank = useMemo(() => computeSelfRankKyu(profiles, games), [profiles, games])
 
   // Boton fisico "atras" de Android: settings -> profile -- ver
   // navigation/localBack.ts.
@@ -70,6 +72,19 @@ export function ProfileScreen() {
           {t('profile.settings')}
         </button>
       </div>
+
+      <section className="profile-selfrank">
+        {selfRank.kyu === null ? (
+          <p className="profile-selfrank-empty">{t('profile.selfRank.insufficientData')}</p>
+        ) : (
+          <>
+            <p className="profile-selfrank-value">{t('profile.selfRank.value', { kyu: Math.round(selfRank.kyu) })}</p>
+            <p className="settings-description">
+              {t(selfRank.confidence === 'blended' ? 'profile.selfRank.disclaimer' : 'profile.selfRank.lowConfidence')}
+            </p>
+          </>
+        )}
+      </section>
 
       <section className="profile-radar">
         <RadarChart

@@ -280,3 +280,137 @@ describe('detectores de errores', () => {
     }
   })
 })
+
+describe('pointCost', () => {
+  it('ATARI_IGNORADO: costo real, tomado de la captura real que se ve mas adelante en la partida', () => {
+    const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [4, 4], [2, 2])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'ATARI_IGNORADO' && e.result === 'incorrect')
+    expect(event?.pointCost).toBeGreaterThan(0)
+  })
+
+  it('AUTOATARI: sin captura real dentro de la partida grabada, sin pointCost (no ausencia de dato, sin dano real)', () => {
+    const m = moves([0, 0], [1, 2], [0, 1], [3, 2], [0, 2], [2, 1], [2, 2])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'AUTOATARI')
+    expect(event?.pointCost).toBeUndefined()
+  })
+
+  it('AUTOATARI: el grupo autoatari termina realmente capturado despues, pointCost es el costo real de esa captura', () => {
+    const m = moves([0, 0], [1, 2], [0, 1], [3, 2], [0, 2], [2, 1], [2, 2], [2, 3])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'AUTOATARI')
+    expect(event?.pointCost).toBeGreaterThan(0)
+  })
+
+  it('CAPTURA_PERDIDA: el grupo sobrevive, pointCost es el valor hipotetico de haber capturado ahi', () => {
+    const m = moves([1, 2], [2, 2], [3, 2], [4, 4], [2, 1], [4, 3], [0, 4], [4, 2])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'CAPTURA_PERDIDA' && e.result === 'incorrect')
+    expect(event?.pointCost).toBeGreaterThan(0)
+  })
+
+  it('RELLENO_OJO_PROPIO: pointCost presente y no negativo', () => {
+    const m = moves([1, 2], [4, 4], [3, 2], [4, 3], [2, 1], [4, 2], [2, 3], [4, 1], [2, 2])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'RELLENO_OJO_PROPIO')
+    expect(event?.pointCost).toBeGreaterThanOrEqual(0)
+  })
+
+  it('RELLENO_TERRITORIO_PROPIO: pointCost presente y no negativo', () => {
+    const m: RecordedMove[] = [
+      { color: BLACK, point: p(1, 1) },
+      { color: WHITE, point: p(8, 0) },
+      { color: BLACK, point: p(1, 0) },
+      { color: WHITE, point: p(8, 1) },
+      { color: BLACK, point: p(0, 1) },
+      { color: WHITE, point: p(8, 2) },
+      { color: BLACK, point: p(1, 2) },
+      { color: WHITE, point: p(8, 3) },
+      { color: BLACK, point: p(1, 3) },
+      { color: WHITE, point: p(8, 4) },
+      { color: BLACK, point: p(0, 3) },
+      { color: WHITE, point: p(8, 5) },
+      { color: BLACK, point: p(0, 0) },
+    ]
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'RELLENO_TERRITORIO_PROPIO')
+    expect(event?.pointCost).toBeGreaterThanOrEqual(0)
+  })
+
+  it('TRIANGULO_VACIO: pointCost presente y no negativo', () => {
+    const m = moves([2, 2], [7, 7], [3, 3], [7, 6], [2, 3])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'TRIANGULO_VACIO')
+    expect(event?.pointCost).toBeGreaterThanOrEqual(0)
+  })
+
+  it('PRIMERA_LINEA_TEMPRANA: pointCost presente y no negativo', () => {
+    const m = moves([0, 4])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'PRIMERA_LINEA_TEMPRANA')
+    expect(event?.pointCost).toBeGreaterThanOrEqual(0)
+  })
+
+  it('PASE_PREMATURO: pointCost es el mismo delta (> 2, por el propio umbral del detector) que ya exige el detector', () => {
+    const m: RecordedMove[] = [
+      { color: BLACK, point: p(1, 2) },
+      { color: WHITE, point: p(2, 2) },
+      { color: BLACK, point: p(2, 1) },
+      { color: WHITE, point: p(3, 2) },
+      { color: BLACK, point: p(3, 1) },
+      { color: WHITE, point: p(7, 7) },
+      { color: BLACK, point: p(2, 3) },
+      { color: WHITE, point: p(7, 6) },
+      { color: BLACK, point: p(3, 3) },
+      { color: WHITE, point: p(7, 5) },
+      { color: BLACK, point: null },
+    ]
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'PASE_PREMATURO' && e.result === 'incorrect')
+    expect(event?.pointCost).toBeGreaterThan(2)
+  })
+
+  it('GRUPO_MURIO_SIN_OJOS: pointCost es el costo real (area antes vs. justo despues de la captura)', () => {
+    const m: RecordedMove[] = [
+      { color: BLACK, point: p(1, 1) },
+      { color: WHITE, point: p(2, 2) },
+      { color: BLACK, point: p(2, 1) },
+      { color: WHITE, point: p(3, 2) },
+      { color: BLACK, point: p(4, 1) },
+      { color: WHITE, point: p(4, 2) },
+      { color: BLACK, point: p(5, 1) },
+      { color: WHITE, point: p(5, 2) },
+      { color: BLACK, point: p(1, 2) },
+      { color: WHITE, point: p(7, 7) },
+      { color: BLACK, point: p(2, 3) },
+      { color: WHITE, point: p(7, 6) },
+      { color: BLACK, point: p(3, 3) },
+      { color: WHITE, point: p(7, 5) },
+      { color: BLACK, point: p(4, 3) },
+      { color: WHITE, point: p(7, 4) },
+      { color: BLACK, point: p(5, 3) },
+      { color: WHITE, point: p(7, 3) },
+      { color: BLACK, point: p(6, 2) },
+      { color: WHITE, point: p(7, 2) },
+      { color: BLACK, point: p(3, 1) },
+    ]
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'GRUPO_MURIO_SIN_OJOS')
+    expect(event?.pointCost).toBeGreaterThan(0)
+  })
+
+  it('CORTE_NO_DEFENDIDO: sin pointCost (reconectar no cambia el area, ver comentario del detector)', () => {
+    const m = moves([2, 2], [7, 7], [3, 3], [2, 3], [7, 6], [7, 4])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'CORTE_NO_DEFENDIDO')
+    expect(event?.pointCost).toBeUndefined()
+  })
+
+  it('ESCALERA_FALLIDA: sin pointCost (consecuencia difusa, sin captura unica atribuible)', () => {
+    const m = moves([2, 2], [0, 0], [7, 7], [3, 2], [7, 6], [2, 1], [7, 5], [1, 2])
+    const events = analyzeGame(SIZE, SIZE, 0, m)
+    const event = events.find((e) => e.conceptId === 'ESCALERA_FALLIDA')
+    expect(event?.pointCost).toBeUndefined()
+  })
+})

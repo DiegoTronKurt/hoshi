@@ -43,6 +43,9 @@ export interface SavedGameRecord {
    * guardadas antes de que existiera el conteo japones -- se asume 'chinese',
    * la unica regla que existia entonces. */
   scoringRule?: 'chinese' | 'japanese'
+  /** Cantidad de piedras de handicap con las que arranco esta partida.
+   * Ausente en partidas sin handicap o guardadas antes de este campo. */
+  handicapCount?: number
   result: { black: number; white: number; winner: 'black' | 'white' }
   sgf: string
 }

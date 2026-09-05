@@ -541,6 +541,23 @@
   color: var(--hoshi-text-muted);
 }
 
+.review-margin-line {
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+
+.review-mistake-point-cost {
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+  margin: 0.2rem 0 0;
+}
+
+.review-point-cost-disclaimer {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  color: var(--hoshi-text-faint);
+}
+
 .review-severity {
   display: inline-block;
   align-self: flex-start;
@@ -1319,6 +1336,37 @@
   color: var(--hoshi-accent-contrast);
 }
 
+.learn-intro-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.learn-intro-demo-body {
+  margin: 0;
+  color: var(--hoshi-text-faint);
+}
+
+.learn-intro-demo .board-container {
+  width: min(260px, 100%);
+}
+
+.learn-intro-demo-continue {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .learn-read-badge {
   font-size: 0.7rem;
   padding: 0.1rem 0.5rem;
@@ -1665,6 +1713,22 @@
   color: var(--hoshi-text);
   font-size: 0.85rem;
   cursor: pointer;
+}
+
+.profile-selfrank {
+  text-align: center;
+}
+
+.profile-selfrank-value {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.profile-selfrank-empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
 }
 
 .profile-radar {

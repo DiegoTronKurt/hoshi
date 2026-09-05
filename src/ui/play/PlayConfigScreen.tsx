@@ -9,6 +9,7 @@ import { computeAdaptiveStrength } from '../../learning/adaptiveDifficulty'
 import { ADAPTIVE_MIN_GAMES } from '../../learning/adaptiveDifficulty'
 import { listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
+import { getHandicapPoints } from '../board/handicapPoints'
 import type { DifficultyMode, GameMode, PlayConfig, ScoringRule } from './playConfig'
 import { loadLastPlayConfig, saveLastPlayConfig } from './playConfig'
 import { SavedGamesList } from './SavedGamesList'
@@ -42,6 +43,16 @@ const BOARD_PRESETS: BoardPreset[] = [
   { width: 9, height: 13, label: '9x13' },
 ]
 
+// Solo 9x9/13x13 (hasta 5, sus unicos puntos hoshi reales) y 19x19 (2 a 9,
+// sus 9 puntos hoshi reales) tienen una convencion de handicap real -- ver
+// ui/board/handicapPoints.ts. Los demas tamanos (5x5, 7x7, 9x13) no ofrecen
+// el grupo en absoluto, en vez de inventar puntos sin respaldo.
+const HANDICAP_OPTIONS_BY_SIZE: Record<string, number[]> = {
+  '9x9': [0, 2, 3, 4, 5],
+  '13x13': [0, 2, 3, 4, 5],
+  '19x19': [0, 2, 3, 4, 5, 6, 7, 8, 9],
+}
+
 const BOT_STYLE_LABEL_KEY: Record<BotStyleId, TranslationKey> = {
   standard: 'play.botStyle.standard',
   territorial: 'play.botStyle.territorial',
@@ -65,6 +76,25 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
   const [botStyle, setBotStyle] = useState<BotStyleId>(lastConfig?.botStyle ?? 'standard')
   const [humanColor, setHumanColor] = useState<Color>(lastConfig?.humanColor ?? BLACK)
   const [scoringRule, setScoringRule] = useState<ScoringRule>(lastConfig?.scoringRule ?? 'chinese')
+  const [handicapCount, setHandicapCount] = useState(lastConfig?.handicapCount ?? 0)
+  const [hintsEnabled, setHintsEnabled] = useState(lastConfig?.hintsEnabled ?? false)
+
+  const handicapOptions = HANDICAP_OPTIONS_BY_SIZE[`${width}x${height}`]
+
+  // Un cambio de tamaño puede dejar la cantidad elegida sin sentido (p.ej.
+  // veniamos de 19x19 con 8 piedras y se pasa a 9x9, que solo llega a 5) o
+  // sacar el grupo entero de la pantalla (9x13) -- en ambos casos se vuelve a
+  // "sin handicap" en vez de dejar un valor invalido silencioso.
+  useEffect(() => {
+    if (!handicapOptions?.includes(handicapCount)) setHandicapCount(0)
+  }, [handicapOptions, handicapCount])
+
+  // El handicap es de Negro por convencion -- forzar el color cuando se elige
+  // alguno evita una combinacion sin sentido (handicap para Blanco). Solo
+  // aplica contra el bot: en local no hay un unico "color de la persona".
+  useEffect(() => {
+    if (mode === 'bot' && handicapCount > 0) setHumanColor(BLACK)
+  }, [mode, handicapCount])
 
   const [savedGames, setSavedGames] = useState<SavedGameRecord[]>([])
   useEffect(() => {
@@ -78,8 +108,31 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
 
   function handleStart() {
     const resolvedStrengthId = difficultyMode === 'adaptive' ? adaptiveResult.strengthId : strengthId
-    saveLastPlayConfig({ width, height, mode, difficultyMode, strengthId, botStyle, humanColor, scoringRule })
-    onStart({ width, height, mode, strengthId: resolvedStrengthId, botStyle, humanColor, scoringRule })
+    const handicapPoints = getHandicapPoints(width, height, handicapCount)
+    const resolvedHumanColor = mode === 'bot' && handicapPoints.length > 0 ? BLACK : humanColor
+    saveLastPlayConfig({
+      width,
+      height,
+      mode,
+      difficultyMode,
+      strengthId,
+      botStyle,
+      humanColor: resolvedHumanColor,
+      scoringRule,
+      handicapCount,
+      hintsEnabled,
+    })
+    onStart({
+      width,
+      height,
+      mode,
+      strengthId: resolvedStrengthId,
+      botStyle,
+      humanColor: resolvedHumanColor,
+      scoringRule,
+      handicapStones: handicapPoints.length > 0 ? handicapPoints : undefined,
+      hintsEnabled,
+    })
   }
 
   return (
@@ -108,6 +161,26 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
           })}
         </div>
       </div>
+
+      {handicapOptions && (
+        <div className="play-card-group">
+          <span className="play-card-group-label">{t('play.handicap.label')}</span>
+          <div className="play-card-row" role="group" aria-label={t('play.handicap.label')}>
+            {handicapOptions.map((count) => (
+              <button
+                key={count}
+                type="button"
+                className={`play-bot-card ${count === handicapCount ? 'active' : ''}`}
+                aria-pressed={count === handicapCount}
+                onClick={() => setHandicapCount(count)}
+              >
+                <span>{count === 0 ? t('play.handicap.off') : t('play.handicap.count', { n: count })}</span>
+              </button>
+            ))}
+          </div>
+          {handicapCount > 0 && <p className="settings-description">{t('play.handicap.disclaimer')}</p>}
+        </div>
+      )}
 
       <div className="play-card-group">
         <span className="play-card-group-label">{t('play.scoringRule.label')}</span>
@@ -138,6 +211,29 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
           <option value="local">{t('play.mode.local')}</option>
           <option value="bot">{t('play.mode.bot')}</option>
         </select>
+      </div>
+
+      <div className="play-card-group">
+        <span className="play-card-group-label">{t('play.hint.toggle.label')}</span>
+        <div className="play-card-row" role="group" aria-label={t('play.hint.toggle.label')}>
+          <button
+            type="button"
+            className={`play-bot-card ${!hintsEnabled ? 'active' : ''}`}
+            aria-pressed={!hintsEnabled}
+            onClick={() => setHintsEnabled(false)}
+          >
+            <span>{t('play.hint.toggle.off')}</span>
+          </button>
+          <button
+            type="button"
+            className={`play-bot-card ${hintsEnabled ? 'active' : ''}`}
+            aria-pressed={hintsEnabled}
+            onClick={() => setHintsEnabled(true)}
+          >
+            <span>{t('play.hint.toggle.on')}</span>
+          </button>
+        </div>
+        {hintsEnabled && <p className="settings-description">{t('play.hint.disclaimer')}</p>}
       </div>
 
       {mode === 'bot' && (
@@ -211,17 +307,19 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
             <p className="settings-description">{t(`play.botStyle.description.${botStyle}` as TranslationKey)}</p>
           </div>
 
-          <div className="controls">
-            <label htmlFor="human-color">{t('play.color.label')}</label>
-            <select
-              id="human-color"
-              value={humanColor}
-              onChange={(event) => setHumanColor(Number(event.target.value) as Color)}
-            >
-              <option value={BLACK}>{t('color.black')}</option>
-              <option value={WHITE}>{t('color.white')}</option>
-            </select>
-          </div>
+          {handicapCount === 0 && (
+            <div className="controls">
+              <label htmlFor="human-color">{t('play.color.label')}</label>
+              <select
+                id="human-color"
+                value={humanColor}
+                onChange={(event) => setHumanColor(Number(event.target.value) as Color)}
+              >
+                <option value={BLACK}>{t('color.black')}</option>
+                <option value={WHITE}>{t('color.white')}</option>
+              </select>
+            </div>
+          )}
         </>
       )}
 

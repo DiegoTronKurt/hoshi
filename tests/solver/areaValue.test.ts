@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { createBoard, toPoint } from '../../src/core/board'
+import { computeAreaScore } from '../../src/core/scoring'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { BoardState, Color } from '../../src/core/types'
-import { areaDeltaForPoint, bestAreaMove, isOwnTerritory, PASS_VALUE_THRESHOLD } from '../../src/solver/areaValue'
+import {
+  areaDeltaForPoint,
+  bestAreaMove,
+  estimateMoveCost,
+  isOwnTerritory,
+  PASS_VALUE_THRESHOLD,
+  realizedAreaCost,
+} from '../../src/solver/areaValue'
 
 const SIZE = 9
 
@@ -59,6 +67,46 @@ describe('bestAreaMove', () => {
     const board = cornerWall()
     place(board, BLACK, [GAP_POINT])
     expect(bestAreaMove(board, BLACK)).toBeNull()
+  })
+})
+
+describe('estimateMoveCost', () => {
+  it('costo 0 si la jugada realmente jugada ya era la mejor disponible', () => {
+    const board = cornerWall()
+    expect(estimateMoveCost(board, toPoint(SIZE, ...GAP_POINT), BLACK)).toBe(0)
+  })
+
+  it('costo positivo (mejor jugada menos la jugada real) si se jugo en otro lado', () => {
+    const board = cornerWall()
+    // Sin blanco disperso alrededor, cualquier punto neutral reclama solo su
+    // propia celda (delta 1, ver el comentario de cornerWall mas arriba) --
+    // bien por debajo del hueco (delta 4), que sigue siendo la mejor jugada.
+    const elsewhere = toPoint(SIZE, 5, 5)
+    expect(estimateMoveCost(board, elsewhere, BLACK)).toBe(3)
+  })
+})
+
+describe('realizedAreaCost', () => {
+  it('mide la diferencia real de area entre dos posiciones reales de la partida (una captura real)', () => {
+    const before = createBoard(SIZE)
+    place(before, BLACK, [[4, 4], [4, 5], [5, 4], [5, 5]])
+    place(before, WHITE, [[0, 0], [0, 8], [8, 0]])
+
+    // Mismo tablero, pero el grupo negro ya fue capturado (puntos vacios de
+    // nuevo) -- dos posiciones reales, no una hipotesis.
+    const after = createBoard(SIZE)
+    place(after, WHITE, [[0, 0], [0, 8], [8, 0]])
+
+    const expected = computeAreaScore(before, 0).black - computeAreaScore(after, 0).black
+    expect(expected).toBeGreaterThan(0)
+    expect(realizedAreaCost(before, after, 0, BLACK)).toBe(expected)
+  })
+
+  it('nunca es negativo, aunque el area para ese color haya aumentado entre los dos estados', () => {
+    const before = createBoard(SIZE)
+    const after = createBoard(SIZE)
+    place(after, BLACK, [[4, 4]])
+    expect(realizedAreaCost(before, after, 0, BLACK)).toBe(0)
   })
 })
 

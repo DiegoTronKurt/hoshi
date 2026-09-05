@@ -103,6 +103,18 @@ export interface Concept {
   hasDetector: boolean
   generatesExercises: boolean
   severity: ConceptSeverity
+  /** Como se calcula el costo en puntos de un error de este concepto en
+   * Revisar (ConceptOccurrence.pointCost, ver analysis/mistakes.ts), cuando
+   * corresponde. 'realized': ya ocurrio una captura real en la partida
+   * grabada, el costo es la diferencia de area real entre el estado justo
+   * antes y justo despues. 'potential': no hubo captura, pero existia una
+   * alternativa legal conocida en esa misma posicion; el costo es el delta
+   * de un solo ply de esa alternativa. Ausente (ningun mistake de este
+   * concepto muestra costo): CORTE_NO_DEFENDIDO (reconectar dos cadenas no
+   * cambia el area bajo conteo chino, cualquier dano real ya aparece como un
+   * evento de otro concepto con costo propio) y ESCALERA_FALLIDA (la
+   * consecuencia es difusa, sin una captura unica atribuible). */
+  costKind?: 'realized' | 'potential'
 }
 
 export const CONCEPTS: Record<ConceptId, Concept> = {
@@ -136,6 +148,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'high',
+    costKind: 'realized',
   },
   AUTOATARI: {
     id: 'AUTOATARI',
@@ -147,6 +160,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'medium',
+    costKind: 'realized',
   },
   CAPTURA_PERDIDA: {
     id: 'CAPTURA_PERDIDA',
@@ -157,6 +171,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: false,
     severity: 'medium',
+    costKind: 'potential',
   },
   KO: {
     id: 'KO',
@@ -188,6 +203,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'low',
+    costKind: 'potential',
   },
   PASE_PREMATURO: {
     id: 'PASE_PREMATURO',
@@ -198,6 +214,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'medium',
+    costKind: 'potential',
   },
   PIEDRA_MUERTA_ATACADA_EN_VANO: {
     id: 'PIEDRA_MUERTA_ATACADA_EN_VANO',
@@ -238,6 +255,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'high',
+    costKind: 'potential',
   },
   PUNTO_VITAL: {
     id: 'PUNTO_VITAL',
@@ -269,6 +287,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: false,
     severity: 'high',
+    costKind: 'realized',
   },
   DOBLE_ATARI: {
     id: 'DOBLE_ATARI',
@@ -354,6 +373,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: true,
     severity: 'low',
+    costKind: 'potential',
   },
   PRIMERA_LINEA_TEMPRANA: {
     id: 'PRIMERA_LINEA_TEMPRANA',
@@ -364,6 +384,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     hasDetector: true,
     generatesExercises: false,
     severity: 'low',
+    costKind: 'potential',
   },
   JUGADA_LEJOS_DEL_COMBATE: {
     id: 'JUGADA_LEJOS_DEL_COMBATE',

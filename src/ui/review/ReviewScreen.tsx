@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { analyzeGame } from '../../analysis/mistakes'
 import type { ConceptOccurrence } from '../../analysis/mistakes'
+import { CONCEPTS } from '../../analysis/concepts'
 import type { ConceptId, ConceptSeverity } from '../../analysis/concepts'
 import { sgfToGameRecord } from '../../core/sgf'
 import { BLACK } from '../../core/types'
@@ -24,6 +25,11 @@ const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
 }
 
 const SEVERITY_ORDER: Record<ConceptSeverity, number> = { high: 0, medium: 1, low: 2 }
+
+const POINT_COST_KEY: Record<'realized' | 'potential', TranslationKey> = {
+  realized: 'review.mistakePointCostRealized',
+  potential: 'review.mistakePointCostPotential',
+}
 
 export type Mistake = ConceptOccurrence & { result: 'incorrect'; severity: ConceptSeverity; moveNumber: number }
 
@@ -207,6 +213,16 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
         <h2>{t('review.title')}</h2>
       </div>
 
+      <p className="review-margin-line">
+        {t('review.marginLine', {
+          margin: Math.abs(selectedGame.result.black - selectedGame.result.white),
+          winner: t(selectedGame.result.winner === 'black' ? 'color.black' : 'color.white'),
+        })}
+      </p>
+      {events.some((e) => e.pointCost !== undefined) && (
+        <p className="review-point-cost-disclaimer">{t('review.pointCostDisclaimer')}</p>
+      )}
+
       {events.length === 0 ? (
         <p className="review-empty">{t('review.noMistakes')}</p>
       ) : (
@@ -236,6 +252,14 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
               </p>
               <p className="review-mistake-concept">{t(`concept.${primaryEvent.conceptId}.label` as TranslationKey)}</p>
               <p className="review-mistake-summary">{t(`concept.${primaryEvent.conceptId}.summary` as TranslationKey)}</p>
+              {primaryEvent.pointCost !== undefined && (
+                <p className="review-mistake-point-cost">
+                  {t(POINT_COST_KEY[CONCEPTS[primaryEvent.conceptId].costKind ?? 'potential'], {
+                    move: primaryEvent.moveNumber,
+                    points: Math.round(primaryEvent.pointCost * 10) / 10,
+                  })}
+                </p>
+              )}
               <button
                 type="button"
                 className="review-practice-concept"
@@ -293,6 +317,14 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                         <p className="review-mistake-summary">
                           {t(`concept.${event.conceptId}.summary` as TranslationKey)}
                         </p>
+                        {event.pointCost !== undefined && (
+                          <p className="review-mistake-point-cost">
+                            {t(POINT_COST_KEY[CONCEPTS[event.conceptId].costKind ?? 'potential'], {
+                              move: event.moveNumber,
+                              points: Math.round(event.pointCost * 10) / 10,
+                            })}
+                          </p>
+                        )}
                         <button
                           type="button"
                           className="review-practice-concept"

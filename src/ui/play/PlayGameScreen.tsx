@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CONCEPTS } from '../../analysis/concepts'
+import { createBoard } from '../../core/board'
 import { applyMove, createGame, gameStateFromBoard, listLegalMoves } from '../../core/rules'
 import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../core/scoring'
 import type { AreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
-import { BLACK } from '../../core/types'
+import { BLACK, WHITE } from '../../core/types'
 import type { GameState, IllegalReason } from '../../core/types'
 import { EngineClient } from '../../engine/client'
 import { EvalClient } from '../../eval/client'
@@ -36,6 +37,11 @@ import { STRENGTH_LEVELS } from './strengthLevels'
 const EVAL_TIMEOUT_IN_GAME_MS = 5000
 
 const KOMI = 6.5
+/** Komi reducido estandar cuando hay piedras de handicap -- solo evita un
+ * empate, no intenta replicar ninguna tabla de komi por cantidad de piedras. */
+const HANDICAP_KOMI = 0.5
+
+const MAX_HINTS_PER_GAME = 5
 
 const BOT_STYLE_LABEL_KEY: Record<string, TranslationKey> = {
   standard: 'play.botStyle.standard',
@@ -68,15 +74,25 @@ export function PlayGameScreen({
   const { t } = useI18n()
   const { theme, playStoneSoundIfEnabled } = useSettings()
 
-  const [history, setHistory] = useState<GameState[]>(() => [
-    config.initialStones
-      ? gameStateFromBoard(
+  const komi = config.handicapStones && config.handicapStones.length > 0 ? HANDICAP_KOMI : KOMI
+
+  const [history, setHistory] = useState<GameState[]>(() => {
+    if (config.handicapStones && config.handicapStones.length > 0) {
+      const board = createBoard(config.width, config.height)
+      for (const p of config.handicapStones) board.stones[p] = BLACK
+      return [gameStateFromBoard(board, WHITE, komi)]
+    }
+    if (config.initialStones) {
+      return [
+        gameStateFromBoard(
           { width: config.width, height: config.height, stones: config.initialStones },
           config.initialToMove ?? BLACK,
-          KOMI,
-        )
-      : createGame(config.width, config.height, KOMI),
-  ])
+          komi,
+        ),
+      ]
+    }
+    return [createGame(config.width, config.height, komi)]
+  })
   const [moves, setMoves] = useState<RecordedMove[]>([])
   const [message, setMessage] = useState<IllegalReason | null>(null)
   const [botThinking, setBotThinking] = useState(false)
@@ -114,6 +130,15 @@ export function PlayGameScreen({
   const engineRef = useRef<EngineClient | null>(null)
   const evalRef = useRef<EvalClient | null>(null)
   const savedThisGameRef = useRef(false)
+  // Cliente de red propio para la pista, separado de evalRef: ese solo existe
+  // cuando config.mode==='bot' && netInfluence>0 (ver el efecto de abajo), pero
+  // la pista tiene que funcionar tambien en partida local y en fuerza `weak`
+  // -- se crea recien al primer clic, no de arranque, para no pagar la carga
+  // del modelo (~11.5MB) en partidas donde nunca se pide una pista.
+  const hintEvalRef = useRef<EvalClient | null>(null)
+  const [hintsUsed, setHintsUsed] = useState(0)
+  const [hintPoint, setHintPoint] = useState<number | null>(null)
+  const [hintLoading, setHintLoading] = useState(false)
   // Captura el tablero inicial una sola vez, para precalentar la red sin
   // depender de `history` (que cambia en cada jugada -- no queremos que el
   // efecto de abajo se repita por eso).
@@ -143,6 +168,15 @@ export function PlayGameScreen({
     onActiveChange(!game.gameOver)
     return () => onActiveChange(false)
   }, [game.gameOver, onActiveChange])
+
+  useEffect(() => () => hintEvalRef.current?.terminate(), [])
+
+  // El anillo de la pista es de una posicion puntual: se borra en cuanto se
+  // juega cualquier jugada real (propia, del bot, o un undo), para no dejarlo
+  // pegado sobre un tablero que ya cambio.
+  useEffect(() => {
+    setHintPoint(null)
+  }, [game])
 
   function isHumanTurn(): boolean {
     if (game.gameOver || botThinking) return false
@@ -184,6 +218,47 @@ export function PlayGameScreen({
     if (game.gameOver) {
       savedThisGameRef.current = false
       setJustSaved(false)
+    }
+  }
+
+  const hintDisabled = !config.hintsEnabled || !isHumanTurn() || hintsUsed >= MAX_HINTS_PER_GAME || hintLoading
+
+  async function handleHint() {
+    if (hintDisabled) return
+    setHintLoading(true)
+    try {
+      if (!hintEvalRef.current) hintEvalRef.current = new EvalClient(EVAL_MODEL_URL)
+      const recentMoves = moves.slice(Math.max(0, moves.length - 5))
+      const priorBoards = [history[history.length - 3]?.board, history[history.length - 2]?.board].filter(
+        (b): b is GameState['board'] => b !== undefined,
+      )
+      // Sin timeout corto a proposito: es un clic manual y tolerante de la
+      // persona jugando, no el paso invisible antes de la jugada del bot --
+      // usa el default de 20s de EvalClient, igual que "Preguntarle a la IA"
+      // en Revisar (ReviewMistakeBoard.tsx), no EVAL_TIMEOUT_IN_GAME_MS.
+      const output = await hintEvalRef.current.evaluate({ state: game, recentMoves, priorBoards })
+      const legal = listLegalMoves(game)
+      const legalPoints = legal.filter((p): p is number => p !== null)
+      const legalPass = legal.includes(null)
+      const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass, game.board.width)
+      let topPoint: number | null = null
+      let topProbability = -1
+      for (const [point, probability] of distribution) {
+        if (probability > topProbability) {
+          topProbability = probability
+          topPoint = point
+        }
+      }
+      setHintPoint(topPoint)
+      // Se descuenta siempre que la consulta responda, aun si la red
+      // sugiere pasar (topPoint null, sin anillo visible) -- fue un uso
+      // real, no se reintenta gratis por un resultado poco util.
+      setHintsUsed((prev) => prev + 1)
+    } catch {
+      // Silencioso, mismo criterio que la guia de red del bot: una pista
+      // fallida no debe interrumpir la partida ni gastar un uso.
+    } finally {
+      setHintLoading(false)
     }
   }
 
@@ -268,19 +343,20 @@ export function PlayGameScreen({
 
     const winner: 'black' | 'white' = finalScore.black > finalScore.white ? 'black' : 'white'
     const strength = STRENGTH_LEVELS.find((level) => level.id === config.strengthId)
-    const sgf = gameRecordToSgf(config.width, config.height, KOMI, moves)
+    const sgf = gameRecordToSgf(config.width, config.height, komi, moves)
 
     saveGame({
       createdAt: new Date().toISOString(),
       width: config.width,
       height: config.height,
-      komi: KOMI,
+      komi,
       mode: config.mode,
       botPlayouts: config.mode === 'bot' ? strength?.playouts : undefined,
       botStrengthId: config.mode === 'bot' ? strength?.id : undefined,
       botStyle: config.mode === 'bot' ? config.botStyle : undefined,
       humanColor: config.mode === 'bot' ? config.humanColor : undefined,
       scoringRule: config.scoringRule,
+      handicapCount: config.handicapStones && config.handicapStones.length > 0 ? config.handicapStones.length : undefined,
       result: { black: finalScore.black, white: finalScore.white, winner },
       sgf,
     }).then((id) => {
@@ -301,7 +377,7 @@ export function PlayGameScreen({
         }
       })
     })
-  }, [game.gameOver, finalScore, config, moves])
+  }, [game.gameOver, finalScore, config, moves, komi])
 
   const turnKey = game.toMove === BLACK ? 'board.turn.black' : 'board.turn.white'
   const strengthLevel = STRENGTH_LEVELS.find((level) => level.id === config.strengthId)
@@ -321,10 +397,12 @@ export function PlayGameScreen({
         height={config.height}
         stones={game.board.stones}
         lastMove={lastMove}
+        hintMove={hintPoint}
         territory={territory}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
+      {hintPoint !== null && <p className="review-hint-legend">{t('play.hint.legend')}</p>}
 
       <div className="status" aria-live="polite">
         {game.gameOver ? (
@@ -356,6 +434,11 @@ export function PlayGameScreen({
           showCount={showCount}
           onToggleCount={() => setShowCount((v) => !v)}
           onExit={() => setShowExitConfirm(true)}
+          hintVisible={config.hintsEnabled}
+          onHint={handleHint}
+          hintDisabled={hintDisabled}
+          hintsRemaining={MAX_HINTS_PER_GAME - hintsUsed}
+          hintLoading={hintLoading}
         />
       )}
 

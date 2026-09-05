@@ -7,6 +7,7 @@ import { BLACK, EMPTY, opponent } from '../core/types'
 import type { Color, GameState } from '../core/types'
 import type { RecordedMove } from '../core/sgf'
 import { isSimpleEye } from '../engine/playoutPolicy'
+import { areaDeltaForPoint, estimateMoveCost, realizedAreaCost } from '../solver/areaValue'
 import { solveLadder } from '../solver/ladder'
 import { CONCEPTS } from './concepts'
 import type { ConceptId, ConceptSeverity } from './concepts'
@@ -37,6 +38,11 @@ export interface ConceptOccurrence {
   point: number | null
   /** Que jugar en su lugar, cuando el detector puede sugerirla. */
   suggestedPoint?: number
+  /** Costo estimado en puntos de este error, cuando el concepto lo permite
+   * (Concept.costKind en concepts.ts). Ausente si el concepto no tiene
+   * costKind, o si el calculo puntual no aplico en esta ocurrencia (p.ej. un
+   * AUTOATARI cuyo grupo termino sobreviviendo igual). */
+  pointCost?: number
 }
 
 interface AnalysisContext {
@@ -58,6 +64,7 @@ function makeIncorrect(
   conceptId: ConceptId,
   point: number | null,
   suggestedPoint?: number,
+  pointCost?: number,
 ): ConceptOccurrence {
   return {
     conceptId,
@@ -68,7 +75,18 @@ function makeIncorrect(
     severity: CONCEPTS[conceptId].severity,
     point,
     suggestedPoint,
+    pointCost,
   }
+}
+
+/** Primer indice `j >= fromIndex` en el que `captured[j]` incluye `point` --
+ * el momento real en que ese punto fue efectivamente retirado del tablero.
+ * null si nunca ocurre en el resto de la partida grabada. */
+function findCaptureMoveIndex(captured: number[][], point: number, fromIndex: number): number | null {
+  for (let j = fromIndex; j < captured.length; j++) {
+    if (captured[j].includes(point)) return j
+  }
+  return null
 }
 
 function makeCorrect(ctx: AnalysisContext, conceptId: ConceptId, point: number | null): ConceptOccurrence {
@@ -119,7 +137,15 @@ function detectAtariIgnorado(ctx: AnalysisContext): ConceptOccurrence | null {
     }
 
     if (!survivesToEnd(ctx, repStone, move.color)) {
-      return makeIncorrect(ctx, 'ATARI_IGNORADO', move.point)
+      // El grupo si murio despues -- costo real, no hipotetico: la
+      // diferencia de area entre el momento justo antes y justo despues de
+      // la captura real que se ve mas adelante en la partida grabada.
+      const captureIndex = findCaptureMoveIndex(ctx.captured, repStone, ctx.moveIndex + 1)
+      const pointCost =
+        captureIndex !== null
+          ? realizedAreaCost(ctx.states[captureIndex].board, ctx.states[captureIndex + 1].board, ctx.komi, move.color)
+          : undefined
+      return makeIncorrect(ctx, 'ATARI_IGNORADO', move.point, undefined, pointCost)
     }
   }
   return null
@@ -134,6 +160,18 @@ function detectAutoatari(ctx: AnalysisContext): ConceptOccurrence | null {
   const after = ctx.states[ctx.moveIndex + 1]
   const group = getGroup(after.board, move.point)
   if (group && group.liberties.size === 1) {
+    // El autoatari en si es la forma riesgosa; si el grupo termina
+    // sobreviviendo igual (rescatado, o el rival nunca lo aprovecha), no
+    // costo puntos realmente esta partida -- pointCost queda ausente, no en
+    // 0, para no afirmar un costo que no ocurrio.
+    if (!survivesToEnd(ctx, move.point, move.color)) {
+      const captureIndex = findCaptureMoveIndex(ctx.captured, move.point, ctx.moveIndex + 1)
+      const pointCost =
+        captureIndex !== null
+          ? realizedAreaCost(ctx.states[captureIndex].board, ctx.states[captureIndex + 1].board, ctx.komi, move.color)
+          : undefined
+      return makeIncorrect(ctx, 'AUTOATARI', move.point, undefined, pointCost)
+    }
     return makeIncorrect(ctx, 'AUTOATARI', move.point)
   }
   return null
@@ -176,7 +214,11 @@ function detectCapturaPerdida(ctx: AnalysisContext): ConceptOccurrence | null {
   if (!best) return null
   if (!survivesToEnd(ctx, best.repStone, rival)) return null
 
-  return makeIncorrect(ctx, 'CAPTURA_PERDIDA', move.point, best.liberty)
+  // El grupo rival sobrevivio hasta el final -- nunca hubo una captura real
+  // que medir, asi que el costo es el valor hipotetico (un solo ply) de
+  // haber capturado justo ahi, no un hecho de la partida.
+  const pointCost = areaDeltaForPoint(before.board, best.liberty, move.color) ?? undefined
+  return makeIncorrect(ctx, 'CAPTURA_PERDIDA', move.point, best.liberty, pointCost)
 }
 
 /** La jugada ocupa un ojo simple del propio grupo, sin capturar nada. */
@@ -187,7 +229,7 @@ function detectRellenoOjoPropio(ctx: AnalysisContext): ConceptOccurrence | null 
 
   const before = ctx.states[ctx.moveIndex]
   if (isSimpleEye(before.board, move.point, move.color)) {
-    return makeIncorrect(ctx, 'RELLENO_OJO_PROPIO', move.point)
+    return makeIncorrect(ctx, 'RELLENO_OJO_PROPIO', move.point, undefined, estimateMoveCost(before.board, move.point, move.color))
   }
   return null
 }
@@ -206,7 +248,13 @@ function detectRellenoTerritorioPropio(ctx: AnalysisContext): ConceptOccurrence 
   // pass-alive real no hay territorio que rellenar.
   if (chains.length === 0) return null
   if (territoryPoints.includes(move.point)) {
-    return makeIncorrect(ctx, 'RELLENO_TERRITORIO_PROPIO', move.point)
+    return makeIncorrect(
+      ctx,
+      'RELLENO_TERRITORIO_PROPIO',
+      move.point,
+      undefined,
+      estimateMoveCost(before.board, move.point, move.color),
+    )
   }
   return null
 }
@@ -216,6 +264,11 @@ function detectRellenoTerritorioPropio(ctx: AnalysisContext): ConceptOccurrence 
  * dos (el patron clasico de inicio de escalera), y el solucionador de
  * escaleras determina que el grupo perseguido escapa: la escalera no
  * funciona y la jugada fue un movimiento desperdiciado.
+ *
+ * Sin costKind a proposito: el grupo que escapa puede pelear el resto de la
+ * partida sin que ninguna captura futura sea atribuible de forma unica a
+ * este intento fallido en particular -- a diferencia de ATARI_IGNORADO o
+ * GRUPO_MURIO_SIN_OJOS, aca no hay un evento real unico que medir.
  */
 function detectEscaleraFallida(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
@@ -251,6 +304,14 @@ function detectEscaleraFallida(ctx: AnalysisContext): ConceptOccurrence | null {
  * pegados a la jugada misma, no cualquier punto de corte que exista en el
  * tablero, para no atribuirle a una jugada una debilidad que ya venia de
  * antes.
+ *
+ * Sin costKind (ver Concept en concepts.ts) a proposito, no por falta de
+ * lectura a futuro: reconectar dos cadenas propias no cambia el conteo de
+ * area bajo reglas chinas (solo importa el color final de cada punto, no si
+ * las piedras forman una cadena o dos), asi que no hay ningun evento de area
+ * que medir aca. Si el corte realmente hace dano (una de las dos cadenas
+ * termina capturada), ese dano ya aparece con su propio costo en
+ * ATARI_IGNORADO o GRUPO_MURIO_SIN_OJOS sobre esa cadena.
  */
 function detectCorteNoDefendido(ctx: AnalysisContext): ConceptOccurrence | null {
   const move = ctx.moves[ctx.moveIndex]
@@ -336,7 +397,13 @@ function detectTrianguloVacio(ctx: AnalysisContext): ConceptOccurrence | null {
     if (before.board.stones[armNearP] !== move.color) continue
     if (before.board.stones[armNearD] !== move.color) continue
     if (before.board.stones[d] !== EMPTY) continue
-    return makeIncorrect(ctx, 'TRIANGULO_VACIO', move.point)
+    return makeIncorrect(
+      ctx,
+      'TRIANGULO_VACIO',
+      move.point,
+      undefined,
+      estimateMoveCost(before.board, move.point, move.color),
+    )
   }
   return null
 }
@@ -359,7 +426,13 @@ function detectPrimeraLineaTemprana(ctx: AnalysisContext): ConceptOccurrence | n
   for (const n of neighbors(width, height, move.point)) {
     if (before.board.stones[n] === rival) return null
   }
-  return makeIncorrect(ctx, 'PRIMERA_LINEA_TEMPRANA', move.point)
+  return makeIncorrect(
+    ctx,
+    'PRIMERA_LINEA_TEMPRANA',
+    move.point,
+    undefined,
+    estimateMoveCost(before.board, move.point, move.color),
+  )
 }
 
 /**
@@ -395,7 +468,7 @@ function detectPasePrematuro(ctx: AnalysisContext): ConceptOccurrence | null {
       best = { point: p, delta }
     }
   }
-  if (best) return makeIncorrect(ctx, 'PASE_PREMATURO', null, best.point)
+  if (best) return makeIncorrect(ctx, 'PASE_PREMATURO', null, best.point, best.delta)
   return makeCorrect(ctx, 'PASE_PREMATURO', null)
 }
 
@@ -443,6 +516,10 @@ function detectGruposMuertosSinOjos(ctx: AnalysisContext): ConceptOccurrence[] {
         color: deadColor,
         severity: CONCEPTS.GRUPO_MURIO_SIN_OJOS.severity,
         point: anchor,
+        // Costo real, no hipotetico: la captura ya ocurrio en la partida
+        // grabada (indice i es la jugada que la ejecuto), asi que antes/
+        // despues son dos posiciones reales, no una candidata.
+        pointCost: realizedAreaCost(before.board, ctx.states[i + 1].board, ctx.komi, deadColor),
       })
     }
   }

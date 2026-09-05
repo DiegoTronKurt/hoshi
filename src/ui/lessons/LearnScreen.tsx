@@ -13,8 +13,15 @@ import { minimoTheme } from '../board/themes'
 import { LockIcon } from '../common/LockIcon'
 import type { PlaySeed } from '../play/playConfig'
 import { AboutGoScreen } from './AboutGoScreen'
+import { IntroDemo } from './IntroDemo'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
+
+/** Leccion que dispara la demo visual corta de "ganar" (ver IntroDemo.tsx),
+ * la primera vez que alguien la abre -- no es una convencion general de
+ * lecciones, solo esta, elegida a proposito por ser el primer contacto real
+ * con la app. */
+const INTRO_DEMO_LESSON_ID = 'n0-l1'
 
 const LEVELS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
 const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
@@ -80,6 +87,11 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
   const [view, setView] = useState<View>(() =>
     initialLessonId ? { kind: 'lesson', lessonId: initialLessonId } : { kind: 'levels' },
   )
+  // Estado local, sin persistir: solo necesita durar mientras este componente
+  // sigue montado -- LessonScreen ya marca la leccion como leida al montarse
+  // (readProgress.ts), asi que isLessonRead(INTRO_DEMO_LESSON_ID) por si sola
+  // alcanza para que la demo no vuelva a aparecer en una proxima visita.
+  const [introDemoDismissed, setIntroDemoDismissed] = useState(false)
 
   const lessonsByLevel = useMemo(
     () => Object.fromEntries(LEVELS.map((level) => [level, lessonsForLevel(level)])) as Record<number, ReturnType<typeof lessonsForLevel>>,
@@ -127,6 +139,9 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     if (!lesson) {
       setView({ kind: 'levels' })
       return null
+    }
+    if (lesson.id === INTRO_DEMO_LESSON_ID && !isLessonRead(INTRO_DEMO_LESSON_ID) && !introDemoDismissed) {
+      return <IntroDemo onContinue={() => setIntroDemoDismissed(true)} />
     }
     return (
       <LessonScreen

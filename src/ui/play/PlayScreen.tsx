@@ -29,6 +29,10 @@ function seededConfig(seed: PlaySeed): PlayConfig {
     scoringRule: 'chinese',
     initialStones: seed.stones,
     initialToMove: seed.toMove,
+    // Partida de comprobacion de una leccion: sin handicap (no tiene
+    // sentido sobre una posicion de leccion) ni pistas (es momento de
+    // practicar la leccion misma, no de pedirle la jugada a la red).
+    hintsEnabled: false,
   }
 }
 

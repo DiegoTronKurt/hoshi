@@ -51,6 +51,43 @@ export function bestAreaMove(board: BoardState, color: Color): { point: number; 
 }
 
 /**
+ * Costo aproximado (un solo ply) de haber jugado `playedPoint` en vez de la
+ * mejor alternativa disponible en esa misma posicion: diferencia entre el
+ * area que hubiera dejado la mejor jugada legal y la que dejo realmente
+ * `playedPoint`. 0 si `playedPoint` ya era la mejor. Mismo mecanismo de un
+ * solo ply que bestAreaMove, sin su umbral de 2 puntos (aca interesa la
+ * diferencia real, no si vale la pena jugar) -- pensado para jugadas
+ * "desperdiciadas" (ojo propio, territorio propio, triangulo vacio, primera
+ * linea temprana) donde nada se captura, asi que no hay ningun evento real
+ * futuro que medir, solo la alternativa inmediata.
+ */
+export function estimateMoveCost(board: BoardState, playedPoint: number, color: Color): number {
+  const playedDelta = areaDeltaForPoint(board, playedPoint, color) ?? 0
+  let bestDelta = playedDelta
+  for (let p = 0; p < board.stones.length; p++) {
+    if (board.stones[p] !== EMPTY || p === playedPoint) continue
+    const delta = areaDeltaForPoint(board, p, color)
+    if (delta !== null && delta > bestDelta) bestDelta = delta
+  }
+  return Math.max(0, bestDelta - playedDelta)
+}
+
+/**
+ * Costo REAL (no hipotetico) de una captura que ya ocurrio en la partida
+ * grabada: diferencia de area para `color` entre el estado justo antes y
+ * justo despues de esa jugada real. A diferencia de areaDeltaForPoint (que
+ * evalua una jugada candidata sobre la posicion actual), esta funcion no
+ * inventa nada -- toma dos posiciones reales de la partida ya jugada, asi
+ * que el numero que devuelve es un hecho de esa partida, no una estimacion.
+ */
+export function realizedAreaCost(beforeBoard: BoardState, afterBoard: BoardState, komi: number, color: Color): number {
+  const key = colorKey(color)
+  const before = computeAreaScore(beforeBoard, komi)[key]
+  const after = computeAreaScore(afterBoard, komi)[key]
+  return Math.max(0, before - after)
+}
+
+/**
  * True si `point` cae dentro del territorio pass-alive propio de `color`
  * (mismo chequeo que detectRellenoTerritorioPropio: sin cadenas pass-alive
  * todavia, no hay territorio que rellenar).
