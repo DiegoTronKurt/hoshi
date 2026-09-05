@@ -25,3 +25,10 @@ export const STRENGTH_LEVELS: StrengthLevel[] = [
   { id: 'strong', playouts: 2000, maxTimeMs: 10000, approxKyu: 15, labelKey: 'play.strength.strong' },
   { id: 'veryStrong', playouts: 8000, maxTimeMs: 15000, approxKyu: 10, labelKey: 'play.strength.veryStrong' },
 ]
+
+/** Kyu aproximado de una partida guardada contra el bot, a partir del
+ * `botStrengthId` guardado en su momento (ver PlayGameScreen.tsx). Null si
+ * la partida es de antes de que ese campo existiera. */
+export function approxKyuForStrengthId(strengthId: string | undefined): number | null {
+  return STRENGTH_LEVELS.find((level) => level.id === strengthId)?.approxKyu ?? null
+}

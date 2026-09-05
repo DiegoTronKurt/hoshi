@@ -682,10 +682,24 @@
   background: var(--hoshi-surface);
 }
 
-.review-secondary-mistake-header {
+.review-secondary-mistake-toggle {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.review-secondary-mistake-summary-line {
+  flex: 1;
+  font-size: 0.9rem;
 }
 
 .today {
@@ -719,7 +733,8 @@
   font-size: 0.9rem;
 }
 
-.today-plan-list li {
+.today-plan-item {
+  width: 100%;
   border: 1px solid var(--hoshi-border);
   border-radius: 12px;
   padding: 0.6rem 0.8rem;
@@ -727,6 +742,10 @@
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .today-plan-badge {
@@ -851,6 +870,7 @@
   border-radius: 12px;
   border: 1px solid var(--hoshi-border);
   background: var(--hoshi-surface-alt);
+  cursor: pointer;
 }
 
 .today-focus-text {

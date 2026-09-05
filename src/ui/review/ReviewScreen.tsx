@@ -9,6 +9,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
 import { reportLocalBack } from '../../navigation/localBack'
+import { approxKyuForStrengthId } from '../play/strengthLevels'
 import { gameHeight, gameWidth, listGames } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
@@ -55,6 +56,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   const { theme } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(initialGameId ?? null)
+  const [expandedSecondary, setExpandedSecondary] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     listGames()
@@ -108,10 +110,20 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
 
   function selectGame(id: number) {
     setSelectedGameId(id)
+    setExpandedSecondary(new Set())
   }
 
   function backToList() {
     setSelectedGameId(null)
+  }
+
+  function toggleSecondary(index: number) {
+    setExpandedSecondary((prev) => {
+      const next = new Set(prev)
+      if (next.has(index)) next.delete(index)
+      else next.add(index)
+      return next
+    })
   }
 
   // Boton fisico "atras" de Android: detalle de partida -> lista -- ver
@@ -155,8 +167,13 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                   month: '2-digit',
                   day: '2-digit',
                 })
+                const kyu = approxKyuForStrengthId(game.botStrengthId)
                 const opponent =
-                  game.mode === 'bot' ? `${t('play.savedGames.vsBot')} (${game.botPlayouts})` : t('play.savedGames.local')
+                  game.mode === 'bot'
+                    ? kyu !== null
+                      ? t('play.savedGames.vsBotKyu', { kyu })
+                      : t('play.savedGames.vsBot')
+                    : t('play.savedGames.local')
                 const winnerLabel = game.result.winner === 'black' ? t('color.black') : t('color.white')
                 const severity = game.id !== undefined ? worstSeverity(gameMistakes.get(game.id) ?? []) : null
                 return (
@@ -238,36 +255,54 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                 const boardState = eventBoardStates[index]
                 if (!boardState) return null
                 const colorKey = event.color === BLACK ? 'color.black' : 'color.white'
+                const expanded = expandedSecondary.has(index)
                 return (
                   <section key={index} className="review-secondary-mistake-card">
-                    <div className="review-secondary-mistake-header">
+                    <button
+                      type="button"
+                      className="review-secondary-mistake-toggle"
+                      aria-expanded={expanded}
+                      onClick={() => toggleSecondary(index)}
+                    >
                       <span className={`review-severity review-severity-${event.severity}`}>
                         {t(SEVERITY_KEY[event.severity])}
                       </span>
-                    </div>
-
-                    <ReviewMistakeBoard
-                      key={`${selectedGame.id}-${index}`}
-                      game={selectedGame}
-                      moves={moves}
-                      event={event}
-                      boardState={boardState}
-                      theme={theme}
-                      evalClient={evalClient}
-                    />
-
-                    <p className="review-mistake-move">
-                      {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
-                    </p>
-                    <p className="review-mistake-concept">{t(`concept.${event.conceptId}.label` as TranslationKey)}</p>
-                    <p className="review-mistake-summary">{t(`concept.${event.conceptId}.summary` as TranslationKey)}</p>
-                    <button
-                      type="button"
-                      className="review-practice-concept"
-                      onClick={() => onPracticeConcept(event.conceptId)}
-                    >
-                      {t('review.practiceConcept')}
+                      <span className="review-secondary-mistake-summary-line">
+                        {t('review.moveNumber', { n: event.moveNumber })} ·{' '}
+                        {t(`concept.${event.conceptId}.label` as TranslationKey)}
+                      </span>
                     </button>
+
+                    {expanded && (
+                      <>
+                        <ReviewMistakeBoard
+                          key={`${selectedGame.id}-${index}`}
+                          game={selectedGame}
+                          moves={moves}
+                          event={event}
+                          boardState={boardState}
+                          theme={theme}
+                          evalClient={evalClient}
+                        />
+
+                        <p className="review-mistake-move">
+                          {t('review.moveNumber', { n: event.moveNumber })} · {t(colorKey)}
+                        </p>
+                        <p className="review-mistake-concept">
+                          {t(`concept.${event.conceptId}.label` as TranslationKey)}
+                        </p>
+                        <p className="review-mistake-summary">
+                          {t(`concept.${event.conceptId}.summary` as TranslationKey)}
+                        </p>
+                        <button
+                          type="button"
+                          className="review-practice-concept"
+                          onClick={() => onPracticeConcept(event.conceptId)}
+                        >
+                          {t('review.practiceConcept')}
+                        </button>
+                      </>
+                    )}
                   </section>
                 )
               })}

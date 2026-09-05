@@ -21,7 +21,6 @@ import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
 import { StreakIcon } from '../icons/StreakIcon'
 import { getReopenedLessons, isLessonRead } from '../lessons/readProgress'
-import { STRENGTH_LEVELS } from '../play/strengthLevels'
 import { useSettings } from '../settings'
 
 const REASON_KEY: Record<SessionReason, TranslationKey> = {
@@ -36,8 +35,6 @@ const LEVEL_TITLE_KEY: Record<0 | 1 | 2 | 3, TranslationKey> = {
   2: 'learn.level.2',
   3: 'learn.level.3',
 }
-
-const NORMAL_STRENGTH = STRENGTH_LEVELS.find((l) => l.id === 'normal') ?? STRENGTH_LEVELS[0]
 
 function focusReasonKey(item: SessionItem): TranslationKey {
   if (item.reason === 'overdue') {
@@ -140,9 +137,9 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
     solverClient,
   )
 
-  function handleStart() {
+  function handleStart(index = 0) {
     setSessionStarted(true)
-    setCurrentIndex(0)
+    setCurrentIndex(index)
     setSolvedCount(0)
   }
 
@@ -186,7 +183,15 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
         </div>
 
         {focus && (
-          <section className="today-focus-card">
+          <section
+            className="today-focus-card"
+            role="button"
+            tabIndex={0}
+            onClick={() => handleStart(0)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') handleStart(0)
+            }}
+          >
             <div className="today-focus-text">
               <div className="today-focus-top">
                 <span className={`today-plan-badge today-reason-${focus.reason}`}>1</span>
@@ -251,13 +256,15 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
               <ul className="today-plan-list">
                 {rest.map((item, index) => (
                   <li key={`${item.entry.id}-${index}`}>
-                    <span className={`today-plan-badge today-reason-${item.reason}`}>{index + 2}</span>
-                    <span className="today-plan-info">
-                      <span className="today-plan-concept">
-                        {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+                    <button type="button" className="today-plan-item" onClick={() => handleStart(index + 1)}>
+                      <span className={`today-plan-badge today-reason-${item.reason}`}>{index + 2}</span>
+                      <span className="today-plan-info">
+                        <span className="today-plan-concept">
+                          {t(`concept.${item.entry.conceptId}.label` as TranslationKey)}
+                        </span>
+                        <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
                       </span>
-                      <span className={`today-reason today-reason-${item.reason}`}>{t(REASON_KEY[item.reason])}</span>
-                    </span>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -279,14 +286,14 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
               theme={theme}
               onIntersectionClick={() => {}}
             />
-            <button type="button" onClick={handleStart}>
+            <button type="button" onClick={() => handleStart(0)}>
               {t('today.exercisePreview.start')}
             </button>
           </section>
         )}
 
         {!focus && plan.items.length > 0 && (
-          <button type="button" onClick={handleStart}>
+          <button type="button" onClick={() => handleStart(0)}>
             {t('today.start')}
           </button>
         )}
@@ -355,7 +362,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
         )}
 
         <button type="button" className="today-play-bot" onClick={onNavigateToPlay}>
-          {t('today.playBot', { kyu: NORMAL_STRENGTH.approxKyu })}
+          {t('today.playBot')}
         </button>
       </div>
     )

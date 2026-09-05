@@ -1,5 +1,94 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-05, cont. 15: recomendados de Hoy navegables, dificultad en kyu en Revisar/Jugar, errores secundarios colapsados de nuevo, boton "Jugar" simplificado)
+
+El usuario probo la app tras la sesion anterior y devolvio 4 ajustes de
+interfaz puntuales: (1) en Hoy, tocar un ejercicio recomendado no hacia
+nada -- habia que buscar el boton "Empezar" aparte; (2) en Revisar, la lista
+de partidas mostraba "contra el bot (500)", el numero de playouts, no un
+dato legible; (3) en Revisar, la sesion anterior (cont. 14) le dio tablero +
+boton de IA propio a CADA error de una partida, no solo al principal --
+probado de verdad, resulto ser demasiada informacion de entrada; pidio
+volver a mostrar solo el error principal completo, con los demas colapsados
+y visibles solo al tocarlos; (4) en Hoy, el boton "Jugar · ~20 kyu" -- pidio
+dejarlo en solo "Jugar".
+
+### 1. Hoy: los recomendados llevan directo al ejercicio
+
+`TodayScreen.tsx`: `handleStart` paso a aceptar un indice opcional (por
+defecto 0). La tarjeta destacada (`today-focus-card`) ahora es clicable
+(`role="button"`, Enter/Espacio incluidos) y arranca la sesion en el
+ejercicio 1; cada fila de "ver el resto del plan" (`today-plan-list`) paso
+de `<li>` con solo texto a un `<button>` que arranca la sesion directo en
+ESE ejercicio (`handleStart(index + 1)`), sin tener que avanzar uno por uno
+desde el primero. CSS: `.today-plan-list li` perdio el borde/fondo propio
+(ahora los lleva el nuevo `.today-plan-item` de adentro) y
+`.today-focus-card` sumo `cursor: pointer`.
+
+### 2. Revisar y Jugar: "contra el bot" muestra el kyu aproximado, no los playouts
+
+`SavedGameRecord` ya guardaba `botStrengthId` ademas de `botPlayouts`
+(`PlayGameScreen.tsx`), sin usarse hasta ahora para mostrar nada. Nueva
+`approxKyuForStrengthId(strengthId)` en `strengthLevels.ts` busca el nivel
+por id y devuelve su `approxKyu` (null si la partida es de antes de que
+existiera el campo, o si no hay match). `ReviewScreen.tsx` (lista de
+partidas) y `SavedGamesList.tsx` (misma lista, pero en Jugar) la usan
+igual: `"contra el bot (~20 kyu)"` en vez de `"contra el bot (500)"`, con
+respaldo al texto plano si `botStrengthId` no esta. Nueva clave
+`play.savedGames.vsBotKyu`, paridad ES/EN. `botPlayouts` se deja en el
+registro (sigue siendo el dato real de cuantas simulaciones corrio el bot)
+pero ya no se muestra en ningun lado -- no se elimino el campo por no ser
+parte de este pedido.
+
+### 3. Revisar: los errores secundarios vuelven a estar colapsados
+
+Ajuste directo sobre el cambio de la sesion anterior (cont. 14), a pedido
+explicito tras probarlo en la app: mostrar tablero + IA + resumen completo
+de CADA error resulto demasiada informacion de entrada. `ReviewScreen.tsx`:
+nuevo estado `expandedSecondary` (`Set<number>`, se reinicia al elegir otra
+partida). El error principal sigue exactamente igual (tablero + IA siempre
+visibles, sin cambios). Cada error secundario ahora arranca colapsado: una
+fila-boton (`review-secondary-mistake-toggle`) con severidad + "Jugada N ·
+concepto"; al tocarla, se expande dentro de la misma tarjeta a exactamente
+lo mismo que ya mostraba cont. 14 (tablero, boton "Preguntarle a la IA",
+concepto, resumen, "Practicar este concepto"). No se volvio al viejo patron
+de seleccion unica (`selectedEventIndex`, donde elegir uno colapsaba los
+demas) -- cada fila se expande de forma independiente, para no perder el
+progreso de haber abierto una si se abre otra. `ReviewMistakeBoard` solo se
+monta (y su red solo se evalua) para el principal y los secundarios
+efectivamente expandidos, asi que dejar uno colapsado no cuesta computo de
+mas. CSS: `.review-secondary-mistake-header` (ya sin uso) se reemplazo por
+`.review-secondary-mistake-toggle`/`.review-secondary-mistake-summary-line`.
+
+### 4. Hoy: boton "Jugar" sin el kyu
+
+`today.playBot` paso de `"Jugar · ~{{kyu}} kyu"` a `"Jugar"` a secas (ES y
+EN); `TodayScreen.tsx` ya no interpola `NORMAL_STRENGTH.approxKyu` ni
+importa `STRENGTH_LEVELS` (quedo sin otro uso en el archivo).
+
+### Documentacion: se completo un encabezado faltante en esta misma nota
+
+Al escribir esta entrada se noto que la sesion grande anterior (ejercicios
+de Yose/Semeai, boton atras de Android, revision de fuerza y contenido --
+commit `18655d2`) habia quedado documentada en este archivo SIN encabezado
+`##` propio, pegada sin titulo entre las entradas "cont. 14" y "cont. 12" de
+mas abajo. Se le agrego su encabezado ("cont. 13"); el contenido en si
+queda intacto, no era una entrada faltante, solo mal formada. Esto tambien
+confirma algo importante: el plan que habia quedado guardado en
+`~/.claude/plans/optimized-dazzling-pretzel.md` (Yose/Semeai, boton atras,
+fuerza del bot, revision de contenido) ya esta completamente ejecutado,
+commiteado y pusheado -- ese archivo de plan quedo obsoleto, no es trabajo
+pendiente.
+
+### Verificacion
+
+`npx tsc -b`, `npx vitest run` (2802 tests, 40 archivos, todos pasan --
+mismo numero que la sesion anterior; no hizo falta ningun test nuevo,
+`TodayScreen`/`ReviewScreen` no tienen tests de componente en este
+proyecto), `npx oxlint` (mismos avisos preexistentes de siempre, ninguno
+nuevo). Paridad de claves i18n ES/EN confirmada (721 claves cada uno, +1 por
+`play.savedGames.vsBotKyu`).
+
 ## Estado general del proyecto (2026-09-05, cont. 14: colapsar tarjetas de Hoy, todos los errores con tablero+IA en Revisar, verificacion real de la codificacion de KataGo, cuatro lecturas nuevas de motor/IA)
 
 El usuario reporto dos cosas usando la app y agrego una tanda de lecturas de
@@ -207,7 +296,7 @@ KataGo, aclarar puntaje de Perfil"), pusheado a `master`. `hoshi-flutter`:
 `hoshi-flutter/build/app/outputs/bundle/release/`. Subir a Play Console
 sigue siendo un paso del usuario.
 
-
+## Estado general del proyecto (2026-09-04, cont. 13: ejercicios de Yose/Semeai, boton atras de Android, revision de fuerza y contenido)
 
 Pregunta reflexiva del usuario ("¿alguien puede aprender Go de verdad con
 esta app?") derivo en tres pedidos propios, en orden de prioridad: (1)

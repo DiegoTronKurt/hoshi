@@ -1,6 +1,7 @@
 import { useI18n } from '../../i18n'
 import { gameHeight, gameWidth } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
+import { approxKyuForStrengthId } from './strengthLevels'
 
 interface SavedGamesListProps {
   games: SavedGameRecord[]
@@ -26,9 +27,12 @@ export function SavedGamesList({ games }: SavedGamesListProps) {
             month: '2-digit',
             day: '2-digit',
           })
+          const kyu = approxKyuForStrengthId(game.botStrengthId)
           const opponent =
             game.mode === 'bot'
-              ? `${t('play.savedGames.vsBot')} (${game.botPlayouts})`
+              ? kyu !== null
+                ? t('play.savedGames.vsBotKyu', { kyu })
+                : t('play.savedGames.vsBot')
               : t('play.savedGames.local')
           const winnerLabel = game.result.winner === 'black' ? t('color.black') : t('color.white')
 

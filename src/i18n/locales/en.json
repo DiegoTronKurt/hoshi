@@ -72,6 +72,7 @@
   "play.savedGames.title": "Saved games",
   "play.savedGames.empty": "No saved games yet.",
   "play.savedGames.vsBot": "vs bot",
+  "play.savedGames.vsBotKyu": "vs bot (~{{kyu}} kyu)",
   "play.savedGames.local": "local",
 
   "nav.label": "Main navigation",
@@ -142,7 +143,7 @@
   "today.stat.exercises": "exercises today",
   "today.stat.streak": "day streak",
   "today.stat.goal": "daily goal",
-  "today.playBot": "Play · ~{{kyu}} kyu",
+  "today.playBot": "Play",
   "today.planOverview.expand": "See the rest of the plan ({{count}})",
   "today.planOverview.collapse": "Hide the rest of the plan",
   "today.exercisePreview.count": "Exercise {{current}} of {{total}}",
