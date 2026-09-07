@@ -1,6 +1,152 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-05, cont. 17: handicap y pistas en Jugar, autorango en Perfil, costo en puntos de errores en Revisar, demo de bienvenida en n0-l1)
+## Estado general del proyecto (2026-09-06, cont. 18: boton atras y resumen en Hoy, motivo de error y pista en Ejercicios, objetivo del Go, comparar-antes-de-ver en lecciones de nivel 1 a 9)
+
+Sesion en dos rondas, misma conversacion que cont.17. Primera ronda: el
+usuario reporto tres problemas de uso reales -- terminar los ejercicios de
+Hoy no da ninguna senal de "listo" y el boton fisico atras de Android cierra
+la app en vez de volver a Hoy si hay una sesion en curso; no hay ningun
+lugar que explique llanamente el objetivo del Go; un clic incorrecto en un
+ejercicio siempre muestra el mismo mensaje generico sin decir por que ese
+punto no sirve. Pidio ademas ideas propias. Segunda ronda: a partir de "que
+le pediria a esta app si no supiera nada de Go", escaneo las 62 lecciones
+(`content/lessons/n0.ts` a `n10.ts`) buscando puntos donde falta un momento
+interactivo justo donde mas importa. El usuario aprobo todo de las dos
+rondas junto con las ideas propias, luego pidio commit, push y AAB.
+
+### 1. Boton atras y tarjeta final en Hoy
+
+`TodayScreen.tsx` nunca llamaba a `reportLocalBack` -- mientras una sesion
+esta activa, `screen` se queda en `'today'` (contribuye 0 a la profundidad
+deseada) y nada mas empuja historial real, asi que el boton fisico no tiene
+nada que hacer pop y cae directo a cerrar la app (mismo mecanismo de
+`navigation/backNav.ts` que ya resuelve esto para otras pantallas). Ahora
+registra un handler identico al patron de `ExercisesScreen.tsx`: mientras
+`sessionStarted` es true, profundidad 1 y atras sale a la portada de Hoy; en
+la portada (sin sesion) no registra nada, asi que atras ahi sigue cerrando
+la app, sin cambios. La tarjeta "Sesion completa" (antes sin ningun boton)
+suma un CTA "Volver a Hoy" y, si algun concepto mejoro en la sesion, una
+lista -- nueva `learning/profile.ts::computeSessionImprovements(before,
+after, conceptIds)`, comparando una foto de `profiles` tomada al arrancar la
+sesion contra una relectura fresca de `listAttempts()` al terminar (el
+`profiles` del componente es una foto de montaje, nunca se actualiza en
+caliente). Unica funcion nueva de esta sesion con tests dedicados (5 casos,
+`tests/learning/profile.test.ts`) -- el resto se verifico por Playwright,
+mismo criterio que el hint de Jugar en cont.17: esta base de codigo no
+tiene ningun test de hooks de React, solo de la logica pura.
+
+### 2. Motivo de error especifico y pista en Ejercicios
+
+`useSolvableExercise.ts` (compartido por Hoy, Ejercicios y la practica
+embebida en lecciones) ganó `wrongReason`/`wrongFlash`/`hintPoint` nuevos,
+via un helper `markWrong(point, reason, countsAsAttempt)` que centraliza los
+~10 sitios que antes hacian `wrongAttemptsRef.current += 1; setStatus
+('incorrect')` a mano. 11 razones especificas, una por rama ya existente (o
+recien destapada) del validador: suicidio/ilegal y autoatari en tsumego,
+fuera de la region de la escalera, territorio propio/no gana nada/no es el
+mas grande en valor de area, pasar prematuro, libertad no compartida/grupo
+equivocado en semeai, no es doble atari. Dos clics que hoy no daban NINGUNA
+senal (fuera de la region en tsumego, jugada ilegal) ahora tambien muestran
+mensaje, con `countsAsAttempt=false` para no tocar `wrongAttemptsRef` ni la
+nota SRS -- mismo comportamiento de aprendizaje que antes, solo con
+feedback real. Pista: tras 2 intentos incorrectos reales en el mismo
+ejercicio, mismo mecanismo ya verificado del hint de Jugar (`EvalClient`
+perezoso, `listLegalMoves` -> `legalPolicyDistribution` -> maxima
+probabilidad), excluida a proposito para `semeaiLiberty` (clic de
+reconocimiento, no de jugada -- una sugerencia de "mejor movida" ahi seria
+una categoria equivocada, no solo imprecisa). Destello nuevo en
+`BoardCanvas.tsx` sobre el punto del clic incorrecto (`wrongFlash: {point,
+id}`, disparado por identidad de objeto no por igualdad de punto, para que
+clickear el mismo punto invalido dos veces seguidas destelle las dos veces),
+reusando el color de `theme.lastMoveMarker` en vez de sumar un campo de tema
+nuevo.
+
+### 3. Objetivo del Go
+
+Verificado que en ningun lado de la app se afirmaba llanamente "el objetivo
+del Go es X": el `IntroDemo` (cont.17) narra un solo ejemplo resuelto sin
+generalizar la regla, y "Sobre el Go" no tenia seccion de objetivo. Nueva
+seccion "¿Cual es el objetivo?" al principio de `AboutGoScreen.tsx` (antes
+de Historia) y texto de `IntroDemo` retocado para afirmar la regla general
+antes de narrar su ejemplo -- las dos superficies ya existian, sin pantalla
+nueva.
+
+### 4. Auditoria de lecciones: la mayoria de nivel 5 a 10 nunca pedia adivinar antes de ver
+
+Escaneando las 62 lecciones aparecieron dos cosas, corregidas durante la
+planificacion antes de tocar codigo:
+
+Primero, `LessonScreen.tsx` ya renderiza un `<LessonPractice>` (problema
+real del banco) automaticamente bajo cualquier leccion cuyo id coincide con
+`Concept.lessonId` de un concepto con `generatesExercises: true`
+(`conceptsForLesson`, invisible desde el archivo de contenido de la leccion
+misma). Esto ya cubria n2-l3 (DOS_OJOS), n9-l1 (EL_FINAL_TAMBIEN_ES_GRANDE),
+n9-l4 (COMPARAR_VALOR_REAL), n10-l2 (CONTAR_LIBERTADES_ANTES_DE_JUGAR) y
+n10-l3 (LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO), las 5 con banco generado
+real (14 a 248 entradas cada una) -- sin tocar nada ahi.
+
+Segundo, leyendo el texto real (no solo el titulo) de cada leccion de nivel
+5 a 10, la mayoria ilustra dos situaciones distintas sin ganador (simetria,
+"lo mismo rotado", trade-offs) en vez de plantear una pregunta con
+respuesta correcta -- forzarlas todas a un formato de adivinar seria
+contenido deshonesto. Solo 5 plantean de verdad una eleccion binaria con
+respuesta ya implicita en sus captions actuales: n6-l2, n7-l2, n7-l3, n8-l2,
+n9-l2.
+
+Nuevo bloque de leccion `{kind:'compare', promptKey, options:[A,B],
+correctIndex, resultCorrectKey, resultIncorrectKey}` (`content/lessons/
+types.ts`) y su renderer `ui/lessons/ComparePrompt.tsx`: las dos posiciones
+se muestran sin sus captions, la persona elige una, recien ahi se revelan
+ambas explicaciones (reusa el mismo `captionKey`/`captionParams` que ya
+tenian como par de bloques `diagram`, ninguna caption nueva ahi). No es un
+ejercicio evaluado ni se registra en FSRS, mismo criterio que `GuidedDemo`.
+Aplicado en las 5 lecciones identificadas, reemplazando su par de `diagram`
+por un `compare` -- el resto de nivel 5 a 10 se deja como estaba, a
+proposito.
+
+n2-l3 ("Dos ojos: vida incondicional") suma un `demo` que reusa
+`expectIllegal` (ya existente desde n0-l6, sin semantica nueva): Blanco
+intenta jugar dentro de cualquiera de los dos ojos de la misma forma
+`DOS_OJOS` que ya mostraba el diagrama de la leccion, y el motor real
+rechaza la jugada por suicidio (cada ojo es la unica otra libertad del
+grupo) -- prueba la vida incondicional por intento real, no por afirmacion.
+
+n1-l4 (Komi) y n1-l6 (Piedras muertas) no tenian ningun diagrama. Ambos
+suman uno (o dos) con numeros verificados via `computeAreaScore`/
+`applyMove` reales, nunca escritos a mano: n1-l4 usa un tablero de 7x7 con
+paredes en columnas 2 y 4 que da un empate exacto (21-21) sin komi y
+Blanco ganando por 6.5 con el komi real de la app; n1-l6 usa un grupo
+blanco de 2x2 con exactamente una libertad real (atari real, no un grupo ya
+sin libertades, que no podria seguir en el tablero) en un recorte de 3x3,
+mostrando 4-4 antes de capturar y 9-0 despues de jugar de verdad esa ultima
+libertad.
+
+### Verificacion y release
+
+`tsc -b` limpio, `vitest run` 2843/2843 (+5 de `computeSessionImprovements`,
+sin tests nuevos de hooks/UI ni de contenido de lecciones, seguido del
+mismo criterio del resto de la sesion), `oxlint` sin advertencias nuevas mas
+alla del mismo patron `set-state-in-effect` ya aceptado en sesiones
+anteriores (un `exhaustive-deps` real detectado y corregido en
+`BoardCanvas.tsx`: `wrongFlash` sobraba en las dependencias de `draw`,
+nunca se lee ahi directo, solo via el ref). Paridad de claves i18n
+verificada dos veces (761 y luego 783 claves en cada idioma, cero
+diferencias). Pase de Playwright real (script descartable, borrado despues)
+cubriendo: boton atras durante una sesion de Hoy vuelve a la portada sin
+cerrar la app; tarjeta final con CTA funcionando; mensajes especificos de
+doble atari y de libertad compartida en Ejercicios, pista apareciendo tras
+2 intentos y funcionando de punta a punta, y confirmadamente ausente en
+semeai; nuevos diagramas de Komi y Piedras muertas con los numeros reales
+calculados; demo de n2-l3 rechazando la jugada de suicidio en cualquiera de
+los dos ojos; bloque comparar de n6-l2 ocultando captions hasta elegir y
+revelando ambas mas la linea de correcto/incorrecto. Cero errores de
+consola en todo el pase.
+
+`hoshi`: commit `9419cb8`, push. `hoshi-flutter`: version `1.18.0+23`,
+`sync-webapp.ps1`, AAB firmado en
+`hoshi-flutter/build/app/outputs/bundle/release/app-release.aab` (54.0MB),
+commit `197d240`, push. Subir el AAB a Play Console sigue siendo un paso
+manual del usuario.
 
 Pregunta abierta del usuario en otra conversacion, tras la sesion cont.16:
 "que otra cosa mejoraria la app". De varias ideas propuestas y ya
