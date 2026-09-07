@@ -4,6 +4,11 @@ import { BLACK, EMPTY } from '../../core/types'
 import { getHoshiPoints } from './hoshiPoints'
 import type { BoardTheme } from './themes'
 
+interface WrongFlashProp {
+  point: number
+  id: number
+}
+
 interface BoardCanvasProps {
   width: number
   height?: number
@@ -11,6 +16,10 @@ interface BoardCanvasProps {
   lastMove: number | null
   /** Punto sugerido a resaltar (por ejemplo, la jugada correcta en un reporte de errores). No es una piedra. */
   hintMove?: number | null
+  /** Ultimo clic incorrecto en un ejercicio, para un destello breve en ese
+   * punto. `id` (no `point`) es lo que dispara la animacion -- clickear el
+   * mismo punto invalido dos veces seguidas debe destellar las dos veces. */
+  wrongFlash?: WrongFlashProp | null
   /** Dueño final de cada punto (BLACK/WHITE/EMPTY para neutral), solo al
    * terminar la partida -- ver core/scoring.ts::computeAreaOwnership. Al
    * pasar de ausente a presente dispara la animacion de revelado; mientras
@@ -25,6 +34,7 @@ interface BoardCanvasProps {
  * transicion CSS posible, cada cuadro se redibuja a mano via rAF. */
 const STONE_SETTLE_MS = 120
 const TERRITORY_REVEAL_MS = 450
+const WRONG_FLASH_MS = 500
 
 function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3
@@ -36,6 +46,7 @@ export function BoardCanvas({
   stones,
   lastMove,
   hintMove = null,
+  wrongFlash = null,
   territory = null,
   theme,
   onIntersectionClick,
@@ -46,8 +57,10 @@ export function BoardCanvas({
 
   const prevLastMoveRef = useRef(lastMove)
   const prevTerritoryRef = useRef(territory)
+  const prevWrongFlashRef = useRef(wrongFlash)
   const stoneAnimRef = useRef<{ point: number; start: number } | null>(null)
   const territoryAnimRef = useRef<{ start: number } | null>(null)
+  const wrongAnimRef = useRef<{ point: number; start: number } | null>(null)
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -182,6 +195,21 @@ export function BoardCanvas({
       ctx.strokeStyle = theme.hintMarker.color
       ctx.stroke()
     }
+
+    if (wrongAnimRef.current) {
+      const progress = Math.min(1, (performance.now() - wrongAnimRef.current.start) / WRONG_FLASH_MS)
+      const alpha = 1 - easeOutCubic(progress)
+      if (alpha > 0.02) {
+        const [x, y] = toXY(width, wrongAnimRef.current.point)
+        ctx.beginPath()
+        ctx.arc(margin + x * cell, margin + y * cell, stoneRadius * 0.7, 0, Math.PI * 2)
+        ctx.globalAlpha = alpha
+        ctx.lineWidth = 3
+        ctx.strokeStyle = theme.lastMoveMarker.color
+        ctx.stroke()
+        ctx.globalAlpha = 1
+      }
+    }
   }, [width, height, stones, lastMove, hintMove, territory, theme])
 
   useEffect(() => {
@@ -195,6 +223,11 @@ export function BoardCanvas({
     }
     prevTerritoryRef.current = territory
 
+    if (wrongFlash && wrongFlash !== prevWrongFlashRef.current) {
+      wrongAnimRef.current = { point: wrongFlash.point, start: performance.now() }
+    }
+    prevWrongFlashRef.current = wrongFlash
+
     let rafId: number | null = null
     function tick() {
       draw()
@@ -204,10 +237,13 @@ export function BoardCanvas({
       if (territoryAnimRef.current && performance.now() - territoryAnimRef.current.start >= TERRITORY_REVEAL_MS) {
         territoryAnimRef.current = null
       }
-      rafId = stoneAnimRef.current || territoryAnimRef.current ? requestAnimationFrame(tick) : null
+      if (wrongAnimRef.current && performance.now() - wrongAnimRef.current.start >= WRONG_FLASH_MS) {
+        wrongAnimRef.current = null
+      }
+      rafId = stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current ? requestAnimationFrame(tick) : null
     }
 
-    if (stoneAnimRef.current || territoryAnimRef.current) {
+    if (stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current) {
       rafId = requestAnimationFrame(tick)
     } else {
       draw()
@@ -221,7 +257,7 @@ export function BoardCanvas({
       if (rafId !== null) cancelAnimationFrame(rafId)
       observer.disconnect()
     }
-  }, [draw, lastMove, stones, territory])
+  }, [draw, lastMove, stones, territory, wrongFlash])
 
   function handleClick(event: React.MouseEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current

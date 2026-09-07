@@ -8,11 +8,13 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { countCompletedToday } from '../../learning/dailyProgress'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
-import { computeProfiles, currentLevel } from '../../learning/profile'
+import { computeProfiles, computeSessionImprovements, currentLevel } from '../../learning/profile'
+import type { ConceptProfile } from '../../learning/profile'
 import { computeStreak } from '../../learning/streak'
 import { minutesForGoal, planSession } from '../../training-policy/session'
 import type { SessionItem, SessionPlan, SessionReason } from '../../training-policy/session'
 import { SolverClient } from '../../solver/client'
+import { reportLocalBack } from '../../navigation/localBack'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
@@ -114,6 +116,26 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
   const [solvedCount, setSolvedCount] = useState(0)
   const [planExpanded, setPlanExpanded] = useState(false)
   const [reopenExpanded, setReopenExpanded] = useState(false)
+  const [sessionStartProfiles, setSessionStartProfiles] = useState<Record<ConceptId, ConceptProfile> | null>(null)
+  const [improvedConcepts, setImprovedConcepts] = useState<ConceptId[] | null>(null)
+
+  // Android atras durante una sesion de Hoy (en un ejercicio o en la tarjeta
+  // final) vuelve a la portada de Hoy en vez de cerrar la app -- mismo patron
+  // que ExercisesScreen.tsx para su propio practica->concepto (setters de
+  // useState directo adentro del handler, nada mas: son estables entre
+  // renders, asi que no hace falta listar una funcion propia en las deps).
+  // Si no hay sesion activa no se registra nada, asi que atras en la portada
+  // de Hoy sigue cerrando la app como siempre.
+  useEffect(() => {
+    reportLocalBack(() => {
+      if (!sessionStarted) return false
+      setSessionStarted(false)
+      setSessionStartProfiles(null)
+      setImprovedConcepts(null)
+      return true
+    }, sessionStarted ? 1 : 0)
+    return () => reportLocalBack(null, 0)
+  }, [sessionStarted])
 
   const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
   useEffect(() => {
@@ -130,17 +152,36 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
     setLoadedProblem(currentEntry ? loadEntry(currentEntry) : null)
   }, [currentEntry])
 
-  const { game, lastMove, status, thinking, solverError, solutionMoves, handleIntersectionClick, handlePass, giveUp } =
-    useSolvableExercise(
-    currentEntry,
-    loadedProblem,
-    solverClient,
-  )
+  const {
+    game,
+    lastMove,
+    status,
+    thinking,
+    solverError,
+    solutionMoves,
+    wrongReason,
+    wrongFlash,
+    hintPoint,
+    hintLoading,
+    hintAvailable,
+    handleHint,
+    handleIntersectionClick,
+    handlePass,
+    giveUp,
+  } = useSolvableExercise(currentEntry, loadedProblem, solverClient)
 
   function handleStart(index = 0) {
     setSessionStarted(true)
     setCurrentIndex(index)
     setSolvedCount(0)
+    setSessionStartProfiles(profiles)
+    setImprovedConcepts(null)
+  }
+
+  function exitSession() {
+    setSessionStarted(false)
+    setSessionStartProfiles(null)
+    setImprovedConcepts(null)
   }
 
   function handleNextItem() {
@@ -152,6 +193,24 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
     giveUp()
     setCurrentIndex((i) => i + 1)
   }
+
+  const sessionComplete = sessionStarted && (!currentItem || !loadedProblem || !game)
+
+  // "Que mejoro esta sesion" para la tarjeta final: profiles (linea ~72) se
+  // computa una sola vez al montar y no cambia durante la sesion (attempts
+  // recien guardados via recordAttempt no vuelven a este estado), asi que
+  // hace falta releer listAttempts() de una para tener un "despues" real que
+  // incluya los intentos que se acaban de guardar.
+  useEffect(() => {
+    if (!sessionComplete || !sessionStartProfiles || improvedConcepts !== null) return
+    const conceptIds = Array.from(new Set(plan?.items.map((item) => item.entry.conceptId) ?? []))
+    listAttempts()
+      .then((freshAttempts) => {
+        const after = computeProfiles(freshAttempts, games)
+        setImprovedConcepts(computeSessionImprovements(sessionStartProfiles, after, conceptIds))
+      })
+      .catch(() => setImprovedConcepts([]))
+  }, [sessionComplete, sessionStartProfiles, improvedConcepts, games, plan])
 
   if (!loaded || !plan) return null
 
@@ -373,6 +432,19 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
       <div className="today">
         <h2>{t('today.complete.title')}</h2>
         <p>{t('today.complete.summary', { solved: solvedCount, total: plan.items.length })}</p>
+        {improvedConcepts && improvedConcepts.length > 0 && (
+          <div className="today-complete-recap">
+            <p className="today-complete-recap-title">{t('today.complete.recap.title')}</p>
+            <ul>
+              {improvedConcepts.map((id) => (
+                <li key={id}>{t(`concept.${id}.label` as TranslationKey)}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button type="button" className="today-complete-cta" onClick={exitSession}>
+          {t('today.complete.cta')}
+        </button>
       </div>
     )
   }
@@ -392,6 +464,12 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
         thinking={thinking}
         solverError={solverError}
         solutionMoves={solutionMoves}
+        wrongReason={wrongReason}
+        wrongFlash={wrongFlash}
+        hintPoint={hintPoint}
+        hintLoading={hintLoading}
+        hintAvailable={hintAvailable}
+        onHint={handleHint}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
         onPass={handlePass}

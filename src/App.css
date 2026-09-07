@@ -388,6 +388,25 @@
   margin: 0.5rem auto;
 }
 
+.exercises-hint-button {
+  display: block;
+  margin: 0.5rem auto;
+  min-height: 40px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.exercises-hint-legend {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+}
+
 .exercises-status {
   text-align: center;
   min-height: 1.4rem;
@@ -1136,6 +1155,41 @@
   cursor: pointer;
 }
 
+.today-complete-recap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface-alt);
+}
+
+.today-complete-recap-title {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.today-complete-recap ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+}
+
+.today-complete-cta {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
 .today-controls button {
   min-height: 44px;
   padding: 0 1.2rem;
@@ -1438,6 +1492,77 @@
   font-family: system-ui, sans-serif;
   font-size: 0.8rem;
   color: var(--hoshi-text-muted);
+  text-align: center;
+}
+
+.lesson-compare {
+  width: 100%;
+  margin: 0 0 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.lesson-compare-prompt {
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+}
+
+.lesson-compare-options {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.lesson-compare-option {
+  flex: 1 1 220px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+.lesson-compare-option-correct {
+  border-color: var(--hoshi-success);
+}
+
+.lesson-compare-option button {
+  min-height: 40px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.lesson-compare-caption {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
+  text-align: center;
+  margin: 0;
+}
+
+.lesson-compare-correct {
+  color: var(--hoshi-success);
+  font-weight: 600;
+  text-align: center;
+}
+
+.lesson-compare-incorrect {
+  color: var(--hoshi-danger);
+  font-weight: 600;
   text-align: center;
 }
 

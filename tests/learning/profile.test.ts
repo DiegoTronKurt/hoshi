@@ -3,7 +3,7 @@ import { toPoint } from '../../src/core/board'
 import { gameRecordToSgf } from '../../src/core/sgf'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { RecordedMove } from '../../src/core/sgf'
-import { computeProfiles, weakestConcepts } from '../../src/learning/profile'
+import { computeProfiles, computeSessionImprovements, weakestConcepts } from '../../src/learning/profile'
 import type { AttemptRecord, SavedGameRecord } from '../../src/storage/db'
 
 const SIZE = 9
@@ -108,5 +108,70 @@ describe('perfil de habilidad', () => {
     for (let i = 1; i < weakest.length; i++) {
       expect(weakest[i].score as number).toBeGreaterThanOrEqual(weakest[i - 1].score as number)
     }
+  })
+})
+
+describe('computeSessionImprovements', () => {
+  it('ningun concepto mejora si los dos perfiles son iguales', () => {
+    const profiles = computeProfiles(
+      [attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: false }), attempt({ solved: false })],
+      [],
+    )
+    expect(computeSessionImprovements(profiles, profiles, ['DOS_OJOS'])).toEqual([])
+  })
+
+  it('sin datos antes y con puntaje real despues cuenta como mejora', () => {
+    const before = computeProfiles([], [])
+    const after = computeProfiles(
+      [attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true })],
+      [],
+    )
+    expect(computeSessionImprovements(before, after, ['DOS_OJOS'])).toEqual(['DOS_OJOS'])
+  })
+
+  it('un puntaje que empeora no se incluye', () => {
+    const before = computeProfiles(
+      [attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true }), attempt({ solved: true })],
+      [],
+    )
+    const after = computeProfiles(
+      [
+        attempt({ solved: true }),
+        attempt({ solved: true }),
+        attempt({ solved: true }),
+        attempt({ solved: true }),
+        attempt({ solved: true }),
+        attempt({ solved: false }),
+        attempt({ solved: false }),
+      ],
+      [],
+    )
+    expect(computeSessionImprovements(before, after, ['DOS_OJOS'])).toEqual([])
+  })
+
+  it('solo considera los conceptos pedidos, aunque otros tambien hayan mejorado', () => {
+    const before = computeProfiles([], [])
+    const after = computeProfiles(
+      [
+        attempt({ conceptId: 'DOS_OJOS', solved: true }),
+        attempt({ conceptId: 'DOS_OJOS', solved: true }),
+        attempt({ conceptId: 'DOS_OJOS', solved: true }),
+        attempt({ conceptId: 'DOS_OJOS', solved: true }),
+        attempt({ conceptId: 'DOS_OJOS', solved: true }),
+        attempt({ conceptId: 'AUTOATARI', solved: true }),
+        attempt({ conceptId: 'AUTOATARI', solved: true }),
+        attempt({ conceptId: 'AUTOATARI', solved: true }),
+        attempt({ conceptId: 'AUTOATARI', solved: true }),
+        attempt({ conceptId: 'AUTOATARI', solved: true }),
+      ],
+      [],
+    )
+    expect(computeSessionImprovements(before, after, ['DOS_OJOS'])).toEqual(['DOS_OJOS'])
+  })
+
+  it('un concepto ausente de ambos perfiles no se incluye', () => {
+    const before = computeProfiles([], [])
+    const after = computeProfiles([], [])
+    expect(computeSessionImprovements(before, after, ['DOS_OJOS'])).toEqual([])
   })
 })

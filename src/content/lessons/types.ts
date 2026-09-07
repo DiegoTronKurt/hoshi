@@ -1,6 +1,16 @@
 import type { Color } from '../../core/types'
 import type { TranslationKey } from '../../i18n'
 
+export interface CompareOption {
+  width: number
+  height: number
+  stones: Int8Array
+  highlightPoint?: number
+  /** Se revela recien despues de elegir una opcion, nunca antes. */
+  captionKey: TranslationKey
+  captionParams?: Record<string, string | number>
+}
+
 export type LessonBlock =
   | { kind: 'paragraph'; textKey: TranslationKey }
   | {
@@ -12,6 +22,22 @@ export type LessonBlock =
       /** Parametros para interpolar en la traduccion, p.ej. un puntaje calculado con computeAreaScore en vez de escrito a mano. */
       captionParams?: Record<string, string | number>
       highlightPoint?: number
+    }
+  | {
+      /**
+       * Adivinar antes de revelar: dos posiciones sin sus captions a la
+       * vista, la persona elige una y recien ahi se muestran ambas
+       * explicaciones. Solo tiene sentido cuando el par realmente plantea
+       * una pregunta con una respuesta (una jugada mejor que otra, cual es
+       * sente), no para ilustrar dos situaciones distintas sin ganador --
+       * eso sigue siendo un par de bloques 'diagram' comunes.
+       */
+      kind: 'compare'
+      promptKey: TranslationKey
+      options: [CompareOption, CompareOption]
+      correctIndex: 0 | 1
+      resultCorrectKey: TranslationKey
+      resultIncorrectKey: TranslationKey
     }
 
 export interface DemoStep {

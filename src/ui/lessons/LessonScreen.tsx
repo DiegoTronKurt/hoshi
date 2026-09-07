@@ -6,6 +6,7 @@ import { useI18n } from '../../i18n'
 import type { PlaySeed } from '../play/playConfig'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
+import { ComparePrompt } from './ComparePrompt'
 import { GuidedDemo } from './GuidedDemo'
 import { LessonPractice } from './LessonPractice'
 import { markLessonRead } from './readProgress'
@@ -36,25 +37,31 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
       </div>
 
       <div className="lesson-body">
-        {lesson.blocks.map((block, index) =>
-          block.kind === 'paragraph' ? (
-            <p key={index} className="lesson-paragraph">
-              {t(block.textKey)}
-            </p>
-          ) : (
-            <figure key={index} className="lesson-diagram">
-              <BoardCanvas
-                width={block.width}
-                height={block.height}
-                stones={block.stones}
-                lastMove={block.highlightPoint ?? null}
-                theme={theme}
-                onIntersectionClick={() => {}}
-              />
-              <figcaption>{t(block.captionKey, block.captionParams)}</figcaption>
-            </figure>
-          ),
-        )}
+        {lesson.blocks.map((block, index) => {
+          if (block.kind === 'paragraph') {
+            return (
+              <p key={index} className="lesson-paragraph">
+                {t(block.textKey)}
+              </p>
+            )
+          }
+          if (block.kind === 'diagram') {
+            return (
+              <figure key={index} className="lesson-diagram">
+                <BoardCanvas
+                  width={block.width}
+                  height={block.height}
+                  stones={block.stones}
+                  lastMove={block.highlightPoint ?? null}
+                  theme={theme}
+                  onIntersectionClick={() => {}}
+                />
+                <figcaption>{t(block.captionKey, block.captionParams)}</figcaption>
+              </figure>
+            )
+          }
+          return <ComparePrompt key={index} block={block} />
+        })}
       </div>
 
       {lesson.demo && <GuidedDemo script={lesson.demo} />}

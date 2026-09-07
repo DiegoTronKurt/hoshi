@@ -1,7 +1,7 @@
 import { computeAreaScore } from '../../core/scoring'
-import { toPoint } from '../../core/board'
-import { applyMove, createGame } from '../../core/rules'
-import { BLACK } from '../../core/types'
+import { createBoard, toPoint } from '../../core/board'
+import { applyMove, createGame, gameStateFromBoard } from '../../core/rules'
+import { BLACK, WHITE } from '../../core/types'
 import type { GameState } from '../../core/types'
 import { board, point } from './helpers'
 import type { Lesson } from './types'
@@ -22,6 +22,56 @@ function areaDiagram() {
 }
 
 const AREA_DIAGRAM = areaDiagram()
+
+/**
+ * Mismo tablero, dos maneras de contarlo: sin komi es un empate exacto
+ * (verificado con computeAreaScore, no inventado), con el komi real de esta
+ * app (6.5) blanco gana. Paredes en columnas 2 y 4 de un tablero de 7, con
+ * la columna 3 vacia y neutral (toca los dos colores) en el medio.
+ */
+function komiDiagram() {
+  const size = 7
+  const black: Array<[number, number]> = []
+  const white: Array<[number, number]> = []
+  for (let y = 0; y < size; y++) {
+    black.push([2, y])
+    white.push([4, y])
+  }
+  const stones = board(size, black, white)
+  const noKomi = computeAreaScore({ width: size, height: size, stones }, 0)
+  const withKomi = computeAreaScore({ width: size, height: size, stones }, 6.5)
+  return { size, stones, tied: noKomi.black, margin: withKomi.white - withKomi.black }
+}
+
+const KOMI_DIAGRAM = komiDiagram()
+
+/**
+ * Grupo blanco de 2x2 sin espacio para dos ojos, con exactamente una
+ * libertad real (no cero: un grupo sin libertades no podria seguir en el
+ * tablero bajo las reglas reales) -- atari real, tan muerto como se puede
+ * estar sin haber sido capturado todavia. `afterScore` es el resultado de
+ * jugar de verdad esa ultima libertad (applyMove real, piedras removidas
+ * por el motor, no borradas a mano), para que el puntaje de "despues" sea
+ * el que el motor realmente da, igual que el resto de este archivo.
+ */
+function deadStoneDiagram() {
+  const size = 3
+  const b = createBoard(size)
+  const blackWall: Array<[number, number]> = [[2, 0], [2, 2], [0, 2], [1, 2]]
+  const whiteDead: Array<[number, number]> = [[0, 0], [1, 0], [0, 1], [1, 1]]
+  for (const [x, y] of blackWall) b.stones[toPoint(size, x, y)] = BLACK
+  for (const [x, y] of whiteDead) b.stones[toPoint(size, x, y)] = WHITE
+  const beforeScore = computeAreaScore({ width: size, height: size, stones: b.stones }, 0)
+
+  const state = gameStateFromBoard({ width: size, height: size, stones: b.stones }, BLACK)
+  const captured = applyMove(state, toPoint(size, 2, 1))
+  if (!captured.legal || !captured.state) throw new Error('deadStoneDiagram: la jugada de captura no fue legal')
+  const afterScore = computeAreaScore({ width: size, height: size, stones: captured.state.board.stones }, 0)
+
+  return { size, before: b.stones, after: captured.state.board.stones, beforeScore, afterScore }
+}
+
+const DEAD_STONE_DIAGRAM = deadStoneDiagram()
 
 /**
  * Reproduce exactamente la misma secuencia de jugadas verificada en
@@ -117,6 +167,14 @@ export const LESSONS_N1: Lesson[] = [
     blocks: [
       { kind: 'paragraph', textKey: 'lesson.n1-l4.p1' },
       { kind: 'paragraph', textKey: 'lesson.n1-l4.p2' },
+      {
+        kind: 'diagram',
+        width: KOMI_DIAGRAM.size,
+        height: KOMI_DIAGRAM.size,
+        stones: KOMI_DIAGRAM.stones,
+        captionKey: 'lesson.n1-l4.diagram.caption',
+        captionParams: { tied: KOMI_DIAGRAM.tied, margin: KOMI_DIAGRAM.margin },
+      },
     ],
   },
   {
@@ -156,6 +214,22 @@ export const LESSONS_N1: Lesson[] = [
     titleKey: 'lesson.n1-l6.title',
     blocks: [
       { kind: 'paragraph', textKey: 'lesson.n1-l6.p1' },
+      {
+        kind: 'diagram',
+        width: DEAD_STONE_DIAGRAM.size,
+        height: DEAD_STONE_DIAGRAM.size,
+        stones: DEAD_STONE_DIAGRAM.before,
+        captionKey: 'lesson.n1-l6.diagram.before.caption',
+        captionParams: { black: DEAD_STONE_DIAGRAM.beforeScore.black, white: DEAD_STONE_DIAGRAM.beforeScore.white },
+      },
+      {
+        kind: 'diagram',
+        width: DEAD_STONE_DIAGRAM.size,
+        height: DEAD_STONE_DIAGRAM.size,
+        stones: DEAD_STONE_DIAGRAM.after,
+        captionKey: 'lesson.n1-l6.diagram.after.caption',
+        captionParams: { black: DEAD_STONE_DIAGRAM.afterScore.black, white: DEAD_STONE_DIAGRAM.afterScore.white },
+      },
       { kind: 'paragraph', textKey: 'lesson.n1-l6.p2' },
     ],
   },

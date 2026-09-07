@@ -183,3 +183,22 @@ export function weakestConcepts(
     .sort((a, b) => a.score - b.score)
     .slice(0, count)
 }
+
+/**
+ * Conceptos de `conceptIds` cuyo puntaje subio entre dos instantaneas de
+ * perfil (por ejemplo antes/despues de una sesion de Hoy) -- para un resumen
+ * de "esto mejoro". Pasar de sin datos a un puntaje real tambien cuenta como
+ * mejora.
+ */
+export function computeSessionImprovements(
+  before: Record<ConceptId, ConceptProfile>,
+  after: Record<ConceptId, ConceptProfile>,
+  conceptIds: ConceptId[],
+): ConceptId[] {
+  return conceptIds.filter((id) => {
+    const beforeScore = before[id]?.score ?? null
+    const afterScore = after[id]?.score ?? null
+    if (afterScore === null) return false
+    return beforeScore === null || afterScore > beforeScore
+  })
+}

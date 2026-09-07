@@ -6,7 +6,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { BoardCanvas } from '../board/BoardCanvas'
 import type { BoardTheme } from '../board/themes'
-import type { ProblemStatus } from './useSolvableExercise'
+import type { ProblemStatus, WrongFlash } from './useSolvableExercise'
 
 interface ExerciseViewProps {
   loaded: LoadedProblem
@@ -16,6 +16,12 @@ interface ExerciseViewProps {
   thinking: boolean
   solverError: boolean
   solutionMoves: number | null
+  wrongReason: TranslationKey | null
+  wrongFlash: WrongFlash | null
+  hintPoint: number | null
+  hintLoading: boolean
+  hintAvailable: boolean
+  onHint: () => void
   theme: BoardTheme
   onIntersectionClick: (point: number) => void
   onPass: () => void
@@ -46,6 +52,12 @@ export function ExerciseView({
   thinking,
   solverError,
   solutionMoves,
+  wrongReason,
+  wrongFlash,
+  hintPoint,
+  hintLoading,
+  hintAvailable,
+  onHint,
   theme,
   onIntersectionClick,
   onPass,
@@ -86,6 +98,8 @@ export function ExerciseView({
         height={loaded.problem.board.height}
         stones={game.board.stones}
         lastMove={lastMove}
+        hintMove={hintPoint}
+        wrongFlash={status === 'incorrect' ? wrongFlash : null}
         theme={theme}
         onIntersectionClick={onIntersectionClick}
       />
@@ -96,6 +110,15 @@ export function ExerciseView({
         </button>
       )}
 
+      {hintAvailable &&
+        (hintPoint !== null ? (
+          <p className="exercises-hint-legend">{t('exercises.hint.legend')}</p>
+        ) : (
+          <button type="button" className="exercises-hint-button" onClick={onHint} disabled={hintLoading}>
+            {hintLoading ? t('exercises.hint.loading') : t('exercises.hint.button')}
+          </button>
+        ))}
+
       <div className="exercises-status" aria-live="polite">
         {status === 'solved' && (
           <div className="exercises-solved-panel">
@@ -105,7 +128,9 @@ export function ExerciseView({
             </p>
           </div>
         )}
-        {status === 'incorrect' && !thinking && <p className="exercises-incorrect">{t('exercises.incorrect')}</p>}
+        {status === 'incorrect' && !thinking && (
+          <p className="exercises-incorrect">{t(wrongReason ?? 'exercises.incorrect')}</p>
+        )}
         {solverError && <p className="exercises-error">{t('engine.error')}</p>}
         {thinking && <p>{t('exercises.thinking')}</p>}
       </div>

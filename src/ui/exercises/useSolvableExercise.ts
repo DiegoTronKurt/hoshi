@@ -3,9 +3,13 @@ import { CONCEPTS } from '../../analysis/concepts'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { getLesson } from '../../content/lessons'
 import { getGroup } from '../../core/groups'
-import { gameStateFromBoard, applyMove } from '../../core/rules'
+import { gameStateFromBoard, applyMove, listLegalMoves } from '../../core/rules'
 import { opponent } from '../../core/types'
 import type { Color, GameState } from '../../core/types'
+import { EvalClient } from '../../eval/client'
+import { EVAL_MODEL_URL } from '../../eval/modelUrl'
+import { legalPolicyDistribution } from '../../eval/policy'
+import type { TranslationKey } from '../../i18n'
 import { createCard, gradeFromAttempt, reviewCard } from '../../learning/fsrs'
 import { computeRegion } from '../../solver/region'
 import type { SolverClient } from '../../solver/client'
@@ -21,6 +25,20 @@ import { useSettings } from '../settings'
 
 export type ProblemStatus = 'playing' | 'incorrect' | 'solved'
 
+/** Cuantos intentos incorrectos "reales" (no los clics fuera de lugar que ni
+ * siquiera cuentan para wrongAttemptsRef) hacen falta antes de ofrecer una
+ * pista. Se pisa la KataGo policy-net, misma mecanica que el hint de Play. */
+const HINT_AVAILABLE_AFTER_WRONG = 2
+
+export interface WrongFlash {
+  point: number
+  /** Se incrementa en cada clic incorrecto, incluso si el punto es el mismo
+   * que la vez anterior -- BoardCanvas dispara el destello por identidad de
+   * este objeto, no por igualdad del punto, para que clickear el mismo punto
+   * invalido dos veces seguidas siga mostrando el destello las dos veces. */
+  id: number
+}
+
 const SOLVE_MAX_DEPTH = 8
 
 export interface SolvableProblemState {
@@ -34,6 +52,24 @@ export interface SolvableProblemState {
   solverError: boolean
   solutionMoves: number | null
   isUserTurn: boolean
+  /** Por que el ultimo clic no funciono, para un mensaje especifico en vez
+   * del generico "intenta de nuevo" -- null cuando no aplica (todavia no
+   * hubo ningun intento incorrecto, o no se pudo identificar una razon mas
+   * puntual que la generica). */
+  wrongReason: TranslationKey | null
+  /** Punto del ultimo clic incorrecto, para el destello del tablero. Ver
+   * WrongFlash: la identidad del objeto, no el punto en si, es lo que
+   * dispara la animacion. */
+  wrongFlash: WrongFlash | null
+  /** Punto sugerido por la red de politicas, solo despues de suficientes
+   * intentos incorrectos reales -- ver HINT_AVAILABLE_AFTER_WRONG. */
+  hintPoint: number | null
+  hintLoading: boolean
+  /** Si corresponde ofrecer el boton de pista ahora mismo (ya se gastaron
+   * suficientes intentos, el problema no es de reconocimiento puro, y
+   * todavia no esta resuelto). */
+  hintAvailable: boolean
+  handleHint: () => void
   handleIntersectionClick: (point: number) => void
   /** Solo tiene efecto para loaded.kind === 'areaValue': las otras dos
    * respuestas (RELLENO_TERRITORIO_PROPIO/PASE_PREMATURO) son "un punto
@@ -87,10 +123,25 @@ export function useSolvableExercise(
   const [thinking, setThinking] = useState(false)
   const [solverError, setSolverError] = useState(false)
   const [solutionMoves, setSolutionMoves] = useState<number | null>(null)
+  const [wrongReason, setWrongReason] = useState<TranslationKey | null>(null)
+  const [wrongFlash, setWrongFlash] = useState<WrongFlash | null>(null)
+  const [wrongAttemptCount, setWrongAttemptCount] = useState(0)
+  const [hintPoint, setHintPoint] = useState<number | null>(null)
+  const [hintLoading, setHintLoading] = useState(false)
 
   const wrongAttemptsRef = useRef(0)
   const recordedRef = useRef(false)
   const startTimeRef = useRef<number | null>(null)
+  const flashIdRef = useRef(0)
+  const hintEvalRef = useRef<EvalClient | null>(null)
+
+  useEffect(() => () => hintEvalRef.current?.terminate(), [])
+  // Un anillo de pista de la posicion anterior ya no tiene sentido en una
+  // nueva posicion (tsumego/escalera pueden avanzar varias jugadas dentro
+  // del mismo problema) -- mismo disparador que usa PlayGameScreen.tsx.
+  useEffect(() => {
+    setHintPoint(null)
+  }, [game])
 
   const region = useMemo(() => {
     if (!loaded || loaded.kind !== 'tsumego') return []
@@ -114,6 +165,9 @@ export function useSolvableExercise(
     recordedRef.current = false
     startTimeRef.current = null
     setSolverError(false)
+    setWrongReason(null)
+    setWrongFlash(null)
+    setWrongAttemptCount(0)
     if (!loaded) {
       setGame(null)
       setLastMove(null)
@@ -239,15 +293,42 @@ export function useSolvableExercise(
   const isUserTurn =
     (status === 'playing' || status === 'incorrect') && !!game && !!loaded && game.toMove === userColor
 
+  /**
+   * Centraliza lo que pasa en CUALQUIER clic incorrecto: mensaje especifico
+   * (o generico si reason es null -- ver el fallback en ExerciseView), el
+   * destello del punto, y si corresponde ademas contar como intento real
+   * (wrongAttemptsRef/wrongAttemptCount, lo que a su vez alimenta la nota
+   * SRS del intento y el umbral de la pista). Los clics que hoy no daban
+   * ninguna senal (fuera de la region, ilegales) pasan por aca tambien pero
+   * con countsAsAttempt=false, para no cambiar esas dos cosas.
+   */
+  function markWrong(point: number, reason: TranslationKey | null, countsAsAttempt: boolean) {
+    if (countsAsAttempt) {
+      wrongAttemptsRef.current += 1
+      setWrongAttemptCount((n) => n + 1)
+    }
+    flashIdRef.current += 1
+    setWrongFlash({ point, id: flashIdRef.current })
+    setWrongReason(reason)
+    setStatus('incorrect')
+  }
+
   async function handleIntersectionClick(point: number) {
     if (!isUserTurn || thinking || !loaded || !game) return
+    setWrongReason(null)
 
     if (loaded.kind === 'tsumego') {
       const problem = loaded.problem
-      if (!region.includes(point)) return
+      if (!region.includes(point)) {
+        markWrong(point, 'exercises.wrongReason.offTarget', false)
+        return
+      }
 
       const result = applyMove(game, point, { regionPoints: new Set(region) })
-      if (!result.legal || !result.state) return
+      if (!result.legal || !result.state) {
+        markWrong(point, result.reason === 'suicide' ? 'exercises.wrongReason.suicide' : 'exercises.wrongReason.illegal', false)
+        return
+      }
       playStoneSoundIfEnabled()
 
       const client = solverClient
@@ -275,8 +356,8 @@ export function useSolvableExercise(
       }
 
       if (!check.solved) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        const selfAtari = getGroup(result.state.board, point)?.liberties.size === 1
+        markWrong(point, selfAtari ? 'exercises.wrongReason.selfAtari' : null, true)
         return
       }
 
@@ -299,8 +380,12 @@ export function useSolvableExercise(
 
     if (loaded.kind === 'ladder') {
       const problem = loaded.problem
+      const runnerLibertiesBefore = getGroup(game.board, problem.runnerPoint)?.liberties.size ?? 0
       const result = applyMove(game, point)
-      if (!result.legal || !result.state) return
+      if (!result.legal || !result.state) {
+        markWrong(point, result.reason === 'suicide' ? 'exercises.wrongReason.suicide' : 'exercises.wrongReason.illegal', false)
+        return
+      }
       playStoneSoundIfEnabled()
 
       const afterChaser = result.state
@@ -320,8 +405,8 @@ export function useSolvableExercise(
       })
 
       if (!outcome.captured) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        const offTrack = runnerGroup.liberties.size >= runnerLibertiesBefore
+        markWrong(point, offTrack ? 'exercises.wrongReason.offTarget' : null, true)
         return
       }
 
@@ -353,8 +438,7 @@ export function useSolvableExercise(
       // importar nada mas (RELLENO_TERRITORIO_PROPIO): ni siquiera hace
       // falta mirar el delta de area para esta parte.
       if (isOwnTerritory(game.board, point, problem.toMove)) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        markWrong(point, 'exercises.wrongReason.ownTerritory', true)
         return
       }
 
@@ -363,8 +447,9 @@ export function useSolvableExercise(
       // ejercicio ensena "hay una jugada real aca", no "encuentra LA mejor".
       const delta = areaDeltaForPoint(game.board, point, problem.toMove)
       if (delta === null || delta <= PASS_VALUE_THRESHOLD) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        // areaDeltaForPoint devuelve null exactamente cuando la jugada es
+        // ilegal (ocupado): en ese caso "no gana nada" seria enganoso.
+        markWrong(point, delta === null ? 'exercises.wrongReason.illegal' : 'exercises.wrongReason.noGain', true)
         return
       }
 
@@ -377,8 +462,7 @@ export function useSolvableExercise(
         (problem.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' || problem.conceptId === 'COMPARAR_VALOR_REAL') &&
         bestAreaMove(game.board, problem.toMove)?.point !== point
       ) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        markWrong(point, 'exercises.wrongReason.notBiggest', true)
         return
       }
 
@@ -398,14 +482,17 @@ export function useSolvableExercise(
       // actual -- primero y unico tipo de ejercicio en este archivo que no
       // coloca una piedra.
       const problem = loaded.problem
-      const correct =
-        problem.conceptId === 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO'
-          ? (sharedLibertiesOf(game.board, problem.groupAPoint, problem.groupBPoint)?.has(point) ?? false)
-          : getGroup(game.board, point)?.color === raceBehindColor(game.board, problem.groupAPoint, problem.groupBPoint)
+      const isSharedLibertyConcept = problem.conceptId === 'LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO'
+      const correct = isSharedLibertyConcept
+        ? (sharedLibertiesOf(game.board, problem.groupAPoint, problem.groupBPoint)?.has(point) ?? false)
+        : getGroup(game.board, point)?.color === raceBehindColor(game.board, problem.groupAPoint, problem.groupBPoint)
 
       if (!correct) {
-        wrongAttemptsRef.current += 1
-        setStatus('incorrect')
+        markWrong(
+          point,
+          isSharedLibertyConcept ? 'exercises.wrongReason.notSharedLiberty' : 'exercises.wrongReason.wrongGroup',
+          true,
+        )
         return
       }
 
@@ -417,8 +504,7 @@ export function useSolvableExercise(
     // doubleAtari: reconocimiento de una sola jugada, sin respuesta del rival.
     const problem = loaded.problem
     if (!isDoubleAtariMove(game.board, point, problem.color)) {
-      wrongAttemptsRef.current += 1
-      setStatus('incorrect')
+      markWrong(point, 'exercises.wrongReason.notDoubleAtari', true)
       return
     }
 
@@ -432,11 +518,16 @@ export function useSolvableExercise(
 
   function handlePass() {
     if (!isUserTurn || thinking || !loaded || !game || loaded.kind !== 'areaValue') return
+    setWrongReason(null)
     const problem = loaded.problem
     const best = bestAreaMove(game.board, problem.toMove)
     if (best !== null) {
-      // Habia una jugada real (PASE_PREMATURO): pasar fue prematuro.
+      // Habia una jugada real (PASE_PREMATURO): pasar fue prematuro. No hay
+      // un punto que destellar (no fue un clic en el tablero), asi que esto
+      // no pasa por markWrong.
       wrongAttemptsRef.current += 1
+      setWrongAttemptCount((n) => n + 1)
+      setWrongReason('exercises.wrongReason.passedTooEarly')
       setStatus('incorrect')
       return
     }
@@ -444,11 +535,46 @@ export function useSolvableExercise(
     setStatus('solved')
   }
 
+  const hintAvailable =
+    !!loaded &&
+    loaded.kind !== 'semeaiLiberty' &&
+    status !== 'solved' &&
+    wrongAttemptCount >= HINT_AVAILABLE_AFTER_WRONG
+
+  async function handleHint() {
+    if (!game || hintLoading || hintPoint !== null || !hintAvailable) return
+    setHintLoading(true)
+    try {
+      if (!hintEvalRef.current) hintEvalRef.current = new EvalClient(EVAL_MODEL_URL)
+      const output = await hintEvalRef.current.evaluate({ state: game })
+      const legal = listLegalMoves(game)
+      const legalPoints = legal.filter((p): p is number => p !== null)
+      const legalPass = legal.includes(null)
+      const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass, game.board.width)
+      let topPoint: number | null = null
+      let topProbability = -1
+      for (const [point, probability] of distribution) {
+        if (probability > topProbability) {
+          topProbability = probability
+          topPoint = point
+        }
+      }
+      setHintPoint(topPoint)
+    } catch {
+      // silencioso, misma decision que la pista de PlayGameScreen.tsx.
+    } finally {
+      setHintLoading(false)
+    }
+  }
+
   function reset() {
     if (!loaded) return
     wrongAttemptsRef.current = 0
     recordedRef.current = false
     setSolverError(false)
+    setWrongReason(null)
+    setWrongFlash(null)
+    setWrongAttemptCount(0)
     setGame(gameStateFromBoard(loaded.problem.board, initialToMove(loaded)))
     setLastMove(null)
     setStatus('playing')
@@ -468,6 +594,12 @@ export function useSolvableExercise(
     solverError,
     solutionMoves,
     isUserTurn,
+    wrongReason,
+    wrongFlash,
+    hintPoint,
+    hintLoading,
+    hintAvailable,
+    handleHint,
     handleIntersectionClick,
     handlePass,
     reset,

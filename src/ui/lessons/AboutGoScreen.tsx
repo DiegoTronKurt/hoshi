@@ -39,6 +39,11 @@ export function AboutGoScreen({ onBack }: AboutGoScreenProps) {
       </div>
 
       <section className="about-go-section">
+        <h3>{t('about.objective.title')}</h3>
+        <p className="lesson-paragraph">{t('about.objective.body')}</p>
+      </section>
+
+      <section className="about-go-section">
         <h3>{t('about.history.title')}</h3>
         {HISTORY_PARAGRAPHS.map((key) => (
           <p key={key} className="lesson-paragraph">

@@ -83,6 +83,21 @@ export const LESSONS_N2: Lesson[] = [
         highlightPoint: cropPoint(DOS_OJOS, 3, 4),
       },
     ],
+    demo: {
+      width: DOS_OJOS.size,
+      height: DOS_OJOS.size,
+      initialStones: DOS_OJOS.stones,
+      toMove: WHITE,
+      steps: [
+        {
+          promptKey: 'lesson.n2-l3.demo.step1.prompt',
+          expectedPoints: [cropPoint(DOS_OJOS, 3, 4), cropPoint(DOS_OJOS, 5, 4)],
+          expectIllegal: true,
+          feedbackKey: 'lesson.n2-l3.demo.step1.feedback',
+        },
+      ],
+      completionKey: 'lesson.n2-l3.demo.complete',
+    },
   },
   {
     id: 'n2-l4',
