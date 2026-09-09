@@ -1,5 +1,106 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-09, cont. 19: mapa de fases, estilos de juego y cultura del Go, refranes en lecciones, tendencia de rango en Perfil)
+
+Misma conversacion que cont.18, continuada varios turnos despues como
+discusion abierta: que le falta a la app para llevar a alguien de cero a
+"heroe" del Go, mas alla de la mecanica que ya ensena bien. De esa discusion
+salieron cinco ideas concretas, todas implementadas esta sesion (se dejo
+afuera, a pedido explicito, la importacion de SGF externo).
+
+**Mapa de fases en Aprender.** Los 11 niveles ya progresaban apertura ->
+medio juego -> final (los titulos de nivel ya dicen literalmente "Opening",
+"Joseki", "Fuseki", "Midgame", "Endgame", "Capturing Races"), pero
+`LearnScreen.tsx` los mostraba como una sola lista plana de 11 tarjetas sin
+ninguna agrupacion visual. Se agrego una tabla `LEVEL_GROUPS` (Fundamentos:
+niveles 0-4, Apertura: 5-7, Medio juego: 8, Final: 9-10) que solo cambia el
+renderizado -- ningun modelo de datos nuevo, cada tarjeta de nivel sigue
+siendo exactamente la misma.
+
+**El glosario ya estaba desactualizado.** `content/glossary.ts` traia un
+comentario propio diciendo que sente, gote, joseki y moyo todavia no los
+ensenaba ninguna leccion real -- eso era cierto cuando se escribio, antes de
+que existieran los niveles 5 a 9, y ya no lo es (n6-l1 ensena joseki, n7-l1
+ensena moyo, n9-l2 ensena sente y gote). Revisando el resto del contenido se
+encontro que ademas hane (n4-l3) y tenuki (n6-l3, con su propio concepto
+`TENUKI_JOSEKI`) tambien se ensenan hace rato y tampoco estaban. Se agregaron
+las 5 entradas nuevas reutilizando texto ya existente (titulo+parrafo de la
+leccion, o label+summary de un concepto cuando existe uno dedicado, como
+`SENTE_Y_GOTE` para sente/gote juntos) -- cero contenido nuevo escrito para
+el glosario en si, solo se lo puso al dia.
+
+**Refranes reales como cita destacada.** Se agrego un campo opcional
+`proverbKey` a `Lesson` (types.ts), renderizado en `LessonScreen.tsx` como un
+parrafo destacado (borde de acento, itálica) justo debajo del titulo. Se
+aplico a 4 lecciones cuyo contenido ya es, literalmente, un refran conocido
+de Go, verificando cada texto real antes de elegir la frase para no
+inventarle un refran a una leccion que no lo amerita: n9-l3 ("jugá sente
+antes que gote"), n8-l5 ("quien va ganando no deberia buscar pelea", el
+refran clasico del "rico no busca pleitos"), n7-l5 ("lo urgente antes que lo
+grande"), n2-l3 ("dos ojos, vivo; un ojo, muerto"). Se descarto a proposito
+un quinto candidato (n6-l2, direccion de bloqueo) por no encontrar un refran
+real y especifico que calzara sin forzarlo.
+
+**"Que es el Go", no solo "como se juega": estilos y cultura en Sobre el
+Go.** La idea original del usuario era una seccion de "tacticas o
+filosofias" con demos cortas. Investigando la app se encontro que ya existe
+un mecanismo real y concreto para esto: `engine/botStyles.ts` ya define
+cuatro estilos de bot (standard/territorial/influence/combative) con sesgos
+de playout genuinamente distintos, ya seleccionables en Jugar. En vez de dar
+una charla abstracta sobre moyo-vs-territorio, la nueva seccion "Estilos de
+juego" en `AboutGoScreen.tsx` explica el contraste anclandolo directamente a
+esos cuatro estilos reales de la app, con un boton "Probarlo en Jugar"
+(`onNavigateToPlay`, hecho llegar hasta `AboutGoScreen` -- antes solo
+reciba `onBack`) para invitar a sentir la diferencia jugando en vez de solo
+leyendo. Se agrego tambien un parrafo cultural/historico corto (las cuatro
+artes del erudito chino, la era AlphaGo 2016-2017 reescribiendo teoria
+asentada, con un gancho auto-referencial: el motor de esta misma app
+desciende de la misma familia de tecnicas) evitando repetir el relato de
+AlphaGo/Lee Sedol que la seccion Historia ya cuenta en detalle -- solo se
+la referencia ("ver Historia, mas abajo"). Se agrego tambien una seccion de
+cierre corta, "Mas alla de esta app", explicando que la escala kyu/dan del
+rango estimado de Perfil y las piedras de hándicap (ya configurables en
+Jugar) son las mismas convenciones que usa el Go real fuera de la app, sin
+nombrar ningun servicio externo especifico.
+
+**Progreso visible como tendencia, no solo una foto.** `AttemptRecord` y
+`SavedGameRecord` (storage/db.ts) ya traen `createdAt`, asi que se pudo
+calcular una tendencia sin persistir nada nuevo -- mismo principio de
+"calcular, no guardar" que ya usan `computeProfiles`/`computeSelfRankKyu`.
+`computeSelfRankTrend` (nuevo `learning/selfRankTrend.ts`) filtra
+attempts/games a los anteriores a un corte (30 dias por defecto, parametro
+opcional) y corre la misma formula de rango sobre ese subconjunto mas viejo;
+si no hay evidencia suficiente antes del corte, no muestra nada en vez de
+inventar una tendencia. Se agrego tambien `topGameMistake` (`learning/
+profile.ts`) que reusa `analyzeGame` sobre todas las partidas guardadas para
+mostrar en Perfil el error mas frecuente en partidas reales (no ejercicios),
+separado del resto del perfil agregado. Verificado con 4 tests nuevos
+(`tests/learning/selfRankTrend.test.ts`) que cubren: sin datos, solo
+evidencia reciente, evidencia vieja y nueva, y una ventana distinta a la de
+30 dias por defecto.
+
+**Verificacion.** `tsc -b` limpio. `oxlint` sin advertencias nuevas (las que
+aparecen son todas preexistentes, ninguna en los archivos tocados esta
+sesion). Paridad de i18n verificada a 801 claves por idioma (783 + 18
+nuevas). Suite completa: 2847 tests, 3 fallaron por timeout en la primera
+corrida (los solucionadores mas pesados de tsumego/seeds, con vitest,
+oxlint y el servidor de dev corriendo todos a la vez compitiendo por CPU) y
+los 13 tests de esos 3 archivos pasaron limpio al correrlos de nuevo en
+aislamiento -- contencion de recursos, no una regresion real. Prueba de
+humo con Playwright real contra el dev server (script descartable, borrado
+despues): mapa de fases (4 encabezados, 11 tarjetas), glosario con 11
+entradas, boton de estilos llevando a Jugar, refran visible en n9-l3, y
+Perfil sin fabricar tendencia ni error-mas-comun cuando no hay historial --
+sin errores de consola en toda la corrida.
+
+**Release.** `hoshi` commit `6805c9e`, pusheado. `npm run build` +
+`sync-webapp.ps1` (via la herramienta de PowerShell directamente, no Bash,
+por la restriccion de politica de ejecucion ya conocida de sesiones
+anteriores). `hoshi-flutter` version `1.18.0+23` -> `1.19.0+24`, AAB firmado
+de 54.0MB en `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`,
+commit `78f8ae0`, pusheado. Subir el AAB a Play Console sigue siendo un paso
+manual del usuario.
+
 ## Estado general del proyecto (2026-09-06, cont. 18: boton atras y resumen en Hoy, motivo de error y pista en Ejercicios, objetivo del Go, comparar-antes-de-ver en lecciones de nivel 1 a 9)
 
 Sesion en dos rondas, misma conversacion que cont.17. Primera ronda: el
