@@ -147,6 +147,35 @@ export function computeProfiles(attempts: AttemptRecord[], games: SavedGameRecor
   return profiles
 }
 
+/**
+ * Concepto que mas veces aparecio como error real en partidas jugadas (no en
+ * ejercicios), para la pantalla de Perfil. Mismo detector (analyzeGame) que
+ * ya alimenta computeProfiles() de arriba, contado por separado en vez de
+ * leido del perfil agregado porque el perfil mezcla ejercicios y partidas, y
+ * aca interesa especificamente "que se te escapa jugando de verdad". Null si
+ * ninguna partida guardada disparo ningun detector todavia.
+ */
+export function topGameMistake(games: SavedGameRecord[]): ConceptId | null {
+  const counts = new Map<ConceptId, number>()
+  for (const game of games) {
+    const { moves } = sgfToGameRecord(game.sgf)
+    const occurrences = analyzeGame(gameWidth(game), gameHeight(game), game.komi, moves)
+    for (const occurrence of occurrences) {
+      if (occurrence.result !== 'incorrect') continue
+      counts.set(occurrence.conceptId, (counts.get(occurrence.conceptId) ?? 0) + 1)
+    }
+  }
+  let best: ConceptId | null = null
+  let bestCount = 0
+  for (const [conceptId, count] of counts) {
+    if (count > bestCount) {
+      best = conceptId
+      bestCount = count
+    }
+  }
+  return best
+}
+
 const MASTERY_THRESHOLD = 70
 
 /**

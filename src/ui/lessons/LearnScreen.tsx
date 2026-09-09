@@ -38,6 +38,17 @@ const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   10: 'learn.level.10',
 }
 
+/** Agrupa los niveles por fase del juego para que se vea la forma del
+ * camino completo, en vez de una lista plana de 11 tarjetas -- los titulos
+ * de los niveles ya dicen "Opening"/"Joseki"/"Fuseki"/"Midgame"/"Endgame",
+ * esto solo hace visible una estructura que ya existia. */
+const LEVEL_GROUPS: Array<{ headingKey: TranslationKey; levels: Array<(typeof LEVELS)[number]> }> = [
+  { headingKey: 'learn.phase.fundamentals', levels: [0, 1, 2, 3, 4] },
+  { headingKey: 'learn.phase.opening', levels: [5, 6, 7] },
+  { headingKey: 'learn.phase.midgame', levels: [8] },
+  { headingKey: 'learn.phase.endgame', levels: [9, 10] },
+]
+
 /**
  * Ya no quedan niveles bloqueados por falta de contenido: los 11 niveles
  * (0 a 10) del curriculo maestro estan completos (Nivel 9 y 10
@@ -131,7 +142,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
   }, [view])
 
   if (view.kind === 'about') {
-    return <AboutGoScreen onBack={goBack} />
+    return <AboutGoScreen onBack={goBack} onNavigateToPlay={onNavigateToPlay} />
   }
 
   if (view.kind === 'lesson') {
@@ -238,41 +249,50 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
           </div>
         </div>
       )}
-      <ul className="learn-level-list">
-        {LEVELS.map((level) => {
-          const lessons = lessonsByLevel[level]
-          const readCount = lessons.filter((lesson) => isLessonRead(lesson.id)).length
-          const complete = lessons.length > 0 && readCount === lessons.length
-          return (
-            <li key={level}>
-              <button type="button" className="learn-level-card" onClick={() => setView({ kind: 'lessonList', level })}>
-                <span className="learn-level-badge">{complete ? '✓' : level}</span>
+      {LEVEL_GROUPS.map((group) => (
+        <div key={group.headingKey} className="learn-phase-group">
+          <h3 className="learn-phase-heading">{t(group.headingKey)}</h3>
+          <ul className="learn-level-list">
+            {group.levels.map((level) => {
+              const lessons = lessonsByLevel[level]
+              const readCount = lessons.filter((lesson) => isLessonRead(lesson.id)).length
+              const complete = lessons.length > 0 && readCount === lessons.length
+              return (
+                <li key={level}>
+                  <button type="button" className="learn-level-card" onClick={() => setView({ kind: 'lessonList', level })}>
+                    <span className="learn-level-badge">{complete ? '✓' : level}</span>
+                    <span className="learn-level-info">
+                      <span>{t(LEVEL_TITLE_KEY[level])}</span>
+                      <span className="learn-level-meta">
+                        {t('learn.lessonsCount', { read: readCount, total: lessons.length })}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      ))}
+      {LOCKED_LEVELS.length > 0 && (
+        <ul className="learn-level-list">
+          {LOCKED_LEVELS.map((info) => (
+            <li key={info.level}>
+              <div className="learn-level-card learn-level-card-locked" aria-disabled="true">
+                <span className="learn-level-badge learn-level-badge-locked">
+                  <LockIcon />
+                </span>
                 <span className="learn-level-info">
-                  <span>{t(LEVEL_TITLE_KEY[level])}</span>
+                  <span>{t(info.titleKey)}</span>
                   <span className="learn-level-meta">
-                    {t('learn.lessonsCount', { read: readCount, total: lessons.length })}
+                    {info.boardSize} · {t('learn.locked')}
                   </span>
                 </span>
-              </button>
+              </div>
             </li>
-          )
-        })}
-        {LOCKED_LEVELS.map((info) => (
-          <li key={info.level}>
-            <div className="learn-level-card learn-level-card-locked" aria-disabled="true">
-              <span className="learn-level-badge learn-level-badge-locked">
-                <LockIcon />
-              </span>
-              <span className="learn-level-info">
-                <span>{t(info.titleKey)}</span>
-                <span className="learn-level-meta">
-                  {info.boardSize} · {t('learn.locked')}
-                </span>
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

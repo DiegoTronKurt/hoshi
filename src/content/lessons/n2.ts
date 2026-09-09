@@ -71,6 +71,7 @@ export const LESSONS_N2: Lesson[] = [
     level: 2,
     order: 3,
     titleKey: 'lesson.n2-l3.title',
+    proverbKey: 'lesson.n2-l3.proverb',
     blocks: [
       { kind: 'paragraph', textKey: 'lesson.n2-l3.p1' },
       { kind: 'paragraph', textKey: 'lesson.n2-l3.p2' },

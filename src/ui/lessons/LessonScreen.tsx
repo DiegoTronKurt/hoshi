@@ -36,6 +36,8 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
         <h2>{t(lesson.titleKey)}</h2>
       </div>
 
+      {lesson.proverbKey && <p className="lesson-proverb">{t(lesson.proverbKey)}</p>}
+
       <div className="lesson-body">
         {lesson.blocks.map((block, index) => {
           if (block.kind === 'paragraph') {

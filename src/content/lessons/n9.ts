@@ -148,6 +148,7 @@ export const LESSONS_N9: Lesson[] = [
     level: 9,
     order: 3,
     titleKey: 'lesson.n9-l3.title',
+    proverbKey: 'lesson.n9-l3.proverb',
     blocks: [
       { kind: 'paragraph', textKey: 'lesson.n9-l3.p1' },
       {

@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { conceptsWithEvidence } from '../../analysis/concepts'
 import { AXIS_LABEL_KEY, computeAxisScores } from '../../analysis/axes'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
-import { computeProfiles, weakestConcepts } from '../../learning/profile'
+import { computeProfiles, topGameMistake, weakestConcepts } from '../../learning/profile'
 import type { ConceptProfile } from '../../learning/profile'
 import { computeSelfRankKyu } from '../../learning/selfRank'
+import { computeSelfRankTrend } from '../../learning/selfRankTrend'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
@@ -46,6 +47,8 @@ export function ProfileScreen() {
   const axisScores = useMemo(() => computeAxisScores(profiles), [profiles])
   const insights = useMemo(() => computeKnowledgeApplicationInsights(profiles), [profiles])
   const selfRank = useMemo(() => computeSelfRankKyu(profiles, games), [profiles, games])
+  const selfRankTrend = useMemo(() => computeSelfRankTrend(attempts, games), [attempts, games])
+  const topMistake = useMemo(() => topGameMistake(games), [games])
 
   // Boton fisico "atras" de Android: settings -> profile -- ver
   // navigation/localBack.ts.
@@ -82,7 +85,20 @@ export function ProfileScreen() {
             <p className="settings-description">
               {t(selfRank.confidence === 'blended' ? 'profile.selfRank.disclaimer' : 'profile.selfRank.lowConfidence')}
             </p>
+            {selfRankTrend.past.kyu !== null && selfRankTrend.current.kyu !== null && (
+              <p className="profile-selfrank-trend">
+                {t('profile.selfRank.trend', {
+                  past: Math.round(selfRankTrend.past.kyu),
+                  current: Math.round(selfRankTrend.current.kyu),
+                })}
+              </p>
+            )}
           </>
+        )}
+        {topMistake && (
+          <p className="profile-topmistake">
+            {t('profile.mistakes.topInGame.line', { concept: t(`concept.${topMistake}.label` as TranslationKey) })}
+          </p>
         )}
       </section>
 

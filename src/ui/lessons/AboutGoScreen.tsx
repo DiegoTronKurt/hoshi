@@ -1,8 +1,10 @@
 import { GLOSSARY_TERMS } from '../../content/glossary'
 import { useI18n } from '../../i18n'
+import type { PlaySeed } from '../play/playConfig'
 
 interface AboutGoScreenProps {
   onBack: () => void
+  onNavigateToPlay: (seed?: PlaySeed) => void
 }
 
 const RULE_SECTIONS = [
@@ -26,7 +28,7 @@ const HISTORY_PARAGRAPHS = [
  * una pestana nueva -- vive como una sub-pantalla mas de Aprender, mismo
  * patron de router que ya usa LearnScreen para niveles/lecciones.
  */
-export function AboutGoScreen({ onBack }: AboutGoScreenProps) {
+export function AboutGoScreen({ onBack, onNavigateToPlay }: AboutGoScreenProps) {
   const { t } = useI18n()
 
   return (
@@ -41,6 +43,17 @@ export function AboutGoScreen({ onBack }: AboutGoScreenProps) {
       <section className="about-go-section">
         <h3>{t('about.objective.title')}</h3>
         <p className="lesson-paragraph">{t('about.objective.body')}</p>
+      </section>
+
+      <section className="about-go-section">
+        <h3>{t('about.styles.title')}</h3>
+        <p className="lesson-paragraph">{t('about.styles.intro')}</p>
+        <p className="lesson-paragraph">{t('about.styles.moyo')}</p>
+        <p className="lesson-paragraph">{t('about.styles.fighting')}</p>
+        <p className="lesson-paragraph">{t('about.styles.history')}</p>
+        <button type="button" className="about-go-styles-cta" onClick={() => onNavigateToPlay()}>
+          {t('about.styles.cta')}
+        </button>
       </section>
 
       <section className="about-go-section">
@@ -83,6 +96,11 @@ export function AboutGoScreen({ onBack }: AboutGoScreenProps) {
           <h4>{t('about.rules.seki.title')}</h4>
           <p className="lesson-paragraph">{t('about.rules.seki.description')}</p>
         </div>
+      </section>
+
+      <section className="about-go-section">
+        <h3>{t('about.beyondHoshi.title')}</h3>
+        <p className="lesson-paragraph">{t('about.beyondHoshi.body')}</p>
       </section>
     </div>
   )

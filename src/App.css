@@ -1253,6 +1253,19 @@
   background: var(--hoshi-accent);
 }
 
+.learn-phase-heading {
+  margin: 1.1rem 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--hoshi-text-muted);
+}
+
+.learn-phase-group:first-of-type .learn-phase-heading {
+  margin-top: 0.5rem;
+}
+
 .learn-level-list,
 .learn-lesson-list {
   list-style: none;
@@ -1479,6 +1492,17 @@
   margin: 0 0 0.9rem;
 }
 
+.lesson-proverb {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--hoshi-accent);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: var(--hoshi-text);
+  background: var(--hoshi-surface-alt);
+  border-radius: 0 8px 8px 0;
+}
+
 .lesson-diagram {
   width: 100%;
   margin: 0 0 0.9rem;
@@ -1702,6 +1726,17 @@
   margin: 0 0 0.6rem;
 }
 
+.about-go-styles-cta {
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--hoshi-accent);
+  color: var(--hoshi-accent-contrast);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
 .about-go-glossary {
   margin: 0;
   display: flex;
@@ -1852,6 +1887,13 @@
 
 .profile-selfrank-empty {
   margin: 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+}
+
+.profile-selfrank-trend,
+.profile-topmistake {
+  margin: 0.4rem 0 0;
   font-size: 0.85rem;
   color: var(--hoshi-text-muted);
 }

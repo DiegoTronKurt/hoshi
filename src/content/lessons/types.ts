@@ -82,4 +82,6 @@ export interface Lesson {
   blocks: LessonBlock[]
   /** "Ejemplo interactivo" de la leccion. Opcional: no todas las lecciones tienen algo demostrable en el tablero. */
   demo?: DemoScript
+  /** Refran de Go real que esta leccion ya ilustra, mostrado como cita destacada arriba del contenido. Opcional. */
+  proverbKey?: TranslationKey
 }
