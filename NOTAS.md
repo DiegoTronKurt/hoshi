@@ -1,5 +1,111 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-11, cont. 20: historial de partidas acotado, Aprender centrado y sin titulos repetidos, boton siguiente leccion, ejercicios sin repetir, texturas de tablero, coach en vivo, ejercicios de juicio local vs. global)
+
+Playtest real de la app con una lista de 8 hallazgos/ideas concretas, todas
+implementadas esta sesion. Se dejo explicitamente afuera (a pedido del
+usuario, para una sesion futura) engrosar los bancos ya existentes de
+ATARI_IGNORADO/AUTOATARI/RELLENO_OJO_PROPIO/TRIANGULO_VACIO/
+CORTE_NO_DEFENDIDO con mas autojuego -- se agrego checkpointing al generador
+para que ese trabajo futuro sea seguro de interrumpir, pero no se corrio
+hasta el final (cada partida en 9x9 tarda ~3 minutos; llegar a un banco
+notablemente mas grande necesita cientos de partidas, varias horas sin
+supervisar).
+
+**Historial de partidas acotado.** `SavedGamesList.tsx` mostraba todo el
+historial guardado sin limite. Ahora muestra solo las ultimas 10 (`games.
+slice().reverse().slice(0, 10)`), con una leyenda "+N mas" cuando hay mas.
+`PlayConfigScreen.tsx` sigue viendo el historial completo para
+`computeAdaptiveStrength` -- el limite es solo de la lista visible.
+
+**Aprender: tarjetas centradas y titulos sin eco.** `.learn-level-card` y
+`.learn-lesson-card` (y el ruleset separado de `.learn-level-card-locked`)
+tenian `justify-content: space-between` sin ningun efecto util (el segundo
+hijo ya ocupaba el espacio con `flex:1`, o no habia segundo hijo) --
+cambiado a `center`. Se reescribieron 7 titulos de leccion que repetian
+literalmente el nombre de su propio nivel (n0-l4 "Captura" siendo el caso
+mas obvio, ademas de n6-l1, n6-l5, n8-l1, n8-l2, n9-l1, n10-l1), preservando
+el sentido de cada leccion.
+
+**Boton "Siguiente leccion".** Nuevo `nextLessonId()` en `content/lessons/
+index.ts` (misma leccion+1 dentro del nivel, o primera leccion del nivel
+siguiente). `LessonScreen.tsx` lo muestra despues del CTA de partida de
+comprobacion. El boton fisico de Android sigue funcionando sin cambios: la
+vista de nivel se recalcula fresca a partir del `lessonId` actual en cada
+back-press, asi que cruzar de nivel con este boton y despues volver atras
+cae en la lista de nivel correcta.
+
+**Ejercicios sin repeticion inmediata.** Nuevo `pickWithoutRepeat()`
+(`content/pickWithoutRepeat.ts`) evita mostrar de nuevo un problema visto en
+los ultimos 5 intentos de la misma sesion, con fallback al pool completo si
+se agota. Aplicado en `ExercisePracticeScreen.tsx` (el boton "Siguiente" de
+practica libre). `TodayScreen.tsx` no lo necesita: ya usa un planificador
+por cuotas (`planSession`), no seleccion aleatoria.
+
+**Texturas de tablero.** `BoardTheme` gana un campo opcional
+`backgroundTexture`. Tres temas (kaya, sumie, nocturno) usan texturas
+proceduralmente generadas (grano de madera, papel, pizarra -- tecnica de
+"dibujo 3x3 con wrap" para tileo perfecto, sin costuras) en vez del fondo
+plano; minimo queda sin cambios a proposito. ~6KB de imagenes, ~10KB de
+diferencia en el bundle final (verificado con diff de tamano antes/despues).
+
+**Coach en vivo.** Nuevo campo `liveMistakeFlagging` en `PlayConfig`
+(apagado por defecto, mismo patron que `hintsEnabled`). Despues de cada
+jugada propia, compara probabilidad de victoria antes/despues via
+`EvalClient` (mismo mecanismo que ya usaba `askAi` en la revision de
+errores) y, si la caida supera un umbral, intenta etiquetarla con un
+detector especifico de `analysis/mistakes.ts` -- pero solo con los 7
+detectores que no necesitan jugadas futuras para decidir
+(`detectAutoatari`, `detectRellenoOjoPropio`,
+`detectRellenoTerritorioPropio`, `detectEscaleraFallida`,
+`detectTrianguloVacio`, `detectPrimeraLineaTemprana`,
+`detectPasePrematuro`); si ninguno aplica, muestra un aviso generico de
+caida de probabilidad. Nueva funcion `analyzeLastMove()` (mismo archivo)
+para esta version "en vivo" sin necesitar el resto de la partida. La pista
+existente tambien ahora muestra la probabilidad de victoria que deja
+(reusando `output.value[0]`, que ya se calculaba y se descartaba).
+
+**Ejercicios de juicio local vs. global.** Nivel 7 (fuseki/moyo) no tenia
+ningun banco de ejercicios -- sus 5 conceptos eran todos
+`generatesExercises: false`. En vez de crear un concepto nuevo como se
+habia planeado originalmente, se reuso `JUICIO_LOCAL_VS_GLOBAL` (ya
+existente, con la leccion n7-l2 ya escrita exactamente sobre este tema) y
+el mismo mecanismo de validacion de `AreaValueProblem`/`bestAreaMove` que ya
+usan `EL_FINAL_TAMBIEN_ES_GRANDE`/`COMPARAR_VALOR_REAL` -- cero UI ni
+formato de dato nuevo. Nuevo generador
+`tools/generate-whole-board-judgment-problems.ts`: autojuego en 13x13 (a
+diferencia de `generate-yose-value-problems.ts`, que en 9x9 casi lleno
+termina con un solo frente de batalla), agrupando candidatos por distancia
+Chebyshev y exigiendo al menos 2 zonas separadas con un ganador claro. 16
+partidas de autojuego (bajado de 30 originales: una corrida a 30 tardo mas
+de 4 horas y el proceso se mato solo antes de terminar sin nada escrito a
+disco) dieron 69 problemas de una distribucion sana (116 posiciones
+candidatas, 18 descartadas por tener una sola zona). Se agrego
+checkpointing (escritura del banco parcial tras cada partida) a este
+generador y al de mistake-exercises para que un proceso killeado a mitad de
+camino no pierda el trabajo hecho.
+
+**Verificacion.** `tsc -b` limpio. `oxlint` sin advertencias nuevas (las 3
+que aparecen en `useSolvableExercise.ts` son preexistentes, en lineas no
+tocadas esta sesion). Paridad de i18n verificada a 810 claves por idioma.
+Suite completa: 2870 tests, todos pasando. Prueba de humo con Playwright
+real contra el dev server (scripts descartables, borrados despues):
+recorrido fresco de Aprender/Ejercicios/Jugar/Perfil sin errores de consola
+ni de pagina; leccion n7-l2 mostrando el nuevo ejercicio generado
+(tablero 13x13 denso, "resuelve en 1 jugada") debajo de su contenido
+existente; coach en vivo verificado contra la red entrenada real (pista
+mostrando "~45%", aviso de error en vivo disparando con etiqueta especifica
+y con el aviso generico de respaldo).
+
+**Release.** `hoshi` commit `8de54c8`, pusheado. `npm run build` +
+`sync-webapp.ps1` (via la herramienta de PowerShell directamente). Flutter
+no estaba en el PATH de esta sesion de herramienta -- se invoco por ruta
+completa (`C:\flutter\bin\flutter.bat`). `hoshi-flutter` version
+`1.19.0+24` -> `1.20.0+25`, AAB firmado de 54.0MB en
+`hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`, commit
+`7af2ef6`, pusheado. Subir el AAB a Play Console sigue siendo un paso
+manual del usuario.
+
 ## Estado general del proyecto (2026-09-09, cont. 19: mapa de fases, estilos de juego y cultura del Go, refranes en lecciones, tendencia de rango en Perfil)
 
 Misma conversacion que cont.18, continuada varios turnos despues como
