@@ -47,6 +47,7 @@
   "play.mistakeFlag.specific": "Esa jugada bajó bastante tu probabilidad de victoria — parece {{concept}}.",
   "play.mistakeFlag.betterMove": "Anillo: ahí es donde hubiera jugado la red en tu lugar.",
   "play.mistakeFlag.territoryHint": "Piedras sombreadas: la zona que cambió de dueño por esa jugada.",
+  "play.mistakeFlag.retroactive": "Ese aviso genérico de hace unas jugadas resultó ser {{concept}}.",
   "play.strength.label": "Fuerza del bot",
   "play.strength.weak": "~25 kyu",
   "play.strength.normal": "~20 kyu",

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { RecordedMove } from '../../src/core/sgf'
-import { analyzeGame, analyzeLastMove } from '../../src/analysis/mistakes'
+import { analyzeGame, analyzeLastMove, recheckDelayedMistake } from '../../src/analysis/mistakes'
 
 const SIZE = 9
 const p = (x: number, y: number) => toPoint(SIZE, x, y)
@@ -317,6 +317,45 @@ describe('analyzeLastMove: solo detectores sin dependencia del futuro', () => {
   it('jugada normal: no reporta nada', () => {
     const m = moves([4, 4])
     expect(analyzeLastMove(SIZE, SIZE, 0, m)).toBeNull()
+  })
+})
+
+describe('recheckDelayedMistake: milestone 3, resuelve un aviso generico unas jugadas despues', () => {
+  it('ATARI_IGNORADO: null mientras la captura futura todavia no paso en la lista de jugadas', () => {
+    // Mismo fixture que el caso positivo de analyzeGame (moveIndex 6, la
+    // 7ma jugada), cortado justo antes de la captura real (la 8va jugada,
+    // indice 7) -- equivale a preguntar "en vivo, un instante despues de la
+    // jugada que quedo en atari".
+    const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [4, 4])
+    expect(recheckDelayedMistake(SIZE, SIZE, 0, m, 6)).toBeNull()
+  })
+
+  it('ATARI_IGNORADO: se resuelve especifico en cuanto la lista de jugadas incluye la captura real', () => {
+    const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [4, 4], [2, 2])
+    const found = recheckDelayedMistake(SIZE, SIZE, 0, m, 6)
+    expect(found?.conceptId).toBe('ATARI_IGNORADO')
+    expect(found?.result).toBe('incorrect')
+  })
+
+  it('CORTE_NO_DEFENDIDO: null mientras el rival todavia no jugo el punto de corte', () => {
+    // moveIndex 2 ([3,3]) deja el punto de corte; cortado antes de que el
+    // rival lo juegue (indice 3, [2,3]) -- equivale a preguntar en vivo,
+    // justo despues de la jugada que dejo el corte.
+    const m = moves([2, 2], [7, 7], [3, 3])
+    expect(recheckDelayedMistake(SIZE, SIZE, 0, m, 2)).toBeNull()
+  })
+
+  it('CORTE_NO_DEFENDIDO: se resuelve especifico en cuanto el rival corta', () => {
+    const m = moves([2, 2], [7, 7], [3, 3], [2, 3])
+    const found = recheckDelayedMistake(SIZE, SIZE, 0, m, 2)
+    expect(found?.conceptId).toBe('CORTE_NO_DEFENDIDO')
+    expect(found?.result).toBe('incorrect')
+  })
+
+  it('moveIndex fuera de rango: devuelve null en vez de lanzar', () => {
+    const m = moves([4, 4])
+    expect(recheckDelayedMistake(SIZE, SIZE, 0, m, 5)).toBeNull()
+    expect(recheckDelayedMistake(SIZE, SIZE, 0, m, -1)).toBeNull()
   })
 })
 

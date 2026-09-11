@@ -47,6 +47,7 @@
   "play.mistakeFlag.specific": "That move dropped your win probability a lot — looks like {{concept}}.",
   "play.mistakeFlag.betterMove": "Ring: the network would have played there instead.",
   "play.mistakeFlag.territoryHint": "Shaded stones: the area that changed hands because of that move.",
+  "play.mistakeFlag.retroactive": "That earlier generic flag turned out to be {{concept}}.",
   "play.strength.label": "Bot strength",
   "play.strength.weak": "~25 kyu",
   "play.strength.normal": "~20 kyu",

@@ -593,6 +593,46 @@ export function analyzeLastMove(width: number, height: number, komi: number, mov
 }
 
 /**
+ * Reintenta, unas jugadas mas tarde, un ATARI_IGNORADO o CORTE_NO_DEFENDIDO
+ * que analyzeLastMove no pudo confirmar en el momento (ver el comentario de
+ * LIVE_SAFE_DETECTORS: ambos preguntan por el futuro, que en el instante de
+ * la jugada todavia no existe). No hace falta una version nueva de esos
+ * detectores: como los dos leen ctx.states[length-1] (o el resto de
+ * ctx.moves) como "lo que ya paso", pasarles la partida tal como va HASTA
+ * AHORA -- no necesariamente terminada -- hace que "hasta ahora" haga de
+ * corte acotado por si solo. Se llama para un `moveIndex` puntual (la
+ * jugada que en su momento solo disparo el aviso generico), no para toda la
+ * partida -- ver PlayGameScreen.tsx para la ventana de jugadas durante la
+ * que tiene sentido reintentar.
+ */
+export function recheckDelayedMistake(
+  width: number,
+  height: number,
+  komi: number,
+  moves: RecordedMove[],
+  moveIndex: number,
+): ConceptOccurrence | null {
+  if (moveIndex < 0 || moveIndex >= moves.length) return null
+
+  const states: GameState[] = [createGame(width, height, komi)]
+  const captured: number[][] = []
+  for (const move of moves) {
+    const result = applyMove(states[states.length - 1], move.point)
+    if (!result.legal || !result.state) break
+    states.push(result.state)
+    captured.push(result.captured)
+  }
+  if (moveIndex >= captured.length) return null
+
+  const ctx: AnalysisContext = { komi, moves: moves.slice(0, captured.length), states, captured, moveIndex }
+  for (const detector of [detectAtariIgnorado, detectCorteNoDefendido]) {
+    const found = detector(ctx)
+    if (found && found.result === 'incorrect') return found
+  }
+  return null
+}
+
+/**
  * Corre todos los detectores de errores sobre una partida completa,
  * reproduciendola jugada por jugada desde el inicio. Regla de
  * implementacion (documento de diseno, seccion 5.4): si un detector no

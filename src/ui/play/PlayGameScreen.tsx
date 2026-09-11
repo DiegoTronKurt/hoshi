@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CONCEPTS } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
-import { analyzeLastMove } from '../../analysis/mistakes'
+import { analyzeLastMove, recheckDelayedMistake } from '../../analysis/mistakes'
 import { createBoard } from '../../core/board'
 import { applyMove, createGame, gameStateFromBoard, listLegalMoves } from '../../core/rules'
 import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../core/scoring'
@@ -38,6 +38,13 @@ import { STRENGTH_LEVELS } from './strengthLevels'
  * ~350ms en caliente, ~2.1s la primera vez (carga del modelo) -- 5000ms deja
  * margen de sobra para ambos casos en un dispositivo bastante mas lento. */
 const EVAL_TIMEOUT_IN_GAME_MS = 5000
+
+/** Cuantas jugadas despues de un aviso generico vale la pena reintentar
+ * recheckDelayedMistake antes de dejarlo asi -- ATARI_IGNORADO y
+ * CORTE_NO_DEFENDIDO necesitan que la captura/no-reconexion realmente
+ * ocurra en jugadas futuras (ver mistakes.ts); mas alla de esta ventana ya
+ * no tiene sentido seguir preguntando por la misma jugada vieja. */
+const RETRO_MISTAKE_WINDOW_PLIES = 6
 
 const KOMI = 6.5
 /** Komi reducido estandar cuando hay piedras de handicap -- solo evita un
@@ -159,6 +166,14 @@ export function PlayGameScreen({
     ghostPoint: number | null
     lossTerritory: Int8Array | null
   } | null>(null)
+  // Milestone 3 (ver NOTAS.md): un aviso generico puede resolverse mas
+  // especifico unas jugadas despues, cuando ATARI_IGNORADO/CORTE_NO_DEFENDIDO
+  // ya tienen futuro real para confirmar. Solo se seguile la jugada generica
+  // MAS RECIENTE a la vez (se pisa con cada aviso nuevo) -- no una cola: dos
+  // errores genericos sin resolver tan cerca uno del otro es un caso raro que
+  // no vale la pena complicar.
+  const pendingRetroMistakeRef = useRef<{ moveIndex: number } | null>(null)
+  const [retroMistakeFlag, setRetroMistakeFlag] = useState<{ conceptId: ConceptId } | null>(null)
   // Captura el tablero inicial una sola vez, para precalentar la red sin
   // depender de `history` (que cambia en cada jugada -- no queremos que el
   // efecto de abajo se repita por eso).
@@ -278,6 +293,12 @@ export function PlayGameScreen({
         const lossTerritory = ownershipLossPoints(beforeTerritory, afterTerritory, lastMove.color)
         const hasLoss = lossTerritory.some((v) => v !== 0)
 
+        // Si esta jugada quedo generica, se guarda como candidata a
+        // resolverse mas especifica dentro de unas pocas jugadas (ver el
+        // efecto de recheckDelayedMistake mas abajo); si ya salio especifica
+        // no hace falta reintentar nada.
+        pendingRetroMistakeRef.current = detected ? null : { moveIndex: moves.length - 1 }
+
         setMistakeFlag({
           conceptId: detected?.conceptId ?? null,
           ghostPoint,
@@ -294,6 +315,30 @@ export function PlayGameScreen({
       cancelled = true
     }
   }, [game, moves, history, config.liveMistakeFlagging, config.mode, config.humanColor, config.width, config.height, komi])
+
+  // Milestone 3: reintenta un aviso generico pendiente cada vez que se juega
+  // una jugada mas (propia, del bot, o un undo que igual cambia moves.length),
+  // hasta RETRO_MISTAKE_WINDOW_PLIES jugadas despues de la original. Corre
+  // sincrono (reproduce la partida desde cero, pero son partidas cortas y
+  // solo 2 detectores) -- no necesita EvalClient ni es asincrono como el
+  // aviso inmediato de arriba.
+  useEffect(() => {
+    const pending = pendingRetroMistakeRef.current
+    if (!pending) return
+    const agoPlies = moves.length - 1 - pending.moveIndex
+    if (agoPlies <= 0) return
+    if (agoPlies > RETRO_MISTAKE_WINDOW_PLIES) {
+      pendingRetroMistakeRef.current = null
+      return
+    }
+
+    const found = recheckDelayedMistake(config.width, config.height, komi, moves, pending.moveIndex)
+    if (!found) return
+    pendingRetroMistakeRef.current = null
+    setRetroMistakeFlag({ conceptId: found.conceptId })
+    const timer = setTimeout(() => setRetroMistakeFlag(null), 5000)
+    return () => clearTimeout(timer)
+  }, [moves, config.width, config.height, komi])
 
   function isHumanTurn(): boolean {
     if (game.gameOver || botThinking) return false
@@ -551,6 +596,12 @@ export function PlayGameScreen({
             <p className="play-mistake-flag-detail">{t('play.mistakeFlag.territoryHint')}</p>
           )}
         </div>
+      )}
+
+      {retroMistakeFlag && (
+        <p className="play-mistake-retro">
+          {t('play.mistakeFlag.retroactive', { concept: t(`concept.${retroMistakeFlag.conceptId}.label` as TranslationKey) })}
+        </p>
       )}
 
       <div className="status" aria-live="polite">

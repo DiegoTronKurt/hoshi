@@ -718,6 +718,16 @@
   opacity: 0.85;
 }
 
+.play-mistake-retro {
+  font-size: 0.8rem;
+  font-style: italic;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  border: 1px dashed var(--hoshi-border-strong);
+  color: var(--hoshi-text-muted);
+}
+
 .review-ask-ai {
   min-height: 40px;
   padding: 0 1rem;
