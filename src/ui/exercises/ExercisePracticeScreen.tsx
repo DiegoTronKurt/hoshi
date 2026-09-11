@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
 import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
-import { pickWithoutRepeat, recentWindowSize } from '../../content/pickWithoutRepeat'
+import { pickStratifiedByConcept, pickWithoutRepeat, recentWindowSize } from '../../content/pickWithoutRepeat'
 import { useI18n } from '../../i18n'
 import { SolverClient } from '../../solver/client'
 import { useSettings } from '../settings'
@@ -10,6 +10,7 @@ import { ExerciseView } from './ExerciseView'
 import { useSolvableExercise } from './useSolvableExercise'
 
 const RECENT_WINDOW = 5
+const RECENT_CONCEPT_WINDOW = 5
 
 interface ExercisePracticeScreenProps {
   conceptFilter: ConceptId | 'all'
@@ -31,16 +32,49 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
     [conceptFilter],
   )
 
-  const recentIdsRef = useRef<string[]>([])
-
-  function pickNext(pool: BankEntry[]): BankEntry | null {
-    const picked = pickWithoutRepeat(pool, recentIdsRef.current)
-    if (picked) {
-      const window = recentWindowSize(pool.length, RECENT_WINDOW)
-      recentIdsRef.current = [...recentIdsRef.current, picked.id].slice(-window)
+  // Solo en "todos los conceptos": agrupar por concepto para elegir en dos
+  // pasos (concepto al azar, despues problema dentro de ese concepto) en vez
+  // de un unico sorteo sobre el pool plano de abajo -- los conteos por
+  // concepto van de 4 a 369 (ver ExercisesConceptScreen), asi que un sorteo
+  // plano deja los conceptos chicos practicamente invisibles frente a los
+  // grandes. En modo de un solo concepto esto es null y pickNext usa el pool
+  // recibido tal cual, sin cambios.
+  const conceptGroups = useMemo(() => {
+    if (conceptFilter !== 'all') return null
+    const groups = new Map<ConceptId, BankEntry[]>()
+    for (const e of entries) {
+      const group = groups.get(e.conceptId)
+      if (group) group.push(e)
+      else groups.set(e.conceptId, [e])
     }
-    return picked
-  }
+    return groups
+  }, [entries, conceptFilter])
+
+  const recentIdsRef = useRef<string[]>([])
+  const recentConceptIdsRef = useRef<string[]>([])
+
+  const pickNext = useCallback(
+    (pool: BankEntry[]): BankEntry | null => {
+      if (conceptGroups) {
+        const result = pickStratifiedByConcept(conceptGroups, recentIdsRef.current, recentConceptIdsRef.current)
+        if (!result) return null
+        const conceptWindow = recentWindowSize(conceptGroups.size, RECENT_CONCEPT_WINDOW)
+        recentConceptIdsRef.current = [...recentConceptIdsRef.current, result.conceptId].slice(-conceptWindow)
+        const conceptPool = conceptGroups.get(result.conceptId as ConceptId) ?? []
+        const window = recentWindowSize(conceptPool.length, RECENT_WINDOW)
+        recentIdsRef.current = [...recentIdsRef.current, result.item.id].slice(-window)
+        return result.item
+      }
+
+      const picked = pickWithoutRepeat(pool, recentIdsRef.current)
+      if (picked) {
+        const window = recentWindowSize(pool.length, RECENT_WINDOW)
+        recentIdsRef.current = [...recentIdsRef.current, picked.id].slice(-window)
+      }
+      return picked
+    },
+    [conceptGroups],
+  )
 
   // Arranca en null: el primer pick lo hace el efecto de mas abajo (misma
   // dependencia [entries] que ya se ejecuta al montar), asi pickNext -- que
@@ -57,8 +91,9 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
 
   useEffect(() => {
     recentIdsRef.current = []
+    recentConceptIdsRef.current = []
     setEntry(pickNext(entries))
-  }, [entries])
+  }, [entries, pickNext])
 
   useEffect(() => {
     setLoaded(entry ? loadEntry(entry) : null)

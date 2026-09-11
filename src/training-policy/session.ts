@@ -24,6 +24,35 @@ export function minutesForGoal(itemCount: number): number {
   return (itemCount * SECONDS_PER_PROBLEM) / 60
 }
 
+/**
+ * Reordena entries intercalando por concepto (round-robin), preservando el
+ * orden relativo dentro de cada concepto. Sin esto, los pasos 2-4 de
+ * planSession de mas abajo recorren `entries` en su orden de concatenacion
+ * de archivo (ver content/problemBank.ts: bank.json primero, con sus
+ * conceptos de vida-muerte, area-value al final): una cuenta nueva sin
+ * tarjetas SRS ni perfil todavia (overdueQuota/weakQuota vacios) llenaria la
+ * sesion entera de "nuevo" solo con los primeros conceptos del archivo, sin
+ * ninguna mezcla real. Intercalar por concepto antes de elegir hace que una
+ * sesion temprana muestre variedad real de conceptos en vez de la cabecera
+ * de un JSON.
+ */
+function interleaveByConcept(entries: BankEntry[]): BankEntry[] {
+  const byConcept = new Map<ConceptId, BankEntry[]>()
+  for (const e of entries) {
+    const group = byConcept.get(e.conceptId)
+    if (group) group.push(e)
+    else byConcept.set(e.conceptId, [e])
+  }
+  const groups = [...byConcept.values()]
+  const result: BankEntry[] = []
+  for (let index = 0; result.length < entries.length; index++) {
+    for (const group of groups) {
+      if (index < group.length) result.push(group[index])
+    }
+  }
+  return result
+}
+
 export type SessionReason = 'overdue' | 'weak' | 'new'
 
 export interface SessionReasonDetail {
@@ -65,6 +94,7 @@ export function planSession(
 
   const cardByProblemId = new Map(srsCards.map((c) => [c.problemId, c]))
   const entryById = new Map(entries.map((e) => [e.id, e]))
+  const diversified = interleaveByConcept(entries)
   const chosen = new Set<string>()
   const items: SessionItem[] = []
 
@@ -90,14 +120,14 @@ export function planSession(
   // 2. Conceptos mas debiles del perfil.
   const weakConcepts = weakestConcepts(profiles)
   const weakScoreById = new Map(weakConcepts.map((p) => [p.conceptId, p.score]))
-  for (const entry of entries) {
+  for (const entry of diversified) {
     if (items.filter((i) => i.reason === 'weak').length >= weakQuota) break
     const conceptScore = weakScoreById.get(entry.conceptId)
     if (conceptScore !== undefined) take(entry, 'weak', { conceptScore })
   }
 
   // 3. Contenido nuevo: problemas sin tarjeta SRS todavia (nunca intentados).
-  for (const entry of entries) {
+  for (const entry of diversified) {
     if (items.length >= sessionSize) break
     if (!cardByProblemId.has(entry.id)) take(entry, 'new')
   }
@@ -105,7 +135,7 @@ export function planSession(
   // Si todavia queda cupo y hay problemas sin usar, se completa con lo que
   // quede (banco chico: mejor una sesion completa que una corta por
   // categoria vacia).
-  for (const entry of entries) {
+  for (const entry of diversified) {
     if (items.length >= sessionSize) break
     take(entry, 'new')
   }

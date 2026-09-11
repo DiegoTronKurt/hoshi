@@ -1,5 +1,46 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-11, cont. 23: Ejercicios elige por concepto, no por tamano de pool)
+
+Playtest real de Ejercicios encontro un problema de seleccion, no de
+contenido: los 22 conceptos con banco van de 4 problemas (OJO_FALSO) a 369
+(PASE_PREMATURO), un rango de ~90x. Los conteos en si son solo informativos
+en la tarjeta de cada concepto (`ExercisesConceptScreen.tsx`), pero DOS
+lugares hacian un sorteo plano sobre el pool combinado en vez de repartir
+por concepto, dejando los conceptos chicos casi invisibles en la practica
+real:
+
+- **"Todos los conceptos"** (`ExercisePracticeScreen.tsx`): `pickNext`
+  sorteaba un elemento cualquiera del pool de 1698 problemas combinados, asi
+  que PASE_PREMATURO salia ~90x mas seguido que OJO_FALSO.
+- **"Hoy"** (`training-policy/session.ts::planSession`): para una cuenta
+  nueva sin tarjetas SRS ni perfil (overdueQuota/weakQuota vacios), los
+  pasos 3 y 4 ("contenido nuevo") recorrian `entries` en su orden de
+  concatenacion de archivo (`content/problemBank.ts`: bank.json primero,
+  con sus conceptos de vida-muerte, area-value al final) -- la sesion
+  entera podia llenarse con el primer concepto del archivo, sin mezcla
+  real.
+
+Fix en ambos lugares, mismo patron: elegir en dos pasos (concepto al azar
+primero, problema dentro de ese concepto despues) en vez de un unico sorteo
+sobre el pool plano. Nueva `pickStratifiedByConcept()`
+(`content/pickWithoutRepeat.ts`, generica, reusa `pickWithoutRepeat`
+internamente para ambos pasos) para Ejercicios; nueva `interleaveByConcept()`
+(privada de `session.ts`, round-robin entre conceptos preservando el orden
+relativo dentro de cada uno) para Hoy, aplicada a los pasos 2-4 de
+`planSession` (el paso 1, vencidos SRS, ya ordena por fecha de vencimiento,
+no por archivo). Verificado empiricamente con datos reales: una sesion
+nueva de 13 items paso de "dominada por 1-2 conceptos" a 13 conceptos
+distintos en los 13 items. Tests nuevos: sorteo estratificado con pools de
+tamano muy distinto (369 vs. 4) sale ~parejo en 400 intentos;
+`planSession` con un concepto de 100 problemas concatenado antes que 5
+conceptos chicos sigue mostrando mas de un concepto en la sesion.
+
+De paso: chequeo visual del fix anterior de alineacion izquierda en
+Aprender (cont. 21) con capturas Playwright reales (niveles, lista de
+lecciones, pantalla de leccion) -- sigue alineado a la izquierda en los
+tres, sin regresion.
+
 ## Estado general del proyecto (2026-09-11, cont. 22: coach en vivo resuelve avisos genericos con mas jugadas, ejercicios de sente antes que gote)
 
 Cierra los dos pendientes que quedaban de la propuesta original de "coach en

@@ -70,6 +70,27 @@ describe('planificador de sesion diaria', () => {
     expect(weakItems.some((i) => i.entry.id === 'p1')).toBe(true)
   })
 
+  it('sin SRS ni perfil, una sesion nueva mezcla varios conceptos en vez de solo el primero del banco', () => {
+    // Simula el orden real de concatenacion de problemBank.ts: un concepto
+    // con muchos problemas primero (como bank.json trae varios conceptos de
+    // vida-muerte antes que area-value), despues varios conceptos chicos.
+    // Antes del fix, los pasos 3/4 de planSession recorrian `entries` en
+    // este mismo orden: con sessionSize=13 la sesion entera se llenaria de
+    // 'PRIMERO' y ningun otro concepto aparaceria.
+    const entries = [
+      ...Array.from({ length: 100 }, (_, i) => entry(`p${i}`, 'PRIMERO' as ConceptId)),
+      entry('q1', 'DOS_OJOS'),
+      entry('q2', 'PUNTO_VITAL'),
+      entry('q3', 'NAKADE'),
+      entry('q4', 'OJO_FALSO'),
+      entry('q5', 'RED_GETA'),
+    ]
+    const plan = planSession(entries, [], emptyProfiles(), NOW, 10)
+    const conceptsSeen = new Set(plan.items.map((i) => i.entry.conceptId))
+    expect(conceptsSeen.size).toBeGreaterThan(1)
+    expect(conceptsSeen.has('DOS_OJOS')).toBe(true)
+  })
+
   it('no repite el mismo problema en dos categorias', () => {
     const entries = [entry('p1', 'DOS_OJOS')]
     const overdueCard = createCard(new Date('2026-01-01T00:00:00Z'))
