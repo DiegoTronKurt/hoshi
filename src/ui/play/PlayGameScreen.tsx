@@ -24,6 +24,7 @@ import { findConceptsToReopen } from '../../training-policy/session'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { ConfirmDialog } from '../common/ConfirmDialog'
 import { reopenLesson } from '../lessons/readProgress'
+import { bucketOwnership, ownershipLossPoints } from '../review/reviewState'
 import { useSettings } from '../settings'
 import { PlayInGameControls } from './PlayInGameControls'
 import type { PlayConfig } from './playConfig'
@@ -153,7 +154,11 @@ export function PlayGameScreen({
   // partida local, asi que se precalienta en su propio efecto en vez de
   // reusar evalRef.
   const liveAnalysisEvalRef = useRef<EvalClient | null>(null)
-  const [mistakeFlag, setMistakeFlag] = useState<{ conceptId: ConceptId | null } | null>(null)
+  const [mistakeFlag, setMistakeFlag] = useState<{
+    conceptId: ConceptId | null
+    ghostPoint: number | null
+    lossTerritory: Int8Array | null
+  } | null>(null)
   // Captura el tablero inicial una sola vez, para precalentar la red sin
   // depender de `history` (que cambia en cada jugada -- no queremos que el
   // efecto de abajo se repita por eso).
@@ -244,7 +249,40 @@ export function PlayGameScreen({
 
         const detected = analyzeLastMove(config.width, config.height, komi, moves)
         if (cancelled) return
-        setMistakeFlag({ conceptId: detected?.conceptId ?? null })
+
+        // Ghost-move: que hubiera jugado la red en beforeState en vez de la
+        // jugada real -- mismo patron que ReviewMistakeBoard.askAi/handleHint
+        // (legalPolicyDistribution + tope de la distribucion), pero aca sobre
+        // el policy de beforeOutput que ya se pidio para el swing de arriba,
+        // sin una tercera llamada a la red.
+        const legal = listLegalMoves(beforeState)
+        const legalPoints = legal.filter((p): p is number => p !== null)
+        const legalPass = legal.includes(null)
+        const distribution = legalPolicyDistribution(beforeOutput.policy, legalPoints, legalPass, beforeState.board.width)
+        let topPoint: number | null = null
+        let topProbability = -1
+        for (const [point, probability] of distribution) {
+          if (probability > topProbability) {
+            topProbability = probability
+            topPoint = point
+          }
+        }
+        const ghostPoint = topPoint !== null && topPoint !== lastMove.point ? topPoint : null
+
+        // Diferencia de ownership antes/despues: que zona dejo de ser de
+        // quien jugo -- localiza "que cambio", no solo "cuanto cayo la
+        // probabilidad". Ver ownershipLossPoints para el porque de comparar
+        // colores absolutos entre dos estados con toMove invertido.
+        const beforeTerritory = bucketOwnership(beforeOutput.ownership, beforeState)
+        const afterTerritory = bucketOwnership(afterOutput.ownership, afterState)
+        const lossTerritory = ownershipLossPoints(beforeTerritory, afterTerritory, lastMove.color)
+        const hasLoss = lossTerritory.some((v) => v !== 0)
+
+        setMistakeFlag({
+          conceptId: detected?.conceptId ?? null,
+          ghostPoint,
+          lossTerritory: hasLoss ? lossTerritory : null,
+        })
       } catch {
         // Silencioso, mismo criterio que la pista y la guia del bot: un
         // aviso fallido no debe interrumpir la partida.
@@ -418,7 +456,14 @@ export function PlayGameScreen({
   /** Solo se calcula al terminar la partida (y solo una vez, ya que `game`
    * deja de cambiar): BoardCanvas usa el cambio de referencia null -> array
    * para disparar la animacion de revelado una sola vez. */
-  const territory = useMemo(() => (game.gameOver ? computeAreaOwnership(game.board) : null), [game])
+  // Fuera de fin de partida, reusa el mismo prop de BoardCanvas para tenir
+  // solo la zona que el aviso de errores en vivo detecto como perdida (ver
+  // ownershipLossPoints) -- nunca coexisten porque mistakeFlag se limpia al
+  // arranque del mismo efecto que fija game.gameOver en la jugada final.
+  const territory = useMemo(
+    () => (game.gameOver ? computeAreaOwnership(game.board) : (mistakeFlag?.lossTerritory ?? null)),
+    [game, mistakeFlag],
+  )
 
   // Guarda la partida en IndexedDB apenas termina, una sola vez.
   useEffect(() => {
@@ -481,7 +526,7 @@ export function PlayGameScreen({
         height={config.height}
         stones={game.board.stones}
         lastMove={lastMove}
-        hintMove={hintPoint}
+        hintMove={hintPoint ?? mistakeFlag?.ghostPoint ?? null}
         territory={territory}
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
@@ -495,11 +540,17 @@ export function PlayGameScreen({
       )}
 
       {mistakeFlag && (
-        <p className="play-mistake-flag">
-          {mistakeFlag.conceptId
-            ? t('play.mistakeFlag.specific', { concept: t(`concept.${mistakeFlag.conceptId}.label` as TranslationKey) })
-            : t('play.mistakeFlag.generic')}
-        </p>
+        <div className="play-mistake-flag">
+          <p>
+            {mistakeFlag.conceptId
+              ? t('play.mistakeFlag.specific', { concept: t(`concept.${mistakeFlag.conceptId}.label` as TranslationKey) })
+              : t('play.mistakeFlag.generic')}
+          </p>
+          {mistakeFlag.ghostPoint !== null && <p className="play-mistake-flag-detail">{t('play.mistakeFlag.betterMove')}</p>}
+          {mistakeFlag.lossTerritory !== null && (
+            <p className="play-mistake-flag-detail">{t('play.mistakeFlag.territoryHint')}</p>
+          )}
+        </div>
       )}
 
       <div className="status" aria-live="polite">

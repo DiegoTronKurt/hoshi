@@ -28,6 +28,10 @@ const APP_THEME_NAME_KEY: Record<string, TranslationKey> = {
   oceano: 'settings.appTheme.oceano',
   lavanda: 'settings.appTheme.lavanda',
   carbon: 'settings.appTheme.carbon',
+  editorial: 'settings.appTheme.editorial',
+  moderno: 'settings.appTheme.moderno',
+  zen: 'settings.appTheme.zen',
+  alegre: 'settings.appTheme.alegre',
 }
 
 const APP_THEME_OPTION_IDS = ['system', ...APP_THEMES.map((theme) => theme.id)]

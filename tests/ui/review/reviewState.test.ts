@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../../src/core/board'
 import { BLACK, EMPTY, WHITE } from '../../../src/core/types'
 import type { RecordedMove } from '../../../src/core/sgf'
-import { stateAtMove } from '../../../src/ui/review/reviewState'
+import { ownershipLossPoints, stateAtMove } from '../../../src/ui/review/reviewState'
 
 describe('stateAtMove', () => {
   it('moveNumber <= 0 devuelve el estado inicial sin tocar', () => {
@@ -52,5 +52,37 @@ describe('stateAtMove', () => {
     expect(state.board.stones[toPoint(9, 2, 2)]).toBe(BLACK) // moves[0] si se aplico
     expect(state.board.stones[toPoint(9, 3, 3)]).toBe(EMPTY) // nunca se llego a moves[2]
     expect(state.toMove).toBe(WHITE) // se corto justo despues de moves[0]
+  })
+})
+
+describe('ownershipLossPoints', () => {
+  it('marca solo los puntos que eran del mover y dejaron de serlo', () => {
+    // 3 puntos: 0 sigue siendo de BLACK, 1 pasa a WHITE, 2 pasa a neutral.
+    const before = Int8Array.from([BLACK, BLACK, BLACK])
+    const after = Int8Array.from([BLACK, WHITE, EMPTY])
+
+    const diff = ownershipLossPoints(before, after, BLACK)
+
+    expect(diff[0]).toBe(EMPTY) // sin cambio: no se marca
+    expect(diff[1]).toBe(WHITE) // paso a manos del rival
+    expect(diff[2]).toBe(WHITE) // quedo neutral -- igual se marca como "dejo de ser tuyo"
+  })
+
+  it('ignora puntos que nunca fueron del mover, aunque cambien de dueno', () => {
+    const before = Int8Array.from([WHITE, EMPTY])
+    const after = Int8Array.from([BLACK, BLACK])
+
+    const diff = ownershipLossPoints(before, after, BLACK)
+
+    expect(diff.every((v) => v === EMPTY)).toBe(true)
+  })
+
+  it('sin ningun cambio de dueno, devuelve todo neutral', () => {
+    const before = Int8Array.from([BLACK, WHITE, EMPTY])
+    const after = Int8Array.from([BLACK, WHITE, EMPTY])
+
+    const diff = ownershipLossPoints(before, after, BLACK)
+
+    expect(diff.every((v) => v === EMPTY)).toBe(true)
   })
 })

@@ -181,6 +181,74 @@ export const carbonTheme: AppTheme = {
   },
 }
 
+export const editorialTheme: AppTheme = {
+  id: 'editorial',
+  scheme: 'light',
+  colors: {
+    bg: '#f3ead8',
+    surface: '#fbf5e7',
+    surfaceAlt: '#efe0bd',
+    border: '#dcc79a',
+    borderStrong: '#b89e6c',
+    text: '#1c1a15',
+    textMuted: '#6b5a3e',
+    textFaint: '#6b5a3e',
+    accent: '#8a2e2e',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const modernoTheme: AppTheme = {
+  id: 'moderno',
+  scheme: 'light',
+  colors: {
+    bg: '#fafaf8',
+    surface: '#ffffff',
+    surfaceAlt: '#eef6f2',
+    border: '#eceae6',
+    borderStrong: '#d8d5cf',
+    text: '#14161a',
+    textMuted: '#6b7280',
+    textFaint: '#9ca3af',
+    accent: '#0f6b52',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const zenTheme: AppTheme = {
+  id: 'zen',
+  scheme: 'light',
+  colors: {
+    bg: '#ffffff',
+    surface: '#ffffff',
+    surfaceAlt: '#fafafa',
+    border: '#eaeaea',
+    borderStrong: '#d8d8d8',
+    text: '#111111',
+    textMuted: '#6e6e6e',
+    textFaint: '#949494',
+    accent: '#111111',
+    accentContrast: '#ffffff',
+  },
+}
+
+export const alegreTheme: AppTheme = {
+  id: 'alegre',
+  scheme: 'light',
+  colors: {
+    bg: '#faf9fd',
+    surface: '#ffffff',
+    surfaceAlt: '#f0eef7',
+    border: '#eeecf5',
+    borderStrong: '#d8d3ea',
+    text: '#2d2a3d',
+    textMuted: '#6d697f',
+    textFaint: '#918da3',
+    accent: '#7c3aed',
+    accentContrast: '#ffffff',
+  },
+}
+
 export const APP_THEMES: AppTheme[] = [
   cremaTheme,
   piedraTheme,
@@ -191,6 +259,10 @@ export const APP_THEMES: AppTheme[] = [
   oceanoTheme,
   lavandaTheme,
   carbonTheme,
+  editorialTheme,
+  modernoTheme,
+  zenTheme,
+  alegreTheme,
 ]
 
 export type AppThemeId = (typeof APP_THEMES)[number]['id'] | 'system'

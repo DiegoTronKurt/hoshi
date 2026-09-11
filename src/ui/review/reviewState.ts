@@ -2,7 +2,7 @@ import { toPoint } from '../../core/board'
 import { applyMove, createGame } from '../../core/rules'
 import type { RecordedMove } from '../../core/sgf'
 import { opponent } from '../../core/types'
-import type { GameState } from '../../core/types'
+import type { Color, GameState } from '../../core/types'
 import { NN_LEN } from '../../eval/features'
 
 /** Estado del motor de reglas tras aplicar moves[0..moveNumber-1]
@@ -44,4 +44,28 @@ export function bucketOwnership(ownership: Float32Array, state: GameState): Int8
     else if (value < -0.5) territory[toPoint(width, x, y)] = opponent(state.toMove)
   }
   return territory
+}
+
+/**
+ * Puntos que eran territorio de `mover` (color de quien jugo la jugada que se
+ * quiere explicar) segun `before` y dejaron de serlo segun `after` -- la
+ * localizacion concreta de "que cambio en el tablero" para el aviso de
+ * errores en vivo (ver PlayGameScreen.tsx), en vez de solo un numero de
+ * probabilidad. `before`/`after` deben venir de bucketOwnership sobre el
+ * mismo tablero (mismo width*height). La celda marcada siempre se tine del
+ * color rival (aunque `after` haya quedado neutral/EMPTY, no solo cuando
+ * paso a ser realmente del rival) a proposito: EMPTY es tambien el valor de
+ * "sin cambio" en este Int8Array, asi que reusarlo para "paso a neutral"
+ * volveria indistinguible un punto perdido de uno que nunca cambio -- y para
+ * el aviso en vivo, "dejo de ser tuyo" es el hecho relevante, no si termino
+ * en manos del rival o neutral. Se usa para tenir solo esa zona, no todo el
+ * tablero, reusando el mismo prop `territory` de BoardCanvas.
+ */
+export function ownershipLossPoints(before: Int8Array, after: Int8Array, mover: Color): Int8Array {
+  const diff = new Int8Array(before.length)
+  const rival = opponent(mover)
+  for (let p = 0; p < before.length; p++) {
+    if (before[p] === mover && after[p] !== mover) diff[p] = rival
+  }
+  return diff
 }

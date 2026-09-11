@@ -27,6 +27,13 @@
   --hoshi-warning-bg: #f7ecd6;
   --hoshi-info: #2f6f9f;
   --hoshi-info-bg: #e0ecf4;
+
+  /* Tipografia: por defecto el look actual (sans del sistema, sin
+     diferenciar titulos de cuerpo). Los 4 temas de "direccion visual"
+     (editorial/moderno/zen/alegre) son los primeros en redefinir esto;
+     los 9 temas de color existentes no la tocan. */
+  --hoshi-font-body: system-ui, sans-serif;
+  --hoshi-font-heading: system-ui, sans-serif;
 }
 
 .app[data-scheme='dark'] {
@@ -71,6 +78,66 @@
   --hoshi-text-faint: #8c8672;
   --hoshi-accent: #8a5a2c;
   --hoshi-accent-contrast: #ffffff;
+}
+
+.app[data-app-theme='editorial'] {
+  --hoshi-bg: #f3ead8;
+  --hoshi-surface: #fbf5e7;
+  --hoshi-surface-alt: #efe0bd;
+  --hoshi-border: #dcc79a;
+  --hoshi-border-strong: #b89e6c;
+  --hoshi-text: #1c1a15;
+  --hoshi-text-muted: #6b5a3e;
+  --hoshi-text-faint: #6b5a3e;
+  --hoshi-accent: #8a2e2e;
+  --hoshi-accent-contrast: #ffffff;
+  --hoshi-font-heading: 'Lora', Georgia, serif;
+  --hoshi-font-body: 'Public Sans', system-ui, sans-serif;
+}
+
+.app[data-app-theme='moderno'] {
+  --hoshi-bg: #fafaf8;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #eef6f2;
+  --hoshi-border: #eceae6;
+  --hoshi-border-strong: #d8d5cf;
+  --hoshi-text: #14161a;
+  --hoshi-text-muted: #6b7280;
+  --hoshi-text-faint: #9ca3af;
+  --hoshi-accent: #0f6b52;
+  --hoshi-accent-contrast: #ffffff;
+  --hoshi-font-heading: 'Manrope', system-ui, sans-serif;
+  --hoshi-font-body: 'Manrope', system-ui, sans-serif;
+}
+
+.app[data-app-theme='zen'] {
+  --hoshi-bg: #ffffff;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #fafafa;
+  --hoshi-border: #eaeaea;
+  --hoshi-border-strong: #d8d8d8;
+  --hoshi-text: #111111;
+  --hoshi-text-muted: #6e6e6e;
+  --hoshi-text-faint: #949494;
+  --hoshi-accent: #111111;
+  --hoshi-accent-contrast: #ffffff;
+  --hoshi-font-heading: 'Shippori Mincho', Georgia, serif;
+  --hoshi-font-body: 'Inter', system-ui, sans-serif;
+}
+
+.app[data-app-theme='alegre'] {
+  --hoshi-bg: #faf9fd;
+  --hoshi-surface: #ffffff;
+  --hoshi-surface-alt: #f0eef7;
+  --hoshi-border: #eeecf5;
+  --hoshi-border-strong: #d8d3ea;
+  --hoshi-text: #2d2a3d;
+  --hoshi-text-muted: #6d697f;
+  --hoshi-text-faint: #918da3;
+  --hoshi-accent: #7c3aed;
+  --hoshi-accent-contrast: #ffffff;
+  --hoshi-font-heading: 'Baloo 2', system-ui, sans-serif;
+  --hoshi-font-body: 'Nunito', system-ui, sans-serif;
 }
 
 .app[data-app-theme='piedra'] {
@@ -187,6 +254,13 @@
   padding: 1.5rem 1rem 3rem;
   background: var(--hoshi-bg);
   color: var(--hoshi-text);
+  font-family: var(--hoshi-font-body);
+}
+
+.app h1,
+.app h2,
+.app h3 {
+  font-family: var(--hoshi-font-heading);
 }
 
 .app-header {
@@ -624,12 +698,24 @@
 }
 
 .play-mistake-flag {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   font-size: 0.85rem;
   margin: 0;
   padding: 0.4rem 0.7rem;
   border-radius: 8px;
   background: var(--hoshi-warning-bg);
   color: var(--hoshi-warning);
+}
+
+.play-mistake-flag p {
+  margin: 0;
+}
+
+.play-mistake-flag-detail {
+  font-size: 0.78rem;
+  opacity: 0.85;
 }
 
 .review-ask-ai {
