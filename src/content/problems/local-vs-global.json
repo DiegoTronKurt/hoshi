@@ -1,0 +1,416 @@
+[
+  {
+    "id": "localVsGlobal1",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[aa][da][ia][ja][ka][la][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][kd][ae][de][ge][je][ke][bf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][ak][hk][al][bl][cl][fl][gl][hl][il][jl][ll][ml][am][bm][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][fi][aj][bj][gj][kj][mj][bk][dk][ek][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal2",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][kd][ae][de][ge][je][ke][bf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][ak][hk][al][bl][cl][fl][gl][hl][il][jl][ll][ml][am][bm][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][fi][aj][bj][gj][kj][mj][bk][dk][ek][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal3",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][ak][hk][al][bl][cl][fl][gl][hl][il][jl][ll][ml][am][bm][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][mh][fi][aj][bj][gj][kj][mj][bk][dk][ek][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal4",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][hk][fl][gl][hl][il][jl][ll][ml][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][mh][fi][aj][bj][gj][kj][mj][bk][ck][dk][ek][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal5",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][jj][hk][fl][gl][hl][il][jl][ll][ml][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][mh][fi][aj][bj][gj][hj][kj][mj][bk][ck][dk][ek][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal6",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][gf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][gi][hi][ji][ki][mi][cj][dj][fj][ij][jj][hk][fl][gl][hl][il][jl][ll][ml][jm][km]AW[fa][ga][bb][db][fb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][mh][fi][aj][bj][gj][hj][kj][mj][bk][ck][dk][ek][fk][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal7",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][gf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][di][gi][hi][ji][ki][mi][cj][dj][fj][ij][jj][hk][fl][gl][hl][il][jl][ll][ml][jm][km]AW[fa][ga][bb][db][fb][gb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][dh][kh][mh][fi][aj][bj][gj][hj][kj][mj][bk][ck][dk][ek][fk][lk][mk][dl][kl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal8",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][da][ia][ja][ka][la][eb][hb][ib][mb][ac][bc][hc][dd][ed][gd][hd][id][kd][ae][de][ge][je][ke][bf][gf][if][ag][ig][ah][eh][gh][jh][lh][bi][ci][di][gi][hi][ji][ki][mi][cj][dj][fj][ij][jj][hk][kk][fl][gl][hl][il][jl][ll][ml][jm][km]AW[fa][ga][bb][db][fb][gb][jb][kb][lb][cc][dc][ec][gc][ic][jc][kc][mc][bd][cd][fd][jd][ld][be][ee][fe][he][le][me][cf][df][ef][ff][hf][lf][mf][cg][dg][eg][gg][hg][jg][kg][mg][bh][ch][dh][kh][mh][fi][aj][bj][gj][hj][kj][mj][bk][ck][dk][ek][fk][lk][mk][dl][cm][dm][hm][im][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal9",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][mj][bk][ck][dk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[gc][jc][kc][fd][gd][ld][md][ge][ie][je][me][hf][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal10",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][mj][bk][ck][dk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ie][je][me][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal11",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ge][ie][je][me][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal12",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][lj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[gc][jc][kc][ld][md][ge][ie][je][me][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal13",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][gd][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][lj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ie][je][me][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal14",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][gd][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][lj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ie][je][me][ag][bg][cg][dg][eg][mg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal15",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][gd][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][mh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][lj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ie][je][me][ag][bg][cg][dg][eg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal16",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ca][da][ea][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][db][eb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][ec][fc][hc][ic][mc][ad][bd][cd][dd][ed][gd][hd][id][jd][kd][ae][be][ce][de][ee][fe][he][ke][le][af][bf][cf][df][ef][ff][gf][hf][if][kf][lf][mf][fg][gg][hg][ig][jg][kg][lg][gh][hh][ih][jh][kh][lh][mh][ai][fi][gi][hi][ii][ji][ki][li][mi][aj][bj][dj][ej][fj][gj][hj][ij][jj][kj][lj][mj][ak][bk][ck][dk][ek][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][el][fl][gl][hl][jl][kl][ll][ml][am][bm][cm][dm][em][fm][hm][im][jm][km][lm][mm]AW[jc][kc][ld][md][ie][je][me][ag][bg][cg][dg][eg][ah][bh][ch][eh][fh][bi][ci][di][ei][cj])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal17",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][fd][gd][hd][id][jd][kd][ld][md][ae][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[ca][da][ea][db][eb][ec][fc][ed][de][ee][cf][df][ef][lf][bg][cg][dg][eg][bh][eh][fj][bk][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal18",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][fd][gd][hd][id][jd][kd][ld][md][ae][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[ca][da][ea][db][eb][ec][fc][ed][de][ee][cf][df][ef][lf][bg][cg][dg][eg][bh][eh][fj][bk][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal19",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][fd][gd][hd][id][jd][kd][ld][md][ae][be][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[ca][da][ea][db][eb][ec][fc][ed][de][ee][cf][df][ef][lf][bg][cg][dg][eg][bh][eh][fj][bk][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal20",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][fd][gd][hd][id][jd][kd][ld][md][ae][be][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][ck][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[ca][da][ea][db][eb][ec][fc][ed][de][ee][cf][df][ef][lf][bg][cg][dg][eg][bh][eh][fj][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal21",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][dd][fd][gd][hd][id][jd][kd][ld][md][ae][be][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][ck][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[lf][eg][fj][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal22",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][dd][fd][gd][hd][id][jd][kd][ld][md][ae][be][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][aj][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][ck][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[lf][eg][eh][fj][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal23",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][fa][ga][ha][ia][ja][ka][la][ma][ab][bb][cb][fb][gb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][gc][hc][ic][jc][kc][lc][mc][ad][bd][cd][dd][fd][gd][hd][id][jd][kd][ld][md][ae][be][ce][fe][ge][he][ie][je][ke][le][me][af][bf][ff][gf][hf][if][jf][mf][ag][bg][fg][gg][hg][ig][jg][kg][lg][mg][ah][ch][dh][fh][gh][hh][ih][jh][kh][lh][mh][ai][bi][di][ei][gi][hi][ii][ji][ki][li][mi][aj][bj][cj][dj][ej][gj][hj][jj][kj][lj][mj][ak][ck][dk][fk][gk][hk][ik][jk][kk][lk][mk][al][bl][cl][dl][fl][gl][hl][il][jl][kl][ll][ml][am][bm][cm][dm][gm][hm][im][jm][km][lm][mm]AW[ed][lf][eg][eh][fj][ek][em][fm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal24",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][kd][he][ie][je][le][af][bf][cf][hf][if][jf][kf][lf][mf][bg][cg][dg][hg][jg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal25",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][kd][he][ie][je][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][bg][cg][dg][hg][jg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal26",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][kd][he][ie][je][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][bg][cg][dg][hg][jg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal27",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][dc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][jd][kd][he][ie][je][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][bg][cg][dg][hg][jg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal28",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][dc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][ld][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][jd][kd][he][ie][je][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][bg][cg][dg][hg][jg][kg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal29",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][dc][ec][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][ld][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][gg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][jd][kd][he][ie][je][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][ag][bg][cg][dg][hg][jg][kg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal30",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][kc][mc][ad][bd][cd][dd][fd][ld][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][gg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][jd][kd][he][ie][je][ke][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][ag][bg][cg][dg][hg][jg][kg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal31",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[da][fa][ia][ja][ab][cb][db][eb][fb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][kc][lc][mc][ad][bd][cd][dd][fd][ld][md][ae][be][de][fe][ge][df][ff][gf][eg][fg][gg][lg][mg][eh][fh][jh][mh][bi][fi][gi][ii][ji][ki][mi][fj][hj][ij][jj][lj][ak][dk][fk][gk][hk][ik][kk][lk][mk][al][dl][fl][gl][ll][ml][am][bm][cm][dm][em][fm][lm]AW[ba][ca][ga][ka][la][ma][gb][hb][kb][lb][mb][jc][ed][hd][id][jd][kd][he][ie][je][ke][le][af][bf][cf][ef][hf][if][jf][kf][lf][mf][ag][bg][cg][dg][hg][jg][kg][ah][ch][dh][gh][hh][ih][kh][lh][ai][ci][ei][hi][li][aj][bj][cj][dj][ej][bk][ck][ek][jk][bl][cl][el][hl][il][jl][kl][im][jm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal32",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][hd][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][ie][je][gf][hf][jf][lf][mf][ag][cg][dg][ig][mg][ah][ch][dh][eh][ai][ki][li][aj][hj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal33",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][hd][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][ie][je][gf][hf][jf][lf][mf][ag][cg][dg][ig][mg][ah][ch][dh][eh][ai][ki][li][aj][hj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal34",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][jf][lf][mf][ag][cg][dg][ig][mg][ah][ch][dh][eh][ai][ki][li][aj][hj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal35",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][gj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][jf][lf][mf][ag][cg][dg][ig][mg][ah][ch][dh][eh][ai][ki][li][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal36",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][gj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][jf][lf][mf][ag][cg][dg][ig][mg][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal37",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][mh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][gj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][ab][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][if][jf][ag][cg][dg][ig][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal38",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ac][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][mh][bi][ci][di][ei][gi][hi][ji][bj][cj][dj][fj][gj][ij][lj][mj][ak][dk][ek][gk][hk][mk][al][bl][cl][el][hl][ll][ml][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][bd][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][if][jf][ag][cg][dg][ig][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal39",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ac][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ji][bj][cj][dj][fj][gj][ij][ak][dk][ek][gk][hk][al][bl][cl][el][hl][cm][fm][hm][im]AW[da][ea][fa][ha][ma][db][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][bd][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][if][jf][ag][cg][dg][ig][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][kl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal40",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ac][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][bf][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ji][bj][cj][dj][fj][gj][ij][ak][dk][ek][gk][hk][al][bl][cl][el][hl][cm][fm][hm][im]AW[da][ea][fa][ha][ma][db][gb][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][bd][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][if][jf][ag][cg][dg][ig][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][kl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal41",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[aa][ba][ia][ja][ka][bb][cb][ib][kb][ac][ic][mc][jd][kd][md][ae][be][ee][ke][le][me][af][bf][cf][df][ef][ff][kf][bg][eg][gg][hg][jg][kg][lg][fh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ji][bj][cj][dj][fj][gj][ij][ak][dk][ek][gk][hk][al][bl][cl][el][hl][cm][fm][hm][im][mm]AW[da][ea][fa][ha][ma][db][gb][hb][jb][lb][bc][cc][ec][hc][jc][kc][lc][ad][bd][dd][ed][fd][gd][id][ld][ce][ge][he][ie][je][gf][hf][if][jf][ag][cg][dg][ig][ah][ch][dh][eh][ai][ki][li][mi][aj][jj][kj][fk][ik][jk][lk][dl][fl][gl][il][jl][kl][bm][dm][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal42",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[eb][ad][ae][je][af][if][ag][cg][eh][lh][li][hj][kl]AW[aa][ba][ca][da][ea][fa][ga][ha][ja][ka][ma][bb][cb][db][fb][hb][ib][jb][kb][lb][mb][ac][bc][cc][dc][fc][gc][hc][ic][jc][kc][lc][bd][ed][gd][hd][id][kd][ld][md][ce][de][ee][fe][ge][he][ie][ke][le][bf][cf][ef][ff][gf][hf][kf][lf][mf][bg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][fh][gh][hh][jh][kh][ai][bi][ci][ei][hi][ii][ji][ki][mi][bj][cj][ej][fj][ij][jj][kj][lj][mj][ak][bk][ek][fk][gk][hk][ik][kk][lk][mk][al][bl][cl][dl][el][gl][hl][il][jl][ml][am][cm][em][fm][gm][hm][im][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal43",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][lc][mc][dd][ed][fd][hd][id][jd][kd][ld][md][de][he][ke][le][me][ef][ff][gf][hf][jf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][ac][bc][fc][kc][ad][bd][cd][ae][be][ce][ie][je][af][bf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal44",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][lc][mc][dd][ed][fd][hd][id][jd][kd][ld][md][de][he][ke][le][me][ef][ff][gf][hf][if][jf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][ac][bc][fc][kc][ad][bd][cd][ae][be][ce][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal45",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][lc][mc][dd][ed][fd][hd][id][jd][kd][ld][md][de][he][ke][le][me][ef][ff][gf][hf][if][jf][kf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][eb][ac][bc][fc][kc][ad][bd][cd][ae][be][ce][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal46",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][lc][mc][dd][ed][fd][hd][id][jd][kd][ld][md][de][he][ie][ke][le][me][ef][ff][gf][hf][if][jf][kf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][eb][ac][bc][fc][kc][ad][bd][cd][ae][be][ce][ee][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][dl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal47",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][jc][lc][mc][dd][ed][fd][hd][id][jd][kd][ld][md][de][he][ie][ke][le][me][ef][ff][gf][hf][if][jf][kf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][eb][ac][bc][fc][gc][ad][bd][cd][ae][be][ce][ee][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][dl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal48",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][jc][lc][mc][dd][ed][fd][gd][hd][id][jd][kd][ld][md][de][he][ie][ke][le][me][ef][ff][gf][hf][if][jf][kf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][eb][ac][bc][fc][gc][ad][bd][cd][ae][be][ce][ee][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][dl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal49",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ca][da][ea][fa][ga][ha][ia][ja][la][ma][db][gb][hb][ib][jb][kb][lb][mb][cc][dc][ec][hc][ic][jc][lc][mc][dd][ed][fd][gd][hd][id][jd][kd][ld][md][de][fe][he][ie][ke][le][me][ef][ff][gf][hf][if][jf][kf][lf][mf][eg][fg][gg][hg][ig][jg][kg][lg][eh][fh][gh][hh][ih][kh][lh][mh][bi][ci][di][ei][fi][gi][hi][ii][ji][ki][li][mi][ej][fj][gj][hj][ij][jj][lj][mj][ek][fk][gk][hk][ik][jk][kk][lk][fl][gl][hl][il][hm][im][jm][lm]AW[aa][ba][ab][bb][cb][eb][ac][bc][fc][gc][ad][bd][cd][ae][be][ce][af][bf][cf][df][ag][bg][cg][dg][ah][bh][ch][dh][ai][aj][bj][cj][dj][ak][ck][dk][mk][al][bl][cl][dl][el][jl][kl][ll][ml][am][bm][cm][dm][em][fm][gm][km])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal50",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][mb][gc][hc][jc][ad][cd][dd][fd][gd][bf][ag][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][ea][ja][la][ab][bb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal51",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][mb][gc][hc][jc][ad][cd][dd][fd][gd][de][bf][ag][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][da][ea][ja][la][ab][bb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal52",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][mb][ec][gc][hc][jc][ad][cd][dd][fd][gd][de][bf][ag][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][da][ea][ja][la][ab][bb][cb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal53",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][mb][ec][gc][hc][jc][ad][bd][cd][dd][fd][gd][de][bf][ag][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][da][ea][ja][la][ab][bb][cb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal54",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][mb][ec][gc][hc][jc][ad][bd][cd][dd][fd][gd][de][bf][ag][bi][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][ca][da][ea][ja][la][ab][bb][cb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal55",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][kb][ec][gc][hc][jc][ad][bd][cd][dd][ed][fd][gd][de][bf][ag][bi][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][ca][da][ea][ja][la][ma][ab][bb][cb][db][gb][jb][lb][ac][bc][cc][fc][ic][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal56",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][ib][kb][ec][gc][hc][ad][bd][cd][dd][ed][fd][gd][de][bf][ag][bi][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][ca][da][ea][ja][la][ma][ab][bb][cb][db][gb][jb][lb][ac][bc][cc][fc][ic][kc][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal57",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[W]AB[fa][ga][ia][eb][hb][ib][kb][ec][gc][hc][ad][bd][cd][dd][ed][fd][gd][de][bf][ag][bi][ej][ek][fk][al][bl][cl][dl][el][fl][gl][il][am][dm][em][fm]AW[aa][ba][ca][da][ea][ja][la][ma][ab][bb][cb][db][gb][jb][lb][mb][ac][bc][cc][fc][ic][kc][lc][mc][hd][id][jd][kd][ld][md][be][ce][ee][fe][ge][he][ie][je][ke][le][me][af][cf][ef][ff][gf][hf][if][jf][kf][lf][mf][cg][dg][eg][fg][gg][hg][ig][jg][kg][lg][mg][ah][bh][ch][dh][eh][fh][gh][hh][ih][jh][kh][lh][mh][ai][ci][di][ei][fi][gi][hi][ii][ji][li][mi][aj][cj][dj][fj][gj][hj][ij][jj][kj][mj][ak][bk][ck][dk][gk][hk][ik][jk][kk][lk][mk][hl][jl][kl][ll][ml][bm][gm][hm][jm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal58",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][bc][gc][hc][ic][kc][lc][mc][ad][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][ig][mg][bh][dh][eh][fh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ma][ab][bb][cb][db][eb][fb][lb][ac][cc][dc][ec][fc][jc][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal59",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][bc][gc][hc][ic][kc][lc][mc][ad][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][ig][mg][bh][dh][eh][fh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ma][ab][bb][cb][db][eb][fb][lb][ac][cc][dc][ec][fc][jc][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal60",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][gc][hc][ic][kc][lc][mc][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][hg][ig][mg][bh][dh][eh][fh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ma][ab][bb][cb][db][eb][fb][lb][ac][cc][dc][ec][fc][jc][bd][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal61",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][mb][gc][hc][ic][kc][lc][mc][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][hg][ig][mg][bh][dh][eh][fh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][jc][bd][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal62",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][mb][gc][hc][ic][kc][lc][mc][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][hg][ig][mg][bh][dh][eh][fh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][hl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][jc][bd][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal63",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][mb][gc][hc][ic][kc][lc][mc][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][hg][ig][mg][bh][dh][eh][fh][gh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][hl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][jc][ad][bd][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal64",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ha][ia][ja][ka][la][gb][hb][ib][jb][kb][lb][mb][gc][hc][ic][kc][lc][mc][gd][hd][ld][md][le][me][ff][gf][hf][if][jf][kf][lf][mf][dg][eg][fg][gg][hg][ig][mg][bh][dh][eh][fh][gh][hh][ih][kh][lh][mh][ai][bi][ci][di][ei][fi][gi][hi][ii][ki][li][mi][aj][bj][dj][ej][gj][hj][ij][jj][kj][lj][ak][bk][dk][ek][fk][gk][hk][ik][jk][al][bl][el][gl][hl][il][jl][em][fm][gm][hm][im][jm]AW[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][eb][fb][ac][bc][cc][dc][ec][fc][jc][ad][bd][cd][dd][ed][fd][id][jd][kd][ae][be][de][ee][fe][ge][he][ie][je][ke][af][bf][cf][df][ef][ag][bg][cg][jg][kg][ah][ch][jh][ji][cj][mj][ck][kk][lk][mk][cl][kl][ml][am][bm][cm][dm][km][lm][mm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal65",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ea][ga][ka][ab][cb][eb][fb][gb][hb][jb][lb][ac][bc][cc][dc][gc][ic][jc][kc][lc][ad][cd][hd][jd][kd][ld][ae][be][ge][he][ie][ke][me][bf][gf][hf][if][jf][kf][lf][mf][hg][ig][jg][kg][lg][eh][ih][jh][hi][ji][hj][ij][ik][jk][cl][gl][hl][il][jl][kl][am][bm][cm][dm][em][fm][gm][im]AW[aa][ha][ia][ja][la][db][mb][ec][mc][dd][ed][fd][gd][md][ce][de][fe][af][cf][ef][ff][ag][bg][cg][dg][eg][fg][gg][mg][bh][dh][fh][gh][hh][kh][lh][mh][fi][gi][ki][li][mi][aj][cj][ej][fj][gj][kj][mj][ak][bk][ck][ek][gk][hk][lk][mk][al][bl][dl][el][fl][ll][ml][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal66",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ea][ga][ka][ab][cb][eb][fb][gb][hb][jb][lb][ac][bc][cc][dc][gc][ic][jc][kc][lc][ad][cd][hd][jd][kd][ld][ae][be][ge][he][ie][ke][me][bf][gf][hf][if][jf][kf][lf][mf][hg][ig][jg][kg][lg][eh][ih][jh][di][hi][ji][hj][ij][ik][jk][cl][gl][hl][il][jl][kl][am][bm][cm][dm][em][fm][gm][im]AW[aa][ha][ia][ja][la][db][mb][ec][mc][dd][ed][fd][gd][md][ce][de][fe][af][cf][ef][ff][ag][bg][cg][dg][eg][fg][gg][mg][bh][dh][fh][gh][hh][kh][lh][mh][fi][gi][ki][li][mi][aj][cj][ej][fj][gj][kj][mj][ak][bk][ck][ek][fk][gk][hk][lk][mk][al][bl][dl][el][fl][ll][ml][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal67",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ea][ga][ka][ab][cb][eb][fb][gb][hb][jb][lb][ac][bc][cc][dc][gc][ic][jc][kc][lc][ad][cd][hd][jd][kd][ld][ae][be][ge][he][ie][ke][me][bf][gf][hf][if][jf][kf][lf][mf][hg][ig][jg][kg][lg][ch][eh][ih][jh][di][hi][ji][hj][ij][ik][jk][cl][gl][hl][il][jl][kl][am][bm][cm][dm][em][fm][gm][im]AW[aa][ha][ia][ja][la][db][mb][ec][mc][dd][ed][fd][gd][md][ce][de][fe][af][cf][ef][ff][ag][bg][cg][dg][eg][fg][gg][mg][bh][dh][fh][gh][hh][kh][lh][mh][fi][gi][ki][li][mi][aj][cj][ej][fj][gj][kj][mj][ak][bk][ck][dk][ek][fk][gk][hk][lk][mk][al][bl][dl][el][fl][ll][ml][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal68",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ea][ga][ka][ab][cb][eb][fb][gb][hb][jb][lb][ac][bc][cc][dc][gc][ic][jc][kc][lc][ad][cd][hd][jd][kd][ld][ae][be][ge][he][ie][ke][me][bf][gf][hf][if][jf][kf][lf][mf][hg][ig][jg][kg][lg][ah][ch][eh][ih][jh][di][hi][ji][hj][ij][ik][jk][cl][gl][hl][il][jl][kl][am][bm][cm][dm][em][fm][gm][im]AW[aa][ha][ia][ja][la][db][mb][ec][mc][dd][ed][fd][gd][md][ce][de][fe][af][cf][ef][ff][ag][bg][cg][dg][eg][fg][gg][mg][bh][dh][fh][gh][hh][kh][lh][mh][fi][gi][ki][li][mi][aj][cj][ej][fj][gj][kj][mj][ak][bk][ck][dk][ek][fk][gk][hk][lk][mk][al][bl][dl][el][fl][ll][ml][jm][km][lm])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "localVsGlobal69",
+    "conceptId": "JUICIO_LOCAL_VS_GLOBAL",
+    "sgf": "(;GM[1]FF[4]SZ[13]ZKIND[areaValue]ZCONCEPT[JUICIO_LOCAL_VS_GLOBAL]PL[B]AB[ba][ea][ga][ka][ab][cb][eb][fb][gb][hb][jb][lb][ac][bc][cc][dc][gc][ic][jc][kc][lc][ad][cd][hd][jd][kd][ld][ae][be][ge][he][ie][ke][me][bf][gf][hf][if][jf][kf][lf][mf][hg][ig][jg][kg][lg][ah][ch][eh][ih][jh][di][hi][ji][hj][ij][ik][jk][cl][gl][hl][il][jl][kl][am][bm][cm][dm][em][fm][gm][im]AW[ca][ha][ia][ja][la][db][mb][ec][mc][dd][ed][fd][gd][md][ce][de][fe][af][cf][ef][ff][ag][bg][cg][dg][eg][fg][gg][mg][bh][dh][fh][gh][hh][kh][lh][mh][fi][gi][ki][li][mi][aj][cj][ej][fj][gj][kj][mj][ak][bk][ck][dk][ek][fk][gk][hk][lk][mk][al][bl][dl][el][fl][ll][ml][jm][km][lm])",
+    "difficulty": "medium"
+  }
+]

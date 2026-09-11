@@ -586,7 +586,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.JUICIO_LOCAL_VS_GLOBAL.summary',
     lessonId: 'n7-l2',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   RELACION_CON_PIEDRAS_PROPIAS: {

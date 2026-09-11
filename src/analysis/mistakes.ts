@@ -541,6 +541,58 @@ const PER_MOVE_DETECTORS: Array<(ctx: AnalysisContext) => ConceptOccurrence | nu
 ]
 
 /**
+ * Subconjunto de PER_MOVE_DETECTORS que no necesita jugadas futuras para
+ * decidir -- puede llamarse en vivo, apenas se juega una jugada, en vez de
+ * solo al terminar la partida. Quedan afuera a proposito: detectAtariIgnorado
+ * y detectCapturaPerdida (ambos preguntan si un grupo "sobrevive hasta el
+ * final" -- contra una partida truncada eso siempre da "todavia esta en el
+ * tablero", asi que nunca dispararian en vivo) y detectCorteNoDefendido
+ * (mira hasta 3 jugadas hacia adelante en la lista de jugadas, que en vivo
+ * todavia no existen). detectEscaleraFallida SI es seguro en vivo pese a
+ * hablar de un resultado "futuro": no mira jugadas grabadas mas adelante,
+ * lo resuelve con el propio solucionador de escaleras sobre el tablero
+ * actual.
+ */
+const LIVE_SAFE_DETECTORS: Array<(ctx: AnalysisContext) => ConceptOccurrence | null> = [
+  detectAutoatari,
+  detectRellenoOjoPropio,
+  detectRellenoTerritorioPropio,
+  detectEscaleraFallida,
+  detectTrianguloVacio,
+  detectPrimeraLineaTemprana,
+  detectPasePrematuro,
+]
+
+/**
+ * Version en vivo de analyzeGame para el aviso de errores en tiempo real de
+ * Jugar (PlayGameScreen.tsx): en vez de reproducir la partida completa y
+ * correr todos los detectores sobre cada jugada, solo evalua la ULTIMA
+ * jugada con los detectores que no dependen del futuro (LIVE_SAFE_DETECTORS
+ * de arriba). Se llama una vez por jugada propia, no una vez por partida, asi
+ * que solo necesita el resultado de esa ultima jugada, no todos los eventos
+ * de la partida.
+ */
+export function analyzeLastMove(width: number, height: number, komi: number, moves: RecordedMove[]): ConceptOccurrence | null {
+  if (moves.length === 0) return null
+
+  const states: GameState[] = [createGame(width, height, komi)]
+  const captured: number[][] = []
+  for (const move of moves) {
+    const result = applyMove(states[states.length - 1], move.point)
+    if (!result.legal || !result.state) return null
+    states.push(result.state)
+    captured.push(result.captured)
+  }
+
+  const ctx: AnalysisContext = { komi, moves, states, captured, moveIndex: moves.length - 1 }
+  for (const detector of LIVE_SAFE_DETECTORS) {
+    const found = detector(ctx)
+    if (found && found.result === 'incorrect') return found
+  }
+  return null
+}
+
+/**
  * Corre todos los detectores de errores sobre una partida completa,
  * reproduciendola jugada por jugada desde el inicio. Regla de
  * implementacion (documento de diseno, seccion 5.4): si un detector no

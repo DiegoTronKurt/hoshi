@@ -1,18 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
 import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
+import { pickWithoutRepeat, recentWindowSize } from '../../content/pickWithoutRepeat'
 import { useI18n } from '../../i18n'
 import { SolverClient } from '../../solver/client'
 import { useSettings } from '../settings'
 import { ExerciseView } from './ExerciseView'
 import { useSolvableExercise } from './useSolvableExercise'
 
-function pickEntry(entries: BankEntry[], excludeId?: string): BankEntry | null {
-  const pool = entries.length > 1 ? entries.filter((e) => e.id !== excludeId) : entries
-  if (pool.length === 0) return null
-  return pool[Math.floor(Math.random() * pool.length)]
-}
+const RECENT_WINDOW = 5
 
 interface ExercisePracticeScreenProps {
   conceptFilter: ConceptId | 'all'
@@ -34,7 +31,21 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
     [conceptFilter],
   )
 
-  const [entry, setEntry] = useState<BankEntry | null>(() => pickEntry(entries))
+  const recentIdsRef = useRef<string[]>([])
+
+  function pickNext(pool: BankEntry[]): BankEntry | null {
+    const picked = pickWithoutRepeat(pool, recentIdsRef.current)
+    if (picked) {
+      const window = recentWindowSize(pool.length, RECENT_WINDOW)
+      recentIdsRef.current = [...recentIdsRef.current, picked.id].slice(-window)
+    }
+    return picked
+  }
+
+  // Arranca en null: el primer pick lo hace el efecto de mas abajo (misma
+  // dependencia [entries] que ya se ejecuta al montar), asi pickNext -- que
+  // lee/escribe recentIdsRef -- nunca se llama durante el render.
+  const [entry, setEntry] = useState<BankEntry | null>(null)
   const [loaded, setLoaded] = useState<LoadedProblem | null>(null)
 
   const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
@@ -45,8 +56,8 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
   }, [])
 
   useEffect(() => {
-    const next = pickEntry(entries)
-    setEntry(next)
+    recentIdsRef.current = []
+    setEntry(pickNext(entries))
   }, [entries])
 
   useEffect(() => {
@@ -72,7 +83,7 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
   } = useSolvableExercise(entry, loaded, solverClient)
 
   function handleNext() {
-    setEntry(pickEntry(entries, entry?.id))
+    setEntry(pickNext(entries))
   }
 
   return (

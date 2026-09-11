@@ -17,7 +17,17 @@ import type { BoardState, Color } from '../core/types'
  * jugada real): la validacion en si es identica para ambos.
  */
 export interface AreaValueProblem {
-  conceptId: 'RELLENO_TERRITORIO_PROPIO' | 'PASE_PREMATURO' | 'EL_FINAL_TAMBIEN_ES_GRANDE' | 'COMPARAR_VALOR_REAL'
+  conceptId:
+    | 'RELLENO_TERRITORIO_PROPIO'
+    | 'PASE_PREMATURO'
+    | 'EL_FINAL_TAMBIEN_ES_GRANDE'
+    | 'COMPARAR_VALOR_REAL'
+    // JUICIO_LOCAL_VS_GLOBAL (Nivel 7): mismo formato, misma validacion --
+    // ver tools/generate-whole-board-judgment-problems.ts. La unica
+    // diferencia con COMPARAR_VALOR_REAL es como se generan las posiciones
+    // (candidatos en al menos dos zonas separadas del tablero, no solo dos
+    // puntos), no como se validan.
+    | 'JUICIO_LOCAL_VS_GLOBAL'
   board: BoardState
   toMove: Color
 }

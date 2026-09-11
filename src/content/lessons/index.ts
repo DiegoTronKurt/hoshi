@@ -35,3 +35,19 @@ export function getLesson(id: string | null): Lesson | null {
   if (id === null) return null
   return ALL_LESSONS.find((lesson) => lesson.id === id) ?? null
 }
+
+/** Al final de un nivel, salta a la primera leccion del siguiente -- no hay
+ * ningun nivel con 0 lecciones hoy, pero el chequeo de largo queda como
+ * resguardo si el contenido cambia. */
+export function nextLessonId(currentLessonId: string): string | null {
+  const current = getLesson(currentLessonId)
+  if (!current) return null
+
+  const sameLevel = lessonsForLevel(current.level)
+  const index = sameLevel.findIndex((lesson) => lesson.id === current.id)
+  if (index >= 0 && index + 1 < sameLevel.length) return sameLevel[index + 1].id
+
+  if (current.level === 10) return null
+  const nextLevelLessons = lessonsForLevel((current.level + 1) as Lesson['level'])
+  return nextLevelLessons.length > 0 ? nextLevelLessons[0].id : null
+}

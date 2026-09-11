@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { conceptsForLesson } from '../../analysis/concepts'
 import type { ConceptId } from '../../analysis/concepts'
 import type { Lesson } from '../../content/lessons'
+import { nextLessonId } from '../../content/lessons'
 import { useI18n } from '../../i18n'
 import type { PlaySeed } from '../play/playConfig'
 import { BoardCanvas } from '../board/BoardCanvas'
@@ -16,12 +17,14 @@ interface LessonScreenProps {
   onBack: () => void
   onNavigateToExercises: (conceptId: ConceptId) => void
   onNavigateToPlay: (seed?: PlaySeed) => void
+  onNavigateToLesson: (lessonId: string) => void
 }
 
-export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigateToPlay }: LessonScreenProps) {
+export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigateToPlay, onNavigateToLesson }: LessonScreenProps) {
   const { t } = useI18n()
   const { theme } = useSettings()
   const practiceConcepts = conceptsForLesson(lesson.id).filter((c) => c.generatesExercises)
+  const nextId = nextLessonId(lesson.id)
 
   useEffect(() => {
     markLessonRead(lesson.id)
@@ -91,6 +94,12 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
           {t('learn.checkGame.cta')}
         </button>
       </section>
+
+      {nextId && (
+        <button type="button" className="lesson-next-button" onClick={() => onNavigateToLesson(nextId)}>
+          {t('learn.nextLesson.cta')}
+        </button>
+      )}
     </div>
   )
 }

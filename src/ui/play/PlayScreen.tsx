@@ -33,6 +33,7 @@ function seededConfig(seed: PlaySeed): PlayConfig {
     // sentido sobre una posicion de leccion) ni pistas (es momento de
     // practicar la leccion misma, no de pedirle la jugada a la red).
     hintsEnabled: false,
+    liveMistakeFlagging: false,
   }
 }
 

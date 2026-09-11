@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CONCEPTS } from '../../analysis/concepts'
+import type { ConceptId } from '../../analysis/concepts'
+import { analyzeLastMove } from '../../analysis/mistakes'
 import { createBoard } from '../../core/board'
 import { applyMove, createGame, gameStateFromBoard, listLegalMoves } from '../../core/rules'
 import { computeAreaOwnership, computeAreaScore, computeTerritoryScore } from '../../core/scoring'
@@ -42,6 +44,12 @@ const KOMI = 6.5
 const HANDICAP_KOMI = 0.5
 
 const MAX_HINTS_PER_GAME = 5
+
+/** Caida de probabilidad de victoria (0-1) para avisar de un error en vivo.
+ * 0.15 es un umbral conservador a proposito: mismo espiritu que el resto de
+ * la deteccion de errores de esta app (mejor no avisar que avisar de mas),
+ * ver analysis/mistakes.ts. */
+const LIVE_MISTAKE_SWING_THRESHOLD = 0.15
 
 const BOT_STYLE_LABEL_KEY: Record<string, TranslationKey> = {
   standard: 'play.botStyle.standard',
@@ -138,7 +146,14 @@ export function PlayGameScreen({
   const hintEvalRef = useRef<EvalClient | null>(null)
   const [hintsUsed, setHintsUsed] = useState(0)
   const [hintPoint, setHintPoint] = useState<number | null>(null)
+  const [hintWinProbability, setHintWinProbability] = useState<number | null>(null)
   const [hintLoading, setHintLoading] = useState(false)
+  // Cliente de red para el aviso de errores en vivo: a diferencia de evalRef
+  // (solo modo 'bot' con guia de red), este tiene que existir tambien en
+  // partida local, asi que se precalienta en su propio efecto en vez de
+  // reusar evalRef.
+  const liveAnalysisEvalRef = useRef<EvalClient | null>(null)
+  const [mistakeFlag, setMistakeFlag] = useState<{ conceptId: ConceptId | null } | null>(null)
   // Captura el tablero inicial una sola vez, para precalentar la red sin
   // depender de `history` (que cambia en cada jugada -- no queremos que el
   // efecto de abajo se repita por eso).
@@ -165,6 +180,17 @@ export function PlayGameScreen({
   }, [config.mode, config.strengthId])
 
   useEffect(() => {
+    if (!config.liveMistakeFlagging) return
+    const client = new EvalClient(EVAL_MODEL_URL)
+    liveAnalysisEvalRef.current = client
+    // Mismo motivo que el precalentado de evalRef de arriba: sin esto, el
+    // primer aviso en vivo pagaria la carga completa del modelo (~2.1s) justo
+    // despues de la primera jugada de la persona.
+    client.evaluate({ state: initialGameRef.current }).catch(() => {})
+    return () => client.terminate()
+  }, [config.liveMistakeFlagging])
+
+  useEffect(() => {
     onActiveChange(!game.gameOver)
     return () => onActiveChange(false)
   }, [game.gameOver, onActiveChange])
@@ -176,7 +202,60 @@ export function PlayGameScreen({
   // pegado sobre un tablero que ya cambio.
   useEffect(() => {
     setHintPoint(null)
+    setHintWinProbability(null)
   }, [game])
+
+  // Aviso de errores en vivo: apenas se juega una jugada propia (no del bot),
+  // compara la probabilidad de victoria de quien jugo antes y despues de esa
+  // jugada. Milestone 1 de "coach mode" (ver NOTAS.md): solo la caida de
+  // probabilidad via la red, sin intentar forzar los detectores de
+  // analysis/mistakes.ts que necesitan jugadas futuras (ATARI_IGNORADO,
+  // CAPTURA_PERDIDA, CORTE_NO_DEFENDIDO) a correr en vivo -- analyzeLastMove
+  // ya los excluye. Cuando SI hay un detector sin dependencia del futuro que
+  // coincide con la misma jugada, se usa para reemplazar el mensaje generico
+  // por uno especifico; si no, el aviso queda generico.
+  useEffect(() => {
+    setMistakeFlag(null)
+    if (!config.liveMistakeFlagging || moves.length === 0 || history.length < 2) return
+
+    const lastMove = moves[moves.length - 1]
+    const isHumanMove = config.mode === 'local' || lastMove.color === config.humanColor
+    const client = liveAnalysisEvalRef.current
+    if (!isHumanMove || !client) return
+
+    const beforeState = history[history.length - 2]
+    const afterState = history[history.length - 1]
+    let cancelled = false
+
+    async function check() {
+      try {
+        const beforeOutput = await client!.evaluate({ state: beforeState }, EVAL_TIMEOUT_IN_GAME_MS)
+        const afterOutput = await client!.evaluate({ state: afterState }, EVAL_TIMEOUT_IN_GAME_MS)
+        if (cancelled) return
+
+        // afterOutput es desde la perspectiva de quien mueve despues (el
+        // rival, el turno ya paso): 1 - eso es la probabilidad de victoria
+        // de quien jugo, en su propia perspectiva -- mismo ajuste que
+        // ReviewMistakeBoard.askAi, pero aca si hace falta invertir porque
+        // evaluamos DESPUES de la jugada, no antes.
+        const winBefore = beforeOutput.value[0]
+        const winAfterMoverPerspective = 1 - afterOutput.value[0]
+        if (winBefore - winAfterMoverPerspective <= LIVE_MISTAKE_SWING_THRESHOLD) return
+
+        const detected = analyzeLastMove(config.width, config.height, komi, moves)
+        if (cancelled) return
+        setMistakeFlag({ conceptId: detected?.conceptId ?? null })
+      } catch {
+        // Silencioso, mismo criterio que la pista y la guia del bot: un
+        // aviso fallido no debe interrumpir la partida.
+      }
+    }
+
+    check()
+    return () => {
+      cancelled = true
+    }
+  }, [game, moves, history, config.liveMistakeFlagging, config.mode, config.humanColor, config.width, config.height, komi])
 
   function isHumanTurn(): boolean {
     if (game.gameOver || botThinking) return false
@@ -250,6 +329,11 @@ export function PlayGameScreen({
         }
       }
       setHintPoint(topPoint)
+      // output.value[0] ya es la probabilidad de victoria de game.toMove (a
+      // quien se le esta dando la pista): no hace falta invertir signo, es
+      // la misma jugada, mismo turno, mismo criterio que
+      // ReviewMistakeBoard.askAi.
+      setHintWinProbability(output.value[0])
       // Se descuenta siempre que la consulta responda, aun si la red
       // sugiere pasar (topPoint null, sin anillo visible) -- fue un uso
       // real, no se reintenta gratis por un resultado poco util.
@@ -402,7 +486,21 @@ export function PlayGameScreen({
         theme={theme}
         onIntersectionClick={handleIntersectionClick}
       />
-      {hintPoint !== null && <p className="review-hint-legend">{t('play.hint.legend')}</p>}
+      {hintPoint !== null && (
+        <p className="review-hint-legend">
+          {t('play.hint.legend')}
+          {hintWinProbability !== null &&
+            ` · ${t('play.hint.winProbability', { percent: Math.round(hintWinProbability * 100) })}`}
+        </p>
+      )}
+
+      {mistakeFlag && (
+        <p className="play-mistake-flag">
+          {mistakeFlag.conceptId
+            ? t('play.mistakeFlag.specific', { concept: t(`concept.${mistakeFlag.conceptId}.label` as TranslationKey) })
+            : t('play.mistakeFlag.generic')}
+        </p>
+      )}
 
       <div className="status" aria-live="polite">
         {game.gameOver ? (

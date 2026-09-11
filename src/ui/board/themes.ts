@@ -1,3 +1,7 @@
+import kayaWoodTexture from '../../assets/board-textures/kaya-wood.webp'
+import sumiePaperTexture from '../../assets/board-textures/sumie-paper.webp'
+import nocturnoSlateTexture from '../../assets/board-textures/nocturno-slate.webp'
+
 export interface StoneStyle {
   fill: string
   stroke: string
@@ -11,6 +15,11 @@ export interface StoneStyle {
 export interface BoardTheme {
   id: string
   background: string
+  /** Textura de fondo opcional (mapa de bits repetible via createPattern).
+   * `background` sigue siendo obligatorio en todo tema: es el color de
+   * respaldo mientras la imagen carga, si falla, o si el tema no define
+   * textura -- ver BoardCanvas.tsx. */
+  backgroundTexture?: { src: string; tileSizePx: number }
   lines: { color: string; widthPx: number }
   hoshi: { color: string; radiusPx: number }
   blackStone: StoneStyle
@@ -35,6 +44,7 @@ export const minimoTheme: BoardTheme = {
 export const sumieTheme: BoardTheme = {
   id: 'sumie',
   background: '#ede6d3',
+  backgroundTexture: { src: sumiePaperTexture, tileSizePx: 128 },
   lines: { color: '#4a4438', widthPx: 1 },
   hoshi: { color: '#4a4438', radiusPx: 3 },
   // Tinta plana a propósito, sin brillo ni sombra: es el carácter del tema.
@@ -48,6 +58,7 @@ export const sumieTheme: BoardTheme = {
 export const kayaTheme: BoardTheme = {
   id: 'kaya',
   background: '#e3b872',
+  backgroundTexture: { src: kayaWoodTexture, tileSizePx: 128 },
   lines: { color: '#6b4a23', widthPx: 1 },
   hoshi: { color: '#6b4a23', radiusPx: 3.2 },
   blackStone: { fill: '#20201f', stroke: '#050505', strokeWidth: 1, highlight: '#6a6a68', dropShadow: true },
@@ -60,6 +71,7 @@ export const kayaTheme: BoardTheme = {
 export const nocturnoTheme: BoardTheme = {
   id: 'nocturno',
   background: '#050505',
+  backgroundTexture: { src: nocturnoSlateTexture, tileSizePx: 128 },
   lines: { color: '#8a6a2a', widthPx: 1 },
   hoshi: { color: '#c99a3a', radiusPx: 3 },
   // Contorno con sombra pero sin brillo: silueta, no gloss.

@@ -78,6 +78,7 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
   const [scoringRule, setScoringRule] = useState<ScoringRule>(lastConfig?.scoringRule ?? 'chinese')
   const [handicapCount, setHandicapCount] = useState(lastConfig?.handicapCount ?? 0)
   const [hintsEnabled, setHintsEnabled] = useState(lastConfig?.hintsEnabled ?? false)
+  const [liveMistakeFlagging, setLiveMistakeFlagging] = useState(lastConfig?.liveMistakeFlagging ?? false)
 
   const handicapOptions = HANDICAP_OPTIONS_BY_SIZE[`${width}x${height}`]
 
@@ -121,6 +122,7 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
       scoringRule,
       handicapCount,
       hintsEnabled,
+      liveMistakeFlagging,
     })
     onStart({
       width,
@@ -132,6 +134,7 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
       scoringRule,
       handicapStones: handicapPoints.length > 0 ? handicapPoints : undefined,
       hintsEnabled,
+      liveMistakeFlagging,
     })
   }
 
@@ -234,6 +237,29 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
           </button>
         </div>
         {hintsEnabled && <p className="settings-description">{t('play.hint.disclaimer')}</p>}
+      </div>
+
+      <div className="play-card-group">
+        <span className="play-card-group-label">{t('play.coach.liveMistakes.toggle.label')}</span>
+        <div className="play-card-row" role="group" aria-label={t('play.coach.liveMistakes.toggle.label')}>
+          <button
+            type="button"
+            className={`play-bot-card ${!liveMistakeFlagging ? 'active' : ''}`}
+            aria-pressed={!liveMistakeFlagging}
+            onClick={() => setLiveMistakeFlagging(false)}
+          >
+            <span>{t('play.coach.liveMistakes.toggle.off')}</span>
+          </button>
+          <button
+            type="button"
+            className={`play-bot-card ${liveMistakeFlagging ? 'active' : ''}`}
+            aria-pressed={liveMistakeFlagging}
+            onClick={() => setLiveMistakeFlagging(true)}
+          >
+            <span>{t('play.coach.liveMistakes.toggle.on')}</span>
+          </button>
+        </div>
+        {liveMistakeFlagging && <p className="settings-description">{t('play.coach.liveMistakes.disclaimer')}</p>}
       </div>
 
       {mode === 'bot' && (

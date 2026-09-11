@@ -1,8 +1,27 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toPoint, toXY } from '../../core/board'
 import { BLACK, EMPTY } from '../../core/types'
 import { getHoshiPoints } from './hoshiPoints'
 import type { BoardTheme } from './themes'
+
+/** Cache a nivel de modulo: los temas son assets estaticos del bundle, nunca
+ * cambian en caliente, asi que basta con decodificar cada imagen una sola
+ * vez aunque el usuario alterne entre temas repetidas veces. */
+const textureImageCache = new Map<string, HTMLImageElement>()
+
+function useTextureImage(src: string | undefined): HTMLImageElement | null {
+  const [, forceRedraw] = useState(0)
+  useEffect(() => {
+    if (!src || textureImageCache.has(src)) return
+    const img = new Image()
+    img.onload = () => {
+      textureImageCache.set(src, img)
+      forceRedraw((n) => n + 1)
+    }
+    img.src = src
+  }, [src])
+  return src ? (textureImageCache.get(src) ?? null) : null
+}
 
 interface WrongFlashProp {
   point: number
@@ -54,6 +73,7 @@ export function BoardCanvas({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const layoutRef = useRef({ margin: 0, cell: 0 })
+  const textureImage = useTextureImage(theme.backgroundTexture?.src)
 
   const prevLastMoveRef = useRef(lastMove)
   const prevTerritoryRef = useRef(territory)
@@ -88,7 +108,18 @@ export function BoardCanvas({
     if (!ctx) return
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    ctx.fillStyle = theme.background
+    const backgroundTexture = theme.backgroundTexture
+    const pattern = backgroundTexture && textureImage ? ctx.createPattern(textureImage, 'repeat') : null
+    if (pattern && backgroundTexture && textureImage) {
+      // La imagen se genera al doble de tileSizePx (nitidez en pantallas de
+      // alta densidad, ver themes.ts); este escalado hace que el patron
+      // repita cada tileSizePx unidades de espacio de usuario (px CSS, dado
+      // el setTransform de mas arriba) en vez de a la resolucion nativa del
+      // bitmap, sin importar el devicePixelRatio real de la pantalla.
+      const scale = backgroundTexture.tileSizePx / textureImage.naturalWidth
+      pattern.setTransform(new DOMMatrix([scale, 0, 0, scale, 0, 0]))
+    }
+    ctx.fillStyle = pattern ?? theme.background
     ctx.fillRect(0, 0, displayWidth, displayHeight)
 
     ctx.strokeStyle = theme.lines.color
@@ -210,7 +241,7 @@ export function BoardCanvas({
         ctx.globalAlpha = 1
       }
     }
-  }, [width, height, stones, lastMove, hintMove, territory, theme])
+  }, [width, height, stones, lastMove, hintMove, territory, theme, textureImage])
 
   useEffect(() => {
     if (lastMove !== null && lastMove !== prevLastMoveRef.current && stones[lastMove] !== EMPTY) {

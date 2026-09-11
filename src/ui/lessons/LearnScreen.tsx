@@ -160,6 +160,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
         onBack={goBack}
         onNavigateToExercises={onNavigateToExercises}
         onNavigateToPlay={onNavigateToPlay}
+        onNavigateToLesson={(lessonId) => setView({ kind: 'lesson', lessonId })}
       />
     )
   }

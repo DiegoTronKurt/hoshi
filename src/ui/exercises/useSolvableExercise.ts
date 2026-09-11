@@ -453,13 +453,17 @@ export function useSolvableExercise(
         return
       }
 
-      // EL_FINAL_TAMBIEN_ES_GRANDE/COMPARAR_VALOR_REAL (nivel 9, yose) son
-      // mas estrictos que RELLENO_TERRITORIO_PROPIO/PASE_PREMATURO: ahi
-      // alcanza con cualquier punto que supere el umbral, aca la gracia es
-      // encontrar EL mejor, no cualquiera que sirva -- se recalcula en vivo,
-      // igual que el resto de este bloque, nunca contra una etiqueta guardada.
+      // EL_FINAL_TAMBIEN_ES_GRANDE/COMPARAR_VALOR_REAL (nivel 9, yose) y
+      // JUICIO_LOCAL_VS_GLOBAL (nivel 7, zonas separadas del tablero -- ver
+      // tools/generate-whole-board-judgment-problems.ts) son mas estrictos
+      // que RELLENO_TERRITORIO_PROPIO/PASE_PREMATURO: ahi alcanza con
+      // cualquier punto que supere el umbral, aca la gracia es encontrar EL
+      // mejor, no cualquiera que sirva -- se recalcula en vivo, igual que el
+      // resto de este bloque, nunca contra una etiqueta guardada.
       if (
-        (problem.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' || problem.conceptId === 'COMPARAR_VALOR_REAL') &&
+        (problem.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' ||
+          problem.conceptId === 'COMPARAR_VALOR_REAL' ||
+          problem.conceptId === 'JUICIO_LOCAL_VS_GLOBAL') &&
         bestAreaMove(game.board, problem.toMove)?.point !== point
       ) {
         markWrong(point, 'exercises.wrongReason.notBiggest', true)

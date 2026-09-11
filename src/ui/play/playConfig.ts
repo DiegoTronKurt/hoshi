@@ -34,6 +34,11 @@ export interface PlayConfig {
   /** Si esta partida ofrece el boton de pista (politica de KataGo, tope de 5
    * usos), elegido en la pantalla de configuracion antes de arrancar. */
   hintsEnabled: boolean
+  /** Si esta partida avisa en vivo, apenas se juega, cuando una jugada
+   * propia parece un error real (caida grande de probabilidad de victoria
+   * segun la red, ver PlayGameScreen.tsx) -- independiente de hintsEnabled,
+   * mismo patron off-by-default. */
+  liveMistakeFlagging: boolean
 }
 
 export type ScoringRule = 'chinese' | 'japanese'
@@ -71,6 +76,7 @@ export interface LastPlayConfig {
    * handleStart, igual que difficultyMode se resuelve a strengthId. */
   handicapCount: number
   hintsEnabled: boolean
+  liveMistakeFlagging: boolean
 }
 
 // Un LastPlayConfig guardado antes del soporte de tablero rectangular o de
@@ -92,7 +98,8 @@ function isValidLastConfig(value: unknown): value is LastPlayConfig {
     (v.humanColor === 1 || v.humanColor === 2) &&
     (v.scoringRule === 'chinese' || v.scoringRule === 'japanese') &&
     typeof v.handicapCount === 'number' &&
-    typeof v.hintsEnabled === 'boolean'
+    typeof v.hintsEnabled === 'boolean' &&
+    typeof v.liveMistakeFlagging === 'boolean'
   )
 }
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { RecordedMove } from '../../src/core/sgf'
-import { analyzeGame } from '../../src/analysis/mistakes'
+import { analyzeGame, analyzeLastMove } from '../../src/analysis/mistakes'
 
 const SIZE = 9
 const p = (x: number, y: number) => toPoint(SIZE, x, y)
@@ -278,6 +278,45 @@ describe('detectores de errores', () => {
     for (let i = 1; i < events.length; i++) {
       expect(events[i].moveNumber).toBeGreaterThanOrEqual(events[i - 1].moveNumber)
     }
+  })
+})
+
+describe('analyzeLastMove: solo detectores sin dependencia del futuro', () => {
+  it('sin jugadas: devuelve null', () => {
+    expect(analyzeLastMove(SIZE, SIZE, 0, [])).toBeNull()
+  })
+
+  it('AUTOATARI: se detecta en vivo, con solo las jugadas hasta ahora', () => {
+    const m = moves([0, 0], [1, 2], [0, 1], [3, 2], [0, 2], [2, 1], [2, 2])
+    const found = analyzeLastMove(SIZE, SIZE, 0, m)
+    expect(found?.conceptId).toBe('AUTOATARI')
+    expect(found?.result).toBe('incorrect')
+  })
+
+  it('AUTOATARI en vivo no trae pointCost (la captura real, si ocurre, todavia no paso)', () => {
+    const m = moves([0, 0], [1, 2], [0, 1], [3, 2], [0, 2], [2, 1], [2, 2])
+    const found = analyzeLastMove(SIZE, SIZE, 0, m)
+    expect(found?.pointCost).toBeUndefined()
+  })
+
+  it('ATARI_IGNORADO: nunca se devuelve en vivo, sin importar la posicion (depende de una captura futura)', () => {
+    // Mismas jugadas que el caso positivo de analyzeGame, cortadas antes de
+    // la captura real de la 8va jugada -- si analyzeLastMove pudiera
+    // detectarlo iria aca.
+    const m = moves([1, 2], [0, 2], [3, 3], [1, 1], [3, 4], [1, 3], [4, 4])
+    const found = analyzeLastMove(SIZE, SIZE, 0, m)
+    expect(found?.conceptId).not.toBe('ATARI_IGNORADO')
+  })
+
+  it('CAPTURA_PERDIDA: nunca se devuelve en vivo (depende de que el grupo sobreviva hasta el final)', () => {
+    const m = moves([1, 2], [2, 2], [3, 2], [4, 4], [2, 1], [4, 3], [0, 4])
+    const found = analyzeLastMove(SIZE, SIZE, 0, m)
+    expect(found?.conceptId).not.toBe('CAPTURA_PERDIDA')
+  })
+
+  it('jugada normal: no reporta nada', () => {
+    const m = moves([4, 4])
+    expect(analyzeLastMove(SIZE, SIZE, 0, m)).toBeNull()
   })
 })
 

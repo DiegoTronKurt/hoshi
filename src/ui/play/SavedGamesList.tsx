@@ -3,6 +3,8 @@ import { gameHeight, gameWidth } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { approxKyuForStrengthId } from './strengthLevels'
 
+const MAX_VISIBLE_GAMES = 10
+
 interface SavedGamesListProps {
   games: SavedGameRecord[]
 }
@@ -15,13 +17,13 @@ export function SavedGamesList({ games }: SavedGamesListProps) {
   }
 
   const locale = language === 'es' ? 'es' : 'en'
+  const recent = games.slice().reverse().slice(0, MAX_VISIBLE_GAMES)
+  const hiddenCount = games.length - recent.length
 
   return (
-    <ul className="saved-games-list">
-      {games
-        .slice()
-        .reverse()
-        .map((game) => {
+    <>
+      <ul className="saved-games-list">
+        {recent.map((game) => {
           const date = new Date(game.createdAt).toLocaleDateString(locale, {
             year: 'numeric',
             month: '2-digit',
@@ -44,6 +46,8 @@ export function SavedGamesList({ games }: SavedGamesListProps) {
             </li>
           )
         })}
-    </ul>
+      </ul>
+      {hiddenCount > 0 && <p className="saved-games-more">{t('play.savedGames.moreCount', { n: hiddenCount })}</p>}
+    </>
   )
 }

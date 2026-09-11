@@ -61,7 +61,7 @@ import { difficultyFromDepth, solutionDepth } from '../src/content/difficulty'
 import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
-const SELF_PLAY_GAMES = 200
+const SELF_PLAY_GAMES = 600
 const WEAK_PLAYOUTS = 100
 const STRONG_PLAYOUTS = 800
 const MAX_MOVE_TIME_MS = 3000
@@ -277,17 +277,46 @@ function extractFromSolved(
   }
 }
 
+async function writeBanks(root: string, found: Found): Promise<void> {
+  const outDir = join(root, '..', 'src', 'content', 'problems')
+  await mkdir(outDir, { recursive: true })
+
+  async function writeBank(fileName: string, idPrefix: string, problems: Problem[]) {
+    const bank = problems.map((problem, index) => {
+      const wantLive = problem.objective === 'live'
+      const forDefender = problem.toMove === problem.targetColor
+      const depth = solutionDepth(problem.tree, wantLive, forDefender)
+      return {
+        id: `${idPrefix}${index + 1}`,
+        conceptId: problem.conceptId,
+        sgf: problemToSgf(problem),
+        difficulty: difficultyFromDepth(depth),
+      }
+    })
+    await writeFile(join(outDir, fileName), JSON.stringify(bank, null, 2))
+  }
+
+  await writeBank('atari-ignorado.json', 'atariignorado', found.atariIgnorado)
+  await writeBank('autoatari.json', 'autoatari', found.autoatari)
+  await writeBank('relleno-ojo-propio.json', 'rellenoojo', found.rellenoOjoPropio)
+  await writeBank('triangulo-vacio.json', 'trianguloVacio', found.trianguloVacio)
+  await writeBank('corte-no-defendido.json', 'corteNoDefendido', found.corteNoDefendido)
+}
+
 async function main() {
   const found: Found = { atariIgnorado: [], autoatari: [], rellenoOjoPropio: [], trianguloVacio: [], corteNoDefendido: [] }
   const seen = new Set<string>()
   let totalCandidates = 0
   let totalSolved = 0
+  const root = dirname(fileURLToPath(import.meta.url))
 
   for (let g = 0; g < SELF_PLAY_GAMES; g++) {
+    const gameStart = Date.now()
     const blackStrong = g % 2 === 0
     const blackPlayouts = blackStrong ? STRONG_PLAYOUTS : WEAK_PLAYOUTS
     const whitePlayouts = blackStrong ? WEAK_PLAYOUTS : STRONG_PLAYOUTS
     const positions = playSelfPlayGame(3000 + g, blackPlayouts, whitePlayouts)
+    console.log(`  (partida ${g + 1} jugada en ${Math.round((Date.now() - gameStart) / 1000)}s, ${positions.length} jugadas)`)
     const lastPositions = positions.slice(-8)
 
     for (const board of lastPositions) {
@@ -315,35 +344,13 @@ async function main() {
     console.log(
       `Partida ${g + 1}/${SELF_PLAY_GAMES} lista. candidatos=${totalCandidates} resueltos=${totalSolved} | ATARI_IGNORADO=${found.atariIgnorado.length} AUTOATARI=${found.autoatari.length} RELLENO_OJO_PROPIO=${found.rellenoOjoPropio.length} TRIANGULO_VACIO=${found.trianguloVacio.length} CORTE_NO_DEFENDIDO=${found.corteNoDefendido.length}`,
     )
+    // Checkpoint tras cada partida (ver generate-whole-board-judgment-
+    // problems.ts): si el proceso muere antes de terminar las
+    // SELF_PLAY_GAMES, los bancos en disco ya tienen el progreso hecho.
+    await writeBanks(root, found)
   }
 
-  const root = dirname(fileURLToPath(import.meta.url))
-  const outDir = join(root, '..', 'src', 'content', 'problems')
-  await mkdir(outDir, { recursive: true })
-
-  async function writeBank(fileName: string, idPrefix: string, problems: Problem[]) {
-    const bank = problems.map((problem, index) => {
-      const wantLive = problem.objective === 'live'
-      const forDefender = problem.toMove === problem.targetColor
-      const depth = solutionDepth(problem.tree, wantLive, forDefender)
-      return {
-        id: `${idPrefix}${index + 1}`,
-        conceptId: problem.conceptId,
-        sgf: problemToSgf(problem),
-        difficulty: difficultyFromDepth(depth),
-      }
-    })
-    await writeFile(join(outDir, fileName), JSON.stringify(bank, null, 2))
-    const byDifficulty: Record<string, number> = {}
-    for (const p of bank) byDifficulty[p.difficulty] = (byDifficulty[p.difficulty] ?? 0) + 1
-    console.log(`${fileName}: ${bank.length} problemas`, byDifficulty)
-  }
-
-  await writeBank('atari-ignorado.json', 'atariignorado', found.atariIgnorado)
-  await writeBank('autoatari.json', 'autoatari', found.autoatari)
-  await writeBank('relleno-ojo-propio.json', 'rellenoojo', found.rellenoOjoPropio)
-  await writeBank('triangulo-vacio.json', 'trianguloVacio', found.trianguloVacio)
-  await writeBank('corte-no-defendido.json', 'corteNoDefendido', found.corteNoDefendido)
+  console.log('Listo.')
 }
 
 main()
