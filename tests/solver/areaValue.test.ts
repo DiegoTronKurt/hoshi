@@ -7,6 +7,7 @@ import {
   areaDeltaForPoint,
   bestAreaMove,
   estimateMoveCost,
+  isBestAreaMove,
   isOwnTerritory,
   PASS_VALUE_THRESHOLD,
   realizedAreaCost,
@@ -67,6 +68,54 @@ describe('bestAreaMove', () => {
     const board = cornerWall()
     place(board, BLACK, [GAP_POINT])
     expect(bestAreaMove(board, BLACK)).toBeNull()
+  })
+})
+
+/** Dos bolsillos identicos por simetria de 180 grados (nada mas en el
+ * tablero salvo dos piedras blancas, tambien simetricas, para que el mar
+ * neutral toque ambos colores -- mismo motivo que el blanco disperso de
+ * cornerWall): ambos huecos empatan en delta 4, verificado con un script
+ * descartable antes de escribir este test (no a ciegas). Reproduce el bug
+ * real encontrado en produccion -- bestAreaMove(...).point devuelve GAP_A
+ * (el primero que encuentra recorriendo el tablero), asi que comparar un
+ * clic contra ese punto exacto rechazaba GAP_B aunque fuera igual de
+ * correcto; 8 de los 197 problemas de yose-value.json ya generados tenian
+ * este mismo empate. */
+function twinPocketBoard(): BoardState {
+  const board = createBoard(SIZE)
+  place(board, BLACK, [[3, 0], [0, 1], [1, 1]])
+  place(board, BLACK, [[5, 8], [8, 7], [7, 7]])
+  place(board, WHITE, [[8, 0], [0, 8]])
+  return board
+}
+const GAP_A: [number, number] = [2, 1]
+const GAP_B: [number, number] = [6, 7]
+
+describe('isBestAreaMove', () => {
+  it('acepta el punto que bestAreaMove elige', () => {
+    const board = twinPocketBoard()
+    expect(isBestAreaMove(board, toPoint(SIZE, ...GAP_A), BLACK)).toBe(true)
+  })
+
+  it('tambien acepta un punto separado que empata en el mismo delta maximo', () => {
+    const board = twinPocketBoard()
+    const best = bestAreaMove(board, BLACK)
+    // Confirma que este es realmente el caso de empate (bestAreaMove ignora
+    // GAP_B): si esto cambiara, el test ya no probaria lo que dice probar.
+    expect(best?.point).toBe(toPoint(SIZE, ...GAP_A))
+    expect(isBestAreaMove(board, toPoint(SIZE, ...GAP_B), BLACK)).toBe(true)
+  })
+
+  it('rechaza un punto legal que no llega al delta maximo', () => {
+    const board = cornerWall()
+    // delta 1 en (5,5), muy por debajo del hueco real (delta 4) -- mismo
+    // punto que ya usa el test de estimateMoveCost mas abajo.
+    expect(isBestAreaMove(board, toPoint(SIZE, 5, 5), BLACK)).toBe(false)
+  })
+
+  it('rechaza una jugada ilegal (punto ya ocupado)', () => {
+    const board = cornerWall()
+    expect(isBestAreaMove(board, toPoint(SIZE, 3, 0), BLACK)).toBe(false)
   })
 })
 

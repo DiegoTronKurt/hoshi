@@ -16,7 +16,7 @@ import type { SolverClient } from '../../solver/client'
 import { isGroupPassAlive } from '../../solver/tsumego'
 import { simulateLadder, solveLadder } from '../../solver/ladder'
 import { isDoubleAtariMove } from '../../solver/doubleAtari'
-import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isOwnTerritory } from '../../solver/areaValue'
+import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isBestAreaMove, isOwnTerritory } from '../../solver/areaValue'
 import { raceBehindColor, sharedLibertiesOf } from '../../solver/semeai'
 import { getSrsCard, listAttempts, recordAttempt, saveSrsCard } from '../../storage/db'
 import { findConceptsToReopenFromExercises } from '../../training-policy/session'
@@ -460,11 +460,14 @@ export function useSolvableExercise(
       // cualquier punto que supere el umbral, aca la gracia es encontrar EL
       // mejor, no cualquiera que sirva -- se recalcula en vivo, igual que el
       // resto de este bloque, nunca contra una etiqueta guardada.
+      // isBestAreaMove (no comparar contra bestAreaMove(...).point) acepta
+      // cualquier punto empatado en el delta maximo, no solo el primero que
+      // bestAreaMove encuentra recorriendo el tablero.
       if (
         (problem.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' ||
           problem.conceptId === 'COMPARAR_VALOR_REAL' ||
           problem.conceptId === 'JUICIO_LOCAL_VS_GLOBAL') &&
-        bestAreaMove(game.board, problem.toMove)?.point !== point
+        !isBestAreaMove(game.board, point, problem.toMove)
       ) {
         markWrong(point, 'exercises.wrongReason.notBiggest', true)
         return

@@ -51,6 +51,23 @@ export function bestAreaMove(board: BoardState, color: Color): { point: number; 
 }
 
 /**
+ * True si `point` empata (o, por construccion de bestAreaMove, nunca supera)
+ * el mejor delta de area disponible para `color` en este tablero. A
+ * diferencia de comparar contra `bestAreaMove(board, color)?.point`,
+ * cualquier punto que empate en delta cuenta como correcto -- bestAreaMove
+ * devuelve un solo punto (el primero que encuentra con el delta maximo),
+ * pero si dos o mas puntos separados empatan en ese maximo, todos son
+ * igualmente la mejor jugada real y ninguno deberia rechazarse solo por no
+ * ser el que bestAreaMove eligio arbitrariamente entre los empatados.
+ */
+export function isBestAreaMove(board: BoardState, point: number, color: Color): boolean {
+  const delta = areaDeltaForPoint(board, point, color)
+  if (delta === null) return false
+  const best = bestAreaMove(board, color)
+  return best !== null && delta >= best.delta
+}
+
+/**
  * Costo aproximado (un solo ply) de haber jugado `playedPoint` en vez de la
  * mejor alternativa disponible en esa misma posicion: diferencia entre el
  * area que hubiera dejado la mejor jugada legal y la que dejo realmente

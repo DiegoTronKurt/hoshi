@@ -62,6 +62,24 @@ import type { ConceptId } from '../src/analysis/concepts'
 
 const BOARD_SIZE = 9
 const SELF_PLAY_GAMES = 600
+
+/**
+ * Cada partida de autojuego es independiente (semilla propia, sin estado
+ * compartido) y tarda ~3 minutos en 9x9 -- corrida en un solo proceso,
+ * SELF_PLAY_GAMES completo tardaria mas de un dia. Esta maquina tiene 8
+ * nucleos fisicos ociosos mientras el script corre en uno solo. En vez de
+ * paralelizar con worker_threads (complejidad extra por poco: los datos que
+ * cruzan el borde ya son serializables, pero coordinar bancos parciales en
+ * memoria entre threads no simplifica nada), cada proceso toma un "turno" de
+ * WORKER_COUNT y procesa las partidas g donde g % WORKER_COUNT ===
+ * WORKER_INDEX, escribiendo su propio banco parcial por concepto
+ * (`*.part{WORKER_INDEX}.json`). tools/merge-mistake-exercise-parts.ts junta
+ * todas las partes al final. Con WORKER_COUNT=1 (default) el comportamiento
+ * es identico al de un solo proceso de siempre -- nada cambia si no se
+ * exportan estas variables.
+ */
+const WORKER_INDEX = Number(process.env.WORKER_INDEX ?? '0')
+const WORKER_COUNT = Number(process.env.WORKER_COUNT ?? '1')
 const WEAK_PLAYOUTS = 100
 const STRONG_PLAYOUTS = 800
 const MAX_MOVE_TIME_MS = 3000
@@ -277,6 +295,10 @@ function extractFromSolved(
   }
 }
 
+function bankFileName(baseName: string): string {
+  return WORKER_COUNT > 1 ? baseName.replace(/\.json$/, `.part${WORKER_INDEX}.json`) : baseName
+}
+
 async function writeBanks(root: string, found: Found): Promise<void> {
   const outDir = join(root, '..', 'src', 'content', 'problems')
   await mkdir(outDir, { recursive: true })
@@ -293,7 +315,7 @@ async function writeBanks(root: string, found: Found): Promise<void> {
         difficulty: difficultyFromDepth(depth),
       }
     })
-    await writeFile(join(outDir, fileName), JSON.stringify(bank, null, 2))
+    await writeFile(join(outDir, bankFileName(fileName)), JSON.stringify(bank, null, 2))
   }
 
   await writeBank('atari-ignorado.json', 'atariignorado', found.atariIgnorado)
@@ -309,8 +331,9 @@ async function main() {
   let totalCandidates = 0
   let totalSolved = 0
   const root = dirname(fileURLToPath(import.meta.url))
+  if (WORKER_COUNT > 1) console.log(`Worker ${WORKER_INDEX}/${WORKER_COUNT}: partidas g % ${WORKER_COUNT} === ${WORKER_INDEX}`)
 
-  for (let g = 0; g < SELF_PLAY_GAMES; g++) {
+  for (let g = WORKER_INDEX; g < SELF_PLAY_GAMES; g += WORKER_COUNT) {
     const gameStart = Date.now()
     const blackStrong = g % 2 === 0
     const blackPlayouts = blackStrong ? STRONG_PLAYOUTS : WEAK_PLAYOUTS
@@ -342,7 +365,7 @@ async function main() {
       }
     }
     console.log(
-      `Partida ${g + 1}/${SELF_PLAY_GAMES} lista. candidatos=${totalCandidates} resueltos=${totalSolved} | ATARI_IGNORADO=${found.atariIgnorado.length} AUTOATARI=${found.autoatari.length} RELLENO_OJO_PROPIO=${found.rellenoOjoPropio.length} TRIANGULO_VACIO=${found.trianguloVacio.length} CORTE_NO_DEFENDIDO=${found.corteNoDefendido.length}`,
+      `[w${WORKER_INDEX}] Partida ${g + 1}/${SELF_PLAY_GAMES} lista. candidatos=${totalCandidates} resueltos=${totalSolved} | ATARI_IGNORADO=${found.atariIgnorado.length} AUTOATARI=${found.autoatari.length} RELLENO_OJO_PROPIO=${found.rellenoOjoPropio.length} TRIANGULO_VACIO=${found.trianguloVacio.length} CORTE_NO_DEFENDIDO=${found.corteNoDefendido.length}`,
     )
     // Checkpoint tras cada partida (ver generate-whole-board-judgment-
     // problems.ts): si el proceso muere antes de terminar las
