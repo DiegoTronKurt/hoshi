@@ -2,91 +2,643 @@
   {
     "id": "corteNoDefendido1",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ea][fa][ga][ia][ab][bb][cb][db][eb][fb][ac][bc][dc][ec][fc][gc][ic][ad][fd][gd][hd][id][ae][de][fe][ge][he][af][bf][ff][gf][hf][if][ag][dg][fg][ig][ah][gh][hh][ih][fi][ii]AW[hb][ib][cc][bd][cd][dd][ed][be][ce][ee][cf][ef][bg][cg][eg][gg][bh][ch][dh][eh][fh][ai][bi][ci][ei]TR[fi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gi]GB[1];W[di]GB[1];B[hg]GB[1])",
-    "difficulty": "medium"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ha][ab][bb][cb][db][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][fd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][gg][fh][gh][hh][ih][fi][gi][hi][ii]AW[fa][ga][eb][hd][cg][dg][fg][ig][ah][bh][ch][eh][ai][bi][di][ei]TR[eh][ei][di]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[eg]GW[1])",
+    "difficulty": "easy"
   },
   {
     "id": "corteNoDefendido2",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ha][ia][ab][cb][hb][ib][hc][ic][dd][hd][id][he][cf][if][bg][cg][bh][ch][dh][eh][ai][ci][di][fi][gi]AW[ca][ea][fa][ga][db][eb][gb][cc][ec][fc][gc][ad][bd][cd][ed][gd][ae][be][ce][de][ee][fe][ge][bf][df][ef][gf][hf][ag][dg][eg][fg][hg][ig][ah][fh][gh][hh][hi][ii]TR[ag][ah]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[af]GW[1];B[bi]GW[1])",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][ea][fa][ha][ia][ab][bb][cb][db][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ad][dd][ed][fd][ce][de][ee][bf][cf][ef][ff][bg][cg][dg][eg][ah][ch][dh][ai][ci]AW[ic][gd][hd][id][be][fe][ge][he][ie][gf][hf][ag][fg][gg][hg][bh][eh][fh][gh][hh][ih][di][ei][fi][gi][hi][ii]TR[ah][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[bi]GB[1];W[af]GB[1];B[bh]GB[1])",
     "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido3",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ac][dc][ec][ad][ae][de][af][eg][gg][ig][ah][bh][eh][gh][hh][bi][ci][hi]AW[aa][ba][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][bc][cc][fc][gc][hc][ic][cd][ed][fd][gd][hd][id][be][ce][ee][fe][ge][he][ie][bf][cf][df][ff][gf][hf][if][ag][bg][dg][fg][hg][ch][dh][fh][di][ei][fi][ii]TR[ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ih]GW[0];W[gi]GW[0])(;B[gi]GW[1]))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fa][fb][ib][fc][hc][dd][fd][gd][hd][id][ce][ee][fe][ge][he][ie][cf][df][ef][ff][gf][hf][if][ag][bg][dg][eg][gg][hg][ch][dh][eh][gh][hh][ih][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][ea][ab][bb][cb][db][eb][ac][cc][dc][ec][ad][bd][cd][ed][ae][be][bf][fg][ah][bh][bi]TR[dd]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[de]GB[1];W[bc]GB[1])",
     "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido4",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fa][ga][ha][ia][gb][ib][cc][fc][gc][ic][bd][ed][fd][gd][hd][id][be][de][ee][ge][ie][af][bf][ef][if][bg][dg][eg][fg][gg][hg][ig][ah][ch][dh][eh][gh][hh][ih][ai][bi][ci][di][ei][fi][gi]AW[aa][ba][da][ea][ab][bb][db][eb][fb][ac][bc][dc][ec][hc][ad][cd][dd][ae][ce][fe][cf][df][ff][cg][ii]TR[aa][ba][ab][bb][ac][bc][ad][ae]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[cb]GW[0](;W[aa]GW[0](;B[ba]GW[0](;W[ab]GW[0](;B[bb]GW[0](;W[ac]GW[0](;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[ba]GW[0](;W[ca]GW[0])(;W[bb]GW[0]))(;B[ca]GW[0](;W[ba]GW[0])(;W[bb]GW[0]))))(;B[ac]GW[0](;W[bb]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ab]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[bb]GW[0](;W[aa]GW[0])(;W[ab]GW[0]))(;B[ad]GW[0];W[bb]GW[0]))))(;W[bb]GW[0](;B[ab]GW[0](;W[ac]GW[0](;B[aa]GW[0](;W[bc]GW[0])(;W[ad]GW[0]))(;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[bc]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[ad]GW[0]))(;B[ac]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))))(;B[ac]GW[0](;W[ab]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ab]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[ba]GW[0](;W[ca]GW[0])(;W[ab]GW[0]))(;B[ca]GW[0](;W[ba]GW[0])(;W[ab]GW[0]))))))(;B[ab]GW[0](;W[ba]GW[0](;B[bb]GW[0](;W[aa]GW[0](;B[ba]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[ba]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))))(;B[ac]GW[0](;W[bb]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[bb]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bb]GW[0]))))(;W[bb]GW[0](;B[ba]GW[0](;W[ac]GW[0](;B[aa]GW[0](;W[bc]GW[0])(;W[ad]GW[0]))(;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[bc]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[ad]GW[0]))(;B[ac]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))))(;B[ac]GW[0](;W[ba]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[ba]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))(;B[ad]GW[0];W[ba]GW[0]))))))(;W[ba]GW[0](;B[aa]GW[0](;W[ab]GW[0](;B[bb]GW[0](;W[aa]GW[0](;B[ac]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[bc]GW[0](;W[ac]GW[0])(;W[ad]GW[0])))(;W[ac]GW[0](;B[aa]GW[0](;W[bc]GW[0])(;W[ad]GW[0]))(;B[bc]GW[0](;W[aa]GW[0])(;W[ad]GW[0]))))(;B[ac]GW[0](;W[aa]GW[0](;B[bb]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[bb]GW[0](;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))(;B[ad]GW[0](;W[aa]GW[0])(;W[bc]GW[0])))))(;W[bb]GW[0](;B[ab]GW[0](;W[ac]GW[0](;B[aa]GW[0](;W[ab]GW[0])(;W[bc]GW[0]))(;B[ab]GW[0](;W[aa]GW[0])(;W[bc]GW[0])))(;W[bc]GW[0](;B[ca]GW[1](;W[ac]GW[0])(;W[cc]GW[0]))(;B[cb]GW[0](;W[ca]GW[0])(;W[ac]GW[0]))))(;B[ac]GW[0](;W[ab]GW[0](;B[bc]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))(;B[ad]GW[0](;W[aa]GW[0])(;W[bc]GW[0])))(;W[bc]GW[0](;B[ca]GW[1](;W[ab]GW[0])(;W[cc]GW[0]))(;B[ab]GW[1](;W[ca]GW[0])(;W[cc]GW[0]))))))(;B[ab]GW[0](;W[aa]GW[0](;B[bb]GW[0](;W[aa]GW[0](;B[ba]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[ad]GW[0])(;W[ae]GW[0])))(;W[ba]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[ad]GW[0])(;W[ae]GW[0]))))(;B[ac]GW[0](;W[bb]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[bb]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bb]GW[0]))))(;W[bb]GW[0](;B[aa]GW[0](;W[ac]GW[0](;B[aa]GW[0](;W[ab]GW[0])(;W[bc]GW[0]))(;B[ab]GW[0](;W[aa]GW[0])(;W[bc]GW[0])))(;W[bc]GW[0](;B[ca]GW[1](;W[ac]GW[0])(;W[cc]GW[0]))(;B[cb]GW[0](;W[ca]GW[0])(;W[ac]GW[0]))))(;B[ac]GW[0](;W[aa]GW[0](;B[bc]GW[0](;W[aa]GW[0])(;W[ba]GW[0]))(;B[ad]GW[0];W[bc]GW[0]))(;W[bc]GW[0](;B[aa]GW[1](;W[ca]GW[0])(;W[cc]GW[0]))(;B[ca]GW[1](;W[aa]GW[0])(;W[cc]GW[0]))))))))(;B[ag]GW[1]))",
-    "difficulty": "hard"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ab][bb][ac][bc][ad]AW[aa][ca][ea][fa][ga][ha][ia][cb][eb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][bh][ch][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][fi][gi][hi][ii]TR[aa]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ba]GW[1])",
+    "difficulty": "easy"
   },
   {
     "id": "corteNoDefendido5",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ec][hc][cd][dd][ed][fd][hd][be][ce][de][ge][af][cf][df][ef][gf][hf][if][bg][cg][dg][gg][ah][bh][ch][dh][gh][ih][ci][ei][fi][gi]AW[aa][ba][ea][ia][ab][bb][cb][db][eb][gb][hb][ac][bc][cc][dc][fc][ic][ad][bd][gd][id][ae][fe][ie][ff][eg][ig][eh][fh][hh][hi]TR[hc][hd]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[fa]GB[1](;B[ga]GB[0](;W[ha]GB[1];B[he]GB[0](;W[ga]GB[1])(;W[fb]GB[1]))(;W[fb]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[ib]GB[1])))(;B[ha]GB[0](;W[ga]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[fb]GB[1]))(;W[fb]GB[1](;B[ib]GB[0](;W[ga]GB[1])(;W[gc]GB[0](;B[ga]GB[0](;W[ia]GB[0](;B[ga]GB[0])(;B[ha]GB[0]))(;W[he]GB[0](;B[hc]GB[0])(;B[hd]GB[0])))(;B[ia]GB[0](;W[ga]GB[0](;B[ha]GB[0])(;B[ia]GB[0]))(;W[he]GB[0](;B[hc]GB[0])(;B[hd]GB[0])))))(;B[he]GB[0](;W[ga]GB[1])(;W[ib]GB[1])))))(;W[ga]GB[1](;B[fa]GB[0](;W[ha]GB[1];B[he]GB[0](;W[fb]GB[1])(;W[ib]GB[1]))(;W[fb]GB[1];B[he]GB[0](;W[fa]GB[1])(;W[ha]GB[1])))(;B[fb]GB[0](;W[fa]GB[1];B[he]GB[0](;W[ha]GB[1])(;W[fb]GB[1]))(;W[ha]GB[1];B[he]GB[0](;W[fa]GB[1])(;W[ib]GB[1])))))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ha][eb][fb][gb][bc][cc][dc][ec][fc][gc][hc][cd][ed][fd][gd][hd][id][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][ef][ff][gf][hf][if][bg][cg][dg][eg][fg][gg][hg][ch][dh][eh][fh][hh][ih][ci][di][ei][fi][gi][hi][ii]AW[aa][ia][bb][db][ib][ac][bd][ae][ag][ah][bh][ai]TR[ca]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ba]GB[1])(;W[da]GB[1](;B[ba]GB[0](;W[ea]GB[1];B[ab]GB[0];W[cb]GB[0])(;W[ab]GB[1];B[ea]GB[0];W[cb]GB[0](;B[ba]GB[0];W[ca]GB[0])(;B[ca]GB[0];W[ba]GB[0])))(;B[ea]GB[0](;W[ba]GB[1])(;W[ab]GB[1];B[ba]GB[0];W[cb]GB[0](;B[ba]GB[0];W[ca]GB[0])(;B[ca]GB[0];W[ba]GB[0])))))",
     "difficulty": "hard"
   },
   {
     "id": "corteNoDefendido6",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][da][ea][ia][cb][eb][hb][ib][dc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][ie][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][ai][bi][ci][di][ei][fi]AW[ba][fa][ga][bb][fb][gb][ac][bc][cc][ec][fc][af][hh][ih][gi][hi]TR[ba][bb][bc][ac][cc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[aa]GW[1];W[ab]GW[0](;B[aa]GW[0](;W[ba]GW[0](;B[ab]GW[0](;W[bb]GW[0](;B[db]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[ac]GW[0](;B[bb]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))))(;B[bb]GW[0](;W[ab]GW[0](;B[ba]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[db]GW[0](;W[ba]GW[0])(;W[ac]GW[0])))(;W[ac]GW[0](;B[ba]GW[0](;W[ab]GW[0])(;W[bc]GW[0]))(;B[ab]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))))(;W[ab]GW[0](;B[ba]GW[0](;W[bb]GW[0](;B[db]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[ac]GW[0](;B[bb]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))))(;B[bb]GW[0](;W[ba]GW[0](;B[db]GW[0](;W[aa]GW[0])(;W[ac]GW[0]))(;B[ac]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[ac]GW[0](;B[ba]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[ba]GW[0])(;W[bc]GW[0]))))))(;B[db]GW[0]))(;B[ab]GW[1];W[aa]GW[0](;B[ab]GW[0](;W[aa]GW[0](;B[ba]GW[0](;W[bb]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[db]GW[0](;W[ac]GW[0])(;W[bc]GW[0])))(;W[ac]GW[0](;B[aa]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))(;B[bb]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))))(;B[bb]GW[0](;W[ac]GW[0](;B[ba]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[bc]GW[0](;B[ba]GW[0](;W[ac]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[ac]GW[0])(;W[cc]GW[0])))))(;W[ba]GW[0](;B[aa]GW[0](;W[bb]GW[0](;B[db]GW[0](;W[ac]GW[0])(;W[bc]GW[0]))(;B[ac]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[ac]GW[0](;B[bb]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[bb]GW[0])(;W[bc]GW[0]))))(;B[bb]GW[0](;W[ac]GW[0](;B[aa]GW[0](;W[bc]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[bc]GW[0])(;W[cc]GW[0])))(;W[bc]GW[0](;B[aa]GW[0](;W[ac]GW[0])(;W[cc]GW[0]))(;B[db]GW[0](;W[ac]GW[0])(;W[cc]GW[0]))))))(;B[db]GW[0])))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][fa][ia][bb][cb][db][eb][fb][gb][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][id][be][de][ee][fe][df][ff][ag][bg][cg][eg][fg][gg][ah][bh][ch][eh][fh][gh][ai][bi][di][ei][fi][gi]AW[ha][gd][hd][ce][ge][he][ie][af][bf][cf][gf][hf][dg][hg][ig][hh][ih][hi][ii]TR[ia]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ib]GB[1](;W[ga]GB[1];B[hb]GB[1](;W[ga]GB[1];B[ha]GB[1])(;W[ha]GB[1];B[ga]GB[1]))(;W[hb]GB[1];B[ga]GB[1](;W[ha]GB[1];B[hb]GB[1])(;W[hb]GB[1];B[ha]GB[1])))",
     "difficulty": "hard"
   },
   {
     "id": "corteNoDefendido7",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[eb][ad][ae][ce][de][af][bf][cf][bg][cg][dg][fg][ah][bh][ch][dh][eh][fh][ai][bi][ci][di][ei][hi]AW[aa][ba][ca][da][fa][ga][ha][ia][ab][cb][db][fb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][cd][dd][ed][gd][hd][id][be][ee][ge][he][ie][df][ef][ff][gf][hf][if][eg][gg][hg][ig][gh][hh][fi][ii]TR[be]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bd]GW[1];B[ag]GW[1])",
-    "difficulty": "medium"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ea][fa][bb][db][gb][hb][bc][ec][ad][bd][cd][ed][fd][ae][ce][ee][fe][he][af][cf][df][ef][ag][cg][eg][fg][ig][dh][fh][gh][ih][ei][fi][gi][hi]AW[ba][ga][ia][ab][cb][eb][fb][ib][cc][dc][fc][gc][hc][ic][id][be][de][ie][bf][ff][gf][hf][if][bg][gg][ah][bh][hh][bi][ci][di]TR[dh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ch]GB[1])",
+    "difficulty": "easy"
   },
   {
     "id": "corteNoDefendido8",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[eb][ad][ae][ce][de][af][bf][cf][bg][cg][dg][fg][ah][bh][ch][dh][eh][fh][ai][bi][ci][di][ei][hi]AW[aa][ba][ca][da][fa][ga][ha][ia][ab][cb][db][fb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][cd][dd][ed][gd][hd][id][be][ee][ge][he][ie][df][ef][ff][gf][hf][if][eg][gg][hg][ig][gh][hh][fi][ii]TR[fi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[gi]GW[1])",
-    "difficulty": "easy"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ea][fa][bb][db][gb][hb][bc][ec][ad][bd][cd][ed][fd][hd][ae][ce][ee][fe][he][af][cf][df][ef][ag][cg][eg][fg][ig][dh][fh][gh][ih][ei][fi][gi][hi]AW[ba][ga][ia][ab][cb][eb][fb][ib][cc][dc][fc][gc][hc][ic][gd][id][be][de][ie][bf][ff][gf][hf][if][bg][gg][ah][bh][hh][bi][ci][di]TR[hd][he]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ge]GB[1];W[hg]GB[1])",
+    "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido9",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ac][bc][cc][ec][fc][gc][bd][ae][be][af][bf][ag][ah][bh][ai][bi][ei]AW[ba][ca][ea][fa][ib][dc][hc][ic][cd][ed][fd][gd][hd][id][ce][de][ee][fe][ge][he][ie][cf][df][ef][ff][hf][if][bg][cg][dg][eg][fg][gg][ig][ch][eh][fh][gh][hh][ih][ci][di][hi][ii]TR[dc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[dd]GW[1];B[da]GW[1](;W[ba]GW[1](;B[ca]GW[1](;W[ea]GW[1](;B[ba]GW[1])(;B[fa]GW[1]))(;W[fa]GW[1](;B[ba]GW[1])(;B[ea]GW[1])))(;B[ea]GW[1]))(;W[ca]GW[1](;B[ba]GW[1](;W[ea]GW[1](;B[ca]GW[1])(;B[fa]GW[1]))(;W[fa]GW[1](;B[ca]GW[1])(;B[ea]GW[1])))(;B[ea]GW[1])))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][ea][fa][ab][bb][cb][gb][ac][cc][ec][gc][ad][bd][ed][gd][ae][ee][fe][ge][hf][dh][eh][fh][gh][ci][di][ei][fi]AW[da][ha][ia][db][fb][hb][ib][dc][fc][hc][ic][cd][dd][fd][hd][id][be][de][he][af][bf][cf][df][ef][ff][gf][if][cg][eg][fg][gg][ig][ah][bh][hh][ih][bi]TR[fb][fc][fd]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ga]GW[1])(;B[eb]GW[0](;W[ga]GW[0](;B[fb]GW[1];W[fc]GW[0];B[fd]GW[0];W[fc]GW[0](;B[ea]GW[1](;W[fa]GW[0])(;W[eb]GW[0]))(;B[fa]GW[1](;W[ea]GW[0])(;W[eb]GW[0])))(;B[fc]GW[0]))(;W[fb]GW[0](;B[ga]GW[0](;W[fc]GW[0];B[fd]GW[0](;W[fb]GW[0];B[fc]GW[0];W[fb]GW[0])(;W[fc]GW[0];B[fb]GW[0];W[fc]GW[0]))(;W[fd]GW[0];B[fc]GW[0]))(;B[fc]GW[0];W[ga]GW[0](;B[fb]GW[1])(;B[fd]GW[0];W[fb]GW[0](;B[ea]GW[1](;W[fa]GW[0])(;W[gb]GW[0]))(;B[fa]GW[1](;W[gb]GW[0])(;W[ec]GW[0])))))))",
     "difficulty": "hard"
   },
   {
     "id": "corteNoDefendido10",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][ea][ga][ha][ia][ab][bb][cb][eb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][fe][ge][ie][af][bf][cf][df][ef][ff][gf][hf][if][cg][dg][eg][fg][gg][hg][ig][ah][ch][dh][eh][ai][bi][ci][di][ei][fi][hi]AW[da][fa][ac][ad][hd][bg][bh][fh][gh][hh][ih][ii]TR[fh][gh][hh][ih][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[gi]GW[0](;W[fh]GW[0](;B[gh]GW[0](;W[hh]GW[0](;B[fh]GW[0](;W[ih]GW[0];B[ii]GW[0](;W[hh]GW[0])(;W[ih]GW[0]))(;W[ii]GW[0];B[ih]GW[0]))(;B[ih]GW[0]))(;W[ih]GW[0](;B[fh]GW[0](;W[hh]GW[0];B[ii]GW[0](;W[hh]GW[0])(;W[ih]GW[0]))(;W[ii]GW[0];B[hh]GW[0](;W[ih]GW[0])(;W[ii]GW[0])))(;B[hh]GW[0])))(;B[hh]GW[0](;W[ih]GW[0](;B[gh]GW[0])(;B[ii]GW[0]))(;W[ii]GW[0](;B[gh]GW[0])(;B[ih]GW[0]))))(;W[gh]GW[0](;B[fh]GW[0](;W[hh]GW[0](;B[ih]GW[0](;W[gh]GW[0](;B[hh]GW[0])(;B[ii]GW[0]))(;W[hh]GW[0](;B[gh]GW[0])(;B[ii]GW[0])))(;B[ii]GW[0]))(;W[ih]GW[0](;B[hh]GW[0])(;B[ii]GW[0])))(;B[hh]GW[0](;W[ih]GW[0](;B[fh]GW[0])(;B[ii]GW[0]))(;W[ii]GW[0](;B[fh]GW[0])(;B[ih]GW[0])))))",
-    "difficulty": "hard"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fb][hc][hd][fe][ge][ie][cf][df][ef][ff][gf][hf][if][bg][cg][dg][eg][fg][hg][ig][ah][bh][ch][dh][eh][fh][hh][ih][ai][bi][gi][hi][ii]AW[aa][ba][ca][da][ea][fa][ha][ia][bb][db][eb][gb][hb][ib][ac][bc][cc][dc][ec][gc][ad][cd][dd][ed][fd][gd][id][ae][be][ce][de][ee][bf][ag][gg][ci][di][fi]TR[id]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ic]GW[1];B[he]GW[1])",
+    "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido11",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fa][ga][ha][ia][bb][cb][ib][ac][cc][hc][ic][cd][dd][ed][fd][hd][id][ee][fe][af][bf][ef][if][bg][dg][dh][hh][ih][ai][bi][ci][di][ei]AW[aa][ba][da][ea][db][fb][gb][hb][dc][ec][fc][gc][bd][gd][ce][de][ge][cf][df][ff][gf][hf][cg][eg][gg][hg][ig][ah][ch][eh][fh][gh][fi][gi][hi]TR[ce][de][cf][df][cg][ch]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[bc]GW[1](;W[ad]GW[0](;B[ae]GW[1](;W[be]GW[0](;B[ag]GW[1];W[fg]GW[0];B[bh]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[bh]GW[0](;W[ad]GW[0](;B[bd]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bd]GW[0](;B[ad]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))))(;W[ag]GW[0](;B[be]GW[1](;W[ad]GW[0](;B[bd]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bd]GW[0](;B[ad]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0]))))(;B[bh]GW[0](;W[ag]GW[0](;B[be]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[ah]GW[0];W[fg]GW[0]))(;W[fg]GW[0](;B[be]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[ag]GW[0])))))(;B[be]GW[1](;W[ag]GW[0](;B[ae]GW[1](;W[ad]GW[0](;B[bd]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bd]GW[0](;B[ad]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0]))))(;B[bh]GW[0](;W[ce]GW[0](;B[ae]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[de]GW[0](;W[cf]GW[0])(;W[df]GW[0])))(;W[de]GW[0](;B[ae]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[ce]GW[0](;W[cf]GW[0])(;W[df]GW[0])))))(;W[fg]GW[0](;B[ae]GW[0](;W[ad]GW[0](;B[bd]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ag]GW[0];W[bh]GW[0]))(;W[bd]GW[0](;B[ad]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ag]GW[0];W[bh]GW[0])))(;B[ag]GW[0];W[bh]GW[0](;B[ae]GW[1](;W[ad]GW[0])(;W[bd]GW[0]))(;B[dg]GW[1](;W[ae]GW[0])(;W[ai]GW[0]))))))(;W[ae]GW[0](;B[ad]GW[1](;W[be]GW[0](;B[ag]GW[1];W[fg]GW[0];B[bh]GW[0](;W[bd]GW[0])(;W[ae]GW[0]))(;B[bh]GW[0](;W[bd]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[ae]GW[0](;B[bd]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))))(;W[ag]GW[0](;B[be]GW[1];W[fg]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;B[bh]GW[0](;W[ag]GW[0](;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0]))(;B[ah]GW[0];W[fg]GW[0]))(;W[fg]GW[0](;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0]))(;B[ag]GW[0])))))(;B[be]GW[1](;W[ag]GW[0](;B[ad]GW[1];W[fg]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0](;B[ad]GW[0](;W[de]GW[0])(;W[cf]GW[0]))(;B[de]GW[0](;W[cf]GW[0])(;W[df]GW[0])))(;W[de]GW[0](;B[ad]GW[0](;W[ce]GW[0])(;W[cf]GW[0]))(;B[ce]GW[0](;W[cf]GW[0])(;W[df]GW[0])))))(;W[fg]GW[0](;B[ad]GW[0](;W[ag]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;W[bh]GW[0](;B[bd]GW[1](;W[ag]GW[0])(;W[ai]GW[0]))(;B[ae]GW[1](;W[ag]GW[0])(;W[ai]GW[0]))))(;B[ag]GW[0];W[bh]GW[0](;B[ad]GW[1](;W[af]GW[0])(;W[bf]GW[0]))(;B[be]GW[1](;W[ad]GW[0])(;W[af]GW[0])))))))(;B[ad]GW[1](;W[bc]GW[0](;B[ae]GW[1](;W[be]GW[0](;B[ag]GW[1];W[fg]GW[0];B[bh]GW[0](;W[bc]GW[0])(;W[bd]GW[0]))(;B[bh]GW[0](;W[bc]GW[0](;B[bd]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bd]GW[0](;B[bc]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))))(;W[ag]GW[0](;B[be]GW[1](;W[bc]GW[0](;B[bd]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bd]GW[0](;B[bc]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0]))))(;B[bh]GW[0](;W[ag]GW[0](;B[be]GW[0](;W[bc]GW[0])(;W[bd]GW[0]))(;B[ah]GW[0];W[fg]GW[0]))(;W[fg]GW[0](;B[be]GW[0](;W[bc]GW[0])(;W[bd]GW[0]))(;B[ag]GW[0])))))(;B[be]GW[1](;W[bc]GW[0](;B[bd]GW[1](;W[ag]GW[0](;B[bc]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[ae]GW[0](;W[fg]GW[0])(;W[bh]GW[0])))(;W[fg]GW[0](;B[bc]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ae]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))))(;B[ae]GW[1](;W[ag]GW[0](;B[bd]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[fg]GW[0](;B[bd]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ag]GW[0];W[bh]GW[0]))))(;W[bd]GW[0](;B[bc]GW[1](;W[ag]GW[0](;B[bd]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[ae]GW[0](;W[fg]GW[0])(;W[bh]GW[0])))(;W[fg]GW[0](;B[bd]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ae]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))))(;B[ae]GW[1](;W[ag]GW[0](;B[bc]GW[0](;W[fg]GW[0])(;W[bh]GW[0]))(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[fg]GW[0](;B[bc]GW[0](;W[ag]GW[0])(;W[bh]GW[0]))(;B[ag]GW[0];W[bh]GW[0]))))))(;W[ae]GW[0](;B[bc]GW[1](;W[be]GW[0](;B[ag]GW[1];W[fg]GW[0];B[bh]GW[0](;W[bd]GW[0])(;W[ae]GW[0]))(;B[bh]GW[0](;W[bd]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[ae]GW[0](;B[bd]GW[0](;W[be]GW[0])(;W[ce]GW[0]))(;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0])))))(;W[ag]GW[0](;B[be]GW[1];W[fg]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;B[bh]GW[0](;W[ag]GW[0](;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0]))(;B[ah]GW[0];W[fg]GW[0]))(;W[fg]GW[0](;B[be]GW[0](;W[ce]GW[0])(;W[de]GW[0]))(;B[ag]GW[0])))))(;B[be]GW[1](;W[ag]GW[0](;B[bc]GW[1];W[fg]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;B[ae]GW[1];W[fg]GW[0](;B[bc]GW[0];W[bh]GW[0])(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0]))))(;W[fg]GW[0](;B[bc]GW[0](;W[ag]GW[0](;B[bd]GW[0];W[bh]GW[0])(;B[ae]GW[0];W[bh]GW[0]))(;W[bh]GW[0](;B[bd]GW[1](;W[ag]GW[0])(;W[ai]GW[0]))(;B[ae]GW[1](;W[ag]GW[0])(;W[ai]GW[0]))))(;B[ae]GW[0](;W[ag]GW[0](;B[bc]GW[0];W[bh]GW[0])(;B[bh]GW[0](;W[ce]GW[0])(;W[de]GW[0])))(;W[bh]GW[0](;B[bc]GW[1](;W[ag]GW[0])(;W[ai]GW[0]))(;B[ag]GW[1](;W[ai]GW[0])(;W[ei]GW[0])))))))))",
-    "difficulty": "hard"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ga][ha][ia][eb][hb][ib][cc][fc][gc][hc][ic][cd][gd][hd][id][ge][he][ie][ff][gf][hf][if][gg][hg][ig][gh][ih][hi]AW[ba][da][ea][fa][ab][cb][db][fb][gb][ac][bc][dc][dd][ed][fd][ae][be][de][fe][bf][cf][ef][ag][bg][dg][eg][fg][ah][bh][ch][fh][ai][bi][ci][di][ei][fi][gi]TR[eb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ec]GB[1];W[ca]GB[1])",
+    "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido12",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][fa][bb][db][eb][fb][ib][ac][bc][cc][ec][fc][gc][ad][cd][dd][fd][hd][ce][ee][ge][he][bf][df][ff][hf][bg][eg][fg][eh][fh][ih][fi][gi][hi][ii]AW[ba][ca][da][ga][cb][gb][hb][hc][ic][bd][id][be][ie][af][cf][gf][if][ag][dg][hg][ig][bh][ch][dh][gh][hh][ai][ci][ei]TR[bf][bg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ae]GB[1](;B[de]GB[0](;W[cg]GB[0](;B[bf]GB[0](;W[bg]GB[0])(;W[ah]GB[0]))(;B[bg]GB[0](;W[bf]GB[0])(;W[ah]GB[0])))(;W[ah]GB[0];B[cg]GB[0](;W[cf]GB[0](;B[bf]GB[0](;W[bg]GB[0])(;W[cg]GB[0]))(;B[bg]GB[0](;W[bf]GB[0])(;W[cg]GB[0])))(;W[bi]GB[1])))(;B[cg]GB[0](;W[cf]GB[0](;B[de]GB[0](;W[bf]GB[0](;B[bg]GB[0](;W[cg]GB[0])(;W[ah]GB[0]))(;B[cg]GB[0](;W[bg]GB[0])(;W[ah]GB[0])))(;W[bg]GB[0]))(;B[bf]GB[0](;W[bg]GB[0];B[de]GB[0](;W[bf]GB[0])(;W[cg]GB[0]))(;W[cg]GB[0];B[de]GB[0](;W[bg]GB[0])(;W[ah]GB[0]))))(;W[ah]GB[1];B[de]GB[0](;W[cf]GB[0](;B[bf]GB[0](;W[bg]GB[0])(;W[cg]GB[0]))(;B[bg]GB[0](;W[bf]GB[0])(;W[cg]GB[0])))(;W[bi]GB[1]))))(;W[cg]GB[0](;B[ae]GB[0](;W[bf]GB[0];B[de]GB[0](;W[bg]GB[0])(;W[ah]GB[0]))(;W[bg]GB[0](;B[de]GB[0](;W[bf]GB[0])(;W[ah]GB[0];B[bf]GB[0](;W[bd]GB[1])(;W[be]GB[0];B[bd]GB[0])))(;B[bf]GB[0](;W[bd]GB[1];B[de]GB[0](;W[be]GB[0];B[bf]GB[0])(;W[ah]GB[1]))(;W[be]GB[0](;B[bd]GB[0](;W[bf]GB[0];B[de]GB[0])(;W[ah]GB[0](;B[de]GB[0])(;B[bf]GB[0])))(;B[de]GB[0](;W[bd]GB[0];B[bf]GB[0])(;W[bf]GB[0];B[bd]GB[0]))))))(;B[de]GB[0](;W[ae]GB[0](;B[bf]GB[0](;W[bg]GB[0])(;W[ah]GB[0]))(;B[bg]GB[0](;W[bf]GB[0])(;W[ah]GB[0])))(;W[bf]GB[0];B[ae]GB[0](;W[bg]GB[0])(;W[ah]GB[0])))))",
-    "difficulty": "hard"
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][ea][fa][ha][ia][cb][db][eb][fb][gb][ib][ac][bc][cc][dc][ec][fc][gc][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][bh][ch][dh][eh][fh][gh][hh][ih][bi][ci][di][ei][fi][gi][hi][ii]AW[ab][bb][hb][hc][ah]TR[ha][ia][ib]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ic]GB[1](;W[hb]GB[1];B[hc]GB[1])(;W[hc]GB[1];B[hb]GB[1]))",
+    "difficulty": "medium"
   },
   {
     "id": "corteNoDefendido13",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[fa][ha][ia][cb][db][eb][fb][gb][ec][fc][hc][ic][ad][bd][dd][ed][gd][ce][de][ee][fe][ge][he][ie][bf][cf][df][ff][hf][if][cg][fg][gg][ig][ch][eh][fh][gh][hh][ih][bi][ci][gi]AW[aa][ba][ca][da][ea][ab][hb][ac][bc][cc][dc][cd][id][ae][af][ef][ag][bg][dg][ah][bh][dh][ai][di][ei][fi]TR[ae][af][ag][bg][ah][bh][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[be]GW[0](;W[ae]GW[0](;B[af]GW[0](;W[ag]GW[0](;B[ae]GW[0](;W[bg]GW[0](;B[ah]GW[0])(;B[bh]GW[0](;W[ah]GW[0])(;W[ai]GW[0])))(;W[ah]GW[0](;B[bg]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0](;W[bg]GW[0])(;W[ai]GW[0]))))(;B[bg]GW[0](;W[ah]GW[0](;B[ae]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[ae]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))(;B[ah]GW[0]))))(;W[bg]GW[0](;B[ae]GW[0](;W[ag]GW[0](;B[ah]GW[0])(;B[bh]GW[0](;W[ah]GW[0])(;W[ai]GW[0])))(;W[ah]GW[0](;B[ag]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0](;W[ag]GW[0])(;W[ai]GW[0]))))(;B[ag]GW[0](;W[ah]GW[0](;B[ae]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[ae]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))(;B[ah]GW[0](;W[bg]GW[0])(;W[bh]GW[0]))))))(;B[ag]GW[0](;W[bg]GW[0](;B[af]GW[0](;W[ah]GW[0](;B[ae]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[ae]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))(;B[ah]GW[0](;W[bg]GW[0])(;W[bh]GW[0]))))(;B[ah]GW[0]))(;W[ah]GW[0](;B[af]GW[0](;W[bg]GW[0](;B[ae]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[ae]GW[0](;W[bg]GW[0])(;W[ai]GW[0]))(;B[bg]GW[0])))(;B[bg]GW[0](;W[bh]GW[0](;B[af]GW[0])(;B[ai]GW[0](;W[ah]GW[0])(;W[bh]GW[0])))(;W[ai]GW[0](;B[af]GW[0])(;B[bh]GW[0](;W[ah]GW[0])(;W[ai]GW[0])))))))(;W[af]GW[0](;B[ae]GW[0](;W[ag]GW[0](;B[bg]GW[0](;W[ah]GW[0](;B[bh]GW[0])(;B[ai]GW[0]))(;W[bh]GW[0](;B[ah]GW[0](;W[af]GW[0])(;W[ag]GW[0]))(;B[ai]GW[0])))(;B[ah]GW[0](;W[bg]GW[0](;B[bh]GW[0](;W[af]GW[0])(;W[ag]GW[0]))(;B[ai]GW[0]))(;W[bh]GW[0](;B[bg]GW[0](;W[af]GW[0])(;W[ag]GW[0]))(;B[ai]GW[0]))))(;W[bg]GW[0](;B[ag]GW[0](;W[ah]GW[0](;B[af]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[af]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))(;B[ah]GW[0](;W[bg]GW[0])(;W[bh]GW[0]))))(;B[ah]GW[0](;W[ag]GW[0](;B[bh]GW[0](;W[af]GW[0])(;W[ag]GW[0]))(;B[ai]GW[0]))(;W[bh]GW[0](;B[ag]GW[0](;W[bg]GW[0])(;W[bh]GW[0]))(;B[ai]GW[0])))))(;B[ag]GW[0](;W[bg]GW[0](;B[ae]GW[0](;W[ah]GW[0](;B[af]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[af]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))(;B[ah]GW[0](;W[bg]GW[0])(;W[bh]GW[0]))))(;B[ah]GW[0]))(;W[ah]GW[0](;B[ae]GW[0](;W[bg]GW[0](;B[af]GW[0](;W[bh]GW[0])(;W[ai]GW[0]))(;B[bh]GW[0]))(;W[bh]GW[0](;B[af]GW[0](;W[bg]GW[0])(;W[ai]GW[0]))(;B[bg]GW[0])))(;B[bg]GW[0](;W[bh]GW[0](;B[ae]GW[0])(;B[ai]GW[0](;W[ah]GW[0])(;W[bh]GW[0])))(;W[ai]GW[0](;B[ae]GW[0])(;B[bh]GW[0](;W[ah]GW[0])(;W[ai]GW[0]))))))))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][da][ab][bb][cb][db][bc][dc][gc][bd][gd][hd][fe][ge][he][bf][cf][ff][gf][hf][bg][cg][dg][eg][fg][gg][hg][dh][eh][fh][ih][ei][hi][ii]AW[ba][ea][fa][ha][ia][eb][fb][gb][hb][ib][ac][cc][ec][fc][hc][ic][ad][cd][dd][ed][fd][id][ae][be][ce][ee][ie][af][df][ef][ag][ig][bh][ch][gh][hh][ai][ci][fi]TR[ih][ii][hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[if]GB[1])(;W[gi]GB[0](;B[if]GB[0](;W[ih]GB[0](;B[hi]GB[0];W[ii]GB[0];B[hi]GB[0](;W[ig]GB[1](;B[gh]GB[0])(;B[hh]GB[0]))(;W[gh]GB[0](;B[ig]GB[0])(;B[hh]GB[0])))(;B[ii]GB[0];W[hi]GB[0];B[ii]GB[0](;W[ig]GB[1](;B[gh]GB[0])(;B[hh]GB[0]))(;W[gh]GB[0](;B[ig]GB[0])(;B[hh]GB[0]))))(;W[hi]GB[0](;B[ih]GB[0])(;B[ii]GB[0];W[ih]GB[0];B[ii]GB[0](;W[ig]GB[1](;B[gh]GB[0])(;B[hh]GB[0]))(;W[gh]GB[0](;B[ig]GB[0])(;B[hh]GB[0])))))(;B[ih]GB[0](;W[if]GB[1];B[ii]GB[0];W[hi]GB[0](;B[ih]GB[0];W[ii]GB[0];B[ih]GB[0])(;B[ii]GB[0];W[ih]GB[0]))(;W[hi]GB[0](;B[if]GB[0])(;B[ii]GB[0](;W[if]GB[0](;B[gh]GB[0](;W[hh]GB[1](;B[fi]GB[0])(;B[gi]GB[0]))(;W[fi]GB[0](;B[hh]GB[0])(;B[gi]GB[0])))(;B[hh]GB[0](;W[gh]GB[1](;B[fi]GB[0])(;B[hi]GB[0]))(;W[fi]GB[1](;B[gh]GB[0])(;B[hi]GB[0]))))(;W[gh]GB[1](;B[if]GB[0](;W[hh]GB[0](;B[ig]GB[0])(;B[fi]GB[0]))(;W[fi]GB[0](;B[ig]GB[0])(;B[hh]GB[0])))(;B[hh]GB[0](;W[if]GB[1](;B[fi]GB[0])(;B[hi]GB[0]))(;W[fi]GB[1](;B[if]GB[0])(;B[hi]GB[0])))))))))",
     "difficulty": "hard"
   },
   {
     "id": "corteNoDefendido14",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][da][ea][ha][cc][ec][fc][gc][gd][hd][id][be][bf][cf][df][gf][cg][dg][eg][fg][gg][ah][bh][dh][ai][di][ei][fi]AW[ab][cb][eb][gb][ac][dc][bd][cd][ed][ae][de][ee][fe][ge][he][af][ef][ff][hf][bg][hg][ig][ch][eh][fh][gh][ih][bi][gi][ii]TR[ah][bh][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[ag]GB[0](;B[ah]GB[0](;W[bh]GB[0];B[ci]GB[0];W[ai]GB[0])(;W[ai]GB[0];B[ci]GB[0];W[bh]GB[0]))(;B[bh]GB[0](;W[ah]GB[0];B[ci]GB[0](;W[bh]GB[0])(;W[ai]GB[0];B[bh]GB[0]))(;W[ai]GB[0];B[ci]GB[0];W[ah]GB[0];B[ch]GB[0])))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ab][bb][db][ac][bc][dc][ec][hc][hd][fe][ie][ff][hf][if][dg][eg][fg][gg][hg][ig][dh][fh][gh][hh][ih][ci][di][hi][ii]AW[aa][ca][da][ea][fa][ga][ha][cb][eb][fb][gb][hb][ib][cc][fc][gc][ic][ad][bd][cd][ed][fd][gd][id][ae][be][ce][de][ee][ge][af][bf][cf][df][ef][gf][ag][bg][cg][ah][ch][ai][bi][fi][gi]TR[aa]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ba]GW[1](;B[ab]GW[1](;W[bb]GW[1](;B[ac]GW[1];W[bc]GW[1](;B[ab]GW[1];W[ac]GW[1])(;B[ac]GW[1];W[ab]GW[1]))(;B[bc]GW[1];W[ac]GW[1]))(;W[ac]GW[1](;B[bb]GW[1];W[bc]GW[1](;B[ab]GW[1];W[bb]GW[1])(;B[bb]GW[1];W[ab]GW[1]))(;B[bc]GW[1];W[bb]GW[1])))(;B[bb]GW[1](;W[ab]GW[1](;B[ac]GW[1];W[bc]GW[1])(;B[bc]GW[1];W[ac]GW[1](;B[bb]GW[1];W[bc]GW[1])(;B[bc]GW[1];W[bb]GW[1])))(;W[ac]GW[1](;B[ab]GW[1];W[bc]GW[1](;B[ab]GW[1];W[bb]GW[1])(;B[bb]GW[1];W[ab]GW[1]))(;B[bc]GW[1];W[ab]GW[1](;B[bb]GW[1];W[bc]GW[1])(;B[bc]GW[1];W[bb]GW[1])))))",
     "difficulty": "hard"
   },
   {
     "id": "corteNoDefendido15",
     "conceptId": "CORTE_NO_DEFENDIDO",
-    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][fa][ab][cb][db][bc][fc][gc][ed][fd][hd][fe][ge][bf][bg][fg][ah][ch][dh][fh][gh][ih][ai][di][ei][fi][hi]AW[aa][ba][ca][ea][ga][eb][gb][ib][ac][dc][ec][hc][ad][bd][cd][dd][id][ce][ee][he][cf][df][ef][ff][gf][hf][dg][eg][gg][hg][ig][bh][eh][hh][bi]TR[aa][ba][ca]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[bb]GW[0](;W[aa]GW[0](;B[ba]GW[0];W[cc]GW[0](;B[aa]GW[0];W[ca]GW[0](;B[aa]GW[1](;W[ba]GW[0])(;W[da]GW[0]))(;B[ba]GW[1](;W[aa]GW[0])(;W[da]GW[0])))(;B[ca]GW[0];W[aa]GW[0](;B[ba]GW[0](;W[ca]GW[0])(;W[da]GW[0]))(;B[ca]GW[0](;W[ba]GW[0])(;W[da]GW[0]))))(;B[ca]GW[0];W[cc]GW[0];B[ba]GW[0];W[aa]GW[0](;B[ba]GW[0](;W[ca]GW[0])(;W[da]GW[0]))(;B[ca]GW[0](;W[ba]GW[0])(;W[da]GW[0]))))(;W[ba]GW[0](;B[aa]GW[0];W[cc]GW[0];B[ca]GW[0];W[ba]GW[0](;B[aa]GW[1](;W[ca]GW[0])(;W[da]GW[0]))(;B[ca]GW[1](;W[aa]GW[0])(;W[da]GW[0])))(;B[ca]GW[0];W[cc]GW[0];B[aa]GW[0];W[ba]GW[0](;B[aa]GW[1](;W[ca]GW[0])(;W[da]GW[0]))(;B[ca]GW[1](;W[aa]GW[0])(;W[da]GW[0])))))(;B[cc]GW[1]))",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][ia][cb][gb][hb][bc][gc][hc][ad][ed][fd][gd][hd][id][ae][ge][he][if][dg][fg][hg][dh][eh][fh][gh][hh][ih][di][ei][ii]AW[aa][ea][fa][ga][ha][ab][bb][db][eb][fb][cc][dc][ec][fc][ic][bd][dd][be][ce][ee][fe][af][cf][df][ef][ff][gf][hf][ag][cg][gg][bh][ch][ai][bi][fi][hi]TR[aa][ab][bb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[ac]GW[0](;W[aa]GW[0](;B[da]GW[1](;W[ab]GW[0];B[bb]GW[0](;W[aa]GW[0];B[ab]GW[0];W[cd]GW[0])(;W[ab]GW[0];B[aa]GW[0];W[cd]GW[0]))(;W[cd]GW[0](;B[ab]GW[0])(;B[bb]GW[0])))(;B[ab]GW[0](;W[da]GW[0](;B[aa]GW[0];W[cd]GW[0];B[bb]GW[0])(;B[bb]GW[0];W[cd]GW[0];B[aa]GW[0]))(;W[cd]GW[0](;B[aa]GW[0];W[da]GW[0];B[bb]GW[0])(;B[da]GW[0]))))(;W[da]GW[0](;B[aa]GW[0](;W[ab]GW[0];B[bb]GW[0];W[cd]GW[0];B[ab]GW[0])(;W[bb]GW[0];B[ab]GW[0];W[cd]GW[0];B[bb]GW[0]))(;B[ab]GW[0];W[cd]GW[0](;B[aa]GW[0])(;B[bb]GW[0]))))",
     "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido16",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][bb][cb][eb][ac][cc][hc][bd][hd][ae][be][ce][de][ge][he][ie][af][bf][ff][gf][hf][if][dg][eg][fg][gg][hg][ah][bh][ch][dh][fh][hh][ih][ci][gi][hi][ii]AW[da][ea][fa][ga][ha][ia][fb][hb][ib][dc][ec][fc][gc][ic][cd][dd][ed][fd][id][ee][fe][cf][df][ef][ag][bg][cg][eh][bi][di][ei]TR[aa][ba][ca][bb][cb][cc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[db]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido17",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][bb][cb][eb][ac][cc][hc][bd][hd][ae][be][ce][de][ge][he][ie][af][bf][ff][gf][hf][if][dg][eg][fg][gg][hg][ah][bh][ch][dh][fh][hh][ih][ci][gi][hi][ii]AW[da][ea][fa][ga][ha][ia][fb][hb][ib][dc][ec][fc][gc][ic][cd][dd][ed][fd][id][ee][fe][cf][df][ef][ag][bg][cg][eh][bi][di][ei]TR[eb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[db]GB[1](;W[gb]GB[1];B[gd]GB[1])(;W[gd]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido18",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][bb][cb][eb][ac][cc][hc][bd][hd][ae][be][ce][de][ge][he][ie][af][bf][ff][gf][hf][if][dg][eg][fg][gg][hg][ah][bh][ch][dh][fh][hh][ih][ci][gi][hi][ii]AW[da][ea][fa][ga][ha][ia][fb][hb][ib][dc][ec][fc][gc][ic][cd][dd][ed][fd][id][ee][fe][cf][df][ef][ag][bg][cg][eh][bi][di][ei]TR[bd][be][ae][ce][bf][af][de]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[db]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido19",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][da][ga][db][eb][fb][gb][ib][cc][dc][ec][fc][gc][hc][ic][dd][ed][fd][hd][ae][be][ce][de][ee][fe][bf][cf][df][ef][ff][gf][hf][cg][eg][fg][gg][hg][ig][ch][eh][fh][gh][hh][fi][gi][hi][ii]AW[aa][ca][fa][ha][ia][ab][cb][ac][bc][bd][cd][gd][id][af][ag][bg][ah][bh][dh][ai][bi][ci][di][ei]TR[ba]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[bb]GB[0])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido20",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][ea][ab][bb][eb][ec][hg][bh][eh][gh][hh][ai][bi][di][gi]AW[da][fa][ga][ha][ia][fb][gb][hb][ib][ac][bc][cc][dc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][ig][ah][ih][ci][ei][fi][hi]TR[ei][fi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ch]GW[1];W[dh]GW[0](;B[fh]GW[0](;W[ei]GW[0](;B[ci]GW[0];W[fi]GW[0](;B[hg]GW[1](;W[eh]GW[0])(;W[hh]GW[0]))(;B[eh]GW[1](;W[hg]GW[0])(;W[gh]GW[0])))(;B[fi]GW[0];W[ei]GW[0](;B[hg]GW[0](;W[eh]GW[0])(;W[fh]GW[0]))(;B[eh]GW[1](;W[hg]GW[0])(;W[gh]GW[0]))))(;W[fi]GW[0](;B[ci]GW[0];W[ei]GW[0](;B[hg]GW[1](;W[eh]GW[0])(;W[hh]GW[0]))(;B[eh]GW[1](;W[hg]GW[0])(;W[gh]GW[0])))(;B[ei]GW[0])))(;B[ci]GW[1]))(;B[dh]GW[1];W[ch]GW[0];B[fh]GW[0](;W[ei]GW[0];B[fi]GW[0];W[ei]GW[0](;B[hg]GW[1](;W[dh]GW[0])(;W[fh]GW[0]))(;B[dh]GW[1](;W[hg]GW[0])(;W[fh]GW[0])))(;W[fi]GW[0];B[ei]GW[0];W[fi]GW[0](;B[hg]GW[1](;W[dh]GW[0])(;W[eh]GW[0]))(;B[dh]GW[1](;W[hg]GW[0])(;W[eh]GW[0])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido21",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ga][ha][ab][cb][ac][bc][fc][hc][fd][gd][hd][id][fe][ge][ie][ff][gf][if][cg][gg][hg][ch][gh][ih][ai][bi][ci][di][gi][hi]AW[ea][fa][ia][db][eb][fb][gb][ib][cc][dc][ec][ic][ad][bd][dd][ed][ae][ce][de][he][af][bf][cf][df][ef][ag][bg][dg][eg][fg][ah][bh][dh][eh][fh][fi]TR[ga][ha]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[hb]GB[0](;B[ga]GB[0](;W[ha]GB[0];B[gc]GB[0];W[ga]GB[0])(;W[gc]GB[0]))(;B[ha]GB[0](;W[ga]GB[0];B[gc]GB[0];W[ha]GB[0])(;W[gc]GB[0])))(;W[gc]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido22",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ga][ha][ab][cb][ac][bc][fc][hc][fd][gd][hd][id][fe][ge][ie][ff][gf][if][cg][gg][hg][ch][gh][ih][ai][bi][ci][di][gi][hi]AW[ea][fa][ia][db][eb][fb][gb][ib][cc][dc][ec][ic][ad][bd][dd][ed][ae][ce][de][he][af][bf][cf][df][ef][ag][bg][dg][eg][fg][ah][bh][dh][eh][fh][fi]TR[ga][ha]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[hb]GB[1](;W[ia]GB[1](;B[ib]GB[1];W[gc]GB[1](;B[ia]GB[1])(;B[ic]GB[1]))(;B[gc]GB[1](;W[ib]GB[1];B[ic]GB[1](;W[ia]GB[1];B[ib]GB[1])(;W[ib]GB[1];B[ia]GB[1]))(;W[ic]GB[1];B[ib]GB[1])))(;W[ib]GB[1](;B[ia]GB[1];W[gc]GB[1];B[ic]GB[1])(;B[gc]GB[1](;W[ia]GB[1];B[ic]GB[1](;W[ia]GB[1];B[ib]GB[1])(;W[ib]GB[1];B[ia]GB[1]))(;W[ic]GB[1];B[ia]GB[1](;W[ib]GB[1];B[ic]GB[1])(;W[ic]GB[1];B[ib]GB[1])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido23",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ga][ha][ab][cb][ac][bc][fc][hc][fd][gd][hd][id][fe][ge][ie][ff][gf][if][cg][gg][hg][ch][gh][ih][ai][bi][ci][di][gi][hi]AW[ea][fa][ia][db][eb][fb][gb][ib][cc][dc][ec][ic][ad][bd][dd][ed][ae][ce][de][he][af][bf][cf][df][ef][ag][bg][dg][eg][fg][ah][bh][dh][eh][fh][fi]TR[ia][ib][ic]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[hb]GW[0](;W[ia]GW[0](;B[ib]GW[0];W[gc]GW[0](;B[ia]GW[0])(;B[ic]GW[0]))(;B[gc]GW[0](;W[ib]GW[0];B[ic]GW[0](;W[ia]GW[0];B[ib]GW[0])(;W[ib]GW[0];B[ia]GW[0]))(;W[ic]GW[0];B[ib]GW[0])))(;W[ib]GW[0](;B[ia]GW[0];W[gc]GW[0];B[ic]GW[0])(;B[gc]GW[0](;W[ia]GW[0];B[ic]GW[0](;W[ia]GW[0];B[ib]GW[0])(;W[ib]GW[0];B[ia]GW[0]))(;W[ic]GW[0];B[ia]GW[0](;W[ib]GW[0];B[ic]GW[0])(;W[ic]GW[0];B[ib]GW[0])))))(;B[gc]GW[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido24",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ga][ha][ab][cb][ac][bc][fc][hc][fd][gd][hd][id][fe][ge][ie][ff][gf][if][cg][gg][hg][ch][gh][ih][ai][bi][ci][di][gi][hi]AW[ea][fa][ia][db][eb][fb][gb][ib][cc][dc][ec][ic][ad][bd][dd][ed][ae][ce][de][he][af][bf][cf][df][ef][ag][bg][dg][eg][fg][ah][bh][dh][eh][fh][fi]TR[ia][ib][ic]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[hb]GW[1](;B[ga]GW[1](;W[ha]GW[1];B[gc]GW[1];W[ga]GW[1])(;W[gc]GW[1]))(;B[ha]GW[1](;W[ga]GW[1];B[gc]GW[1];W[ha]GW[1])(;W[gc]GW[1])))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido25",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][fa][ha][ab][db][eb][fb][gb][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][de][fe][ie][af][bf][df][hf][bg][cg][dg][eg][gg][bh][fh][gh][fi][hi]AW[cb][ac][gd][ge][he][cf][ef][ff][gf][fg][hg][ig][ah][ch][dh][eh][hh][ih][bi][ci][ei][ii]TR[hf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[if]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido26",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][fa][ha][ab][db][eb][fb][gb][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][de][fe][ie][af][bf][df][hf][bg][cg][dg][eg][gg][bh][fh][gh][fi][hi]AW[cb][ac][gd][ge][he][cf][ef][ff][gf][fg][hg][ig][ah][ch][dh][eh][hh][ih][bi][ci][ei][ii]TR[hg][ig][hh][ih][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[if]GW[0](;W[hg]GW[0](;B[ig]GW[0](;W[hh]GW[0](;B[ih]GW[0](;W[hg]GW[0](;B[hh]GW[0])(;B[gi]GW[0]))(;W[hh]GW[0](;B[hg]GW[0])(;B[gi]GW[0])))(;B[gi]GW[0](;W[ih]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[hh]GW[0]))(;W[ii]GW[0](;B[gg]GW[0](;W[fh]GW[0])(;W[gh]GW[0]))(;B[fh]GW[0](;W[gg]GW[0])(;W[gh]GW[0])))))(;W[ih]GW[0](;B[hh]GW[0])(;B[gi]GW[0](;W[hh]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[hh]GW[0]))(;W[ii]GW[0];B[hh]GW[0](;W[ih]GW[0])(;W[ii]GW[0])))))(;B[hh]GW[0](;W[ig]GW[0](;B[ih]GW[0](;W[hg]GW[0](;B[ig]GW[0])(;B[gi]GW[0]))(;W[ig]GW[0](;B[hg]GW[0])(;B[gi]GW[0])))(;B[gi]GW[0](;W[ih]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;W[ii]GW[0];B[ih]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))))(;W[ih]GW[0](;B[ig]GW[0])(;B[gi]GW[0](;W[ig]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;W[ii]GW[0](;B[gg]GW[0](;W[ig]GW[0])(;W[fh]GW[0]))(;B[ig]GW[0](;W[gg]GW[0])(;W[fh]GW[0])))))))(;W[ig]GW[0](;B[hg]GW[0](;W[hh]GW[0](;B[ih]GW[0])(;B[gi]GW[0](;W[ih]GW[0];B[ii]GW[0](;W[ig]GW[0])(;W[hh]GW[0]))(;W[ii]GW[0];B[ih]GW[0])))(;W[ih]GW[0](;B[hh]GW[0])(;B[gi]GW[0](;W[hh]GW[0];B[ii]GW[0](;W[ig]GW[0])(;W[hh]GW[0]))(;W[ii]GW[0];B[hh]GW[0](;W[ig]GW[0])(;W[ih]GW[0])))))(;B[hh]GW[0](;W[hg]GW[0](;B[ih]GW[0](;W[hg]GW[0](;B[ig]GW[0])(;B[gi]GW[0]))(;W[ig]GW[0](;B[hg]GW[0])(;B[gi]GW[0])))(;B[gi]GW[0](;W[ih]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;W[ii]GW[0];B[ih]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))))(;W[ih]GW[0](;B[hg]GW[0])(;B[gi]GW[0](;W[hg]GW[0];B[ii]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;W[ii]GW[0];B[hg]GW[0](;W[ig]GW[0])(;W[ih]GW[0])))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido27",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][fa][ha][ab][db][eb][fb][gb][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][hd][id][ae][be][de][fe][ie][af][bf][df][hf][bg][cg][dg][eg][gg][bh][fh][gh][fi][hi]AW[cb][ac][gd][ge][he][cf][ef][ff][gf][fg][hg][ig][ah][ch][dh][eh][hh][ih][bi][ci][ei][ii]TR[ch][dh][ci][bi][eh][ei]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ag]GW[1](;W[ai]GW[0](;B[di]GW[0](;W[ah]GW[0](;B[ch]GW[0](;W[dh]GW[0](;B[eh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))(;W[eh]GW[0](;B[dh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[dh]GW[0])(;W[bi]GW[0]))))(;B[dh]GW[0](;W[ch]GW[0](;B[eh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))(;W[eh]GW[0](;B[ch]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[ch]GW[0])(;W[bi]GW[0])))))(;W[ch]GW[0](;B[ah]GW[0](;W[dh]GW[0](;B[eh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))(;W[eh]GW[0](;B[dh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[dh]GW[0])(;W[bi]GW[0]))))(;B[dh]GW[0](;W[ah]GW[0](;B[eh]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))(;W[eh]GW[0](;B[ah]GW[0](;W[ai]GW[0])(;W[bi]GW[0]))(;B[ai]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))))))(;B[gi]GW[0]))(;W[di]GW[0](;B[ai]GW[0](;W[ch]GW[0](;B[ah]GW[0](;W[dh]GW[0](;B[eh]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[eh]GW[0])(;W[ci]GW[0])))(;W[eh]GW[0](;B[dh]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[dh]GW[0])(;W[ci]GW[0]))))(;B[dh]GW[0](;W[eh]GW[0](;B[ah]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[ci]GW[0])(;W[di]GW[0])))(;W[bi]GW[0](;B[ah]GW[0](;W[eh]GW[0])(;W[ci]GW[0]))(;B[eh]GW[0](;W[ah]GW[0])(;W[ci]GW[0])))))(;W[dh]GW[0](;B[ah]GW[0](;W[ch]GW[0](;B[eh]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[eh]GW[0])(;W[ci]GW[0])))(;W[eh]GW[0](;B[ch]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[ch]GW[0])(;W[ci]GW[0]))))(;B[ch]GW[0](;W[eh]GW[0](;B[ah]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[ci]GW[0])(;W[di]GW[0])))(;W[bi]GW[0](;B[ah]GW[0](;W[eh]GW[0])(;W[ci]GW[0]))(;B[eh]GW[0](;W[ah]GW[0])(;W[ci]GW[0]))))))(;B[gi]GW[0])))(;B[gi]GW[0](;W[ag]GW[0];B[ai]GW[0];W[ag]GW[0](;B[ah]GW[0])(;B[di]GW[0](;W[ch]GW[0](;B[ah]GW[0](;W[dh]GW[0])(;W[eh]GW[0]))(;B[dh]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))(;W[dh]GW[0](;B[ah]GW[0](;W[ch]GW[0])(;W[eh]GW[0]))(;B[ch]GW[0](;W[eh]GW[0])(;W[bi]GW[0])))))(;W[ai]GW[0];B[ag]GW[0])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido28",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][eb][hb][ib][bc][gc][cd][gd][hd][id][ge][ie][ff][gf][if][ig][fh][ih][ai][bi][fi][gi][ii]AW[db][gb][ac][cc][dc][ec][fc][ic][ad][dd][ed][fd][be][ce][ee][fe][af][cf][df][ef][hf][ag][bg][cg][dg][eg][fg][gg][hg][ah][ch][gh][hh][di][ei][hi]TR[gb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[fb]GW[1];B[hc]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido29",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][eb][hb][ib][bc][gc][cd][gd][hd][id][ge][ie][ff][gf][if][ig][fh][ih][ai][bi][fi][gi][ii]AW[db][gb][ac][cc][dc][ec][fc][ic][ad][dd][ed][fd][be][ce][ee][fe][af][cf][df][ef][hf][ag][bg][cg][dg][eg][fg][gg][hg][ah][ch][gh][hh][di][ei][hi]TR[ac][ad]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bd]GW[1];B[ba]GW[1](;W[cd]GW[1])(;W[ae]GW[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido30",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][da][ab][bb][db][eb][ac][bc][cc][dc][ad][ed][ce][de][ee][fe][cf][df][ef][ag][bg][dg][eg][ch][dh][ai][bi][ci][di]AW[ea][fa][ga][ha][ia][cb][fb][hb][ib][ec][fc][gc][hc][ic][bd][cd][fd][gd][hd][id][ae][be][ge][he][ie][af][bf][ff][gf][if][fg][gg][ig][ah][eh][fh][gh][hh][ei][fi][hi][ii]TR[ag][bg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[bh]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido31",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][fa][ab][ac][bc][cc][dc][ad][bd][cd][be][ce][bf][cf][ff][ag][bg][cg][dg][fg][gg][ig][ah][bh][ch][eh][fh][ih][ai][bi][ci][ei][hi]AW[da][ga][ha][ia][bb][cb][db][eb][fb][hb][ib][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][id][de][ee][fe][ge][he][df][gf][hf][if][eg][hg][gh][hh][di]TR[eg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ef]GW[1](;B[dh]GW[1](;W[fi]GW[1](;B[di]GW[1];W[gi]GW[1])(;B[gi]GW[1]))(;W[gi]GW[1](;B[di]GW[1];W[fi]GW[1])(;B[fi]GW[1])))(;B[fi]GW[1];W[gi]GW[1];B[dh]GW[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido32",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][ab][ac][bc][cc][dc][ad][bd][cd][be][ce][bf][cf][ff][ag][bg][cg][dg][fg][gg][ig][ah][bh][ch][eh][fh][ih][ai][bi][ci][ei][fi][hi]AW[da][ea][ga][ha][ia][bb][cb][db][eb][fb][hb][ib][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][id][de][ee][fe][ge][he][df][gf][hf][if][eg][hg][gh][hh][di]TR[ff][fg][gg][fh][eh][fi][ei]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ie]GB[1])(;W[ef]GB[0](;B[dh]GB[0](;W[ie]GB[1];B[di]GB[0](;W[gi]GB[0])(;W[ii]GB[0](;B[ig]GB[0](;W[ih]GB[0];B[gi]GB[0])(;W[gi]GB[0]))(;B[ih]GB[0](;W[ig]GB[0](;B[gi]GB[0])(;B[ii]GB[0]))(;W[gi]GB[0](;B[ig]GB[0])(;B[ii]GB[0])))))(;W[gi]GB[0];B[di]GB[0](;W[ie]GB[0])(;W[ii]GB[0](;B[ig]GB[0](;W[ie]GB[0])(;W[ih]GB[0]))(;B[ih]GB[0](;W[ie]GB[0];B[hi]GB[0])(;W[ig]GB[0])))))(;B[gi]GB[0](;W[ie]GB[1];B[ii]GB[0];W[dh]GB[0](;B[ff]GB[0](;W[fg]GB[0](;B[ig]GB[0])(;B[eh]GB[0]))(;W[gg]GB[0](;B[fg]GB[0])(;B[ig]GB[0])))(;B[fg]GB[0](;W[ff]GB[0](;B[gg]GB[0])(;B[ig]GB[0]))(;W[gg]GB[0](;B[ff]GB[0])(;B[ig]GB[0]))))(;W[ii]GB[0](;B[ig]GB[0](;W[ie]GB[1];B[dh]GB[0];W[ih]GB[0];B[di]GB[0])(;W[dh]GB[0](;B[ff]GB[0](;W[ie]GB[0](;B[fg]GB[0])(;B[gg]GB[0]))(;W[fg]GB[0](;B[eh]GB[0])(;B[fh]GB[0])))(;B[fg]GB[0](;W[ie]GB[0](;B[ff]GB[0])(;B[gg]GB[0]))(;W[ff]GB[0](;B[gg]GB[0])(;B[eh]GB[0])))))(;B[dh]GB[0](;W[ie]GB[1](;B[ig]GB[0];W[ih]GB[0];B[di]GB[0])(;B[di]GB[0](;W[ig]GB[0];B[ih]GB[0])(;W[ih]GB[0])))(;W[ig]GB[0];B[di]GB[0]))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido33",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][ea][fa][bb][cb][fb][ib][ac][cc][dc][ec][fc][bd][cd][gd][ce][de][ee][fe][ge][he][ie][af][ff][gf][hf][if][cg][eg][fg][hg][ig][ah][bh][ai][bi][ci][ei]AW[aa][ga][ha][ia][gb][hb][gc][hc][fd][hd][id][be][bf][cf][df][ef][ag][dg][gg][ch][dh][eh][fh][gh][hh][ih][di][gi][hi][ii]TR[ah][bh][ai][bi][ci]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[bg]GB[0](;B[ah]GB[0](;W[cg]GB[0](;B[bh]GB[0](;W[ai]GB[0](;B[bi]GB[0];W[ci]GB[0])(;B[ci]GB[0];W[bi]GB[0](;B[ah]GB[0])(;B[bh]GB[0])))(;W[bi]GB[0]))(;B[ai]GB[0](;W[bh]GB[0](;B[bi]GB[0];W[ci]GB[0](;B[ah]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[bi]GB[0](;B[ah]GB[0])(;B[ai]GB[0])))(;W[bi]GB[0])))(;W[bh]GB[0](;B[ai]GB[0](;W[cg]GB[0](;B[bi]GB[0];W[ci]GB[0](;B[ah]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[bi]GB[0](;B[ah]GB[0])(;B[ai]GB[0])))(;W[bi]GB[0](;B[ah]GB[0](;W[cg]GB[0])(;W[ai]GB[0]))(;B[ai]GB[0](;W[cg]GB[0])(;W[ah]GB[0]))))(;B[bi]GB[0](;W[cg]GB[0](;B[ai]GB[0];W[ci]GB[0](;B[ah]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[ai]GB[0](;B[bi]GB[0])(;B[ci]GB[0])))(;W[ai]GB[0]))))(;B[bh]GB[0](;W[cg]GB[0](;B[ah]GB[0](;W[ai]GB[0](;B[bi]GB[0];W[ci]GB[0])(;B[ci]GB[0];W[bi]GB[0](;B[ah]GB[0])(;B[bh]GB[0])))(;W[bi]GB[0]))(;B[ai]GB[0](;W[ah]GB[0](;B[bi]GB[0];W[ci]GB[0](;B[bh]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[bi]GB[0]))(;W[bi]GB[0];B[ci]GB[0];W[ah]GB[0])))(;W[ah]GB[0](;B[ai]GB[0](;W[cg]GB[0](;B[bi]GB[0];W[ci]GB[0](;B[bh]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[bi]GB[0]))(;W[bi]GB[0]))(;B[bi]GB[0](;W[cg]GB[0](;B[ai]GB[0];W[ci]GB[0](;B[bh]GB[0])(;B[ai]GB[0]))(;B[ci]GB[0];W[ai]GB[0](;B[bh]GB[0])(;B[bi]GB[0])))(;W[ai]GB[0])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido34",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ab][cb][db][ac][bc][ic][hd][id][gf][hf][ag][fg][hg][ig][ah][bh][dh][eh][gh][hh][ih][bi][ci][gi][hi]AW[ca][da][ea][ga][ha][ia][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][fd][gd][ae][ce][fe][ge][he][af][bf][cf][df][ff][if][bg][dg][eg][ch][fh][ei][fi]TR[dh][eh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[di]GB[1](;W[ef]GB[1](;B[gg]GB[1](;W[cg]GB[1](;B[fh]GB[1](;W[ei]GB[1])(;W[fi]GB[1]))(;B[fi]GB[1]))(;W[fh]GB[1];B[fi]GB[1];W[cg]GB[1]))(;B[fh]GB[1](;W[cg]GB[1](;B[gg]GB[1](;W[ei]GB[1])(;W[fi]GB[1]))(;B[ei]GB[1]))(;W[ei]GB[1](;B[cg]GB[1])(;B[gg]GB[1];W[cg]GB[1]))))(;W[cg]GB[1](;B[ef]GB[1](;W[fh]GB[1](;B[ei]GB[1];W[gg]GB[1];B[fi]GB[1];W[fg]GB[1])(;B[fi]GB[1]))(;W[ei]GB[1](;B[gg]GB[1](;W[fh]GB[1];B[fi]GB[1])(;W[fi]GB[1];B[fh]GB[1](;W[ei]GB[1])(;W[fi]GB[1])))(;B[fh]GB[1])))(;B[fh]GB[1](;W[ef]GB[1](;B[gg]GB[1](;W[ei]GB[1])(;W[fi]GB[1]))(;B[ei]GB[1]))(;W[ei]GB[1]))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido35",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ab][cb][db][ac][bc][ic][hd][id][gf][hf][ag][fg][hg][ig][ah][bh][dh][eh][gh][hh][ih][bi][ci][gi][hi]AW[ca][da][ea][ga][ha][ia][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][fd][gd][ae][ce][fe][ge][he][af][bf][cf][df][ff][if][bg][dg][eg][ch][fh][ei][fi]TR[fh][fi][ei]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ef]GW[1];W[cg]GW[0](;B[gg]GW[1])(;B[di]GW[0](;W[fh]GW[0](;B[gg]GW[0](;W[ei]GW[0];B[fi]GW[0])(;W[fi]GW[0];B[ei]GW[0](;W[fh]GW[0])(;W[fi]GW[0])))(;B[ei]GW[1]))(;W[ei]GW[0](;B[gg]GW[0](;W[fh]GW[0];B[fi]GW[0])(;W[fi]GW[0];B[fh]GW[0](;W[ei]GW[0])(;W[fi]GW[0])))(;B[fh]GW[0]))))(;B[cg]GW[1];W[ef]GW[0](;B[gg]GW[0];W[ch]GW[0];B[di]GW[0](;W[cg]GW[0](;B[fh]GW[0](;W[ei]GW[0])(;W[fi]GW[0]))(;B[ei]GW[0](;W[fh]GW[0])(;W[fi]GW[0])))(;W[fh]GW[0](;B[cg]GW[0](;W[ei]GW[0])(;W[fi]GW[0]))(;B[ei]GW[0];W[cg]GW[0])))(;B[ch]GW[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido36",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][ea][fa][ga][ha][ia][bb][cb][db][eb][gb][hb][ib][bc][cc][dc][ec][fc][gc][hc][ic][ed][fd][gd][hd][id][fe][ge][he][df][ef][ff][gf][if][eg][fg][gg][hg][ig][fh][gh][hh][di][ei][gi][hi]AW[aa][ab][ac][ad][bd][cd][dd][ae][be][de][ee][af][bf][cf][ag][bg][cg][dg][bh][ch][dh][eh][ai][bi][ci]TR[di][ei]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[fi]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido37",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][fa][ga][ha][ia][ab][cb][eb][fb][gb][hb][ib][bc][cc][dc][ec][ad][bd][cd][dd][ae][be][ce][he][af][bf][hf][bg][cg][bh][ch][dh][bi][gi]AW[ea][bb][db][fc][gc][hc][ic][ed][fd][gd][id][de][ee][fe][ie][cf][df][ef][ff][gf][if][ag][dg][eg][gg][hg][ig][eh][fh][hh][ih][ai][ci][di][ei][fi][hi][ii]TR[aa][ab]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ba]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido38",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ea][ae][af][bf][cf][df][ef][gf][hf][ag][bg][dg][eg][gg][hg][ig][ah][bh][ch][gh][hh][ih][bi][ci][di][ei][fi][gi][hi][ii]AW[aa][ba][ca][fa][ga][ha][ia][ab][bb][cb][eb][gb][hb][ib][ac][bc][cc][ec][fc][gc][hc][ad][bd][cd][dd][ed][gd][hd][id][be][ce][de][ee][fe][ge][he][ie][if][fg][dh][eh][fh]TR[fg][fh][eh][dh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ff]GW[1];B[cg]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido39",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ea][ga][ha][ia][cb][eb][gb][hb][ib][ec][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][ae][be][ce][de][ee][fe][ge][af][bf][cf][ef][ff][gf][ag][eg][fg][hg][ig][ah][ch][dh][eh][gh][hh][ih][ai][ci][gi][hi][ii]AW[ba][fa][bb][bc][dc][id][he][hf][if][bg][cg][dg][bh][fh][bi][di][ei]TR[hg][ig][hh][gh][ih][hi][gi][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ie]GB[1];B[gg]GB[0];W[fi]GB[0])(;W[fi]GB[0](;B[ie]GB[0](;W[he]GB[1](;B[if]GB[0])(;B[gg]GB[0](;W[hf]GB[0];B[if]GB[0](;W[he]GB[0];B[hf]GB[0])(;W[hf]GB[0];B[he]GB[0]))(;W[if]GB[0];B[hf]GB[0];W[ie]GB[0])))(;W[hf]GB[0](;B[he]GB[0])(;B[if]GB[0])))(;B[gg]GB[0];W[ie]GB[0])))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido40",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ga][ha][fb][gb][ib][fc][ic][gd][he][hi][ii]AW[aa][ba][ca][da][ea][fa][ab][bb][cb][db][eb][hb][ac][bc][cc][dc][ec][gc][hc][ad][bd][cd][dd][ed][fd][id][ae][be][ce][ee][fe][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][bh][ch][dh][eh][fh][gh][ih][ai][ci][ei][gi]TR[hb][hc][gc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[hd]GW[0](;W[hb]GW[0](;B[ia]GW[0](;W[gc]GW[0](;B[hc]GW[0];W[ge]GW[0](;B[hb]GW[0];W[gc]GW[0])(;B[gc]GW[0];W[hb]GW[0]))(;B[ge]GW[1]))(;W[hc]GW[0](;B[gc]GW[0](;W[hb]GW[0](;B[hc]GW[0];W[ge]GW[0])(;B[ge]GW[0];W[hc]GW[0]))(;W[hc]GW[0](;B[hb]GW[0];W[ge]GW[0])(;B[ge]GW[0];W[hb]GW[0])))(;B[ge]GW[1])))(;B[gc]GW[0];W[ge]GW[0](;B[ia]GW[1])(;B[hc]GW[0])))(;W[gc]GW[0](;B[ia]GW[0](;W[hb]GW[0](;B[hc]GW[0];W[ge]GW[0](;B[hb]GW[0];W[gc]GW[0])(;B[gc]GW[0];W[hb]GW[0]))(;B[ge]GW[1]))(;W[hc]GW[0];B[hb]GW[0](;W[gc]GW[0](;B[hc]GW[0];W[ge]GW[0])(;B[ge]GW[1]))(;W[hc]GW[0](;B[gc]GW[0];W[ge]GW[0])(;B[ge]GW[1]))))(;B[hb]GW[0];W[ge]GW[0](;B[ia]GW[1])(;B[hc]GW[0]))))(;B[ge]GW[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido41",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ga][ha][ia][fb][gb][ib][fc][ic][gd][hd][ge][he][hi][ii]AW[aa][ba][ca][da][ea][fa][ab][bb][cb][db][eb][ac][bc][cc][dc][ec][gc][ad][bd][cd][dd][ed][fd][id][ae][be][ce][ee][fe][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][ih][ai][ci][ei][gi]TR[gd][hd][ge][he]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[hc]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido42",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ia][bb][cb][fb][ac][cc][ad][cd][gd][ae][bg][ah][bh][ch][dh][bi][ci][di]AW[aa][ba][da][ea][ga][ha][db][eb][gb][hb][bc][dc][ec][fc][hc][ic][bd][dd][ed][fd][hd][id][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][cg][dg][eg][fg][gg][hg][ig][eh][gh][hh][ih][ei][fi][gi][hi][ii]TR[aa][ba]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[ab]GW[0](;W[aa]GW[0];B[ba]GW[0])(;W[ba]GW[0];B[aa]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido43",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ib][cc][hc][hd][id][fe][ge][he][df][hf][fg][fh][hh][ih][gi][hi][ii]AW[aa][ba][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][bc][ec][gc][ad][bd][cd][dd][ed][fd][gd][ae][be][ce][de][ee][af][bf][cf][ff][if][ag][bg][cg][dg][eg][gg][hg][ah][bh][ch][dh][eh][gh][ai][bi][ci][di][ei]TR[df]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[ef]GB[0])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido44",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ea][fa][ga][ab][bb][cb][db][eb][fb][ib][bc][dc][gd][id][he][gf][hf]AW[ha][ia][gb][cc][ec][fc][gc][ad][bd][cd][dd][ed][fd][ae][be][ce][de][ee][fe][af][bf][cf][df][ef][ag][bg][cg][dg][eg][gg][hg][ig][ah][bh][ch][dh][eh][fh][gh][hh][ih][ai][ci][di][ei][fi][gi]TR[ha][ia]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[hb]GW[1](;B[hc]GW[1];W[ic]GW[1])(;B[ic]GW[1];W[hc]GW[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido45",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ec][hc][ad][cd][dd][fd][gd][hd][ae][be][ce][de][ee][fe][ge][af][bf][df][ff][gf][hf][ag][bg][cg][dg][eg][fg][gg][ig][ah][bh][dh][gh][hh][ai][bi][ci][ei][hi]AW[aa][ca][da][ga][ha][ia][ab][bb][cb][db][eb][hb][ib][ac][cc][dc][fc][gc][ic][bd][id][he][if][eh][fh][fi]TR[ga][ha][ia][hb][ib][ic][id]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ea]GW[1];W[ie]GW[0](;B[fa]GW[1];W[gb]GW[0](;B[fb]GW[0](;W[ga]GW[0](;B[ha]GW[0](;W[ia]GW[0])(;W[gb]GW[0]))(;B[ia]GW[0](;W[ha]GW[0])(;W[gb]GW[0])))(;W[ha]GW[0](;B[ga]GW[0](;W[ia]GW[0])(;W[gb]GW[0]))(;B[ia]GW[0](;W[ga]GW[0])(;W[gb]GW[0]))))(;B[ed]GW[1]))(;B[fb]GW[0](;W[fa]GW[0](;B[gb]GW[0](;W[ea]GW[0](;B[fc]GW[0])(;B[gc]GW[0]))(;W[fc]GW[0](;B[ea]GW[0](;W[fa]GW[0])(;W[ga]GW[0]))(;B[gc]GW[0];W[ea]GW[0])))(;B[ed]GW[1];W[ea]GW[0](;B[gb]GW[0](;W[fc]GW[0])(;W[gc]GW[0]))(;B[ef]GW[1])))(;W[gb]GW[0](;B[fa]GW[0](;W[ga]GW[0](;B[ha]GW[0](;W[ia]GW[0])(;W[gb]GW[0]))(;B[ia]GW[0](;W[ha]GW[0])(;W[gb]GW[0])))(;W[ha]GW[0](;B[ga]GW[0](;W[ia]GW[0])(;W[gb]GW[0]))(;B[ia]GW[0](;W[ga]GW[0])(;W[gb]GW[0]))))(;B[ed]GW[1]))))(;B[fa]GW[1](;W[ea]GW[0](;B[fb]GW[1];W[ie]GW[0](;B[gb]GW[0](;W[ga]GW[0](;B[ha]GW[0](;W[ia]GW[0])(;W[hb]GW[0]))(;B[ia]GW[0](;W[ha]GW[0])(;W[hb]GW[0])))(;W[ha]GW[0](;B[ga]GW[0](;W[ia]GW[0])(;W[hb]GW[0]))(;B[ia]GW[0](;W[ga]GW[0])(;W[hb]GW[0]))))(;B[ed]GW[1]))(;B[gb]GW[1];W[ed]GW[0](;B[ie]GW[0](;W[ga]GW[0](;B[ha]GW[0](;W[ia]GW[0])(;W[fb]GW[0]))(;B[ia]GW[0](;W[ha]GW[0])(;W[fb]GW[0])))(;W[ha]GW[0](;B[ga]GW[0](;W[ia]GW[0])(;W[fb]GW[0]))(;B[ia]GW[0](;W[ga]GW[0])(;W[fb]GW[0]))))(;B[ef]GW[1];W[ec]GW[0];B[ie]GW[0](;W[ga]GW[0])(;W[ha]GW[0]))))(;W[fb]GW[0](;B[ed]GW[0](;W[ea]GW[0](;B[ie]GW[0](;W[fa]GW[0](;B[he]GW[0];W[gb]GW[0])(;B[ef]GW[0];W[gb]GW[0]))(;W[gb]GW[0](;B[he]GW[0];W[fa]GW[0])(;B[ef]GW[0];W[fa]GW[0])))(;B[ef]GW[1](;W[fa]GW[0];B[ie]GW[0];W[gb]GW[0])(;W[gb]GW[0];B[ie]GW[0];W[fa]GW[0])))(;W[gb]GW[0](;B[ie]GW[0];W[ea]GW[0](;B[he]GW[0];W[fa]GW[0])(;B[ef]GW[0];W[fa]GW[0]))(;B[ef]GW[0](;W[ea]GW[0];B[ie]GW[0];W[fa]GW[0])(;W[ie]GW[0]))))(;B[ie]GW[0](;W[ea]GW[0](;B[ed]GW[0](;W[fa]GW[0](;B[he]GW[0];W[gb]GW[0])(;B[ef]GW[0];W[gb]GW[0]))(;W[gb]GW[0](;B[he]GW[0];W[fa]GW[0])(;B[ef]GW[0];W[fa]GW[0])))(;B[he]GW[1](;W[fa]GW[0](;B[ed]GW[0];W[gb]GW[0])(;B[ef]GW[1];W[gb]GW[0]))(;W[gb]GW[0](;B[ed]GW[0];W[fa]GW[0])(;B[ef]GW[1];W[fa]GW[0]))))(;W[gb]GW[0](;B[ed]GW[0];W[ea]GW[0](;B[he]GW[0];W[fa]GW[0])(;B[ef]GW[0];W[fa]GW[0]))(;B[he]GW[1];W[ea]GW[0](;B[ed]GW[0];W[fa]GW[0])(;B[ef]GW[1];W[fa]GW[0])))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido46",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ec][hc][ad][cd][dd][fd][gd][hd][ae][be][ce][de][ee][fe][ge][af][bf][df][ff][gf][hf][ag][bg][cg][dg][eg][fg][gg][ig][ah][bh][dh][gh][hh][ai][bi][ci][ei][hi]AW[aa][ca][da][ga][ha][ia][ab][bb][cb][db][eb][hb][ib][ac][cc][dc][fc][gc][ic][bd][id][he][if][eh][fh][fi]TR[ec]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ed]GB[1](;W[ea]GB[1](;B[fa]GB[1](;W[fb]GB[1])(;W[gb]GB[1]))(;B[fb]GB[1](;W[fa]GB[1];B[gb]GB[1](;W[fc]GB[1];B[gc]GB[1])(;W[gc]GB[1];B[fc]GB[1]))(;W[gb]GB[1])))(;W[fa]GB[1](;B[fb]GB[1](;W[ea]GB[1];B[gb]GB[1](;W[fc]GB[1];B[gc]GB[1])(;W[gc]GB[1];B[fc]GB[1]))(;W[gb]GB[1]))(;B[gb]GB[1](;W[ea]GB[1])(;W[fb]GB[1]))))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido47",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][ab][cb][ac][bc][cc][dc][ad][bd][cd][dd][ed][gd][be][ce][de][ee][fe][af][bf][cf][df][ef][ff][gf][ag][bg][cg][dg][eg][fg][gg][bh][ch][eh][fh][hh][ai][bi][ci][di][ei][fi][gi]AW[da][ea][fa][ha][ia][db][eb][fb][gb][hb][ib][ec][fc][gc][hc][ic][fd][id][ge][he][ie][hf][if][hg][ig][ih][hi][ii]TR[hh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gh]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido48",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ia][cb][gb][ib][ac][cc][dc][gc][ic][bd][cd][dd][ae][ce][bf][df][ff][hf][ag][cg][dg][fg][gg][hg][ah][fh][gh][ai][bi][di][ei][fi][gi][hi]AW[aa][ba][ca][da][bb][db][eb][fb][hb][ec][hc][ed][fd][gd][hd][id][de][ee][fe][ge][he][ie][ef][if][bg][eg][ig][bh][dh][hh][ih][ci][ii]TR[bf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[ch]GB[0](;B[ad]GB[0];W[cf]GB[0](;B[be]GB[0](;W[df]GB[0](;B[af]GB[0](;W[cg]GB[0])(;W[dg]GB[0]))(;B[cg]GB[0];W[dg]GB[0];B[af]GB[0]))(;W[cg]GB[0](;B[af]GB[0](;W[df]GB[0])(;W[dg]GB[0]))(;B[df]GB[0];W[dg]GB[0];B[af]GB[0])))(;B[af]GB[0](;W[df]GB[0](;B[be]GB[0](;W[cg]GB[0])(;W[dg]GB[0]))(;B[cg]GB[0];W[dg]GB[0];B[be]GB[0]))(;W[cg]GB[0](;B[be]GB[0](;W[df]GB[0])(;W[dg]GB[0]))(;B[df]GB[0];W[dg]GB[0];B[be]GB[0]))))(;B[be]GB[0];W[cf]GB[0](;B[ad]GB[0](;W[df]GB[0](;B[af]GB[0](;W[cg]GB[0])(;W[dg]GB[0]))(;B[cg]GB[0];W[dg]GB[0];B[af]GB[0]))(;W[cg]GB[0](;B[af]GB[0](;W[df]GB[0])(;W[dg]GB[0]))(;B[df]GB[0];W[dg]GB[0];B[af]GB[0])))(;B[af]GB[0](;W[df]GB[0](;B[ad]GB[0](;W[cg]GB[0])(;W[dg]GB[0]))(;B[cg]GB[0];W[dg]GB[0];B[ad]GB[0]))(;W[cg]GB[0](;B[ad]GB[0](;W[df]GB[0])(;W[dg]GB[0]))(;B[df]GB[0];W[dg]GB[0];B[ad]GB[0])))))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido49",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ea][fa][ga][db][eb][fb][gc][ad][bd][cd][ed][fd][gd][hd][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][if][ag][bg][cg][dg][eg][fg][gg][ah][bh][ch][eh][fh][bi][fi][gi]AW[ba][ha][ia][bb][cb][hb][ib][ac][bc][cc][dc][ec][fc][hc][ic][dd][id][gf][hf][hg][ig][hh][ci][ei][hi][ii]TR[ha][ia][hb][ib][hc][ic][id]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[gb]GW[0](;W[ha]GW[0](;B[ia]GW[0](;W[hb]GW[0](;B[ib]GW[0](;W[hc]GW[0](;B[ic]GW[0](;W[ha]GW[0])(;W[hb]GW[0]))(;B[id]GW[0];W[ic]GW[0]))(;W[ic]GW[0](;B[ia]GW[0](;W[ib]GW[0])(;W[hc]GW[0]))(;B[ib]GW[0](;W[ia]GW[0])(;W[hc]GW[0]))))(;B[hc]GW[0](;W[ib]GW[0](;B[ic]GW[0])(;B[id]GW[0](;W[ia]GW[0])(;W[ic]GW[0])))(;W[ic]GW[0](;B[ib]GW[0](;W[ha]GW[0])(;W[hb]GW[0]))(;B[id]GW[0];W[ib]GW[0]))))(;W[ib]GW[0](;B[hb]GW[0](;W[ia]GW[0](;B[hc]GW[0](;W[ic]GW[0])(;W[id]GW[0]))(;B[ic]GW[0](;W[ha]GW[0])(;W[ia]GW[0])))(;W[hc]GW[0](;B[ia]GW[0](;W[ic]GW[0])(;W[id]GW[0]))(;B[ic]GW[0])))(;B[hc]GW[0](;W[ia]GW[0](;B[hb]GW[0](;W[ic]GW[0])(;W[id]GW[0]))(;B[ic]GW[0]))(;W[hb]GW[0](;B[ic]GW[0])(;B[id]GW[0](;W[ia]GW[0])(;W[ic]GW[0]))))))(;B[hb]GW[0](;W[ia]GW[0](;B[ib]GW[0](;W[ha]GW[0](;B[ia]GW[0](;W[hc]GW[0])(;W[ic]GW[0]))(;B[hc]GW[0](;W[ic]GW[0])(;W[id]GW[0])))(;W[ia]GW[0](;B[ha]GW[0](;W[hc]GW[0])(;W[ic]GW[0]))(;B[hc]GW[0](;W[ic]GW[0])(;W[id]GW[0]))))(;B[hc]GW[0](;W[ib]GW[0](;B[ic]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[ib]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))))(;W[ib]GW[0](;B[ia]GW[0](;W[hc]GW[0](;B[ha]GW[0](;W[ic]GW[0])(;W[id]GW[0]))(;B[ic]GW[0]))(;W[ic]GW[0](;B[ha]GW[0](;W[hc]GW[0])(;W[id]GW[0]))(;B[hc]GW[0];W[ha]GW[0])))(;B[hc]GW[0](;W[ia]GW[0](;B[ic]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[ia]GW[0];W[ha]GW[0])(;B[id]GW[0]))))))(;W[ia]GW[0](;B[ha]GW[0](;W[hb]GW[0](;B[ib]GW[0](;W[hc]GW[0](;B[ia]GW[0](;W[ic]GW[0])(;W[id]GW[0]))(;B[ic]GW[0](;W[hb]GW[0])(;W[hc]GW[0])))(;W[ic]GW[0](;B[ia]GW[0](;W[hc]GW[0])(;W[id]GW[0]))(;B[hc]GW[0])))(;B[hc]GW[0](;W[ib]GW[0](;B[ic]GW[0](;W[ia]GW[0])(;W[hb]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[ib]GW[0])(;B[id]GW[0]))))(;W[ib]GW[0](;B[hb]GW[0](;W[hc]GW[0](;B[ic]GW[0](;W[ia]GW[0])(;W[ib]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[hc]GW[0])(;B[id]GW[0])))(;B[hc]GW[0](;W[hb]GW[0](;B[ic]GW[0](;W[ia]GW[0])(;W[hb]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[hb]GW[0])(;B[id]GW[0])))))(;B[hb]GW[0](;W[ha]GW[0](;B[ib]GW[0](;W[ha]GW[0](;B[ia]GW[0](;W[hc]GW[0])(;W[ic]GW[0]))(;B[hc]GW[0](;W[ic]GW[0])(;W[id]GW[0])))(;W[ia]GW[0](;B[ha]GW[0](;W[hc]GW[0])(;W[ic]GW[0]))(;B[hc]GW[0](;W[ic]GW[0])(;W[id]GW[0]))))(;B[hc]GW[0](;W[ib]GW[0](;B[ic]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[ib]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))))(;W[ib]GW[0](;B[ha]GW[0](;W[hc]GW[0](;B[ic]GW[0](;W[ia]GW[0])(;W[ib]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[hc]GW[0])(;B[id]GW[0])))(;B[hc]GW[0](;W[ha]GW[0](;B[ic]GW[0](;W[ha]GW[0])(;W[ia]GW[0]))(;B[id]GW[0]))(;W[ic]GW[0](;B[ha]GW[0])(;B[id]GW[0])))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido50",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][da][ea][cb][hb][bc][fc][gc][hc][ad][bd][cd][fd][hd][id][ae][be][ce][de][ee][fe][ge][bf][cf][df][ef][ff][gf][cg][eg][hg][ih][ei][ii]AW[fa][ha][ia][ab][db][fb][gb][ib][ac][cc][dc][dd][he][ie][af][if][bg][dg][fg][gg][ah][ch][dh][fh][gh][hh][bi][di][fi][gi][hi]TR[ah]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ag]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido51",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][da][ae][be][bf][cf][dg][gg][fh][gh][hh][bi][ci][di][fi][ii]AW[aa][ba][ea][fa][ga][ha][ia][ab][bb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ce][de][ee][fe][he][ie][af][df][ff][gf][hf][if][ag][cg][eg][fg][hg][ig][ah][bh][eh][ih][ai][ei]TR[af][ag][ah][bh][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bg]GW[1](;B[ae]GW[1](;W[be]GW[1](;B[bf]GW[1](;W[ae]GW[1](;B[ch]GW[1](;W[cf]GW[1])(;W[dh]GW[1](;B[ch]GW[1])(;B[bi]GW[1])))(;B[dh]GW[1](;W[cf]GW[1])(;W[ch]GW[1](;B[dg]GW[1])(;B[dh]GW[1]))))(;W[cf]GW[1](;B[ch]GW[1](;W[ae]GW[1])(;W[bf]GW[1]))(;B[dh]GW[1](;W[ae]GW[1])(;W[bf]GW[1]))))(;B[cf]GW[1](;W[ae]GW[1](;B[ch]GW[1](;W[bf]GW[1])(;W[dh]GW[1](;B[ch]GW[1])(;B[bi]GW[1])))(;B[dh]GW[1](;W[bf]GW[1])(;W[ch]GW[1](;B[dg]GW[1])(;B[dh]GW[1]))))(;W[bf]GW[1](;B[ch]GW[1](;W[ae]GW[1])(;W[cf]GW[1]))(;B[dh]GW[1](;W[ae]GW[1])(;W[cf]GW[1])))))(;W[bf]GW[1](;B[ch]GW[1](;W[be]GW[1])(;W[cf]GW[1]))(;B[dh]GW[1](;W[be]GW[1])(;W[cf]GW[1]))))(;B[be]GW[1](;W[ae]GW[1](;B[bf]GW[1](;W[cf]GW[1](;B[be]GW[1](;W[bf]GW[1](;B[ch]GW[1])(;B[dh]GW[1]))(;W[ch]GW[1]))(;B[bf]GW[1](;W[be]GW[1](;B[ch]GW[1])(;B[dh]GW[1]))(;W[ch]GW[1])))(;W[ch]GW[1]))(;B[cf]GW[1](;W[bf]GW[1](;B[ch]GW[1](;W[be]GW[1])(;W[cf]GW[1]))(;B[dh]GW[1](;W[be]GW[1])(;W[cf]GW[1])))(;W[ch]GW[1])))(;W[bf]GW[1](;B[ch]GW[1](;W[ae]GW[1])(;W[cf]GW[1]))(;B[dh]GW[1](;W[ae]GW[1])(;W[cf]GW[1])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido52",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][ce][de][ee][fe][ge][he][ie][af][bf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ah][bh][ih][ai][ci][ei]AW[ch][dh][eh][gh][hh][fi][gi][hi][ii]TR[ih]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ig]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido53",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][fa][ga][ha][ia][ab][cb][eb][fb][gb][hb][ib][ac][bc][dc][ec][fc][hc][ic][ad][bd][cd][dd][ed][id][ae][be][ce][de][ee][ie][af][bf][cf][if][cg][ch][hh][ih][hi]AW[ea][gc][fd][gd][hd][fe][he][df][ef][ff][gf][hf][ag][bg][dg][eg][fg][gg][hg][ig][ah][bh][dh][eh][gh][ai][ci][di][ei][fi][gi]TR[ag][bg][ah][bh][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[bi]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido54",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][da][ea][ab][bb][cb][eb][gb][hb][ac][bc][cc][dc][ec][ad][bd][cd][dd][gd][id][ae][be][ce][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][dg][eg][fg][gg][hg][ig][ah][bh][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][hi][ii]AW[fa][ga][ha][ib][fc][gc][hc][ed][fd][ch][fi]TR[gb][hb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[ia]GB[1])(;W[fb]GB[0](;B[gb]GB[0](;W[ia]GB[0](;B[ic]GB[0](;W[hb]GB[0];B[hd]GB[0])(;W[hd]GB[1]))(;B[hd]GB[0](;W[hb]GB[0];B[ic]GB[0])(;W[ic]GB[1])))(;W[hb]GB[0](;B[ic]GB[0](;W[ia]GB[0];B[hd]GB[0])(;W[gb]GB[0];B[hd]GB[0]))(;B[hd]GB[0](;W[ia]GB[0];B[ic]GB[0])(;W[gb]GB[0];B[ic]GB[0]))))(;B[hb]GB[0](;W[ia]GB[0](;B[ic]GB[0](;W[gb]GB[0];B[hd]GB[0])(;W[hd]GB[1]))(;B[hd]GB[0](;W[gb]GB[0];B[ic]GB[0])(;W[ic]GB[1])))(;W[gb]GB[0](;B[ic]GB[0](;W[ia]GB[0];B[hd]GB[0])(;W[hb]GB[0];B[hd]GB[0]))(;B[hd]GB[0](;W[ia]GB[0];B[ic]GB[0])(;W[hb]GB[0];B[ic]GB[0]))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido55",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][da][ea][ab][bb][cb][eb][gb][hb][ac][bc][cc][dc][ec][ad][bd][cd][dd][gd][id][ae][be][ce][de][ee][fe][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][dg][eg][fg][gg][hg][ig][ah][bh][dh][eh][fh][gh][hh][ih][ai][bi][ci][di][ei][hi][ii]AW[fa][ga][ha][ib][fc][gc][hc][ed][fd][ch][fi]TR[gb][hb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[fb]GB[1](;W[ia]GB[1](;B[ic]GB[1](;W[fa]GB[1](;B[ga]GB[1](;W[ha]GB[1](;B[fa]GB[1](;W[ia]GB[1])(;W[ib]GB[1]))(;B[ia]GB[1]))(;W[ia]GB[1](;B[fa]GB[1](;W[ha]GB[1])(;W[ib]GB[1]))(;B[ha]GB[1])))(;B[ha]GB[1](;W[ia]GB[1](;B[ga]GB[1])(;B[ib]GB[1]))(;W[ib]GB[1](;B[ga]GB[1])(;B[ia]GB[1]))))(;W[ga]GB[1](;B[fa]GB[1](;W[ha]GB[1](;B[ia]GB[1](;W[ga]GB[1])(;W[ha]GB[1]))(;B[ib]GB[1]))(;W[ia]GB[1](;B[ha]GB[1])(;B[ib]GB[1])))(;B[ha]GB[1](;W[ia]GB[1](;B[fa]GB[1])(;B[ib]GB[1]))(;W[ib]GB[1](;B[fa]GB[1])(;B[ia]GB[1])))))(;B[hd]GB[1]))(;W[ic]GB[1](;B[ia]GB[1](;W[fa]GB[1](;B[ga]GB[1];W[ha]GB[1](;B[fa]GB[1](;W[ia]GB[1])(;W[hd]GB[1]))(;B[hd]GB[1]))(;B[ha]GB[1]))(;W[ga]GB[1](;B[fa]GB[1];W[ha]GB[1](;B[ia]GB[1];W[ha]GB[1])(;B[hd]GB[1]))(;B[ha]GB[1])))(;B[hd]GB[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido56",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ga][ab][cb][gb][hb][ib][ac][bc][cc][hc][bd][dd][fd][gd][hd][id][ae][de][fe][bf][cf][df][ef][gf][hf][ag][bg][ch][dh][eh][fh][bi][ei][gi]AW[aa][ea][ia][bb][db][eb][fb][dc][ec][fc][gc][ed][ee][ge][ie][ff][if][cg][dg][eg][fg][gg][hg][ig][bh][gh][ih][di][hi][ii]TR[da]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ca]GB[1](;W[ba]GB[1];B[fa]GB[1])(;W[fa]GB[1];B[ba]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido57",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ga][ab][cb][gb][hb][ib][ac][bc][cc][hc][bd][dd][fd][gd][hd][id][ae][de][fe][bf][cf][df][ef][gf][hf][ag][bg][ch][dh][eh][fh][bi][ei][gi]AW[aa][ea][ia][bb][db][eb][fb][dc][ec][fc][gc][ed][ee][ge][ie][ff][if][cg][dg][eg][fg][gg][hg][ig][bh][gh][ih][di][hi][ii]TR[ge]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ic]GW[1])(;B[he]GW[0]))",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido58",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ga][ab][cb][gb][hb][ib][ac][bc][cc][hc][bd][dd][fd][gd][hd][id][ae][de][fe][bf][cf][df][ef][gf][hf][ag][bg][ch][dh][eh][fh][bi][ei][gi]AW[aa][ea][ia][bb][db][eb][fb][dc][ec][fc][gc][ed][ee][ge][ie][ff][if][cg][dg][eg][fg][gg][hg][ig][bh][gh][ih][di][hi][ii]TR[gf][hf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[he]GB[0](;B[gf]GB[0](;W[hf]GB[0])(;W[hh]GB[0]))(;B[hf]GB[0](;W[gf]GB[0])(;W[hh]GB[0])))(;W[hh]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido59",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ga][ab][cb][gb][hb][ib][ac][bc][cc][hc][bd][dd][fd][gd][hd][id][ae][de][fe][bf][cf][df][ef][gf][hf][ag][bg][ch][dh][eh][fh][bi][ei][gi]AW[aa][ea][ia][bb][db][eb][fb][dc][ec][fc][gc][ed][ee][ge][ie][ff][if][cg][dg][eg][fg][gg][hg][ig][bh][gh][ih][di][hi][ii]TR[bi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ci]GB[1](;W[ah]GB[1];B[ai]GB[1](;W[ah]GB[1];B[bh]GB[1])(;W[bh]GB[1];B[ah]GB[1]))(;W[ai]GB[1];B[ah]GB[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido60",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][da][ea][fa][ga][ha][db][eb][fb][gb][hb][ib][ec][fc][gc][hc][ic][dd][ed][fd][gd][hd][id][be][de][ee][ge][ie][bf][ef][ff][gf][hf][if][dg][eg][fg][gg][ig][fh][hh][fi][hi]AW[aa][ba][ab][bb][cb][ac][bc][cc][dc][ad][bd][cd][ae][af][cf][df][ag][cg][ah][bh][ch][dh][eh][ih][ai][bi][ci][di][ei]TR[be][bf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ce]GB[1];W[bg]GB[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido61",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][fa][ga][ha][ia][ab][cb][gb][hb][bc][cc][dc][ec][fc][gc][hc][ad][bd][cd][dd][ed][fd][ae][be][af][bf][cf][df][ef][ff][bg][cg][bh][ch][fh][hh][ai][bi][fi][gi]AW[ca][da][ea][eb][fb][ib][ic][gd][hd][id][ce][de][ee][fe][ge][he][ie][gf][hf][dg][eg][fg][gg][ig][ah][dh][eh][gh][ih][ci][di][hi][ii]TR[ig][ih][ii][hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[hg]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido62",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][bb][hc][ic][ad][bd][cd][ed][ce][de][ee][fe][ge][he][ie][af][cf][ef][ff][hf][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][eh][fh][gh][hh][ai][ci][gi][hi][ii]AW[ca][ea][ha][ia][ab][cb][db][fb][gb][hb][ib][bc][cc][dc][ec][gc][dd][fd][gd][hd][be][bf][dh][di][fi]TR[hc][ic]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[id]GB[1](;W[fa]GB[1])(;W[ga]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido63",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ea][ga][ha][ia][cb][eb][fb][hb][ib][bc][cc][dc][ec][fc][gc][hc][dd][ed][gd][hd][id][ae][ce][ee][fe][ge][he][ff][gf][hf][gg][fh][gh][fi][gi]AW[aa][da][ab][bb][ac][ad][bd][de][af][bf][cf][df][ef][if][ag][cg][dg][fg][hg][ah][ch][dh][eh][hh][ih][bi][ci][ei][hi]TR[ba]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ca]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido64",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ea][ga][ha][ia][cb][eb][fb][hb][ib][bc][cc][dc][ec][fc][gc][hc][dd][ed][gd][hd][id][ae][ce][ee][fe][ge][he][ff][gf][hf][gg][fh][gh][fi][gi]AW[aa][da][ab][bb][ac][ad][bd][de][af][bf][cf][df][ef][if][ag][cg][dg][fg][hg][ah][ch][dh][eh][hh][ih][bi][ci][ei][hi]TR[ce]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[cd]GB[1](;W[be]GB[1];B[bg]GB[1](;W[ae]GB[1])(;W[eg]GB[1]))(;W[bg]GB[1];B[be]GB[1];W[eg]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido65",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ea][ga][ha][ia][cb][eb][fb][hb][ib][bc][cc][dc][ec][fc][gc][hc][dd][ed][gd][hd][id][ae][ce][ee][fe][ge][he][ff][gf][hf][gg][fh][gh][fi][gi]AW[aa][da][ab][bb][ac][ad][bd][de][af][bf][cf][df][ef][if][ag][cg][dg][fg][hg][ah][ch][dh][eh][hh][ih][bi][ci][ei][hi]TR[fg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[eg]GW[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido66",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][fa][ga][ab][bb][cb][gb][hb][ac][bc][cc][dc][fc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][ae][be][ce][de][fe][ge][cf][df][ff][cg][fg][dh][eh][fh][gh][di][ei]AW[da][ea][ha][ia][db][fb][ec][id][ee][he][ie][af][bf][gf][hf][if][ag][bg][dg][eg][gg][bh][ch][hh][ih][bi][ci][fi][gi][hi]TR[hh][ih][hi][gi][fi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ef]GW[1](;B[hg]GW[1];W[ig]GW[1])(;B[ig]GW[1];W[hg]GW[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido67",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ah][bh]AW[aa][ba][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][ig][ch][dh][fh][gh][ih][ai][ci][di][ei][fi][hi]TR[ah][bh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[bi]GB[0](;B[ah]GB[0];W[bh]GB[0])(;B[bh]GB[0];W[ah]GB[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido68",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ga][ha][bb][cb][fb][ac][bc][dc][ec][ed][be][cf][ef][ch][gh][hh][ai][di][fi][hi]AW[ca][da][ab][eb][gb][hb][fc][ic][bd][cd][dd][fd][gd][id][ce][ee][fe][ge][bf][df][gf][bg][dg][hg][ig][dh][eh][fh][ei]TR[bd][cd][dd][ce]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[db]GW[1](;W[cc]GW[0](;B[ad]GW[0](;W[ae]GW[0](;B[af]GW[0](;W[be]GW[0](;B[ff]GW[0](;W[de]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[ff]GW[0])))(;W[de]GW[0](;B[be]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))(;B[ff]GW[0](;W[be]GW[0])(;W[ag]GW[0]))))(;B[ff]GW[1](;W[be]GW[0](;B[af]GW[0](;W[de]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[af]GW[0])))(;W[de]GW[0](;B[af]GW[0](;W[be]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[be]GW[0])(;W[af]GW[0])))))(;W[de]GW[0](;B[ae]GW[0](;W[af]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))))(;B[ae]GW[1](;W[ad]GW[0](;B[de]GW[0](;W[cc]GW[0](;B[ad]GW[0](;W[bd]GW[0])(;W[cd]GW[0]))(;B[bd]GW[0](;W[cd]GW[0])(;W[dd]GW[0])))(;W[ad]GW[0](;B[cc]GW[0](;W[bd]GW[0])(;W[cd]GW[0]))(;B[bd]GW[0](;W[cc]GW[0])(;W[cd]GW[0]))))(;B[af]GW[0](;W[de]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[de]GW[0](;W[cc]GW[0])(;W[ad]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[cg]GW[0])))))(;W[de]GW[0](;B[ad]GW[0](;W[af]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[ad]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[ad]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ad]GW[0])(;W[cg]GW[0])))))))(;W[ad]GW[0](;B[cc]GW[1](;W[de]GW[0](;B[ae]GW[1](;W[af]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ff]GW[0]))(;B[be]GW[0](;W[ae]GW[0])(;W[ff]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[1](;W[ff]GW[0](;B[ae]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ae]GW[0])(;W[cg]GW[0])))(;W[eg]GW[0](;B[ae]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))(;B[ff]GW[0](;W[ae]GW[0])(;W[ag]GW[0])))))(;W[af]GW[0](;B[ff]GW[1](;W[ae]GW[0](;B[ag]GW[1](;W[be]GW[0])(;W[de]GW[0]))(;B[cg]GW[0](;W[be]GW[0])(;W[de]GW[0])))(;W[de]GW[0](;B[ag]GW[0](;W[ae]GW[0])(;W[cg]GW[0]))(;B[cg]GW[0](;W[ae]GW[0])(;W[ag]GW[0]))))(;B[ag]GW[1](;W[ae]GW[0](;B[ff]GW[1](;W[be]GW[0])(;W[de]GW[0]))(;B[cg]GW[0](;W[be]GW[0])(;W[de]GW[0])))(;W[de]GW[0](;B[ff]GW[0](;W[ae]GW[0])(;W[cg]GW[0]))(;B[cg]GW[0](;W[ae]GW[0])(;W[ff]GW[0]))))))(;B[ae]GW[1](;W[cc]GW[0](;B[de]GW[0](;W[cc]GW[0](;B[ad]GW[0](;W[bd]GW[0])(;W[cd]GW[0]))(;B[bd]GW[0](;W[cd]GW[0])(;W[dd]GW[0])))(;W[ad]GW[0](;B[cc]GW[0](;W[bd]GW[0])(;W[cd]GW[0]))(;B[bd]GW[0](;W[cc]GW[0])(;W[cd]GW[0]))))(;B[af]GW[0](;W[de]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[de]GW[0](;W[cc]GW[0])(;W[ad]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[cg]GW[0])))))(;W[de]GW[0](;B[cc]GW[1](;W[af]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ff]GW[0]))(;B[be]GW[0](;W[ae]GW[0])(;W[ff]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[cc]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[cc]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[cc]GW[0])(;W[cg]GW[0]))))))))(;B[cc]GW[1](;W[db]GW[0](;B[ad]GW[0](;W[ae]GW[0](;B[af]GW[0](;W[be]GW[0](;B[ff]GW[0](;W[de]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[ff]GW[0])))(;W[de]GW[0](;B[be]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))(;B[ff]GW[0](;W[be]GW[0])(;W[ag]GW[0]))))(;B[ff]GW[1](;W[be]GW[0](;B[af]GW[0](;W[de]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[af]GW[0])))(;W[de]GW[0](;B[af]GW[0](;W[be]GW[0])(;W[ag]GW[0]))(;B[ag]GW[0](;W[be]GW[0])(;W[af]GW[0])))))(;W[de]GW[0](;B[ae]GW[0](;W[af]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))))(;B[ae]GW[1](;W[ad]GW[0](;B[de]GW[0](;W[ad]GW[0](;B[bd]GW[0](;W[cd]GW[0])(;W[dd]GW[0]))(;B[cd]GW[0](;W[af]GW[0])(;W[ff]GW[0])))(;W[bd]GW[0](;B[ad]GW[0](;W[cd]GW[0])(;W[dd]GW[0]))(;B[cd]GW[0](;W[af]GW[0])(;W[ff]GW[0]))))(;B[af]GW[0](;W[de]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[de]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[cg]GW[0])))))(;W[de]GW[0](;B[ad]GW[0](;W[af]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[ad]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[ad]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ad]GW[0])(;W[cg]GW[0])))))))(;W[ad]GW[0](;B[db]GW[1](;W[de]GW[0](;B[ae]GW[1](;W[af]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ff]GW[0]))(;B[be]GW[0](;W[ae]GW[0])(;W[ff]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[1](;W[ff]GW[0](;B[ae]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ae]GW[0])(;W[cg]GW[0])))(;W[eg]GW[0](;B[ae]GW[0](;W[ff]GW[0])(;W[ag]GW[0]))(;B[ff]GW[0](;W[ae]GW[0])(;W[ag]GW[0])))))(;W[af]GW[0](;B[ff]GW[1](;W[ae]GW[0](;B[ag]GW[1](;W[be]GW[0])(;W[de]GW[0]))(;B[cg]GW[0](;W[be]GW[0])(;W[de]GW[0])))(;W[de]GW[0](;B[ag]GW[0](;W[ae]GW[0])(;W[cg]GW[0]))(;B[cg]GW[0](;W[ae]GW[0])(;W[ag]GW[0]))))(;B[ag]GW[1](;W[ae]GW[0](;B[ff]GW[1](;W[be]GW[0])(;W[de]GW[0]))(;B[cg]GW[0](;W[be]GW[0])(;W[de]GW[0])))(;W[de]GW[0](;B[ff]GW[0](;W[ae]GW[0])(;W[cg]GW[0]))(;B[cg]GW[0](;W[ae]GW[0])(;W[ff]GW[0]))))))(;B[ae]GW[1](;W[db]GW[0](;B[de]GW[0](;W[ad]GW[0](;B[bd]GW[0](;W[cd]GW[0])(;W[dd]GW[0]))(;B[cd]GW[0](;W[af]GW[0])(;W[ff]GW[0])))(;W[bd]GW[0](;B[ad]GW[0](;W[cd]GW[0])(;W[dd]GW[0]))(;B[cd]GW[0](;W[af]GW[0])(;W[ff]GW[0]))))(;B[af]GW[0](;W[de]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[de]GW[0](;W[ad]GW[0])(;W[bd]GW[0]))(;B[ag]GW[0](;W[de]GW[0])(;W[cg]GW[0])))))(;W[de]GW[0](;B[db]GW[1](;W[af]GW[0](;B[ae]GW[0](;W[be]GW[0])(;W[ff]GW[0]))(;B[be]GW[0](;W[ae]GW[0])(;W[ff]GW[0])))(;W[ff]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[af]GW[0])(;W[cg]GW[0]))))(;B[af]GW[0](;W[db]GW[0](;B[ff]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[ff]GW[0])(;W[cg]GW[0])))(;W[ff]GW[0](;B[db]GW[0](;W[ag]GW[0])(;W[cg]GW[0]))(;B[ag]GW[0](;W[db]GW[0])(;W[cg]GW[0])))))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido69",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ea][fa][ha][cb][eb][gb][cc][dc][ec][fc][gc][ed][fd][gd][fe][ge][df][ef][ff][gf][ag][fg][gg][hg][ig][ah][ch][dh][eh][fh][gh][ih][bi][ci][ei][fi][gi][hi]AW[ba][ab][bb][db][hb][ib][ac][bc][hc][ic][ad][cd][dd][hd][ae][be][ce][de][ee][he][ie][af][bf][cf][hf][if][bg][cg][dg][eg][bh]TR[ag][ah]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ai]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido70",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ea][ga][ha][ia][eb][fb][gb][hb][ib][ac][ec][fc][gc][ic][ad][ed][fd][gd][hd][id][be][ee][fe][ge][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][hg][ig][ah][ch][dh][fh][gh][hh][ih][ai][ci][di][ei][gi][hi][ii]AW[aa][ba][da][ab][bb][cb][bc][cc][dc][bd][cd][dd][ce][de][he][bh]TR[ac][ad]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ae]GB[1];W[ca]GB[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido71",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ga][ha][ia][bb][ib][ic][id][ae][be][af][gf][hf][ag][bg][eg][fg][fh]AW[aa][ba][ca][da][ea][fa][cb][db][eb][fb][gb][hb][ac][bc][cc][ec][fc][gc][hc][ad][bd][cd][dd][ed][fd][gd][hd][ce][de][ee][fe][ge][he][bf][cf][df][ef][ff][if][cg][dg][hg][ah][ch][dh][eh][gh][hh][bi][ci][di][ei][fi][gi][hi][ii]TR[ga][ha][ia][ib][ic][id]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[ie]GB[0](;B[ga]GB[0](;W[ha]GB[0](;B[ia]GB[0](;W[ga]GB[0](;B[ib]GB[0](;W[ic]GB[0](;B[ia]GB[0])(;B[ib]GB[0]))(;W[id]GB[0]))(;B[ic]GB[0](;W[ib]GB[0])(;W[id]GB[0])))(;W[ib]GB[0](;B[ic]GB[0](;W[ga]GB[0])(;W[ia]GB[0]))(;B[id]GB[0](;W[ga]GB[0])(;W[ia]GB[0]))))(;B[ib]GB[0](;W[ga]GB[0](;B[ia]GB[0](;W[ic]GB[0](;B[ia]GB[0])(;B[ib]GB[0]))(;W[id]GB[0]))(;B[ic]GB[0](;W[ia]GB[0])(;W[id]GB[0])))(;W[ia]GB[0](;B[ic]GB[0](;W[ga]GB[0])(;W[id]GB[0](;B[ib]GB[0])(;B[ic]GB[0])))(;B[id]GB[0](;W[ga]GB[0])(;W[ic]GB[0])))))(;W[ia]GB[0](;B[ib]GB[0](;W[ha]GB[0](;B[ic]GB[0](;W[ga]GB[0])(;W[id]GB[0](;B[ib]GB[0])(;B[ic]GB[0])))(;B[id]GB[0](;W[ga]GB[0])(;W[ic]GB[0])))(;W[ic]GB[0]))(;B[ic]GB[0](;W[ha]GB[0](;B[ib]GB[0](;W[ga]GB[0])(;W[id]GB[0](;B[ib]GB[0])(;B[ic]GB[0])))(;B[id]GB[0](;W[ga]GB[0])(;W[ib]GB[0](;B[ic]GB[0])(;B[id]GB[0]))))(;W[ib]GB[0]))))(;B[ha]GB[0](;W[ga]GB[0](;B[ia]GB[0](;W[ib]GB[0](;B[ha]GB[0](;W[ia]GB[0](;B[ic]GB[0])(;B[id]GB[0]))(;W[ic]GB[0]))(;B[ia]GB[0](;W[ha]GB[0](;B[ic]GB[0])(;B[id]GB[0]))(;W[ic]GB[0])))(;W[ic]GB[0]))(;B[ib]GB[0](;W[ia]GB[0](;B[ic]GB[0](;W[ha]GB[0])(;W[id]GB[0](;B[ib]GB[0])(;B[ic]GB[0])))(;B[id]GB[0](;W[ha]GB[0])(;W[ic]GB[0])))(;W[ic]GB[0])))(;W[ia]GB[0](;B[ib]GB[0](;W[ga]GB[0](;B[ia]GB[0](;W[ic]GB[0](;B[ha]GB[0])(;B[ia]GB[0]))(;W[id]GB[0]))(;B[ic]GB[0](;W[ia]GB[0])(;W[id]GB[0])))(;W[ic]GB[0](;B[ga]GB[0](;W[ia]GB[0](;B[ga]GB[0](;W[ha]GB[0])(;W[ib]GB[0]))(;B[ha]GB[0](;W[ga]GB[0])(;W[ib]GB[0])))(;W[id]GB[0]))(;B[ia]GB[0](;W[ga]GB[0](;B[ha]GB[0])(;B[ia]GB[0]))(;W[id]GB[0]))))(;B[ic]GB[0](;W[ga]GB[0](;B[ib]GB[0](;W[ha]GB[0])(;W[id]GB[0](;B[ib]GB[0])(;B[ic]GB[0])))(;B[id]GB[0](;W[ha]GB[0])(;W[ib]GB[0](;B[ic]GB[0])(;B[id]GB[0]))))(;W[ib]GB[0])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido72",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ca][da][ga][ia][ab][bb][cb][gb][ib][ac][bc][cc][fc][gc][hc][ic][ad][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ge][ie][bf][cf][df][ef][ff][gf][ag][bg][dg][eg][fg][gg][ig][ah][bh][dh][eh][fh][gh][ai][bi][ci][di][ei][hi][ii]AW[ea][fa][db][eb][hb][dc][ec][he][hf][hg][hh][ih][fi]TR[hi][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[gi]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido73",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fa][ga][ha][ia][cb][eb][gb][ib][ec][gc][ic][ed][hd][id][he][ie][gf][hf][if][bg][gg][hg][ig][fh][gh][hh][ih][ai][di][ei][fi][gi][hi][ii]AW[aa][ba][da][ea][bb][fb][ac][cc][dc][fc][ad][bd][cd][dd][fd][gd][ae][ce][ee][fe][ge][af][bf][cf][df][ef][ff][cg][dg][eg][fg][ah][bh][ch][dh][eh][ci]TR[da][ea]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[db]GW[0](;W[da]GW[0];B[ea]GW[0];W[bc]GW[0];B[da]GW[0])(;W[ea]GW[0];B[da]GW[0];W[bc]GW[0];B[ea]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido74",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][fa][ga][ha][ia][cb][eb][gb][ib][ec][gc][ic][ed][hd][id][he][ie][gf][hf][if][bg][gg][hg][ig][fh][gh][hh][ih][ai][di][ei][fi][gi][hi][ii]AW[aa][ba][da][ea][bb][fb][ac][cc][dc][fc][ad][bd][cd][dd][fd][gd][ae][ce][ee][fe][ge][af][bf][cf][df][ef][ff][cg][dg][eg][fg][ah][bh][ch][dh][eh][ci]TR[da][ea]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[db]GW[1](;B[ca]GW[1](;W[cb]GW[1])(;W[bc]GW[1]))(;B[cb]GW[1](;W[ca]GW[1])(;W[bc]GW[1])))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido75",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fd][fe][bg][dg][bh][dh][fh][ai][di][ei][gi]AW[aa][ca][da][ea][fa][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][gd][hd][id][ae][be][ce][de][ge][he][ie][bf][cf][df][ef][ff][gf][if][eg][fg][gg][hg][ig][ch][eh][hh][ih][ci][hi][ii]TR[ch][ci]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[af]GW[1](;W[ag]GW[0](;B[cg]GW[0](;W[af]GW[0](;B[ah]GW[0])(;B[bi]GW[0](;W[ah]GW[0](;B[ch]GW[0])(;B[ci]GW[0]))(;W[ch]GW[0](;B[ah]GW[0])(;B[ci]GW[0];W[ah]GW[0]))))(;W[ah]GW[0](;B[af]GW[0];W[ah]GW[0](;B[ag]GW[0])(;B[bi]GW[0](;W[ag]GW[0])(;W[ch]GW[0])))(;B[bi]GW[0](;W[af]GW[0](;B[ch]GW[0])(;B[ci]GW[0]))(;W[ch]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[ah]GW[0]))(;B[ci]GW[0];W[af]GW[0])))))(;B[ah]GW[1](;W[af]GW[0](;B[cg]GW[0])(;B[bi]GW[1]))(;W[bi]GW[0](;B[af]GW[1])(;B[cg]GW[0](;W[af]GW[0](;B[ch]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0](;W[ch]GW[0])(;W[ci]GW[0])))(;W[ch]GW[0](;B[af]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0];W[af]GW[0]))))))(;W[ah]GW[0](;B[ag]GW[1];W[bi]GW[0](;B[cg]GW[0](;W[ch]GW[0](;B[ah]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0]))(;W[bi]GW[0](;B[ah]GW[0](;W[ch]GW[0])(;W[ci]GW[0]))(;B[ch]GW[0];W[ah]GW[0])))(;B[ah]GW[1]))(;B[cg]GW[0](;W[ag]GW[0](;B[af]GW[0];W[ah]GW[0](;B[ag]GW[0])(;B[bi]GW[0](;W[ag]GW[0])(;W[ch]GW[0])))(;B[bi]GW[0](;W[af]GW[0](;B[ch]GW[0])(;B[ci]GW[0]))(;W[ch]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[ah]GW[0]))(;B[ci]GW[0];W[af]GW[0]))))(;W[bi]GW[0](;B[ag]GW[0])(;B[ai]GW[0](;W[ag]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[ch]GW[0]))(;B[ch]GW[0](;W[af]GW[0])(;W[bi]GW[0])))(;W[ch]GW[0](;B[ag]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[bi]GW[0];W[ag]GW[0](;B[af]GW[0](;W[ag]GW[0])(;W[ah]GW[0]))(;B[ci]GW[0];W[af]GW[0]))))))))(;B[ag]GW[1](;W[af]GW[0](;B[cg]GW[0])(;B[ah]GW[1];W[bi]GW[0];B[cg]GW[0](;W[ch]GW[0](;B[bi]GW[0])(;B[ci]GW[0]))(;W[bi]GW[0](;B[ch]GW[0])(;B[ci]GW[0]))))(;W[bi]GW[0](;B[af]GW[1];W[ah]GW[0];B[cg]GW[0])(;B[cg]GW[0](;W[af]GW[0](;B[ah]GW[0](;W[ch]GW[0](;B[bi]GW[0])(;B[ci]GW[0]))(;W[bi]GW[0](;B[ch]GW[0])(;B[ci]GW[0])))(;B[ch]GW[0](;W[bi]GW[0](;B[ah]GW[0])(;B[ci]GW[0]))(;W[ci]GW[0](;B[ah]GW[0])(;B[bi]GW[0]))))(;W[ch]GW[0](;B[af]GW[0](;W[bi]GW[0])(;W[ci]GW[0]))(;B[ah]GW[0](;W[af]GW[0](;B[bi]GW[0])(;B[ci]GW[0]))(;W[bi]GW[0](;B[af]GW[0])(;B[ci]GW[0];W[af]GW[0]))))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido76",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fd][fe][bg][dg][bh][dh][fh][ai][di][ei][gi]AW[aa][ca][da][ea][fa][ga][ha][ia][ab][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][gd][hd][id][ae][be][ce][de][ge][he][ie][bf][cf][df][ef][ff][gf][if][eg][fg][gg][hg][ig][ch][eh][hh][ih][ci][hi][ii]TR[ch][ci]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[cg]GW[1](;B[af]GW[1](;W[ag]GW[1](;B[ah]GW[1](;W[af]GW[1])(;W[bi]GW[1](;B[bg]GW[1](;W[af]GW[1](;B[ah]GW[1])(;B[bh]GW[1]))(;W[ah]GW[1]))(;B[ah]GW[1](;W[af]GW[1](;B[bg]GW[1])(;B[bh]GW[1]))(;W[bg]GW[1](;B[bh]GW[1])(;B[ai]GW[1])))))(;B[bi]GW[1](;W[af]GW[1])(;W[ah]GW[1](;B[bg]GW[1](;W[af]GW[1](;B[bh]GW[1])(;B[ai]GW[1]))(;W[bh]GW[1](;B[ai]GW[1])(;B[bi]GW[1])))(;B[bh]GW[1](;W[af]GW[1](;B[bg]GW[1])(;B[ai]GW[1]))(;W[bg]GW[1](;B[ai]GW[1])(;B[bi]GW[1]))))))(;W[ah]GW[1](;B[ag]GW[1];W[bi]GW[1])(;B[bi]GW[1];W[ag]GW[1](;B[bg]GW[1](;W[af]GW[1](;B[bh]GW[1])(;B[ai]GW[1]))(;W[bh]GW[1](;B[ai]GW[1])(;B[bi]GW[1])))(;B[bh]GW[1](;W[af]GW[1](;B[bg]GW[1])(;B[ai]GW[1]))(;W[bg]GW[1](;B[ai]GW[1])(;B[bi]GW[1]))))))(;B[ag]GW[1](;W[af]GW[1](;B[ah]GW[1];W[bi]GW[1](;B[ag]GW[1](;W[bg]GW[1](;B[ah]GW[1])(;B[bh]GW[1]))(;W[ah]GW[1](;B[bg]GW[1])(;B[bh]GW[1])))(;B[bg]GW[1](;W[ag]GW[1](;B[ah]GW[1])(;B[bh]GW[1]))(;W[ah]GW[1](;B[ag]GW[1])(;B[bh]GW[1]))))(;B[bi]GW[1];W[ah]GW[1](;B[ag]GW[1](;W[bg]GW[1](;B[bh]GW[1])(;B[ai]GW[1]))(;W[bh]GW[1](;B[ai]GW[1])(;B[bi]GW[1])))(;B[bg]GW[1](;W[ag]GW[1](;B[bh]GW[1])(;B[ai]GW[1]))(;W[bh]GW[1](;B[ai]GW[1])(;B[bi]GW[1])))))(;W[bi]GW[1](;B[af]GW[1];W[ah]GW[1](;B[af]GW[1](;W[ag]GW[1](;B[bg]GW[1])(;B[bh]GW[1]))(;W[bg]GW[1]))(;B[ag]GW[1](;W[af]GW[1](;B[bg]GW[1])(;B[bh]GW[1]))(;W[bg]GW[1])))(;B[ah]GW[1];W[af]GW[1](;B[ag]GW[1](;W[bg]GW[1](;B[ah]GW[1])(;B[bh]GW[1]))(;W[ah]GW[1](;B[bg]GW[1])(;B[bh]GW[1])))(;B[bg]GW[1](;W[ag]GW[1](;B[ah]GW[1])(;B[bh]GW[1]))(;W[ah]GW[1](;B[ag]GW[1])(;B[bh]GW[1])))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido77",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ea][fa][ga][ha][ab][bb][fb][gb][hb][ib][ac][fd][be][de][ee][df][ag][bg][ah][bh][ch][dh][eh][fh][hh][bi][ci][gi][hi]AW[aa][ca][da][cb][eb][cc][dc][fc][hc][cd][dd][ed][gd][hd][id][ce][ge][ie][af][bf][cf][ef][ff][hf][if][cg][dg][fg][hg][gh][ih]TR[gh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[gg]GW[1](;B[eg]GW[1](;W[ei]GW[1](;B[fi]GW[1];W[ii]GW[1];B[ig]GW[1];W[ii]GW[1];B[ih]GW[1])(;B[ii]GW[1];W[fi]GW[1](;B[hh]GW[1](;W[ig]GW[1](;B[gi]GW[1])(;B[hi]GW[1]))(;W[gi]GW[1](;B[hi]GW[1])(;B[ii]GW[1])))(;B[gi]GW[1](;W[ig]GW[1](;B[hh]GW[1])(;B[hi]GW[1]))(;W[hh]GW[1](;B[hi]GW[1])(;B[ii]GW[1])))))(;W[fi]GW[1];B[ei]GW[1](;W[ig]GW[1](;B[fi]GW[1];W[ii]GW[1])(;B[ii]GW[1];W[fi]GW[1](;B[hh]GW[1])(;B[gi]GW[1])))(;W[ii]GW[1](;B[ig]GW[1];W[ii]GW[1](;B[ih]GW[1])(;B[fi]GW[1]))(;B[fi]GW[1];W[ig]GW[1]))))(;B[ei]GW[1](;W[eg]GW[1](;B[fi]GW[1])(;B[ii]GW[1]))(;W[ii]GW[1](;B[eg]GW[1];W[fi]GW[1](;B[hh]GW[1](;W[ig]GW[1](;B[gi]GW[1])(;B[hi]GW[1]))(;W[gi]GW[1]))(;B[gi]GW[1](;W[ig]GW[1](;B[hh]GW[1])(;B[fi]GW[1]))(;W[hh]GW[1](;B[fi]GW[1])(;B[hi]GW[1]))))(;B[ig]GW[1](;W[eg]GW[1](;B[ih]GW[1])(;B[fi]GW[1]))(;W[ii]GW[1](;B[eg]GW[1];W[ih]GW[1](;B[ig]GW[1];W[ii]GW[1](;B[ih]GW[1])(;B[fi]GW[1]))(;B[fi]GW[1];W[ig]GW[1]))(;B[ih]GW[1];W[eg]GW[1](;B[fi]GW[1])(;B[ii]GW[1])))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido78",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ab][bb][cb][ac][ad][bd][cd][dd][ed][fd][gd][hd][ce][ee][ge][eg][dh][hh]AW[ca][ea][ga][ia][db][eb][fb][hb][ib][bc][dc][ec][fc][gc][hc][ic][id][ae][be][de][fe][he][ie][bf][cf][df][ef][ff][gf][if][ag][bg][fg][gg][hg][ig][ah][bh][ch][ih][ai][bi][ci][hi]TR[ca]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[da]GW[1];B[cc]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido79",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ab][bb][cb][ac][ad][bd][cd][dd][ed][fd][gd][hd][ce][ee][ge][eg][dh][hh]AW[ca][ea][ga][ia][db][eb][fb][hb][ib][bc][dc][ec][fc][gc][hc][ic][id][ae][be][de][fe][he][ie][bf][cf][df][ef][ff][gf][if][ag][bg][fg][gg][hg][ig][ah][bh][ch][ih][ai][bi][ci][hi]TR[bc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[cc]GW[1];B[da]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido80",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ab][bb][fb][bc][ad][bd][cd][fd][gd][ee][fe][ef][ff][ag][fg][gg][hg][ig][ah][dh][eh][gh][hh][ih][ai][bi][ci][di][ei][fi][hi][ii]AW[ba][da][fa][ga][ha][ia][cb][db][eb][cc][dc][ec][fc][gc][hc][ic][dd][ed][hd][id][ae][be][ce][de][ge][ie][af][bf][df][gf][hf][if][bg][cg][dg][eg][bh][ch]TR[ba]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ca]GW[1];B[ac]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido81",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][ab][db][hb][ac][bc][cc][dc][hc][ic][cd][dd][ed][fd][gd][hd][id][de][ge][he][ie][cf][ef][ff][hf][if][cg][dg][fg][hg][ig][bh][ch][eh][fh][gh][ih][ai][bi][di][fi][gi][hi][ii]AW[ba][da][ea][fa][ga][ia][bb][eb][fb][gb][ib][ec][fc][gc][ad][bd][ae][ce][ee][af][bf][ag][bg][ah]TR[ba][bb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[cb]GW[0](;W[ba]GW[0];B[bb]GW[0])(;W[bb]GW[0];B[ba]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido82",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ga][ha][ab][bb][eb][fb][gb][hb][ib][ac][bc][gc][ic][bd][dd][hd][ae][ce][de][fe][bf][cf][if][bg][cg][dg][eg][ig][ch][eh][fh][ei]AW[ca][da][ea][fa][cb][db][cc][dc][ec][fc][cd][ed][gd][id][ee][ge][he][ie][af][df][ef][ff][gf][fg][gg][hg][ah][bh][gh][ih][bi][ci][fi][gi][hi][ii]TR[ba][bb][ab][bc][ac][bd]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[be]GB[1])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido83",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][bc][dc][fc][gc][hc][gd][hd][id][he][ie][gf][hf][if][gg][hh]AW[ac][cc][ec][ad][bd][cd][dd][ed][fd][ae][be][ce][de][ee][fe][ge][af][bf][df][ef][ff][ag][bg][cg][dg][eg][fg][hg][ig][ah][bh][ch][dh][eh][fh][gh][ih][bi][di][gi][ii]TR[hg][ig][ih][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[hi]GW[1];B[fi]GW[1];W[hh]GW[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido84",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][bc][dc][fc][gc][hc][gd][hd][id][he][ie][gf][hf][if][gg][hh][ih][hi]AW[ac][cc][ec][ad][bd][cd][dd][ed][fd][ae][be][ce][de][ee][fe][ge][af][bf][df][ef][ff][ag][bg][cg][dg][eg][fg][hg][ah][bh][ch][dh][eh][fh][gh][bi][di][gi]TR[hh][ih][hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[ig]GB[1];W[fi]GB[1](;B[hg]GB[1])(;B[ii]GB[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido85",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ea][ab][bb][cb][db][eb][fb][gb][ac][bc][cc][gc][ad][bd][hd][id][ae][ce][de][ee][ie][af][df][ef][gf][if][bg][cg][dg][eg][fg][hg][ig][dh][fh][gh][di][hi]AW[ba][fa][ga][ha][ia][ib][dc][ec][fc][hc][cd][dd][ed][fd][gd][fe][ge][he][bf][cf][hf][ag][ah][bh][ch][eh][bi][ei][gi]TR[bf][cf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[be]GW[0](;W[bf]GW[0];B[cf]GW[0])(;W[cf]GW[0];B[bf]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido86",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fa][ha][ia][eb][hb][ib][ec][fc][gc][hc][cd][id][ge][dh][eh][di]AW[aa][ba][ca][da][ea][ab][bb][cb][db][gb][ac][bc][cc][dc][ad][bd][dd][ed][fd][gd][hd][ae][be][ee][fe][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][bg][cg][dg][eg][fg][gg][hg][ig][ah][bh][ch][fh][gh][hh][ih][ai][ci][fi][gi][hi][ii]TR[gb]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ga]GW[1])(;B[fb]GW[1]))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido87",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ia][cb][db][eb][fb][hb][ib][ac][ec][gc][hc][ic][ad][bd][cd][dd][fd][gd][hd][id][ae][ce][de][ee][fe][ge][he][ie][ef][gf][eg][fg][dh][eh][fh][hh][fi]AW[ga][ha][gb][be][af][bf][cf][df][hf][if][ag][cg][dg][hg][ah][bh][ch][ih][ai][bi][ci][di][gi][hi]TR[hf][if][hg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ff]GW[1](;W[gg]GW[0];B[gh]GW[0](;W[ig]GW[0];B[ii]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[if]GW[0])(;W[hg]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[hf]GW[0])(;W[hg]GW[0]))))(;W[ii]GW[0];B[ig]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[if]GW[0])(;W[hg]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[hf]GW[0])(;W[hg]GW[0])))))(;W[ig]GW[0](;B[gg]GW[1];W[ii]GW[0];B[gh]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[hf]GW[0])(;W[ig]GW[0]))))(;B[gh]GW[0](;W[gg]GW[0];B[ii]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[if]GW[0])(;W[hg]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[gg]GW[0])(;W[hg]GW[0]))(;B[gg]GW[0](;W[hf]GW[0])(;W[hg]GW[0]))))(;W[ii]GW[0];B[gg]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[hf]GW[0])(;W[ig]GW[0])))))))(;B[gg]GW[1](;W[ig]GW[0](;B[ff]GW[1];W[ii]GW[0];B[gh]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[hf]GW[0])(;W[ig]GW[0]))))(;B[gh]GW[0]))(;W[ii]GW[0](;B[ff]GW[1];W[ig]GW[0];B[gh]GW[0](;W[hf]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0])))(;W[if]GW[0](;B[hf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[hf]GW[0])(;W[ig]GW[0]))))(;B[ig]GW[0](;W[hf]GW[0](;B[ff]GW[0](;W[if]GW[0](;B[hg]GW[0](;W[hf]GW[0])(;W[if]GW[0]))(;B[gh]GW[0](;W[ih]GW[0])(;W[gi]GW[0])))(;W[hg]GW[0](;B[if]GW[0](;W[hf]GW[0])(;W[hg]GW[0]))(;B[gh]GW[0](;W[ih]GW[0])(;W[gi]GW[0]))))(;B[if]GW[0]))(;W[if]GW[0](;B[ff]GW[0](;W[hf]GW[0](;B[hg]GW[0](;W[hf]GW[0])(;W[if]GW[0]))(;B[gh]GW[0](;W[ih]GW[0])(;W[gi]GW[0])))(;W[hg]GW[0](;B[hf]GW[0](;W[ig]GW[0])(;W[gh]GW[0]))(;B[gh]GW[0](;W[hf]GW[0])(;W[ig]GW[0]))))(;B[hf]GW[0]))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido88",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][ia][cb][db][eb][fb][hb][ib][ac][ec][gc][hc][ic][ad][bd][cd][dd][fd][gd][hd][id][ae][ce][de][ee][fe][ge][he][ie][ef][gf][eg][fg][dh][eh][fh][hh][fi]AW[ga][ha][gb][be][af][bf][cf][df][hf][if][ag][cg][dg][hg][ah][bh][ch][ih][ai][bi][ci][di][gi][hi]TR[gi][hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[gg]GW[1](;W[ig]GW[0](;B[gh]GW[0](;W[ei]GW[0];B[ii]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;W[ii]GW[0];B[ei]GW[0]))(;B[ei]GW[1];W[ii]GW[0];B[gh]GW[0]))(;W[ei]GW[0];B[gh]GW[0](;W[ig]GW[0];B[ii]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;W[ii]GW[0];B[ig]GW[0](;W[ih]GW[0](;B[gi]GW[0](;W[ig]GW[0])(;W[hi]GW[0]))(;B[hi]GW[0](;W[ig]GW[0])(;W[ii]GW[0])))(;W[gi]GW[0](;B[ih]GW[0](;W[hi]GW[0])(;W[ii]GW[0]))(;B[hi]GW[0](;W[ih]GW[0])(;W[ii]GW[0]))))))(;B[gh]GW[0](;W[gg]GW[0](;B[ei]GW[0](;W[ig]GW[0];B[ii]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;W[ii]GW[0];B[ig]GW[0](;W[ih]GW[0](;B[gi]GW[0](;W[ig]GW[0])(;W[hi]GW[0]))(;B[hi]GW[0](;W[ig]GW[0])(;W[ii]GW[0])))(;W[gi]GW[0](;B[ih]GW[0](;W[hi]GW[0])(;W[ii]GW[0]))(;B[hi]GW[0](;W[ih]GW[0])(;W[ii]GW[0])))))(;B[ii]GW[0](;W[ig]GW[0](;B[ei]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;B[gi]GW[0](;W[ei]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[ei]GW[0];W[ii]GW[0])))(;W[ei]GW[0](;B[ig]GW[0](;W[gi]GW[0](;B[ih]GW[0])(;B[hi]GW[0];W[ih]GW[0]))(;W[hi]GW[0](;B[ih]GW[0])(;B[gi]GW[0];W[ih]GW[0])))(;B[gi]GW[0](;W[ig]GW[0];B[hi]GW[0])(;W[hi]GW[0])))))(;W[ig]GW[0](;B[gg]GW[0](;W[ei]GW[0];B[ii]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;W[ii]GW[0];B[ei]GW[0]))(;B[ei]GW[0](;W[gg]GW[0];B[ii]GW[0](;W[gi]GW[0];B[hi]GW[0])(;W[hi]GW[0];B[gi]GW[0];W[ii]GW[0]))(;W[ii]GW[0];B[gg]GW[0])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido89",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ba][ab][bb][cb][bc][fc][ad][bd][cd][ed][fd][gd][id][ae][be][ce][ge][he][ie][af][cf][df][ef][if][dg][fg][gg][ig][dh][gh][hh][ih][ci][di][ei][fi][gi][ii]AW[ca][da][ea][fa][ha][ia][db][fb][gb][ib][cc][dc][ec][gc][hc][ic][dd][hd][ee][fe][bf][ff][gf][hf][ag][bg][cg][hg][ah][bh][ch][bi]TR[ee][fe][ff][gf][hf][hg]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[de]GW[1](;B[eg]GW[1](;W[eh]GW[1](;B[fh]GW[1])(;B[hi]GW[1]))(;W[fh]GW[1](;B[eh]GW[1])(;B[hi]GW[1])))(;B[eh]GW[1]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido90",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ha][ia][dd][ed][fd][ae][be][ce][ee][fe][cf][ef][ag][dg][gg][bh][ch][dh][eh][fh][gh][ai][bi][fi][hi][ii]AW[aa][ca][da][ea][ga][ab][cb][db][eb][fb][hb][ac][bc][cc][dc][ec][fc][hc][ic][ad][bd][cd][gd][hd][ge][ie][bf][df][ff][gf][if][bg][cg][eg][hg][ig][ih][ci][ei]TR[ae][be][ce][cf]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[af]GB[1](;W[bf]GB[1](;B[de]GB[1](;W[bg]GB[1];B[cg]GB[1](;W[bf]GB[1];B[bg]GB[1])(;W[bg]GB[1];B[bf]GB[1]))(;W[cg]GB[1];B[bg]GB[1]))(;B[bg]GB[1]))(;W[bg]GB[1];B[de]GB[1](;W[bf]GB[1];B[cg]GB[1](;W[bf]GB[1];B[bg]GB[1])(;W[bg]GB[1];B[bf]GB[1]))(;W[cg]GB[1];B[bf]GB[1](;W[bg]GB[1];B[cg]GB[1])(;W[cg]GB[1];B[bg]GB[1]))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido91",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[fa][ga][ha][fb][hb][fc][hc][ic][cd][dd][ed][fd][gd][hd][id][ae][be][ce][ee][he][ie][af][bf][bg][cg][dg][fg][gg][ig][ah][ch][eh][fh][gh][ai][bi][ci][di][ei][gi]AW[aa][ba][ca][ea][ab][db][eb][ac][bc][cc][dc][ec][gc][ad][bd][de][fe][ge][cf][df][ef][ff][gf][hf][eg][hg][hh][ih][hi]TR[ig]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[if]GB[1];W[ii]GB[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido92",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][ea][ia][cb][eb][hb][ib][dc][hc][cd][dd][ed][id][de][ag][bg][ah][gh][ih][ai][di][ei][fi][gi]AW[ha][ac][bc][cc][bd][fd][ae][ce][ee][ge][he][bf][df][ff][hf][if][cg][dg][eg][fg][gg][ig][eh][bi][ci][hi][ii]TR[hi][ii]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[hg]GW[1];W[fh]GW[0];B[hh]GW[0](;W[hi]GW[0];B[ii]GW[0])(;W[ii]GW[0];B[hi]GW[0]))(;B[fh]GW[1];W[hg]GW[0];B[hh]GW[0](;W[hi]GW[0];B[ii]GW[0])(;W[ii]GW[0];B[hi]GW[0])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido93",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ea][fa][ga][cb][db][ib][bc][cc][dc][gc][hc][ic][ad][cd][id][ce][ee][ie][bf][ag][bg][cg][gg][ig][ah][bh][ch][hh][ai][bi][ei][hi]AW[da][ha][ia][bb][fb][gb][hb][ac][ec][fc][dd][ed][fd][gd][ae][be][de][ge][he][cf][df][ef][ff][gf][hf][if][dg][fg][dh][eh][fh][gh][ci][di][gi]TR[cb][db][cc][bc][dc][cd][ce]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[aa]GB[1])(;W[ab]GB[0](;B[aa]GB[0](;W[ab]GB[0](;B[ca]GB[0](;W[bb]GB[1](;B[da]GB[0](;W[eb]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[bd]GB[0](;B[eb]GB[0])(;B[ac]GB[0])))(;B[ac]GB[0](;W[ab]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[bb]GB[0](;B[da]GB[0])(;B[ab]GB[0]))))(;W[eb]GB[0](;B[da]GB[0](;W[bb]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[ac]GB[0](;B[bb]GB[0])(;B[bd]GB[0])))(;B[bb]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[ac]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[ac]GB[0])))))(;B[bb]GB[0](;W[eb]GB[0](;B[ca]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[ac]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[ac]GB[0])))(;B[ac]GB[0](;W[bd]GB[0](;B[ca]GB[0])(;B[ab]GB[0]))(;W[fe]GB[0](;B[ca]GB[0])(;B[ab]GB[0]))))(;W[bd]GB[0](;B[ca]GB[0](;W[eb]GB[0](;B[da]GB[0])(;B[ac]GB[0]))(;W[ac]GB[0](;B[da]GB[0])(;B[eb]GB[0])))(;B[eb]GB[0](;W[ac]GB[0](;B[ca]GB[0])(;B[ad]GB[0]))(;W[fe]GB[0](;B[ca]GB[0])(;B[ac]GB[0]))))))(;W[bb]GB[1](;B[ca]GB[0](;W[ab]GB[1](;B[da]GB[0](;W[eb]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[bd]GB[0](;B[eb]GB[0])(;B[ac]GB[0])))(;B[ac]GB[0](;W[ab]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[bb]GB[0](;B[da]GB[0])(;B[ab]GB[0]))))(;W[eb]GB[0](;B[da]GB[0](;W[ab]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[ac]GB[0](;B[ab]GB[0])(;B[bd]GB[0])))(;B[ab]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[fe]GB[1](;B[da]GB[0])(;B[bb]GB[0])))))(;B[ac]GB[0](;W[eb]GB[0](;B[ca]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[ab]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[ab]GB[0])))(;B[ab]GB[0](;W[bd]GB[0](;B[ca]GB[0])(;B[bb]GB[0]))(;W[fe]GB[0](;B[ca]GB[0])(;B[bb]GB[0]))))(;W[bd]GB[0](;B[ca]GB[0](;W[eb]GB[0](;B[da]GB[0])(;B[ab]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[ab]GB[0])))(;B[ab]GB[0](;W[eb]GB[0](;B[ca]GB[0])(;B[bb]GB[0]))(;W[fe]GB[0](;B[ca]GB[0])(;B[bb]GB[0])))))))(;B[ca]GB[0](;W[eb]GB[0](;B[aa]GB[0](;W[ab]GB[0](;B[da]GB[0](;W[bb]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[ac]GB[0](;B[bb]GB[0])(;B[bd]GB[0])))(;B[bb]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[ac]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[ac]GB[0]))))(;W[bb]GB[0](;B[da]GB[0](;W[ab]GB[0](;B[ac]GB[0])(;B[bd]GB[0]))(;W[ac]GB[0](;B[ab]GB[0])(;B[bd]GB[0])))(;B[ab]GB[0](;W[bd]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[fe]GB[1](;B[da]GB[0])(;B[bb]GB[0])))))(;B[da]GB[0](;W[bd]GB[0](;B[aa]GB[0](;W[ad]GB[0];B[af]GB[0])(;W[fe]GB[0](;B[ad]GB[0])(;B[af]GB[0])))(;B[af]GB[0](;W[aa]GB[0];B[ad]GB[0])(;W[ad]GB[0];B[aa]GB[0])))(;W[fe]GB[0](;B[aa]GB[0](;W[ab]GB[0](;B[bb]GB[0])(;B[ac]GB[0]))(;W[bb]GB[0](;B[ab]GB[0])(;B[ac]GB[0])))(;B[bd]GB[0](;W[ee]GB[0](;B[aa]GB[0])(;B[af]GB[0]))(;W[eg]GB[0](;B[aa]GB[0])(;B[af]GB[0]))))))(;W[bd]GB[0](;B[aa]GB[0](;W[eb]GB[0](;B[da]GB[0](;W[ad]GB[0];B[af]GB[0])(;W[fe]GB[0](;B[ad]GB[0])(;B[af]GB[0])))(;B[ad]GB[0](;W[ab]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[bb]GB[0](;B[da]GB[0])(;B[ab]GB[0](;W[ac]GB[0](;B[da]GB[0])(;B[bb]GB[0]))(;W[fe]GB[0](;B[da]GB[0])(;B[bb]GB[0]))))))(;W[ad]GB[0](;B[da]GB[0](;W[eb]GB[0];B[af]GB[0])(;W[fe]GB[0](;B[eb]GB[0])(;B[af]GB[0])))(;B[eb]GB[0](;W[fe]GB[0](;B[da]GB[0])(;B[af]GB[0]))(;W[eg]GB[0](;B[da]GB[0])(;B[af]GB[0])))))(;B[da]GB[0](;W[aa]GB[0](;B[eb]GB[0](;W[ad]GB[0];B[af]GB[0])(;W[fe]GB[0](;B[ad]GB[0])(;B[af]GB[0])))(;B[ad]GB[0](;W[aa]GB[1](;B[bb]GB[0])(;B[eb]GB[0]))(;W[ab]GB[0](;B[aa]GB[0])(;B[bb]GB[0]))))(;W[eb]GB[0](;B[aa]GB[0](;W[ad]GB[0];B[af]GB[0])(;W[fe]GB[0](;B[ad]GB[0])(;B[af]GB[0])))(;B[af]GB[0](;W[aa]GB[0];B[ad]GB[0])(;W[ad]GB[0];B[aa]GB[0]))))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido94",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ha][ia][db][fb][hb][cc][ec][fc][gc][hc][ic][cd][dd][ed][fd][gd][id][be][ce][de][ee][fe][ge][he][ie][cf][df][ff][gf][hf][cg][fg][hg][ig][ah][bh][ch][gh][hh][ih][ai][di][ei][gi][hi][ii]AW[aa][ba][ca][ea][fa][ga][ab][bb][cb][eb][gb][ac][bc][ad][bd][ae][af][bf][ef][ag][bg][dg][eg][dh][eh][fh][bi]TR[db]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[dc]GB[1];W[da]GB[1])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido95",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ha][ia][db][fb][hb][cc][ec][fc][gc][hc][ic][cd][dd][ed][fd][gd][id][be][ce][de][ee][fe][ge][he][ie][cf][df][ff][gf][hf][cg][fg][hg][ig][ah][bh][ch][gh][hh][ih][ai][di][ei][gi][hi][ii]AW[aa][ba][ca][ea][fa][ga][ab][bb][cb][eb][gb][ac][bc][ad][bd][ae][af][bf][ef][ag][bg][dg][eg][dh][eh][fh][bi]TR[bi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[ci]GW[0])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido96",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][ca][ea][ha][ia][ab][bb][cb][db][fb][gb][bc][cc][dc][ec][fc][gc][hc][ed][fd][gd][hd][ce][de][ee][he][df][if][bg][cg][dg][eg][bh][ai][bi][ci][di]AW[fa][ib][ac][ad][bd][cd][dd][ae][be][fe][ge][af][bf][cf][ef][ff][gf][hf][ag][fg][hg][ig][ch][dh][eh][gh][hh][fi]TR[ch][dh][eh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[gi]GW[1](;B[ah]GW[1];W[ei]GW[1])(;B[ei]GW[1];W[ah]GW[1];B[fh]GW[1];W[eh]GW[1](;B[ch]GW[1];W[fh]GW[1];B[dh]GW[1])(;B[dh]GW[1];W[fh]GW[1];B[ch]GW[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido97",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ea][fa][ha][ia][hb][ib][dc][ec][ic][ad][bd][cd][ed][fd][be][ee][fe][af][cf][bg][cg][dg][eg][gg][ah][dh][gh][ei][fi][gi][hi][ii]AW[aa][ba][da][bb][cb][db][eb][fb][gb][ac][bc][cc][fc][gc][hc][gd][hd][ce][de][ge][ie][gf][hf][if][fg][hg][ch][fh][hh][ih][ai][bi][di]TR[fg][fh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[W]PL[W];W[ff]GW[1](;B[df]GW[1](;W[he]GW[1](;B[ef]GW[1];W[eh]GW[1])(;B[eh]GW[1];W[ef]GW[1]))(;W[ef]GW[1];B[eh]GW[1];W[he]GW[1]))(;B[ef]GW[1](;W[he]GW[1](;B[df]GW[1];W[eh]GW[1])(;B[eh]GW[1];W[df]GW[1]))(;W[df]GW[1];B[eh]GW[1];W[he]GW[1])))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido98",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ea][fa][ha][ia][hb][ib][dc][ec][ic][ad][bd][cd][ed][fd][be][ee][fe][af][cf][bg][cg][dg][eg][gg][ah][dh][eh][gh][ci][ei][fi][gi][hi][ii]AW[aa][ba][da][bb][cb][db][eb][fb][gb][ac][bc][cc][fc][gc][hc][gd][hd][ce][de][ge][he][ie][ff][gf][hf][if][fg][hg][ch][fh][hh][ih][ai][bi]TR[ci]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[bh]GB[1](;W[ai]GB[1](;B[ag]GB[1])(;B[ch]GB[1]))(;W[bi]GB[1](;B[ag]GB[1])(;B[ch]GB[1])))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido99",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][cb][db][gd][hd][ie][if][ag][gg][hg][ig][ah][fh][gh][bi][hi]AW[aa][da][ea][fa][ha][ia][ab][bb][eb][gb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][id][ae][be][ce][de][ee][fe][ge][af][bf][cf][df][ef][ff][gf][bg][cg][dg][eg][fg][bh][dh][eh][hh][ih][ci][di][ei][gi]TR[hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[fi]GB[0];B[ii]GB[0](;W[hh]GB[0];B[ih]GB[0])(;W[ih]GB[0];B[hh]GB[0]))(;W[ii]GB[1];B[fi]GB[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido100",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[aa][da][ea][ga][ab][bb][db][eb][fb][gb][ac][bc][cc][ec][fc][gc][ic][ed][fd][gd][hd][ae][be][ce][de][ee][fe][ge][he][ie][af][bf][cf][gf][hf][if][ag][bg][gg][hg][ig][ah][gh][hh][ih][ai][bi][ci][hi][ii]AW[ca][ha][ia][hb][ib][dc][ad][cd][dd][df][ef][ff][cg][dg][fg][bh][ch][dh][eh][fh][di][ei][fi][gi]TR[aa][ab][bb][ac][bc][cc]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[bd]GB[1](;W[ba]GB[1](;B[cb]GB[1](;W[ba]GB[1](;B[ca]GB[1](;W[dc]GB[1](;B[ba]GB[1](;W[cd]GB[1])(;W[dd]GB[1]))(;B[ad]GB[1](;W[cd]GB[1])(;W[dd]GB[1])))(;W[cd]GB[1](;B[ba]GB[1](;W[dc]GB[1])(;W[dd]GB[1]))(;B[dc]GB[1])))(;B[dc]GB[1](;W[cd]GB[1](;B[ca]GB[1])(;B[dd]GB[1]))(;W[dd]GB[1](;B[ca]GB[1])(;B[cd]GB[1]))))(;W[ca]GB[1](;B[ba]GB[1](;W[dc]GB[1](;B[ca]GB[1](;W[cd]GB[1])(;W[dd]GB[1]))(;B[ad]GB[1](;W[cd]GB[1])(;W[dd]GB[1])))(;W[cd]GB[1](;B[ca]GB[1](;W[dc]GB[1])(;W[dd]GB[1]))(;B[dc]GB[1])))(;B[dc]GB[1](;W[cd]GB[1](;B[ba]GB[1])(;B[dd]GB[1]))(;W[dd]GB[1](;B[ba]GB[1])(;B[cd]GB[1])))))(;B[dc]GB[1](;W[cd]GB[1](;B[cb]GB[1](;W[ba]GB[1](;B[ca]GB[1])(;B[dd]GB[1]))(;W[ca]GB[1](;B[ba]GB[1])(;B[dd]GB[1])))(;B[dd]GB[1]))(;W[dd]GB[1](;B[cb]GB[1](;W[ba]GB[1](;B[ca]GB[1])(;B[cd]GB[1]))(;W[ca]GB[1](;B[ba]GB[1])(;B[cd]GB[1])))(;B[cd]GB[1]))))(;W[cb]GB[1](;B[ba]GB[1](;W[ca]GB[1](;B[cb]GB[1](;W[dc]GB[1](;B[ca]GB[1](;W[cd]GB[1])(;W[dd]GB[1]))(;B[ad]GB[1](;W[cd]GB[1])(;W[dd]GB[1])))(;W[cd]GB[1](;B[ca]GB[1](;W[dc]GB[1])(;W[dd]GB[1]))(;B[dc]GB[1])))(;B[dc]GB[1](;W[cd]GB[1](;B[cb]GB[1])(;B[dd]GB[1]))(;W[dd]GB[1](;B[cb]GB[1])(;B[cd]GB[1]))))(;W[cb]GB[1](;B[ca]GB[1](;W[dc]GB[1](;B[cb]GB[1](;W[cd]GB[1])(;W[dd]GB[1]))(;B[ad]GB[1](;W[cd]GB[1])(;W[dd]GB[1])))(;W[cd]GB[1](;B[cb]GB[1](;W[dc]GB[1])(;W[dd]GB[1]))(;B[dc]GB[1])))(;B[dc]GB[1](;W[cd]GB[1](;B[ca]GB[1])(;B[dd]GB[1]))(;W[dd]GB[1](;B[ca]GB[1])(;B[cd]GB[1])))))(;B[dc]GB[1](;W[cd]GB[1](;B[ba]GB[1](;W[ca]GB[1](;B[cb]GB[1])(;B[dd]GB[1]))(;W[cb]GB[1](;B[ca]GB[1])(;B[dd]GB[1])))(;B[dd]GB[1]))(;W[dd]GB[1](;B[ba]GB[1](;W[ca]GB[1](;B[cb]GB[1])(;B[cd]GB[1]))(;W[cb]GB[1](;B[ca]GB[1])(;B[cd]GB[1])))(;B[cd]GB[1])))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido101",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ba][ca][da][ea][fa][ga][db][eb][fb][gb][hb][ib][ac][dc][ec][fc][gc][ic][ad][cd][dd][ed][fd][gd][hd][ee][ge][he][bf][ff][hf][bg][eg][fg][gg][hg][ah][bh][hh][ih][ai][ei][fi][gi][hi][ii]AW[aa][ha][bb][cb][bc][cc][bd][ae][be][ce][de][ie][af][cf][df][ef][if][cg][dg][ch][dh][eh][fh][gh][bi][ci][di]TR[ac][ad]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W];W[ab]GB[0](;B[ac]GB[0];W[ad]GB[0])(;B[ad]GB[0];W[ac]GB[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido102",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ab][bb][cb][db][eb][cc][dc][ec][fc][hc][bd][dd][ed][fd][gd][hd][ae][be][ce][de][ge][ie][af][bf][cf][df][gf][hf][ag][bg][cg][hg][ig][dh][hh][ih][bi][di][ei][fi][hi][ii]AW[ba][da][ea][ga][ha][ia][fb][gb][hb][ib][ac][gc][ic][id][ee][fe][ef][ff][dg][fg][gg][ah][bh][eh][fh][gh][ci][gi]TR[ah][bh]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[ch]GW[0])",
+    "difficulty": "easy"
+  },
+  {
+    "id": "corteNoDefendido103",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][ab][bb][cb][db][eb][cc][dc][ec][fc][hc][bd][dd][ed][fd][gd][hd][ae][be][ce][de][ge][ie][af][bf][cf][df][gf][hf][ag][bg][cg][hg][ig][dh][hh][ih][bi][di][ei][fi][hi][ii]AW[ba][da][ea][ga][ha][ia][fb][gb][hb][ib][ac][gc][ic][id][ee][fe][ef][ff][dg][fg][gg][ah][bh][eh][fh][gh][ci][gi]TR[dh][di][ei][fi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[B]PL[W](;W[eg]GB[1])(;W[ch]GB[0](;B[dh]GB[0](;W[eg]GB[0](;B[di]GB[0](;W[ei]GB[0](;B[dh]GB[0](;W[di]GB[0])(;W[fi]GB[0]))(;B[di]GB[0](;W[dh]GB[0])(;W[fi]GB[0])))(;W[fi]GB[0]))(;B[ei]GB[0](;W[di]GB[0])(;W[fi]GB[0])))(;W[di]GB[0](;B[ei]GB[0](;W[eg]GB[0])(;W[dh]GB[0]))(;B[fi]GB[0](;W[eg]GB[0])(;W[dh]GB[0]))))(;B[di]GB[0](;W[eg]GB[0](;B[dh]GB[0](;W[ei]GB[0](;B[dh]GB[0](;W[di]GB[0])(;W[fi]GB[0]))(;B[di]GB[0](;W[dh]GB[0])(;W[fi]GB[0])))(;W[fi]GB[0]))(;B[ei]GB[0](;W[dh]GB[0])(;W[fi]GB[0])))(;W[dh]GB[0](;B[ei]GB[0](;W[eg]GB[0])(;W[fi]GB[0](;B[di]GB[0](;W[eg]GB[0])(;W[ei]GB[0]))(;B[ei]GB[0](;W[eg]GB[0])(;W[di]GB[0]))))(;B[fi]GB[0](;W[eg]GB[0])(;W[ei]GB[0]))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido104",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ga][ab][hb][ib][ac][bc][cc][ic][dd][ed][id][be][ge][he][ie][cf][gf][hf][ag][bg][eg][hg][ah][bh][fh][hh][ih][bi][di][ei][fi]AW[aa][ba][da][ea][ha][cb][eb][gb][dc][ec][fc][hc][ad][bd][cd][gd][hd][ce][de][ee][fe][af][df][ef][cg][dg][gg][ch][dh][eh][gh][ci]TR[af]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[ae]GW[1])(;B[bf]GW[0];W[ae]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido105",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][hd][id][ae][ce][de][ee][fe][ge][he][af][bf][cf][df][ef][ff][hf][ag][bg][cg][dg][eg][gg][ah][bh][ch][dh][eh][ai][bi][ci]AW[aa][ie][if][fg][hg][ig][fh][gh][ih][di][ei][fi][hi][ii]TR[ie][if][ig][hg][ih][ii][hi]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B];B[gf]GW[0](;W[hh]GW[0])(;W[gi]GW[0]))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "corteNoDefendido106",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[ca][da][ea][fa][ga][ha][ia][ab][bb][cb][db][eb][fb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][hd][id][ae][ce][de][ee][fe][ge][he][af][bf][cf][df][ef][ff][hf][ag][bg][cg][dg][eg][gg][ah][bh][ch][dh][eh][ai][bi][ci]AW[aa][ie][if][fg][hg][ig][fh][gh][ih][di][ei][fi][hi][ii]TR[fg][fh][gh][fi][ei][di]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[kill]ZTARGET[W]PL[B](;B[be]GW[1](;W[hh]GW[0](;B[gf]GW[0])(;B[gi]GW[0](;W[ie]GW[0](;B[gf]GW[0](;W[if]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0]))))(;B[if]GW[0](;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[gf]GW[0](;W[hg]GW[0])(;W[ig]GW[0])))(;W[hg]GW[0](;B[ie]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[gf]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))))(;W[if]GW[0](;B[ie]GW[0](;W[fg]GW[0](;B[gf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))(;W[hg]GW[0](;B[gf]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[fg]GW[0](;W[ig]GW[0])(;W[fh]GW[0]))))(;B[gf]GW[0](;W[ie]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ie]GW[0])(;W[ig]GW[0])))))))(;W[gi]GW[0](;B[gf]GW[0])(;B[hh]GW[0](;W[ie]GW[0](;B[gf]GW[0](;W[if]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0]))))(;B[if]GW[0](;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[gf]GW[0](;W[hg]GW[0])(;W[ig]GW[0])))(;W[hg]GW[0](;B[ie]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[gf]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))))(;W[if]GW[0](;B[ie]GW[0](;W[fg]GW[0](;B[gf]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))(;W[hg]GW[0](;B[gf]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[fg]GW[0](;W[ig]GW[0])(;W[fh]GW[0]))))(;B[gf]GW[0](;W[ie]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ie]GW[0])(;W[ig]GW[0]))))))))(;B[gf]GW[0](;W[hh]GW[0](;B[be]GW[0])(;B[gi]GW[0](;W[ie]GW[0](;B[be]GW[0](;W[if]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0]))))(;B[if]GW[0](;W[fg]GW[0](;B[be]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0])))(;W[hg]GW[0](;B[be]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[ie]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))))(;W[if]GW[0](;B[be]GW[0](;W[ie]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ie]GW[0])(;W[ig]GW[0]))))(;B[ie]GW[0](;W[fg]GW[0](;B[be]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))(;W[hg]GW[0](;B[be]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[fg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))))))(;W[gi]GW[0](;B[be]GW[0])(;B[hh]GW[0](;W[ie]GW[0](;B[be]GW[0](;W[if]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[if]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[if]GW[0])(;W[ig]GW[0]))))(;B[if]GW[0](;W[fg]GW[0](;B[be]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0])))(;W[hg]GW[0](;B[be]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[ie]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))))(;W[if]GW[0](;B[be]GW[0](;W[ie]GW[0](;B[fg]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[fg]GW[0])(;W[ig]GW[0])))(;W[fg]GW[0](;B[ie]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ie]GW[0])(;W[ig]GW[0]))))(;B[ie]GW[0](;W[fg]GW[0](;B[be]GW[0](;W[hg]GW[0])(;W[ig]GW[0]))(;B[hg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))(;W[hg]GW[0](;B[be]GW[0](;W[fg]GW[0])(;W[ig]GW[0]))(;B[fg]GW[0](;W[ig]GW[0])(;W[fh]GW[0])))))))))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "corteNoDefendido107",
+    "conceptId": "CORTE_NO_DEFENDIDO",
+    "sgf": "(;GM[1]FF[4]SZ[9]AB[da][fa][ga][db][eb][fb][gb][hb][ib][cc][dc][ec][fc][dd][ed][fd][ee][af][bf][ef][gf][hf][ag][bg][dg][eg][fg][hg][ig][ah][bh][dh][eh][ih][ai][ci][di][ei][hi]AW[aa][ba][ca][ia][bb][cb][ac][bc][gc][hc][ad][bd][cd][gd][id][ae][be][ce][de][fe][ge][he][ie][cf][df][if][gg][fh][gh][hh][fi]TR[af][bf][ag][bg][ah][bh][ai]ZCONCEPT[CORTE_NO_DEFENDIDO]ZOBJECTIVE[live]ZTARGET[B]PL[B];B[cg]GB[1])",
+    "difficulty": "easy"
   }
 ]
