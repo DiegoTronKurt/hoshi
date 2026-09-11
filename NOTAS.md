@@ -1,5 +1,66 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-11, cont. 22: coach en vivo resuelve avisos genericos con mas jugadas, ejercicios de sente antes que gote)
+
+Cierra los dos pendientes que quedaban de la propuesta original de "coach en
+vivo" (item 3) y de contenido de yose (item 5): el milestone 3 completo
+(reintentar un aviso generico cuando el futuro ya esta disponible) y
+sente/gote, que se habian dejado explicitamente para una sesion aparte por
+el tamano del trabajo de calibracion que requerian.
+
+**Milestone 3: avisos genericos que se resuelven especificos.** `analyzeLastMove`
+ya excluia ATARI_IGNORADO/CORTE_NO_DEFENDIDO del aviso en vivo porque ambos
+necesitan ver el futuro (una captura real, una no-reconexion) que en el
+instante de la jugada todavia no existe. Nueva `recheckDelayedMistake()`
+(`analysis/mistakes.ts`) reutiliza esos mismos dos detectores SIN cambiarlos:
+como ambos leen "el resto de la partida" como si fuera el final, pasarles la
+partida tal como va hasta ahora (no necesariamente terminada) hace que
+"final" signifique "por ahora" -- exactamente el recorte acotado que hacia
+falta. `PlayGameScreen.tsx` guarda el aviso generico mas reciente y lo
+reintenta en cada jugada siguiente durante hasta 6 jugadas; si se resuelve,
+aparece una segunda leyenda corta y aparte ("resulto ser X") porque el aviso
+original ya desaparecio del estado para entonces -- no hay nada que
+"actualizar en el lugar".
+
+**4 direcciones visuales -> 4 temas de app reales + coach en vivo mas util.**
+(Ya en NOTAS bajo cont. 21 arriba, agregado aca solo como referencia cruzada:
+`editorial`/`moderno`/`zen`/`alegre` en `appThemes.ts`, y el aviso de errores
+en vivo con anillo de mejor jugada + zona de territorio en
+`PlayGameScreen.tsx`.)
+
+**Ejercicios de sente antes que gote (SENTE_ANTES_QUE_GOTE, n9-l3).** Tenia
+concepto e ilustracion en la leccion desde antes, pero `generatesExercises`
+quedaba en false a proposito: sente/gote necesita comparar "que pasa si se
+ignora" contra "que pasa si se responde", no un solo delta de area como el
+resto de `solver/areaValue.ts`. Nueva `classifySenteGote()`: juega la
+jugada candidata, mide si el rival tiene alguna respuesta local disponible
+(sin exigirle valor -- una jugada de rescate no vale nada en area hasta que
+la captura real pasa), busca la mejor alternativa REAL del rival fuera de
+un radio Chebyshev de 3, simula que el rival la juega (tenuki), y compara
+cuanto gana el jugador original siguiendo la amenaza contra cuanto gano el
+rival con el tenuki. Calibracion real, no de manual: el margen minimo
+(SENTE_GAP_THRESHOLD) arranco en 2 como PASS_VALUE_THRESHOLD, pero un
+diagnostico contra autojuego real (9x9) encontro casi cero posiciones
+sente con ese margen -- las jugadas sente genuinas en yose casi nunca
+superan un margen de 2-3 puntos de diferencia. Bajado a 0 (cualquier
+diferencia positiva ya significa "ignorar cuesta mas que responder"),
+verificado de nuevo contra autojuego real antes de aceptarlo.
+
+Nuevo generador `tools/generate-sente-gote-problems.ts` (9x9, mismo
+presupuesto de autojuego que `generate-yose-value-problems.ts`): busca
+posiciones que traigan un candidato sente Y uno gote a la vez, para que
+"elegir el sente primero" sea una decision real. 70 problemas generados y
+verificados. Reusa `AreaValueProblem` sin cambios de formato; la unica
+plomeria nueva es el branch de validacion en `useSolvableExercise.ts`
+(classifySenteGote en vez del umbral generico de delta de area, porque una
+jugada de atari real vale poco en area hasta que la captura pasa) y su
+propio `handlePass` (una jugada sente puede existir aunque bestAreaMove de
+todo el tablero de null en 3/70 posiciones generadas -- pasar tiene que
+decidirse con el mismo verificador que un clic, no con bestAreaMove).
+SENTE_Y_GOTE (identificar si UNA jugada dada es sente o gote, no elegir
+entre dos) sigue sin banco: es una interaccion de clasificar binaria, no de
+clic-en-el-tablero, y necesitaria su propio componente de UI.
+
 ## Estado general del proyecto (2026-09-11, cont. 21: fix de jugada empatada rechazada, Aprender vuelve a alinearse a la izquierda, bancos de ejercicios engrosados, 4 temas de app nuevos, aviso de errores en vivo con anillo de mejor jugada y zona de territorio, AAB 1.21.0+26)
 
 Testeo real en Android del trabajo de cont. 20 encontro dos bugs reales
