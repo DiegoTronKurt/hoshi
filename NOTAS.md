@@ -1,5 +1,92 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-11, cont. 21: fix de jugada empatada rechazada, Aprender vuelve a alinearse a la izquierda, bancos de ejercicios engrosados, 4 temas de app nuevos, aviso de errores en vivo con anillo de mejor jugada y zona de territorio, AAB 1.21.0+26)
+
+Testeo real en Android del trabajo de cont. 20 encontro dos bugs reales
+(ademas de features que solo faltaba subir al store): jugadas empatadas en
+el mejor puntaje se rechazaban en yose/juicio local-global, y los niveles
+5/8/9 repetian literalmente el nombre de su propio grupo de fase
+("Apertura... Apertura") -- la limpieza de titulos de cont. 20 solo habia
+revisado leccion-vs-nivel, no nivel-vs-grupo-de-fase. Ademas, a pedido
+explicito del usuario, `.learn-level-card`/`.learn-lesson-card` volvieron de
+`center` a `flex-start`: la decision de centrar (tomada en cont. 20 siguiendo
+el plan original) no le gusto en la practica.
+
+**Jugada empatada rechazada.** `bestAreaMove` devuelve un solo punto aunque
+haya varios empatados en el mismo delta maximo; `useSolvableExercise`
+comparaba por identidad exacta de punto (`bestAreaMove(...)?.point !== point`)
+para `EL_FINAL_TAMBIEN_ES_GRANDE`/`COMPARAR_VALOR_REAL`/
+`JUICIO_LOCAL_VS_GLOBAL`, rechazando cualquier empate que `bestAreaMove` no
+eligiera. Nueva `isBestAreaMove()` en `solver/areaValue.ts` acepta cualquier
+punto con delta >= al mejor. Verificado contra datos reales: 8/197 ejercicios
+de yose existentes tenian un empate no detectado. Test de regresion nuevo
+con un tablero de dos bolsillos simetricos construido a proposito (empate
+verificado empiricamente, `bestAreaMove` solo devuelve uno de los dos).
+
+**Aprender: vuelta a la izquierda, titulos de nivel sin eco de su fase.**
+Revertido `justify-content: center` -> `flex-start` en `.learn-level-card`,
+`.learn-lesson-card` y `.learn-level-card-locked`. Niveles 5/8/9 recortados
+("Apertura" -> "Puntos de esquina", "Medio juego: ataque y defensa" ->
+"Ataque y defensa", "Endgame" -> "Yose") para no repetir el titulo del grupo
+de fase (`LEVEL_GROUPS`) que ya se muestra arriba de la lista.
+
+**Bancos de ejercicios engrosados via autojuego paralelo.** Los 5 bancos mas
+delgados (ATARI_IGNORADO 8, AUTOATARI 23, RELLENO_OJO_PROPIO 11,
+TRIANGULO_VACIO 11, CORTE_NO_DEFENDIDO 15) crecieron a 49/60/53/45/107
+respectivamente corriendo `generate-mistake-exercises.ts` con 600 partidas de
+autojuego. En vez de una corrida secuencial (~28h estimadas a ~3min/partida:
+tiempo de MCTS con presupuesto de playouts fijo por jugada, no por partida,
+mas el peso de cargar la red neuronal por proceso), se agrego sharding por
+variables de entorno (`WORKER_INDEX`/`WORKER_COUNT`, particion por indice de
+partida modulo N) para correr 7 procesos de Node en paralelo -- CPU-bound,
+sin relacion con `worker_threads`/serializacion, asi que procesos de SO
+separados es mas simple que hilos. Cada worker escribe checkpoints
+`<banco>.partN.json` tras cada partida (nunca los bancos reales
+directamente); `tools/merge-mistake-exercise-parts.ts` (nuevo) concatena y
+renumera ids al terminar. Verificado con la suite completa (3492 tests) una
+vez liberada la CPU de los 7 workers.
+
+**4 temas de app nuevos: editorial, moderno, zen, alegre.** Se exploraron 5
+direcciones visuales completas (mockups en Claude Design) para Aprender y
+Perfil; en vez de reemplazar el look actual por una sola, se generalizo el
+sistema de temas de color ya existente (`appThemes.ts`, 9 temas, activado via
+`data-app-theme` en `App.tsx`) agregando tokens de tipografia
+(`--hoshi-font-heading`/`--hoshi-font-body`, nuevos en `:root`, consumidos
+por `.app`/`.app h1,h2,h3`) ademas de los de color que ya existian. Los 9
+temas previos no se tocan (heredan la tipografia por defecto, sin cambios).
+Fuentes de Google Fonts (Lora+Public Sans, Manrope, Shippori Mincho+Inter,
+Baloo 2+Nunito) cargadas sin condicionar en `index.html` -- no afectan el
+tamano del bundle (CDN externo, no bundleado). El look completo de los
+mockups (sombras vs. bordes, filas sin tarjeta en zen, colores por fase en
+alegre) no se replico 1:1 a proposito: el resto de la app usa un unico
+lenguaje de tarjeta (borde plano, sin sombra) en decenas de pantallas, asi
+que ampliar solo color+tipografia es lo que se puede generalizar sin
+reescribir cada pantalla una por una y arriesgar regresiones visuales no
+verificables sin recorrer toda la app a mano. Verificado con Playwright real:
+los 4 temas nuevos aplican fondo/fuente distintos sin errores de consola, los
+9 existentes siguen iguales.
+
+**Aviso de errores en vivo, mas especifico.** Ademas de la caida de
+probabilidad y la etiqueta de concepto (cont. 20, milestone 1), ahora
+muestra: (1) un anillo "jugada fantasma" con el punto que la red hubiera
+jugado en la posicion previa a la jugada real (mismo patron de extraccion de
+policy que ya usan la pista y `ReviewMistakeBoard.askAi`, reusando el
+`policy` de la evaluacion "antes" que ya se pedia para el swing, sin llamada
+extra a la red), y (2) una zona de tablero sombreada con el territorio que
+efectivamente cambio de dueno (`ownershipLossPoints()`, nueva en
+`review/reviewState.ts`: diff de `bucketOwnership` antes/despues sobre el
+mismo tablero -- coloreado siempre como "ahora no es tuyo" aunque haya
+quedado neutral, porque EMPTY tambien es el valor de "sin cambio" en ese
+Int8Array y dejarlo en EMPTY habria vuelto indistinguibles ambos casos).
+Milestone 3 (mensaje generico -> especifico para los detectores retrasados
+ATARI_IGNORADO/CORTE_NO_DEFENDIDO) y sente/gote siguen pendientes.
+
+**AAB 1.21.0+26.** Sincronizado hoshi/dist -> hoshi-flutter/assets/webapp,
+build verificado grepeando el JS embebido del .aab por las claves i18n
+nuevas (`settings.appTheme.zen`, `play.mistakeFlag.betterMove`, etc.) antes
+de subir el commit -- mismo criterio de verificacion que builds anteriores,
+nunca asumir que sincronizar+compilar realmente incluyo el cambio.
+
 ## Estado general del proyecto (2026-09-11, cont. 20: historial de partidas acotado, Aprender centrado y sin titulos repetidos, boton siguiente leccion, ejercicios sin repetir, texturas de tablero, coach en vivo, ejercicios de juicio local vs. global)
 
 Playtest real de la app con una lista de 8 hallazgos/ideas concretas, todas
