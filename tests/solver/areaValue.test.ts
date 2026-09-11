@@ -6,6 +6,7 @@ import type { BoardState, Color } from '../../src/core/types'
 import {
   areaDeltaForPoint,
   bestAreaMove,
+  classifySenteGote,
   estimateMoveCost,
   isBestAreaMove,
   isOwnTerritory,
@@ -198,5 +199,104 @@ describe('isOwnTerritory', () => {
   it('false si todavia no hay ninguna cadena pass-alive (bolsillo sin sellar)', () => {
     const board = cornerWall()
     expect(isOwnTerritory(board, toPoint(SIZE, 1, 0), BLACK)).toBe(false)
+  })
+})
+
+/** Bloque blanco de 6 piedras en la esquina (0,0)-(2,1) con exactamente 2
+ * libertades -- (1,2) y (3,1) -- antes de que negro juegue. Si blanco
+ * ignora el atari de negro en (1,2) y negro despues juega (3,1), captura
+ * las 6 piedras: el territorio resultante (6 puntos vacios + la piedra
+ * jugada) vale claramente mas que el "gran punto" real que blanco tenia
+ * disponible en la esquina opuesta (delta 4, mismo bolsillo validado que
+ * cornerWall, reflejado y con el color invertido) -- por eso el atari es
+ * sente, no gote. Numeros verificados con un script de depuracion antes de
+ * aceptarlos (ver NOTAS.md): capturar da delta 7, el punto lejano da 4. */
+function senteBoard(): BoardState {
+  const board = createBoard(SIZE)
+  place(board, WHITE, [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ])
+  place(board, BLACK, [
+    [3, 0],
+    [0, 2],
+    [2, 2],
+  ])
+  // Espejo de cornerWall (pocket (0,0)-(2,0)/pared (3,0),(0,1),(1,1)/hueco
+  // (2,1)) via x'=8-x, y'=8-y, con blanco en vez de negro -- delta 4.
+  place(board, WHITE, [
+    [5, 8],
+    [8, 7],
+    [7, 7],
+  ])
+  return board
+}
+const SENTE_CANDIDATE: [number, number] = [1, 2]
+const FAR_BIG_POINT: [number, number] = [6, 7]
+
+/** Una sola piedra blanca en la esquina: si negro le pone atari y blanco lo
+ * ignora, capturarla vale muy poco (delta 2: 1 punto de territorio + la
+ * piedra jugada) -- claramente menos que el mismo punto lejano de 4 puntos
+ * que blanco tenia disponible. El mismo atari que era sente con un grupo
+ * grande es gote con un grupo chico: la diferencia esta en cuanto hay en
+ * juego si se ignora, no en la forma del atari en si. */
+function goteBoard(): BoardState {
+  const board = createBoard(SIZE)
+  place(board, WHITE, [[0, 0]])
+  place(board, WHITE, [
+    [5, 8],
+    [8, 7],
+    [7, 7],
+  ])
+  return board
+}
+const GOTE_CANDIDATE: [number, number] = [1, 0]
+
+describe('classifySenteGote', () => {
+  it('atari sobre un grupo grande es sente cuando capturarlo vale claramente mas que la mejor alternativa del rival', () => {
+    const board = senteBoard()
+    expect(classifySenteGote(board, toPoint(SIZE, ...SENTE_CANDIDATE), BLACK)).toBe('sente')
+  })
+
+  it('el mismo tipo de atari es gote cuando el grupo amenazado es chico (poco en juego si se ignora)', () => {
+    const board = goteBoard()
+    expect(classifySenteGote(board, toPoint(SIZE, ...GOTE_CANDIDATE), BLACK)).toBe('gote')
+  })
+
+  it('null si la jugada no crea ninguna amenaza local que el rival deba responder', () => {
+    const board = senteBoard()
+    // La propia jugada de blanco en su "gran punto" lejano no amenaza nada
+    // cerca de si misma -- no hay atari ni grupo en juego ahi.
+    expect(classifySenteGote(board, toPoint(SIZE, ...FAR_BIG_POINT), WHITE)).toBeNull()
+  })
+
+  it('null si la jugada no es legal (punto ya ocupado)', () => {
+    const board = senteBoard()
+    expect(classifySenteGote(board, toPoint(SIZE, 0, 0), BLACK)).toBeNull()
+  })
+
+  it('null si el rival no tiene ninguna alternativa real de tenuki (todo el resto del tablero vale igual o menos)', () => {
+    // Mismo atari que el caso sente, pero sin el bolsillo lejano: sin una
+    // alternativa que supere PASS_VALUE_THRESHOLD en ningun otro lugar del
+    // tablero, "ignorar" no es una opcion real que comparar.
+    const board = createBoard(SIZE)
+    place(board, WHITE, [
+      [0, 0],
+      [1, 0],
+      [2, 0],
+      [0, 1],
+      [1, 1],
+      [2, 1],
+    ])
+    place(board, BLACK, [
+      [3, 0],
+      [0, 2],
+      [2, 2],
+    ])
+    expect(classifySenteGote(board, toPoint(SIZE, ...SENTE_CANDIDATE), BLACK)).toBeNull()
   })
 })

@@ -122,6 +122,7 @@
   "exercises.wrongReason.ownTerritory": "That's already your own settled territory, playing there doesn't gain anything.",
   "exercises.wrongReason.noGain": "That doesn't change the score, try a point that actually gains area.",
   "exercises.wrongReason.notBiggest": "That gains something, but there's a bigger point available right now.",
+  "exercises.wrongReason.notSente": "That move doesn't force a reply — the opponent can safely ignore it. Find the one that does.",
   "exercises.wrongReason.passedTooEarly": "Passing here gives up a point that's still available.",
   "exercises.wrongReason.notSharedLiberty": "That liberty isn't shared between the two groups.",
   "exercises.wrongReason.wrongGroup": "That's not the group that's behind in the liberty race.",

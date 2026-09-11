@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { entryKind, listBankEntries, loadEntry, loadProblem } from '../../src/content/problemBank'
 import { computeRegion } from '../../src/solver/region'
 import { solve } from '../../src/solver/tsumego'
-import { bestAreaMove, isOwnTerritory } from '../../src/solver/areaValue'
+import { bestAreaMove, classifySenteGote, isOwnTerritory } from '../../src/solver/areaValue'
+import { EMPTY } from '../../src/core/types'
 import { raceBehindColor, sharedLibertiesOf } from '../../src/solver/semeai'
 
 describe('banco de problemas: invariante del generador', () => {
@@ -101,9 +102,25 @@ describe('banco de problemas: invariante del generador', () => {
         }
       }
       expect(hasOwnTerritory).toBe(true)
+    } else if (conceptId === 'SENTE_ANTES_QUE_GOTE') {
+      // Este concepto no se valida con bestAreaMove (ver useSolvableExercise.ts):
+      // una jugada sente real puede tener un delta de area inmediato por
+      // debajo de PASS_VALUE_THRESHOLD (una jugada de atari no vale nada en
+      // area hasta que la captura real pasa mas adelante), asi que `best`
+      // puede ser null aca sin que la posicion este mal generada. El
+      // invariante real es el mismo filtro que uso el generador
+      // (tools/generate-sente-gote-problems.ts::hasRealChoice): tiene que
+      // existir al menos un punto que classifySenteGote etiquete 'sente'.
+      let hasSente = false
+      for (let p = 0; p < board.stones.length && !hasSente; p++) {
+        if (board.stones[p] !== EMPTY) continue
+        if (classifySenteGote(board, p, toMove) === 'sente') hasSente = true
+      }
+      expect(hasSente).toBe(true)
     } else {
-      // PASE_PREMATURO, EL_FINAL_TAMBIEN_ES_GRANDE, COMPARAR_VALOR_REAL: las
-      // tres afirman que hay una jugada real que vale la pena.
+      // PASE_PREMATURO, EL_FINAL_TAMBIEN_ES_GRANDE, COMPARAR_VALOR_REAL,
+      // JUICIO_LOCAL_VS_GLOBAL: las cuatro afirman que hay una jugada real
+      // que vale la pena.
       expect(best).not.toBeNull()
     }
   })

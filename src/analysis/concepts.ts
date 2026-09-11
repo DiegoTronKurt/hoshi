@@ -673,16 +673,22 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
   // Nivel 9 (Yose): la mayoria sigue el mismo patron -- sin detector ni banco
   // de ejercicios, la afirmacion vive en la leccion (content/lessons/n9.ts),
   // pero ahi cada numero se calcula con el motor real en vez de citarse de un
-  // libro. EL_FINAL_TAMBIEN_ES_GRANDE y COMPARAR_VALOR_REAL si tienen banco
-  // (tools/generate-yose-value-problems.ts + solver/areaValue.ts, mismo
-  // mecanismo que PASE_PREMATURO/RELLENO_TERRITORIO_PROPIO en nivel 1):
-  // "cual es la mejor jugada aca" tiene una respuesta unica y verificable.
-  // SENTE_Y_GOTE/SENTE_ANTES_QUE_GOTE y CONTAR_PARA_DECIDIR quedan afuera a
-  // proposito -- sente/gote necesitaria comparar "valor si se ignora" contra
-  // "valor si se responde" (una evaluacion a 2-3 jugadas, no un solo delta), y
-  // CONTAR_PARA_DECIDIR ensena a leer el marcador agregado para elegir
-  // estrategia, no a identificar una jugada -- forzarlo en el mismo mecanismo
-  // de "elegir el mejor punto" etiquetaria mal el concepto (ver NOTAS.md).
+  // libro. EL_FINAL_TAMBIEN_ES_GRANDE, COMPARAR_VALOR_REAL y
+  // SENTE_ANTES_QUE_GOTE si tienen banco (tools/generate-yose-value-
+  // problems.ts / tools/generate-sente-gote-problems.ts + solver/
+  // areaValue.ts): "cual es la mejor jugada aca" tiene una respuesta unica y
+  // verificable. SENTE_ANTES_QUE_GOTE usa classifySenteGote (comparacion de
+  // 2 jugadas mas: responder localmente vs. tenuki, ver el comentario de esa
+  // funcion) en vez de un solo delta de area -- la posicion trae un
+  // candidato sente y uno gote, la jugada correcta es la sente. SENTE_Y_GOTE
+  // (identificar si UNA jugada dada es sente o gote, no elegir entre dos)
+  // queda afuera todavia: es una interaccion binaria de clasificar, no de
+  // click-en-el-tablero, y no hay ninguna pantalla de ejercicios con ese
+  // formato hoy -- necesitaria su propio componente de UI, no solo un banco
+  // nuevo. CONTAR_PARA_DECIDIR tambien queda afuera: ensena a leer el
+  // marcador agregado para elegir estrategia, no a identificar una jugada --
+  // forzarlo en el mecanismo de "elegir el mejor punto" etiquetaria mal el
+  // concepto (ver NOTAS.md).
   EL_FINAL_TAMBIEN_ES_GRANDE: {
     id: 'EL_FINAL_TAMBIEN_ES_GRANDE',
     level: 9,
@@ -711,7 +717,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
     summaryKey: 'concept.SENTE_ANTES_QUE_GOTE.summary',
     lessonId: 'n9-l3',
     hasDetector: false,
-    generatesExercises: false,
+    generatesExercises: true,
     severity: 'low',
   },
   COMPARAR_VALOR_REAL: {

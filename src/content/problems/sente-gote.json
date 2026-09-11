@@ -1,0 +1,422 @@
+[
+  {
+    "id": "senteGote1",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ca][da][fa][ga][ia][bb][cb][hb][ib][bc][gc][hc][ic][bd][cd][dd][ed][hd][ee][ef][bg][cg][dg][eg][fg][gg][ch][gh][ci][fi][gi]AW[ea][ab][eb][fb][ac][cc][dc][ec][fc][gd][id][ae][be][ce][de][fe][he][af][cf][df][ff][gf][if][ag][hg][ah][bh][dh][eh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote2",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ca][da][fa][ga][ia][bb][cb][hb][ib][bc][gc][hc][ic][bd][cd][dd][ed][hd][ee][ie][bf][ef][bg][cg][dg][eg][fg][gg][ch][gh][hh][ci][fi][gi]AW[ea][ab][eb][fb][gb][ac][cc][dc][ec][fc][ad][gd][ae][be][ce][de][fe][he][af][cf][df][ff][gf][if][ag][hg][ah][bh][dh][eh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote3",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][dc][ec][fc][hc][bd][dd][fd][ee][ge][bf][df][gf][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][ic][ad][cd][hd][fe][ie][ef][eg][ah][bh][ch][dh][gh][bi][di])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote4",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][dc][ec][fc][hc][bd][dd][fd][be][ee][ge][bf][df][gf][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][gc][ic][ad][cd][hd][fe][ie][ef][eg][ah][bh][ch][dh][gh][bi][di])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote5",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][dc][ec][fc][hc][bd][dd][fd][be][ee][ge][bf][df][gf][hf][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][gc][ic][ad][cd][hd][fe][ie][ef][eg][ah][bh][ch][dh][gh][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote6",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][dc][ec][fc][hc][bd][dd][fd][be][ee][ge][bf][df][gf][hf][if][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][gc][ic][ad][cd][hd][fe][ie][ef][eg][ah][bh][ch][dh][gh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote7",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][dc][ec][fc][hc][bd][dd][fd][id][be][ee][ge][bf][df][gf][hf][if][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][gc][ad][cd][hd][ae][fe][ie][ef][eg][ah][bh][ch][dh][gh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote8",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][ib][cc][dc][ec][fc][hc][bd][dd][fd][id][be][ee][ge][bf][df][gf][hf][if][ag][cg][dg][fg][hg][fh][ei][gi]AW[ca][ea][ga][eb][gb][ac][bc][gc][ad][cd][hd][ae][de][fe][ie][ef][eg][ah][bh][ch][dh][gh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote9",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[da][ia][db][hb][ib][cc][dc][ec][fc][hc][bd][dd][fd][id][be][ce][ee][ge][he][bf][df][gf][hf][if][cg][dg][fg][gg][hg][fh][ei][fi][gi]AW[ca][ea][ga][eb][fb][gb][ac][bc][gc][ad][gd][hd][ae][fe][af][ef][ff][bg][eg][ah][bh][ch][dh][gh][hh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote10",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[da][ia][db][hb][ib][cc][dc][ec][fc][hc][bd][dd][fd][id][be][ce][ee][ge][he][bf][df][gf][hf][if][cg][dg][fg][gg][hg][eh][fh][ei][fi][gi]AW[ca][ea][ga][eb][fb][gb][ac][bc][gc][ad][gd][hd][ae][af][bg][ig][ah][bh][ch][dh][gh][hh][ih][bi][di][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote11",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[da][ia][db][hb][ib][cc][dc][ec][fc][hc][bd][dd][fd][id][be][ce][ee][ge][he][bf][df][gf][hf][if][cg][dg][fg][gg][hg][eh][fh][ei][fi][gi][ii]AW[ca][ea][ga][eb][fb][gb][ac][bc][gc][ad][gd][hd][ae][af][bg][ah][bh][ch][dh][gh][bi][di])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote12",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ia][db][hb][ib][cc][dc][ec][fc][hc][bd][dd][fd][id][be][ce][ee][ge][he][ie][bf][df][gf][hf][if][cg][dg][fg][gg][hg][ig][eh][fh][ei][fi][gi][ii]AW[ca][ea][ga][bb][eb][fb][gb][ac][bc][gc][ad][gd][hd][ae][af][bg][ah][bh][ch][dh][gh][bi][di])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote13",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][ca][ga][ia][ab][eb][fb][hb][ib][ac][bc][cc][dc][fc][gc][ic][bd][cd][dd][fd][ce][fe][bg][cg][dg][dh][hh][ai][bi][ci][di][fi][gi][hi]AW[ea][fa][db][ec][ad][ed][gd][hd][id][be][de][ee][ge][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][eg][fg][gg][hg][ig][ah][bh][ch][fh][ih][ei][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote14",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][ca][ga][ia][ab][eb][fb][hb][ib][ac][bc][cc][dc][fc][gc][ic][bd][cd][dd][fd][ce][fe][hh][fi][gi][hi]AW[ea][fa][db][ec][ad][ed][gd][hd][id][be][de][ee][ge][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][eg][fg][gg][hg][ig][ah][bh][ch][eh][fh][ih][ei][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote15",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][ca][ga][ia][ab][bb][eb][fb][hb][ib][ac][bc][cc][dc][fc][gc][ic][bd][cd][dd][fd][ce][fe][hh][fi][gi][hi]AW[ea][fa][db][ec][ad][ed][gd][hd][id][be][de][ee][ge][ie][af][bf][cf][df][ef][ff][gf][hf][if][ag][dg][eg][fg][gg][hg][ig][ah][bh][ch][eh][fh][ih][ei][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote16",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][ac][dc][ec][fc][gc][hc][ic][bd][cd][ed][fd][gd][id][ce][de][ee][fe][he][ie][ef][ff][gf][hf][if][fg][gg][ig][hh][ih][di][ei][fi][gi][hi][ii]AW[da][ea][cb][db][bc][ah])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote17",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][ac][dc][ec][fc][gc][hc][ic][bd][cd][ed][fd][gd][id][ce][de][ee][fe][he][ie][ef][ff][gf][hf][if][fg][gg][ig][hh][ih][di][ei][fi][gi][hi][ii]AW[ca][da][ea][cb][db][bc][ah])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote18",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][ac][dc][ec][fc][gc][hc][ic][bd][cd][ed][fd][gd][hd][id][ce][de][ee][fe][he][ie][ef][ff][gf][hf][if][fg][gg][ig][hh][ih][di][ei][fi][gi][hi][ii]AW[ca][da][ea][cb][db][bc][ah])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote19",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][ac][dc][ec][fc][gc][hc][ic][bd][cd][ed][fd][gd][hd][id][ce][de][ee][fe][he][ie][ef][ff][gf][hf][if][fg][gg][ig][hh][ih][di][ei][fi][gi][hi][ii]AW[ca][da][ea][cb][db][bc][ah][gh])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote20",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][fa][ga][ha][ia][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][he][ie][df][ef][ff][gf][hf][if][cg][fg][gg][ig][dh][hh][ih][di][ei][fi][gi][hi][ii]AW[ca][da][ea][ab][cb][db][bc][ad][cf][ag][bg][eg][ah][fh][gh])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote21",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][fa][ga][ha][ia][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][he][ie][df][ef][ff][gf][hf][if][cg][fg][gg][ig][dh][hh][ih][di][ei][fi][gi][hi][ii]AW[ca][da][ea][ab][cb][db][bc][ad][cf][ag][bg][eg][ah][ch][fh][gh])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote22",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][he][ie][df][ef][ff][gf][hf][if][cg][fg][gg][ig][dh][hh][ih][di][ei][fi][gi][hi][ii]AW[ab][bc][ad][cf][ag][bg][eg][ah][ch][fh][gh])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote23",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][fa][ga][ha][ia][bb][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][he][ie][df][ef][ff][gf][hf][if][cg][fg][gg][ig][dh][hh][ih][di][ei][fi][gi][hi][ii]AW[ab][bc][ad][cf][ag][bg][eg][ah][ch][fh][gh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote24",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][fa][ga][ha][ia][bb][cb][eb][fb][gb][hb][ib][cc][dc][ec][fc][gc][hc][ic][bd][cd][dd][ed][fd][gd][hd][id][ae][be][ce][de][ee][fe][he][ie][df][ef][ff][gf][hf][if][fg][gg][ig][dh][hh][ih][di][ei][fi][gi][hi][ii]AW[ab][bc][ad][cf][ag][bg][dg][eg][ah][ch][fh][gh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote25",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[fa][bb][cb][db][eb][hc][ic][ad][cd][fd][gd][hd][be][ce][de][ee][ge][bf][df][hf][cg][dg][eg][hg][ig][ah][bh][ch][ai]AW[aa][ca][ga][ia][ab][fb][hb][ib][ec][fc][gc][fe][ef][ff][gf][ag][fg][gg][dh][eh][fh][hh][ih][gi][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote26",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ha][ab][eb][fb][gb][ib][cc][dc][hc][ic][ad][cd][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][gi]AW[aa][ca][da][fa][ga][bb][cb][db][bc][fc][gc][bd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][eh][fh][gh][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote27",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ba][ha][ab][eb][fb][gb][ib][hc][ic][ad][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][gi]AW[ca][da][fa][ga][bb][cb][db][bc][ec][fc][gc][bd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][eh][fh][gh][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote28",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ba][ha][ab][eb][fb][gb][ib][hc][ic][ad][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][di][gi]AW[ca][da][ea][fa][ga][bb][cb][db][bc][ec][fc][gc][bd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][eh][fh][gh][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote29",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ba][ha][ab][eb][fb][gb][ib][ac][hc][ic][ad][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][di][gi]AW[ca][da][ea][fa][ga][bb][cb][db][bc][ec][fc][gc][bd][cd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][eh][fh][gh][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote30",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ba][ha][ab][eb][fb][gb][ib][ac][dc][hc][ic][ad][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][di][gi]AW[ca][da][ea][fa][ga][bb][cb][db][bc][ec][fc][gc][bd][cd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][eh][fh][gh][bi][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote31",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ba][ha][ab][eb][fb][gb][hb][ib][ac][dc][hc][ic][ad][gd][hd][ae][de][he][af][bf][cf][ff][gf][hf][ag][bg][gg][ig][hh][ih][di][gi]AW[ca][da][ea][fa][ga][bb][cb][db][bc][ec][fc][gc][bd][cd][dd][ed][fd][be][ce][fe][ge][ie][df][ef][if][cg][dg][eg][fg][ah][bh][dh][eh][fh][gh][bi][ei][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote32",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ca][da][fa][ha][ia][ab][bb][cb][ac][ad][ce][gg][eh][fh][ai][ci][gi]AW[ea][db][eb][fb][gb][hb][ib][bc][cc][dc][ec][gc][hc][bd][dd][fd][gd][hd][id][ae][be][de][ee][fe][ge][he][ie][af][bf][cf][df][ef][ff][gf][hf][if][bg][dg][eg][fg][hg][bh][ch][dh][hh][ih][bi][ei][fi][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote33",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ca][da][bb][cb][db][gb][dc][fc][gc][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][bi][ci][ei][fi][gi]AW[fa][ga][ha][ab][eb][fb][hb][ib][ac][bc][cc][ec][hc][bd][cd][dd][ed][id][ae][be][ce][de][af][cf][df][gf][hf][ag][bg][dg][eg][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote34",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ca][da][bb][cb][db][gb][dc][fc][gc][ic][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][bi][ci][ei][fi][gi]AW[fa][ga][ha][ab][eb][fb][hb][ib][ac][bc][cc][ec][hc][bd][cd][dd][ed][ae][be][ce][de][af][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote35",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[bb][gb][fc][gc][ic][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][bi][ci][ei][fi][gi]AW[ba][fa][ga][ha][ab][eb][fb][hb][ib][ac][bc][cc][ec][hc][bd][cd][dd][ed][ae][be][ce][de][af][bf][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote36",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ca][bb][gb][fc][gc][ic][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][gh][bi][ci][ei][fi][gi]AW[ba][da][fa][ga][ha][ab][db][eb][fb][hb][ib][ac][bc][cc][dc][ec][hc][bd][cd][dd][ed][ae][be][ce][de][af][bf][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote37",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ca][bb][gb][fc][gc][ic][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][fh][gh][bi][ci][ei][fi][gi]AW[ba][da][fa][ga][ha][ab][db][eb][fb][hb][ib][ac][bc][cc][dc][ec][hc][ad][bd][cd][dd][ed][ae][be][ce][de][af][bf][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote38",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ca][bb][gb][fc][gc][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][fh][gh][bi][ci][ei][fi][gi]AW[ba][da][fa][ga][ha][ab][db][eb][fb][hb][ib][ac][bc][cc][dc][ec][hc][ad][bd][cd][dd][ed][id][ae][be][ce][de][af][bf][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][hh][ih][ai][hi])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote39",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ca][bb][gb][fc][gc][fd][gd][hd][ee][fe][ge][he][ie][ef][ff][if][cg][fg][hg][bh][ch][dh][eh][fh][gh][bi][ci][ei][fi][gi][ii]AW[ba][da][fa][ga][ha][ab][db][eb][fb][hb][ib][ac][bc][cc][dc][ec][hc][ad][bd][cd][dd][ed][id][ae][be][ce][de][af][bf][cf][df][gf][hf][ag][bg][dg][eg][ig][ah][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote40",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ia][bb][gb][hb][ib][bc][ec][gc][bd][dd][ed][fd][hd][ae][ce][ie][bf][cf][ff][gf][bg][dg][eg][ch][fh][ih][ci][fi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][cd][gd][de][ge][he][af][ef][hf][if][hg][bh][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote41",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ia][bb][gb][hb][ib][bc][ec][gc][bd][dd][ed][fd][hd][ae][ce][ie][bf][cf][ff][gf][ag][bg][dg][eg][ch][fh][ih][ci][fi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][cd][gd][de][fe][ge][he][ef][hf][if][hg][bh][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote42",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[fa][ga][ia][bb][fb][gb][hb][ib][bc][ec][gc][bd][dd][ed][fd][hd][ae][ce][ie][bf][cf][ff][gf][ag][bg][dg][eg][ch][fh][ih][ci][fi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][cd][gd][de][fe][ge][he][ef][hf][if][hg][bh][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote43",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ia][bb][fb][gb][hb][ib][bc][ec][gc][bd][dd][ed][fd][hd][ae][ce][ie][bf][cf][ff][gf][ag][bg][dg][eg][ch][fh][ih][ci][fi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][cd][gd][de][ee][fe][ge][he][ef][hf][if][hg][bh][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote44",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ia][bb][fb][gb][hb][ib][bc][cc][ec][gc][bd][dd][ed][fd][ae][ce][bf][cf][ff][gf][ag][bg][dg][eg][ch][fh][ih][ci][fi][gi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][gd][id][de][ee][fe][ge][he][ef][hf][if][hg][bh][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote45",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ba][fa][ga][ia][bb][fb][gb][hb][ib][bc][cc][ec][gc][bd][dd][ed][fd][ae][ce][bf][cf][ff][gf][ag][bg][dg][eg][ch][fh][ih][ci][fi][gi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][gd][id][de][ee][fe][ge][he][ef][hf][if][hg][bh][eh][gh][ai][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote46",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ba][fa][ga][ia][bb][fb][gb][hb][ib][bc][cc][ec][gc][bd][dd][ed][fd][ae][ce][bf][cf][ff][gf][ag][bg][dg][eg][ah][ch][fh][ih][ci][fi][gi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][gd][id][de][ee][fe][ge][he][ef][hf][if][hg][ig][bh][eh][gh][ai][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote47",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[ba][fa][ga][ia][bb][fb][gb][hb][ib][bc][cc][ec][gc][bd][dd][ed][fd][ae][ce][bf][cf][ff][gf][ag][bg][dg][eg][ah][ch][fh][ih][bi][ci][fi][gi]AW[aa][ca][ea][ab][cb][db][eb][dc][hc][ic][ad][gd][id][de][ee][fe][ge][he][ef][hf][if][gg][hg][ig][eh][gh][di][ei][hi][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote48",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][ea][ec][bd][cd][ed][ae][be][ce][ee][fe][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi]AW[fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][id][de][ge][he][cf][df][ef][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote49",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][ea][ec][bd][cd][ed][ae][be][ce][ee][fe][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi]AW[fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote50",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][ea][ec][bd][cd][ed][ae][be][ce][ee][fe][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote51",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][ea][bd][cd][ae][be][ce][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote52",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][ea][bd][cd][ed][ae][be][ce][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote53",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][bd][cd][ed][ae][be][ce][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[da][fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote54",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][bd][cd][ed][ae][be][ce][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[da][fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote55",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ba][bd][cd][ed][ae][be][ce][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[da][fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote56",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][bd][cd][ed][ae][be][ce][fe][af][bf][cg][dg][eg][dh][fh][gh][hh][ih][bi][ci][di][fi][gi][hi][ii]AW[da][fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote57",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[aa][ba][bd][cd][ed][ae][be][ce][fe][af][bf][cg][dg][eg][dh][bi][ci][di][ii]AW[da][fa][ha][ia][ab][bb][cb][db][eb][fb][gb][hb][ib][ac][bc][cc][dc][ec][fc][gc][hc][ic][ad][dd][fd][gd][hd][id][de][ge][he][cf][df][ef][ff][gf][if][ag][fg][gg][hg][ig][ah][bh][ch][eh][ai][ei])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote58",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ha][eb][bc][fd][de][fe][he][ie][dg][bh][ch][di]AW[aa][ga][ad][gd][ae][be][af][hf][if][ag][gg][ah])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote59",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[da][ha][eb][bc][fd][de][fe][he][ie][dg][bh][ch][di]AW[aa][ga][ad][gd][ae][be][af][hf][if][ag][bg][gg][ah])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote60",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ea][fa][ab][db][eb][fb][gb][hb][ec][fc][gc][ic][ed][fd][gd][ae][fe][ge][he][ff][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][di][fi][hi]AW[ca][da][ga][ia][bb][cb][ib][ac][bc][cc][dc][ad][dd][hd][id][be][ce][de][ee][cf][ef][ag][cg][dg][ch][hh][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote61",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ea][fa][ab][db][eb][fb][gb][hb][ec][fc][gc][ic][ed][fd][gd][fe][ge][he][ff][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][di][fi][hi]AW[ca][da][ga][ia][bb][cb][ib][ac][bc][cc][dc][ad][dd][hd][id][be][ce][de][ee][af][cf][ef][ag][cg][dg][ch][hh][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote62",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ea][fa][ab][db][eb][fb][gb][hb][ec][fc][gc][ic][ed][fd][gd][fe][ge][he][ie][ff][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][di][fi][hi]AW[ca][da][ga][ia][bb][cb][ib][ac][bc][cc][dc][ad][dd][hd][id][be][ce][de][ee][af][cf][ef][ag][cg][dg][ch][hh][ai][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote63",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ea][fa][ab][db][eb][fb][gb][hb][ec][fc][gc][hc][ic][ed][fd][gd][fe][ge][he][ie][ff][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][di][fi][hi]AW[ca][da][ga][ia][bb][cb][ib][ac][bc][cc][dc][ad][cd][dd][be][ce][de][ee][af][cf][ef][ag][cg][dg][ch][hh][ai][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote64",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[aa][ea][fa][ab][db][eb][fb][gb][hb][ec][fc][gc][hc][ic][ed][fd][gd][fe][ge][he][ie][ff][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][di][fi][gi][hi]AW[ca][da][ga][ia][bb][cb][ib][ac][bc][cc][dc][ad][cd][dd][hd][be][ce][de][ee][af][cf][ef][ag][cg][dg][ch][hh][ai][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote65",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ea][fa][ha][db][eb][fb][gb][hb][ec][fc][gc][hc][ic][ed][fd][gd][hd][id][fe][ge][he][ie][ff][gf][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][bi][di][ei][fi][gi][hi]AW[aa][ba][ca][da][bb][cb][ac][bc][cc][dc][ad][cd][dd][be][ce][de][ee][af][cf][ef][ag][cg][dg][ah][ch][hh][ai][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote66",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[W]AB[ea][fa][ga][ha][db][eb][fb][gb][hb][ec][fc][gc][hc][ic][ed][fd][gd][hd][id][fe][ge][he][ie][ff][gf][hf][bg][eg][fg][gg][hg][ig][bh][dh][eh][fh][gh][bi][di][ei][fi][gi][hi]AW[aa][ba][ca][da][bb][cb][ac][bc][cc][dc][ad][cd][dd][ae][be][ce][de][ee][af][cf][ef][ag][cg][dg][ah][ch][hh][ai][ci][ii])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote67",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ab][eb][fb][gb][hb][ib][ac][bc][dc][ec][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][id][ae][ce][de][ee][fe][ge][he][ie][bf][cf][df][ef][gf][hf][if][bg][cg][dg][fg][ig][ch][dh][eh][fh][ai][bi][fi][gi][ii]AW[aa][da][ha][cb][cc][af][bh][ih][ei])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote68",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ab][eb][fb][gb][hb][ib][ac][bc][dc][ec][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][id][ae][ce][de][ee][fe][ge][he][ie][bf][cf][df][ef][gf][hf][if][bg][cg][dg][fg][ig][ch][dh][eh][fh][ai][bi][fi][gi][hi][ii]AW[aa][ca][da][ha][cb][cc][af][bh][ih][ci][ei])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote69",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ab][eb][fb][gb][hb][ib][ac][bc][dc][ec][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][id][ae][ce][de][ee][fe][ge][he][ie][bf][cf][df][ef][gf][hf][if][bg][cg][dg][fg][ig][ch][dh][eh][fh][gh][ai][bi][fi][gi][hi][ii]AW[aa][ca][da][ha][cb][cc][af][bh][ih][ci][ei])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "senteGote70",
+    "conceptId": "SENTE_ANTES_QUE_GOTE",
+    "sgf": "(;GM[1]FF[4]SZ[9]ZKIND[areaValue]ZCONCEPT[SENTE_ANTES_QUE_GOTE]PL[B]AB[fa][ga][ab][eb][fb][gb][hb][ib][ac][bc][dc][ec][fc][gc][hc][ic][ad][bd][cd][ed][fd][gd][id][ae][ce][de][ee][fe][ge][he][ie][bf][cf][df][ef][ff][gf][hf][if][bg][cg][dg][fg][ig][ch][dh][eh][fh][gh][ai][bi][fi][gi][hi][ii]AW[aa][ba][ca][da][ha][cb][cc][af][bh][ih][ci][ei])",
+    "difficulty": "medium"
+  }
+]

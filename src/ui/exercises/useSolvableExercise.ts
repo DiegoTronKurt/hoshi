@@ -4,7 +4,7 @@ import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { getLesson } from '../../content/lessons'
 import { getGroup } from '../../core/groups'
 import { gameStateFromBoard, applyMove, listLegalMoves } from '../../core/rules'
-import { opponent } from '../../core/types'
+import { EMPTY, opponent } from '../../core/types'
 import type { Color, GameState } from '../../core/types'
 import { EvalClient } from '../../eval/client'
 import { EVAL_MODEL_URL } from '../../eval/modelUrl'
@@ -16,7 +16,14 @@ import type { SolverClient } from '../../solver/client'
 import { isGroupPassAlive } from '../../solver/tsumego'
 import { simulateLadder, solveLadder } from '../../solver/ladder'
 import { isDoubleAtariMove } from '../../solver/doubleAtari'
-import { PASS_VALUE_THRESHOLD, areaDeltaForPoint, bestAreaMove, isBestAreaMove, isOwnTerritory } from '../../solver/areaValue'
+import {
+  PASS_VALUE_THRESHOLD,
+  areaDeltaForPoint,
+  bestAreaMove,
+  classifySenteGote,
+  isBestAreaMove,
+  isOwnTerritory,
+} from '../../solver/areaValue'
 import { raceBehindColor, sharedLibertiesOf } from '../../solver/semeai'
 import { getSrsCard, listAttempts, recordAttempt, saveSrsCard } from '../../storage/db'
 import { findConceptsToReopenFromExercises } from '../../training-policy/session'
@@ -434,6 +441,33 @@ export function useSolvableExercise(
 
     if (loaded.kind === 'areaValue') {
       const problem = loaded.problem
+
+      // SENTE_ANTES_QUE_GOTE se valida aparte, antes que el resto de este
+      // bloque: la jugada correcta (la sente) suele tener un delta de area
+      // INMEDIATO chico -- una jugada de atari no vale nada en area hasta
+      // que la captura real pasa mas adelante (ver classifySenteGote) --
+      // asi que el filtro generico de "delta > PASS_VALUE_THRESHOLD" de mas
+      // abajo la rechazaria por error. La pregunta aca no es "cuanto vale
+      // esta jugada ahora", es "cual de las dos jugadas disponibles obliga
+      // al rival a responder".
+      if (problem.conceptId === 'SENTE_ANTES_QUE_GOTE') {
+        if (game.board.stones[point] !== EMPTY) {
+          markWrong(point, 'exercises.wrongReason.illegal', false)
+          return
+        }
+        if (classifySenteGote(game.board, point, problem.toMove) !== 'sente') {
+          markWrong(point, 'exercises.wrongReason.notSente', true)
+          return
+        }
+        const result = applyMove(game, point)
+        if (!result.legal || !result.state) return
+        playStoneSoundIfEnabled()
+        setGame(result.state)
+        setLastMove(point)
+        setStatus('solved')
+        return
+      }
+
       // Jugar dentro del propio territorio ya asegurado es incorrecto sin
       // importar nada mas (RELLENO_TERRITORIO_PROPIO): ni siquiera hace
       // falta mirar el delta de area para esta parte.
@@ -527,6 +561,22 @@ export function useSolvableExercise(
     if (!isUserTurn || thinking || !loaded || !game || loaded.kind !== 'areaValue') return
     setWrongReason(null)
     const problem = loaded.problem
+
+    // SENTE_ANTES_QUE_GOTE siempre tiene una jugada sente real por
+    // construccion (ver hasRealChoice en tools/generate-sente-gote-
+    // problems.ts) aunque bestAreaMove(...) de todo el tablero de casualidad
+    // de null (un candidato sente puede tener un delta de area inmediato
+    // chico -- ver classifySenteGote): pasar es siempre prematuro aca, sin
+    // excepcion, y se decide con el mismo verificador que el resto de la
+    // validacion de este concepto, no con bestAreaMove.
+    if (problem.conceptId === 'SENTE_ANTES_QUE_GOTE') {
+      wrongAttemptsRef.current += 1
+      setWrongAttemptCount((n) => n + 1)
+      setWrongReason('exercises.wrongReason.passedTooEarly')
+      setStatus('incorrect')
+      return
+    }
+
     const best = bestAreaMove(game.board, problem.toMove)
     if (best !== null) {
       // Habia una jugada real (PASE_PREMATURO): pasar fue prematuro. No hay

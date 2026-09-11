@@ -28,6 +28,15 @@ export interface AreaValueProblem {
     // (candidatos en al menos dos zonas separadas del tablero, no solo dos
     // puntos), no como se validan.
     | 'JUICIO_LOCAL_VS_GLOBAL'
+    // SENTE_ANTES_QUE_GOTE (Nivel 9): mismo `board`/`toMove`, pero la
+    // validacion NO es areaDeltaForPoint/isBestAreaMove -- ver el branch
+    // dedicado en useSolvableExercise.ts. La posicion trae un candidato
+    // sente y uno gote (solver/areaValue.ts::classifySenteGote); la jugada
+    // correcta es la sente, sin importar si su delta de area inmediato es
+    // chico (una jugada de atari real vale poco en area HASTA que la
+    // captura pasa -- exigirle el mismo umbral que el resto de esta union
+    // rechazaria la respuesta correcta).
+    | 'SENTE_ANTES_QUE_GOTE'
   board: BoardState
   toMove: Color
 }

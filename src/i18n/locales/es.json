@@ -122,6 +122,7 @@
   "exercises.wrongReason.ownTerritory": "Eso ya es tu propio territorio asegurado, jugar ahí no suma nada.",
   "exercises.wrongReason.noGain": "Eso no cambia el puntaje, prueba un punto que realmente gane área.",
   "exercises.wrongReason.notBiggest": "Eso gana algo, pero hay un punto más grande disponible ahora mismo.",
+  "exercises.wrongReason.notSente": "Esa jugada no obliga a responder — el rival puede ignorarla sin problema. Busca la que sí obliga.",
   "exercises.wrongReason.passedTooEarly": "Pasar acá regala un punto que todavía está disponible.",
   "exercises.wrongReason.notSharedLiberty": "Esa libertad no es compartida entre los dos grupos.",
   "exercises.wrongReason.wrongGroup": "Ese no es el grupo que va perdiendo la carrera de libertades.",

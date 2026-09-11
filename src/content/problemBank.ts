@@ -9,6 +9,7 @@ import corteNoDefendidoData from './problems/corte-no-defendido.json'
 import areaValueData from './problems/area-value.json'
 import yoseValueData from './problems/yose-value.json'
 import localVsGlobalData from './problems/local-vs-global.json'
+import senteGoteData from './problems/sente-gote.json'
 import semeaiLibertyData from './problems/semeai-liberty.json'
 import { sgfToProblem } from './problemSgf'
 import type { Problem } from './problemSgf'
@@ -55,6 +56,7 @@ const entries: BankEntry[] = [
   ...(areaValueData as BankEntry[]),
   ...(yoseValueData as BankEntry[]),
   ...(localVsGlobalData as BankEntry[]),
+  ...(senteGoteData as BankEntry[]),
   ...(semeaiLibertyData as BankEntry[]),
 ]
 
@@ -63,13 +65,13 @@ export function listBankEntries(conceptId?: ConceptId): BankEntry[] {
   return entries.filter((entry) => entry.conceptId === conceptId)
 }
 
-/** ESCALERA, DOBLE_ATARI, los conceptos de valor de area (incluyendo yose y
- * JUICIO_LOCAL_VS_GLOBAL, que reusan el mismo formato -- ver
- * areaValueProblem.ts) y los dos de libertades de semeai tienen su propio
- * formato de dato (ver ladderProblem.ts / doubleAtariProblem.ts /
+/** ESCALERA, DOBLE_ATARI, los conceptos de valor de area (incluyendo yose,
+ * JUICIO_LOCAL_VS_GLOBAL y SENTE_ANTES_QUE_GOTE, que reusan el mismo formato
+ * -- ver areaValueProblem.ts) y los dos de libertades de semeai tienen su
+ * propio formato de dato (ver ladderProblem.ts / doubleAtariProblem.ts /
  * areaValueProblem.ts / semeaiLibertyProblem.ts): no encajan en
  * Problem/solve(), asi que se distinguen por conceptId antes de elegir que
- * parser SGF usar. Ningun otro concepto usa estos siete, asi que el mapeo es
+ * parser SGF usar. Ningun otro concepto usa estos ocho, asi que el mapeo es
  * 1 a 1 y seguro. */
 export function entryKind(entry: BankEntry): BankEntryKind {
   if (entry.conceptId === 'ESCALERA') return 'ladder'
@@ -79,7 +81,8 @@ export function entryKind(entry: BankEntry): BankEntryKind {
     entry.conceptId === 'PASE_PREMATURO' ||
     entry.conceptId === 'EL_FINAL_TAMBIEN_ES_GRANDE' ||
     entry.conceptId === 'COMPARAR_VALOR_REAL' ||
-    entry.conceptId === 'JUICIO_LOCAL_VS_GLOBAL'
+    entry.conceptId === 'JUICIO_LOCAL_VS_GLOBAL' ||
+    entry.conceptId === 'SENTE_ANTES_QUE_GOTE'
   )
     return 'areaValue'
   if (
