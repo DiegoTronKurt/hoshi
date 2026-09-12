@@ -59,6 +59,17 @@ const MAX_HINTS_PER_GAME = 5
  * ver analysis/mistakes.ts. */
 const LIVE_MISTAKE_SWING_THRESHOLD = 0.15
 
+/** Cuanto queda visible el aviso de error en vivo (mensaje + anillo fantasma
+ * + zona de territorio) antes de desaparecer solo. Playtest real: contra un
+ * bot que responde rapido, el aviso se borraba en cuanto llegaba SU jugada
+ * (ver el efecto de mistakeFlag mas abajo) -- a veces menos de un segundo,
+ * sin tiempo real de leerlo. Un temporizador propio, independiente de
+ * cuando responde el rival, es lo que de verdad soluciona eso. Un poco mas
+ * largo que RETRO_MISTAKE_WINDOW_PLIES/retroMistakeFlag (5000ms): este aviso
+ * trae mas para leer (nombre de concepto + 1-2 lineas de detalle) ademas del
+ * tablero. */
+const MISTAKE_FLAG_DISPLAY_MS = 6000
+
 const BOT_STYLE_LABEL_KEY: Record<string, TranslationKey> = {
   standard: 'play.botStyle.standard',
   territorial: 'play.botStyle.territorial',
@@ -110,6 +121,21 @@ export function PlayGameScreen({
     return [createGame(config.width, config.height, komi)]
   })
   const [moves, setMoves] = useState<RecordedMove[]>([])
+  // "Ultimo valor" de moves/history disponible sin ser una dependencia
+  // reactiva -- los usa el efecto de aviso de errores en vivo mas abajo para
+  // tomar una foto de estos dos arrays en el instante exacto en que arranca
+  // (antes de que el bot pueda responder), sin tener que declarar moves ni
+  // history como dependencias (lo que reiniciaria ese efecto con CUALQUIER
+  // jugada, incluida la del bot -- ver el comentario ahi). Sincronizados en
+  // su propio efecto (no asignados directo en el render) para no pisar la
+  // regla de refs de React -- corre en cada jugada igual, antes que el
+  // efecto de aviso de errores por estar declarado primero.
+  const movesRef = useRef(moves)
+  const historyRef = useRef(history)
+  useEffect(() => {
+    movesRef.current = moves
+    historyRef.current = history
+  }, [moves, history])
   const [message, setMessage] = useState<IllegalReason | null>(null)
   const [botThinking, setBotThinking] = useState(false)
   const [botError, setBotError] = useState(false)
@@ -166,6 +192,9 @@ export function PlayGameScreen({
     ghostPoint: number | null
     lossTerritory: Int8Array | null
   } | null>(null)
+  // Temporizador de MISTAKE_FLAG_DISPLAY_MS para el aviso de arriba -- ver el
+  // efecto que lo arma mas abajo.
+  const mistakeFlagTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Milestone 3 (ver NOTAS.md): un aviso generico puede resolverse mas
   // especifico unas jugadas despues, cuando ATARI_IGNORADO/CORTE_NO_DEFENDIDO
   // ya tienen futuro real para confirmar. Solo se seguile la jugada generica
@@ -217,6 +246,10 @@ export function PlayGameScreen({
 
   useEffect(() => () => hintEvalRef.current?.terminate(), [])
 
+  useEffect(() => () => {
+    if (mistakeFlagTimerRef.current !== null) clearTimeout(mistakeFlagTimerRef.current)
+  }, [])
+
   // El anillo de la pista es de una posicion puntual: se borra en cuanto se
   // juega cualquier jugada real (propia, del bot, o un undo), para no dejarlo
   // pegado sobre un tablero que ya cambio.
@@ -224,6 +257,19 @@ export function PlayGameScreen({
     setHintPoint(null)
     setHintWinProbability(null)
   }, [game])
+
+  // Indice de la ultima jugada PROPIA (no del bot) dentro de `moves` -- solo
+  // cambia cuando se juega una jugada propia nueva, a diferencia de
+  // moves.length (que crece con cualquier jugada, incluida la respuesta del
+  // bot). Usado como dependencia del efecto de aviso de errores de mas abajo
+  // en vez de moves/history directamente: es lo que permite que ese efecto
+  // NO se reinicie cuando el bot responde, ver el comentario ahi.
+  const lastHumanMoveIndex = useMemo(() => {
+    for (let i = moves.length - 1; i >= 0; i--) {
+      if (config.mode === 'local' || moves[i].color === config.humanColor) return i
+    }
+    return -1
+  }, [moves, config.mode, config.humanColor])
 
   // Aviso de errores en vivo: apenas se juega una jugada propia (no del bot),
   // compara la probabilidad de victoria de quien jugo antes y despues de esa
@@ -234,17 +280,41 @@ export function PlayGameScreen({
   // ya los excluye. Cuando SI hay un detector sin dependencia del futuro que
   // coincide con la misma jugada, se usa para reemplazar el mensaje generico
   // por uno especifico; si no, el aviso queda generico.
+  //
+  // Depende de lastHumanMoveIndex, NO de game/moves/history directamente:
+  // playtest real encontro que contra un bot que responde rapido, este
+  // efecto se reiniciaba con CADA jugada (incluida la del bot), lo que (a)
+  // cancelaba el chequeo en curso si el bot contestaba antes de que
+  // terminaran las dos llamadas a EvalClient (el aviso nunca llegaba a
+  // mostrarse) y (b) si llegaba a mostrarse, se borraba en cuanto el bot
+  // jugaba -- a veces menos de un segundo despues. Con lastHumanMoveIndex
+  // como dependencia, la respuesta del bot ya no reinicia nada: el chequeo
+  // en curso sigue vivo hasta terminar, y una vez mostrado el aviso lo
+  // limpia solo MISTAKE_FLAG_DISPLAY_MS despues (ver mas abajo), no la
+  // jugada del bot.
   useEffect(() => {
-    setMistakeFlag(null)
-    if (!config.liveMistakeFlagging || moves.length === 0 || history.length < 2) return
-
-    const lastMove = moves[moves.length - 1]
-    const isHumanMove = config.mode === 'local' || lastMove.color === config.humanColor
+    if (!config.liveMistakeFlagging || lastHumanMoveIndex < 0) return
     const client = liveAnalysisEvalRef.current
-    if (!isHumanMove || !client) return
+    if (!client) return
 
-    const beforeState = history[history.length - 2]
-    const afterState = history[history.length - 1]
+    // Foto de moves/history tomada AHORA, sincronicamente (el bot todavia no
+    // pudo responder): movesRef/historyRef no son dependencias de este
+    // efecto (ver el comentario de arriba), asi que esto es lo unico que le
+    // da a analyzeLastMove mas abajo la partida exactamente hasta esta
+    // jugada, aunque el bot ya haya jugado de nuevo para cuando termine el
+    // await de mas abajo.
+    const movesSnapshot = movesRef.current
+    const historySnapshot = historyRef.current
+    const lastMove = movesSnapshot[lastHumanMoveIndex]
+    const beforeState = historySnapshot[lastHumanMoveIndex]
+    const afterState = historySnapshot[lastHumanMoveIndex + 1]
+    if (!beforeState || !afterState) return
+
+    if (mistakeFlagTimerRef.current !== null) {
+      clearTimeout(mistakeFlagTimerRef.current)
+      mistakeFlagTimerRef.current = null
+    }
+    setMistakeFlag(null)
     let cancelled = false
 
     async function check() {
@@ -262,7 +332,7 @@ export function PlayGameScreen({
         const winAfterMoverPerspective = 1 - afterOutput.value[0]
         if (winBefore - winAfterMoverPerspective <= LIVE_MISTAKE_SWING_THRESHOLD) return
 
-        const detected = analyzeLastMove(config.width, config.height, komi, moves)
+        const detected = analyzeLastMove(config.width, config.height, komi, movesSnapshot)
         if (cancelled) return
 
         // Ghost-move: que hubiera jugado la red en beforeState en vez de la
@@ -297,13 +367,17 @@ export function PlayGameScreen({
         // resolverse mas especifica dentro de unas pocas jugadas (ver el
         // efecto de recheckDelayedMistake mas abajo); si ya salio especifica
         // no hace falta reintentar nada.
-        pendingRetroMistakeRef.current = detected ? null : { moveIndex: moves.length - 1 }
+        pendingRetroMistakeRef.current = detected ? null : { moveIndex: lastHumanMoveIndex }
 
         setMistakeFlag({
           conceptId: detected?.conceptId ?? null,
           ghostPoint,
           lossTerritory: hasLoss ? lossTerritory : null,
         })
+        mistakeFlagTimerRef.current = setTimeout(() => {
+          setMistakeFlag(null)
+          mistakeFlagTimerRef.current = null
+        }, MISTAKE_FLAG_DISPLAY_MS)
       } catch {
         // Silencioso, mismo criterio que la pista y la guia del bot: un
         // aviso fallido no debe interrumpir la partida.
@@ -314,7 +388,7 @@ export function PlayGameScreen({
     return () => {
       cancelled = true
     }
-  }, [game, moves, history, config.liveMistakeFlagging, config.mode, config.humanColor, config.width, config.height, komi])
+  }, [lastHumanMoveIndex, config.liveMistakeFlagging, config.width, config.height, komi])
 
   // Milestone 3: reintenta un aviso generico pendiente cada vez que se juega
   // una jugada mas (propia, del bot, o un undo que igual cambia moves.length),

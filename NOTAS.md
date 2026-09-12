@@ -1,5 +1,43 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-11, cont. 24: el aviso de errores en vivo ya no se lo come la respuesta del bot)
+
+Playtest real: el aviso de errores en vivo (mensaje + anillo fantasma + zona
+de territorio, cont. 21) se sentia "de medio segundo" contra el bot. Causa
+real, no solo cosmetica: `PlayGameScreen.tsx` tenia el chequeo en un
+`useEffect` con dependencia `[game, moves, history]`, que dispara con
+CUALQUIER jugada -- incluida la respuesta automatica del bot. Dos efectos
+concretos: (a) si el bot contestaba antes de que terminaran las dos llamadas
+a EvalClient del chequeo, el efecto se reiniciaba y cancelaba ese chequeo en
+curso -- el aviso a veces no llegaba ni a mostrarse; (b) cuando si se
+mostraba, el mismo reinicio lo borraba en el instante en que el bot jugaba,
+a veces bajo 1 segundo despues.
+
+Fix: nuevo `lastHumanMoveIndex` (indice de la ultima jugada PROPIA dentro de
+`moves`, memoizado -- a diferencia de `moves.length`, NO cambia con la
+respuesta del bot) como dependencia del efecto en vez de `game`/`moves`/
+`history` directamente. Como el efecto ya no se reinicia con la jugada del
+bot, el chequeo en curso sigue vivo hasta terminar sin importar que tan
+rapido conteste, y el aviso ya mostrado se limpia con un timer propio
+(`MISTAKE_FLAG_DISPLAY_MS = 6000`) en vez de con la siguiente jugada
+cualquiera. `movesRef`/`historyRef` (sincronizados en su propio efecto, no
+asignados durante el render -- react(refs) de oxlint no deja) le dan al
+chequeo una foto de moves/history tomada en el instante exacto en que
+arranca, para que `analyzeLastMove` siga viendo la partida hasta la jugada
+propia y no una jugada del bot que todavia no habia pasado cuando arranco el
+efecto.
+
+Verificado con una partida real contra el bot en el navegador (Playwright,
+no solo tests): el aviso ahora sobrevive la respuesta del bot y queda
+visible los ~6s completos, en vez de desaparecer al instante. `tsc`/
+`oxlint`/3650 tests sin cambios.
+
+De paso: se re-confirmo que la alineacion izquierda de Aprender (cont. 21)
+sigue correcta en el codigo y en un render real -- si en el telefono se ve
+centrada, es un build viejo instalado (los AAB solo llegan via Play Store,
+no son instalables directo); un APK de release permite confirmar sin
+esperar el rollout.
+
 ## Estado general del proyecto (2026-09-11, cont. 23: Ejercicios elige por concepto, no por tamano de pool)
 
 Playtest real de Ejercicios encontro un problema de seleccion, no de
