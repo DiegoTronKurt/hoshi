@@ -192,6 +192,63 @@ function buildSnapbackSeed2(): { board: BoardState; targetPoints: number[] } {
   return { board, targetPoints: [toPoint(9, 3, 3), toPoint(9, 3, 4)] }
 }
 
+/**
+ * Misma red que buildGetaSeed/buildGetaSeed2 (identica geometria relativa a
+ * la esquina), en un tablero 13x13: una tercera posicion genuinamente
+ * distinta bajo el grupo diedral (ni 5x5 ni 9x9 la alcanzan) sin inventar
+ * una tactica nueva que verificar desde cero. El margen de region (2) sigue
+ * sin tocar el borde extra en ningun lado, asi que sigue siendo exactamente
+ * la misma lectura ya confirmada.
+ */
+function buildGetaSeed3(): { board: BoardState; targetPoints: number[] } {
+  const board = createBoard(13)
+  board.stones[toPoint(13, 1, 2)] = BLACK
+  board.stones[toPoint(13, 2, 1)] = BLACK
+  board.stones[toPoint(13, 1, 1)] = WHITE
+  return { board, targetPoints: [toPoint(13, 1, 1)] }
+}
+
+/**
+ * Misma trampa de snapback que buildSnapbackSeed/buildSnapbackSeed2 (mismas
+ * piedras, mismas coordenadas), en un tablero 13x13: mismo razonamiento que
+ * buildGetaSeed3 -- la region que recorta solve() (margen 2) no llega a
+ * tocar el borde extra, asi que es la misma lectura ya verificada, solo con
+ * mas tablero vacio alrededor, y por lo tanto una posicion nueva de verdad
+ * bajo el grupo diedral.
+ */
+function buildSnapbackSeed3(): { board: BoardState; targetPoints: number[] } {
+  const board = createBoard(13)
+  const black: Array<[number, number]> = [
+    [2, 3], [3, 2], [2, 4], [3, 5], [5, 4], [4, 5],
+  ]
+  const white: Array<[number, number]> = [
+    [3, 3], [3, 4], [5, 3], [4, 2],
+  ]
+  for (const [x, y] of black) board.stones[toPoint(13, x, y)] = BLACK
+  for (const [x, y] of white) board.stones[toPoint(13, x, y)] = WHITE
+  return { board, targetPoints: [toPoint(13, 3, 3), toPoint(13, 3, 4)] }
+}
+
+/**
+ * Mismo ojo falso de esquina que buildOjoFalsoSeed (identica geometria: A y
+ * B forman el "anillo" del punto (0,0), la diagonal blanca en (1,1) les
+ * quita la libertad que las volveria seguras, y (2,0)/(0,2) sellan la otra
+ * libertad de cada una), en un tablero 13x13 en vez de 9x9. El margen de
+ * region (1) no llega a tocar ningun borde nuevo, asi que sigue siendo
+ * exactamente la misma lectura ya confirmada por el solucionador -- una
+ * posicion distinta bajo el grupo diedral, no una tactica nueva.
+ */
+function buildOjoFalsoSeed2(): { board: BoardState; targetPoints: number[] } {
+  const size = 13
+  const board = createBoard(size)
+  board.stones[toPoint(size, 1, 0)] = BLACK
+  board.stones[toPoint(size, 0, 1)] = BLACK
+  board.stones[toPoint(size, 1, 1)] = WHITE
+  board.stones[toPoint(size, 2, 0)] = WHITE
+  board.stones[toPoint(size, 0, 2)] = WHITE
+  return { board, targetPoints: [toPoint(size, 1, 0), toPoint(size, 0, 1)] }
+}
+
 interface SeedSpec {
   conceptId: ConceptId
   board: BoardState
@@ -217,9 +274,12 @@ interface SeedSpec {
 
 const getaSeed = buildGetaSeed()
 const getaSeed2 = buildGetaSeed2()
+const getaSeed3 = buildGetaSeed3()
 const snapbackSeed = buildSnapbackSeed()
 const snapbackSeed2 = buildSnapbackSeed2()
+const snapbackSeed3 = buildSnapbackSeed3()
 const ojoFalsoSeed = buildOjoFalsoSeed()
+const ojoFalsoSeed2 = buildOjoFalsoSeed2()
 
 const SEED_SPECS: SeedSpec[] = [
   // Vive: jugar el punto vital separa el espacio en dos ojos reales.
@@ -236,12 +296,15 @@ const SEED_SPECS: SeedSpec[] = [
   // solo en una posicion de tablero nueva de verdad.
   { conceptId: 'RED_GETA', board: getaSeed.board, targetPoints: getaSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 4 },
   { conceptId: 'RED_GETA', board: getaSeed2.board, targetPoints: getaSeed2.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 4 },
+  { conceptId: 'RED_GETA', board: getaSeed3.board, targetPoints: getaSeed3.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 4 },
   { conceptId: 'SNAPBACK', board: snapbackSeed.board, targetPoints: snapbackSeed.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 5 },
   { conceptId: 'SNAPBACK', board: snapbackSeed2.board, targetPoints: snapbackSeed2.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 5 },
+  { conceptId: 'SNAPBACK', board: snapbackSeed3.board, targetPoints: snapbackSeed3.targetPoints, targetColor: WHITE, toMove: BLACK, objective: 'kill', regionMargin: 2, maxDepth: 5 },
   // Ojo falso de esquina: blanco captura las dos piedras del "anillo" jugando
   // directo en la esquina, porque la diagonal ya les habia quitado su otra
   // libertad a cada una (ver comentario de buildOjoFalsoSeed).
   { conceptId: 'OJO_FALSO', board: ojoFalsoSeed.board, targetPoints: ojoFalsoSeed.targetPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
+  { conceptId: 'OJO_FALSO', board: ojoFalsoSeed2.board, targetPoints: ojoFalsoSeed2.targetPoints, targetColor: BLACK, toMove: WHITE, objective: 'kill', regionMargin: 1, maxDepth: 8 },
 ]
 
 /**

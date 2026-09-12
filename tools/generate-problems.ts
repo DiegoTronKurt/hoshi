@@ -22,6 +22,7 @@
  * Problem/solve() de vida-muerte (ver el plan de esta fase) y necesitan su
  * propio tipo de dato y mecanismo de verificacion.
  */
+import { createHash } from 'node:crypto'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -175,14 +176,27 @@ async function main() {
   const outDir = join(root, '..', 'src', 'content', 'problems')
   await mkdir(outDir, { recursive: true })
 
-  const bank = problems.map((problem, index) => {
+  // El id es un hash del contenido (conceptId + sgf), no la posicion en el
+  // array: el progreso de repaso espaciado del jugador (storage/db.ts,
+  // STORE_SRS) se guarda en IndexedDB con este id como clave. Un id
+  // posicional (`p${index}`) se corrompe en silencio cada vez que el
+  // pipeline inserta problemas antes de otros que ya existian -- exactamente
+  // lo que paso al agregar semillas nuevas en content/seeds.ts (cont. 26):
+  // toda tarjeta SRS guardada localmente habria quedado apuntando a un
+  // problema distinto del que el jugador de verdad reviso. El sgf ya
+  // codifica tablero+objetivo+turno+puntos objetivo por completo, asi que
+  // hasheandolo el id queda estable sin importar en que orden ni posicion
+  // termine el problema dentro del array.
+  const bank = problems.map((problem) => {
     const wantLive = problem.objective === 'live'
     const forDefender = problem.toMove === problem.targetColor
     const depth = solutionDepth(problem.tree, wantLive, forDefender)
+    const sgf = problemToSgf(problem)
+    const hash = createHash('sha256').update(`${problem.conceptId}:${sgf}`).digest('hex').slice(0, 16)
     return {
-      id: `p${index + 1}`,
+      id: `p_${hash}`,
       conceptId: problem.conceptId,
-      sgf: problemToSgf(problem),
+      sgf,
       difficulty: difficultyFromDepth(depth),
     }
   })

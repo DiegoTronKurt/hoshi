@@ -20,6 +20,12 @@ import type { Problem } from '../../src/content/problemSgf'
 // para el caso concurrente. Confirmado repitiendo la corrida completa
 // varias veces: mismo archivo, mismo hook, sin ningun cambio de codigo de
 // por medio, a veces pasa y a veces no.
+//
+// El segundo test (round trip SGF) subio su propio timeout de 180000 a
+// 300000 al agregar las semillas de RED_GETA/SNAPBACK/OJO_FALSO en 13x13
+// (cont. 26): son mas problemas que reverificar con el solucionador, mismo
+// motivo de fondo que el parrafo de arriba, no una regresion de rendimiento
+// del solucionador en si.
 let problems: Problem[]
 beforeAll(() => {
   problems = buildSeedProblems()
@@ -59,5 +65,5 @@ describe('posiciones semilla', () => {
 
       expect(result.solved).toBe(true)
     }
-  }, 180000)
+  }, 300000)
 })
