@@ -54,7 +54,11 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
   }, [step, status, game, playStoneSoundIfEnabled])
 
   function handleClick(point: number) {
-    if (status !== 'awaiting-move' || !step || step.auto !== undefined) return
+    // 'wrong' tiene que seguir aceptando clicks -- si no, el primer click
+    // equivocado deja la demo trabada para siempre (el mensaje invita a
+    // "probar otro punto" pero ningun click, ni siquiera el correcto, volvia
+    // a hacer nada hasta salir y reentrar a la leccion).
+    if ((status !== 'awaiting-move' && status !== 'wrong') || !step || step.auto !== undefined) return
     if (!step.expectedPoints.includes(point)) {
       setStatus('wrong')
       return
