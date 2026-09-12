@@ -1,5 +1,248 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-12, cont. 27: auditoria completa de Aprender -- bug real de reintento encontrado y arreglado)
+
+Pedido explicito: revisar las 64 lecciones de Aprender (11 niveles) por
+correctitud, incluyendo que se pueda reintentar si no se acierta a la
+primera. Dos pasadas distintas:
+
+**1) Mecanica de reintento -- bug real encontrado.** `GuidedDemo.tsx` (el
+"ejemplo interactivo" con click validado que tienen 22 de las 64
+lecciones) tenia `handleClick` con esta guarda: `if (status !==
+'awaiting-move' || ...) return`. Un click en un punto que NO esta en
+`expectedPoints` pone `status = 'wrong'` y muestra "Esa no es la jugada.
+Prueba otro punto." -- pero como la guarda solo acepta clicks en estado
+`'awaiting-move'`, ese mismo mensaje deja el tablero MUERTO: ningun click
+siguiente hace nada, ni siquiera el correcto. La demo quedaba trabada para
+siempre en el primer error, sin mas salida que abandonar la leccion (lo que
+ademas reinicia la demo entera desde el paso 1, perdiendo el progreso de
+cualquier paso ya resuelto). Confirmado con Playwright real (no solo
+lectura de codigo): click en un punto valido pero incorrecto -> aparece el
+mensaje; click despues en el punto correcto -> nada, mensaje de error
+sigue ahi. Ningun test cubria este componente (`GuidedDemo` no tiene
+ningun test, ni unitario ni de integracion) -- por eso paso desapercibido
+pese a que 22 lecciones lo usan.
+
+Fix de una linea: la guarda ahora acepta clicks en `'awaiting-move'` O
+`'wrong'` (`(status !== 'awaiting-move' && status !== 'wrong') || ...`).
+Reverificado con Playwright: 3 clicks incorrectos seguidos siguen mostrando
+el mensaje correctamente, y el click correcto despues SI avanza la demo.
+De paso, se confirmo que `useSolvableExercise.ts` (Ejercicios, y tambien el
+"problema guiado" embebido en cada leccion via `LessonPractice.tsx`) nunca
+tuvo este bug -- su guarda ya acepta clicks en `'playing'` Y `'incorrect'`
+desde el principio, probablemente porque ese camino si esta cubierto por
+la bateria grande de tests de Ejercicios; `ComparePrompt.tsx` (el bloque
+"adivina antes de ver" de nivel 6+) tampoco aplica: revela ambas
+respuestas apenas se elige una, sin necesidad de reintento por diseño.
+
+**2) Correctitud del contenido -- sin errores encontrados.** Se escribio un
+script de verificacion mecanica (`vite-node` descartable) que recorre las
+64 lecciones y simula cada paso de las 22 demos con el motor de reglas
+real (`applyMove`): confirma que todo punto en `expectedPoints` es
+legal (o ilegal, cuando `expectIllegal: true`), y que cada secuencia
+completa sin sorpresas. 0 problemas en 33 pasos de demo revisados. Encima
+de eso, lectura manual nivel por nivel con verificacion cruzada contra el
+motor donde la afirmacion lo ameritaba:
+- Nivel 2 (formas de vida y muerte): ya tenia test propio
+  (`tests/content/lessons.test.ts`) contra el solucionador.
+- n2-l8 (nakade "cuadrado de cuatro"): la leccion ofrece 4 puntos
+  distintos como "el" punto vital. Verificado con el solucionador que los
+  4 matan por igual (simetria real de la forma 2x2, no una casualidad) --
+  no bastaba con que los 4 fueran legales, tenian que efectivamente matar.
+- Nivel 3 (doble atari/escalera/rompedor/red/snapback/corte-conexion):
+  todas las secuencias de captura verificadas a mano contra conteo real de
+  libertades, incluyendo el porque el rompedor de escalera (n3-l3) cambia
+  el resultado (la piedra ya conectada da una libertad extra desde el
+  arranque, confirmado por calculo, no solo por la explicacion del texto).
+- Niveles 4, 9, 10 en particular NUNCA escriben un numero a mano: usan
+  `computeAreaScore`/`getGroup`/`countLiberties`/`areaDeltaForPoint` reales
+  sobre el tablero real para calcular libertades, deltas de puntaje y
+  conteos, con comentarios que documentan intentos de verificacion
+  anteriores que se descartaron por no dar una senal reproducible (ver
+  n4-l4 y n9-l1 en el codigo). Es el mismo Principio 1 del documento de
+  diseno que ya regia Ejercicios, aplicado con la misma disciplina en
+  Aprender.
+- Niveles 5-8 (fuseki/joseki/moyo/ataque-defensa, solo prosa+diagramas+
+  bloques "compare", sin demo interactiva): los `correctIndex` de los 5
+  bloques `compare` encontrados (n6-l2, n7-l2, n7-l3, n8-l2, n9-l2)
+  corresponden a proverbios de Go reales y bien establecidos (bloquear
+  hacia el apoyo, urgente antes que grande, jugar en relacion a piedras
+  propias, atacar reforzando lo propio, sente antes que gote) -- ninguno
+  contradice teoria estandar.
+
+No se encontro NINGUN error de contenido (secuencia ilegal, afirmacion
+tactica falsa, dato inventado a mano). El unico problema real de las 64
+lecciones era el bug de reintento de arriba. `tsc`/`oxlint` sin cambios
+nuevos (confirmado contra `git show HEAD:...`); vitest completo corriendo.
+
+## Estado general del proyecto (2026-09-12, cont. 26: inventario de huecos en Ejercicios + primer lote de contenido nuevo)
+
+Pedido explicito: revisar a fondo la cobertura de tipos de ejercicio y
+agregar mas, o al menos proponer algo concreto. Inventario completo
+(`CONCEPTS` en `analysis/concepts.ts`, 61 conceptos en 11 niveles, cruzado
+con `listBankEntries()`, 1698 problemas antes de este cambio):
+
+**Huecos totales (0 ejercicios en el nivel entero):** niveles 4 (forma
+eficiente/direccion), 5 (puntos de fuseki), 6 (joseki) y 8 (ataque y
+defensa) -- los 5 conceptos de cada uno tienen `generatesExercises: false`,
+sin generador ni detector de ningun tipo. Es, con diferencia, el hueco mas
+grande del catalogo: 4 niveles completos son solo lectura de leccion, sin
+practica.
+
+**Nivel 7 (moyo/juicio):** ya tiene banco real gracias a
+`generate-whole-board-judgment-problems.ts` (JUICIO_LOCAL_VS_GLOBAL, 69
+problemas) de una sesion anterior, pero los otros 4 conceptos del nivel
+(MOYO_NO_ES_TERRITORIO, RELACION_CON_PIEDRAS_PROPIAS, PACIENCIA_Y_MARGEN,
+DIRECCION_NO_ES_TODO) siguen en `false`.
+
+**Conceptos sueltos en `false` en niveles que si tienen banco** (0-3, 9-10):
+LIBERTADES, CAPTURA_PERDIDA, KO, CONTEO_AREA,
+PIEDRA_MUERTA_ATACADA_EN_VANO, PRIMERA_LINEA_TEMPRANA,
+GRUPO_MURIO_SIN_OJOS, JUGADA_LEJOS_DEL_COMBATE, ESCALERA_FALLIDA,
+CONEXION_INNECESARIA, SENTE_Y_GOTE, CONTAR_PARA_DECIDIR, QUE_ES_SEMEAI,
+UN_OJO_GANA, CONECTAR_EN_VEZ_DE_PELEAR. La mayoria caen en dos categorias
+distintas, no una sola "falta hacerlo": (a) definiciones/reglas (KO,
+LIBERTADES, QUE_ES_SEMEAI, CONTEO_AREA) que no tienen forma natural de "elige
+el punto correcto"; (b) evaluacion retrospectiva de una partida completa ya
+jugada (CAPTURA_PERDIDA, PIEDRA_MUERTA_ATACADA_EN_VANO,
+GRUPO_MURIO_SIN_OJOS) -- el rol de un detector de `analyzeGame`, no el de un
+ejercicio de un solo punto. SENTE_Y_GOTE sigue diferido: pedir "sente o
+gote" sobre UNA jugada es un juicio binario, no un click en el tablero, y
+necesita una UI nueva (distinta de SENTE_ANTES_QUE_GOTE, que ya pide elegir
+la jugada sente entre dos). CONTAR_PARA_DECIDIR/UN_OJO_GANA/
+CONECTAR_EN_VEZ_DE_PELEAR se solapan bastante con conceptos hermanos de la
+misma leccion que ya tienen banco (COMPARAR_VALOR_REAL,
+CONTAR_LIBERTADES_ANTES_DE_JUGAR, LIBERTADES_COMPARTIDAS_CUENTAN_DISTINTO) --
+prioridad mas baja.
+
+**Recomendacion de prioridad, no implementada aun (necesita su propia
+sesion dedicada, mismo criterio de tamano que ya se aplico para el juicio de
+tablero completo antes de que existiera):** nivel 4 (forma eficiente /
+direccion) es el candidato mas fuerte para el siguiente generador nuevo.
+Pedagogicamente es "cual de estas jugadas candidatas es objetivamente
+mejor", el mismo patron de comparacion que ya tiene solucionador y
+plumbing reales en `solver/areaValue.ts` +
+`generate-area-value-problems.ts` / `generate-whole-board-judgment-
+problems.ts` -- extender ese patron (auto-juego, comparar valor de area o
+swing de tasa de victoria entre 2-3 candidatas) en vez de inventar un
+mecanismo de generacion nuevo desde cero. Niveles 5/6/8 son mas de fuseki y
+joseki -- necesitan su propio criterio de "movimiento correcto" (probable-
+mente swing de tasa de victoria de auto-juego temprano, no area cerrada, ya
+que el juego esta lejos de terminar), mas trabajo de diseño antes de
+generar nada.
+
+**Lo que si se hizo en esta sesion -- crecer los 3 bancos mas delgados que
+ya existian**, todos semillas escritas a mano en `content/seeds.ts` (no
+auto-juego: el hallazgo previo de que subir `SELF_PLAY_GAMES` da
+rendimientos decrecientes solo aplica a los conceptos que SI vienen de
+auto-juego, como CAPTURA_SIMPLE/DOS_OJOS/PUNTO_VITAL). Mismo patron ya
+establecido para geta/snapback (misma tactica dispersa en tablero mas
+grande = posicion nueva de verdad bajo el grupo diedral, sin inventar nada,
+reverificada por el solucionador antes de aceptarse): se agrego una tercera
+posicion en 13x13 para RED_GETA y SNAPBACK, y una segunda para OJO_FALSO
+(el banco mas delgado de todos, el unico que solo tenia una semilla). Antes
+-> despues: OJO_FALSO 4 -> 8, RED_GETA 8 -> 12, SNAPBACK 16 -> 24 (total
+1698 -> 1706 problemas). Confirmado con `buildSeedProblems()` real (no solo
+inspeccion de codigo): las 3 semillas nuevas sobreviven la reverificacion
+del solucionador tal como estan, sin ajustar ninguna geometria a mano para
+que "les salga bien".
+
+De paso: la region que recorta `computeRegion()` es un rectangulo fijo
+alrededor de `targetPoints` ± margen (no depende del tamano del tablero
+salvo por el recorte a sus bordes), asi que el tiempo de busqueda por
+semilla no deberia cambiar entre 9x9 y 13x13 -- el segundo test de
+`tests/content/seeds.test.ts` (round trip SGF) igual se paso de su timeout
+de 180s con las 16 llamadas nuevas al solucionador que suma este cambio;
+subido a 300s (mismo numero que ya usaba el `beforeAll` del mismo archivo),
+ver comentario ahi. `tsc`/`oxlint`/vitest completo sin cambios aparte de
+eso.
+
+**Hallazgo real durante el shipping de esto, no solo el contenido:**
+`tools/generate-problems.ts` armaba el `id` de cada entrada de `bank.json`
+por posicion en el array (`p${index+1}`), y `storage/db.ts` guarda el
+progreso de repaso espaciado del jugador (`STORE_SRS`, IndexedDB local del
+telefono) usando ese mismo id como clave. Como `buildSeedProblems()` se
+antepone al autojuego dentro del array, agregar las 3 semillas nuevas de
+arriba corria en cascada el id de CADA problema de autojuego existente --
+cualquier tarjeta SRS ya guardada en un dispositivo real habria quedado
+apuntando en silencio a un problema distinto del que el jugador de verdad
+repaso. Fix: el id ahora es un hash del contenido
+(`sha256(conceptId:sgf).slice(0,16)`, prefijado `p_`), estable sin importar
+el orden o la posicion dentro del array -- el sgf ya codifica
+tablero+objetivo+turno+puntos objetivo por completo. Costo de una sola vez
+(el cambio de esquema de id resetea el review histórico de repaso espaciado
+ya guardado localmente, exactamente igual que si solo se hubiera
+regenerado sin el fix), pero elimina la clase de bug entera para cualquier
+adicion de contenido futura, no solo esta.
+El autojuego de `generate-problems.ts` SI es determinista (`randomSeed:
+1000 + g`, `chooseMove` lo respeta), asi que regenerar con `npm run
+problems:generate` reproduce exactamente los mismos problemas de
+autojuego ya existentes, solo con el id nuevo -- no es una barajada de
+contenido, es un cambio de esquema de identificador.
+
+**El mismo patron de id posicional existe tambien en los otros 7 scripts
+generadores** (`doubleatari${i}`, `ladder${i}`, `${prefix}${i}` en
+mistake-exercises, `areaValue${i}`, `semeaiLiberty${i}`, `senteGote${i}`,
+`localVsGlobal${i}`, `yoseValue${i}`) -- ninguno se toco en esta pasada
+porque ninguno de esos bancos se reordeno hoy, pero cualquier sesion futura
+que inserte contenido antes de lo ya existente en cualquiera de ellos tiene
+el mismo riesgo y deberia aplicar el mismo fix (hash de contenido) antes de
+regenerar.
+
+## Estado general del proyecto (2026-09-12, cont. 25: Service Worker fuera de la copia de Flutter -- posible causa real de "Aprender sigue centrado")
+
+Tras cont. 21/23/24, el usuario reinstalo un APK recien construido
+(sideload directo, sin pasar por Play Store, descartando la teoria de
+"build viejo") y las tarjetas de Aprender le seguian apareciendo
+centradas. Se extrajo el APK exacto instalado y se confirmo con grep sobre
+el CSS empaquetado que `justify-content:flex-start` esta ahi, byte a byte
+-- **no es un bug de build ni de empaquetado**, el codigo correcto SI esta
+en el APK que el usuario instalo.
+
+Hipotesis investigada y mecanismo real encontrado en el shell de Flutter:
+`local_web_server.dart` sirve `assets/webapp/` por HTTP en un puerto
+loopback FIJO (`127.0.0.1:51823`, a proposito, para que localStorage/
+IndexedDB sobrevivan entre arranques). Como ese origen cuenta como contexto
+seguro, el Service Worker de la PWA (`vite-plugin-pwa`,
+`registerType: 'autoUpdate'`) se registra ahi de verdad dentro del WebView.
+El almacenamiento de ese origen -- incluido el propio Service Worker
+registrado y su Cache Storage -- es dato privado de la app que sobrevive
+una reinstalacion normal (solo una desinstalacion completa lo borraria), y
+como el puerto es fijo por diseño en cada build, el origen nunca cambia:
+el Service Worker de la primerisima instalacion podia seguir interceptando
+la navegacion y sirviendo ese bundle viejo para siempre, sin importar
+cuantas veces se reconstruyera el APK. Ademas `local_web_server.dart` nunca
+mandaba ningun header de cache, lo que podia interferir con el propio
+chequeo de actualizacion de Workbox.
+
+Fix, en vez de intentar hacer que el ciclo de vida de Workbox se comporte
+bien contra un servidor local hecho a mano: **sacar el Service Worker por
+completo de la copia embebida en Flutter**. Es redundante ahi -- `rootBundle`
+ya garantiza que los assets del APK instalado esten disponibles offline sin
+necesidad de un SW propio -- y en este embedding es activamente daniino.
+
+- `sync-webapp.ps1`: despues de copiar `hoshi/dist`, borra
+  `registerSW.js`/`sw.js`/`workbox-*.js` y quita el `<script id="vite-
+  plugin-pwa:register-sw">` de `index.html` (falla fuerte si el patron no
+  matchea, en vez de fallar en silencio si vite-plugin-pwa cambia su
+  output).
+- `local_web_server.dart`: agrega `Cache-Control: no-store` a toda
+  respuesta -- no cuesta nada en un servidor en memoria y evita que el
+  cache HTTP del WebView (o un SW futuro) retenga bytes viejos.
+- `main.dart`: limpieza de migracion para instalaciones YA existentes con
+  un Service Worker viejo registrado (que sync-webapp.ps1 no puede tocar
+  retroactivamente): en el primer `onPageFinished`, corre JS que
+  desregistra cualquier Service Worker y borra Cache Storage, espera
+  ~400ms (best-effort, no hay forma de esperar una Promise de JS desde
+  Dart) y recarga una vez. No-op silencioso en instalaciones limpias.
+
+Verificado: `flutter analyze` limpio, `sync-webapp.ps1` corrido de verdad
+sobre un build fresco confirma que `sw.js`/`workbox-*.js`/`registerSW.js`
+ya no llegan a `assets/webapp/` y que el script de registro desaparecio de
+`index.html`. Pendiente de confirmar en el dispositivo real del usuario
+(la ruta de migracion -- instalar ENCIMA de una app con un SW viejo ya
+activo, no una instalacion limpia -- es la que de verdad prueba el fix).
+
 ## Estado general del proyecto (2026-09-11, cont. 24: el aviso de errores en vivo ya no se lo come la respuesta del bot)
 
 Playtest real: el aviso de errores en vivo (mensaje + anillo fantasma + zona
