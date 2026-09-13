@@ -41,6 +41,12 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
   }, [script])
 
   const step = stepIndex < script.steps.length ? script.steps[stepIndex] : null
+  /** Si este es el ultimo paso, pasar directo a 'done' en vez de 'feedback':
+   * un boton "Continuar" que lleva de un mensaje de exito a otro casi
+   * identico se sentia como que no hacia nada (ver NOTAS.md). El feedback
+   * del ultimo paso no se pierde -- se muestra junto con el mensaje de
+   * completado en el branch 'done' de mas abajo. */
+  const isLastStep = stepIndex === script.steps.length - 1
 
   useEffect(() => {
     if (!step || step.auto === undefined || step.auto === false || status !== 'awaiting-move') return
@@ -50,8 +56,8 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
       if (movePoint !== null) playStoneSoundIfEnabled()
       setGame(result.state)
     }
-    setStatus('feedback')
-  }, [step, status, game, playStoneSoundIfEnabled])
+    setStatus(isLastStep ? 'done' : 'feedback')
+  }, [step, status, game, playStoneSoundIfEnabled, isLastStep])
 
   function handleClick(point: number) {
     // 'wrong' tiene que seguir aceptando clicks -- si no, el primer click
@@ -68,7 +74,7 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
 
     if (step.expectIllegal) {
       if (!result.legal) {
-        setStatus('feedback')
+        setStatus(isLastStep ? 'done' : 'feedback')
       } else {
         setStatus('wrong')
       }
@@ -78,16 +84,17 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
     if (result.legal && result.state) {
       playStoneSoundIfEnabled()
       setGame(result.state)
-      setStatus('feedback')
+      setStatus(isLastStep ? 'done' : 'feedback')
     } else {
       setStatus('wrong')
     }
   }
 
+  // Solo se llega aca desde el estado 'feedback', que ya nunca ocurre en el
+  // ultimo paso (ver isLastStep arriba) -- siempre hay un paso siguiente.
   function handleContinue() {
-    const next = stepIndex + 1
-    setStepIndex(next)
-    setStatus(next < script.steps.length ? 'awaiting-move' : 'done')
+    setStepIndex((i) => i + 1)
+    setStatus('awaiting-move')
   }
 
   return (
@@ -103,7 +110,10 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
       />
       <div className="lesson-demo-status" aria-live="polite">
         {status === 'done' ? (
-          <p className="lesson-demo-done">{t(script.completionKey)}</p>
+          <>
+            <p className="lesson-demo-feedback">{t(script.steps[script.steps.length - 1].feedbackKey)}</p>
+            <p className="lesson-demo-done">{t(script.completionKey)}</p>
+          </>
         ) : status === 'feedback' && step ? (
           <>
             <p className="lesson-demo-feedback">{t(step.feedbackKey)}</p>

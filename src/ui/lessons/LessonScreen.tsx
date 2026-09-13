@@ -28,6 +28,11 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
 
   useEffect(() => {
     markLessonRead(lesson.id)
+    // "Siguiente leccion" navega sin desmontar LessonScreen (mismo componente,
+    // props nuevas) -- sin esto, si la persona llegaba al boton habiendo
+    // scrolleado hasta el final de la leccion anterior, la siguiente aparecia
+    // ya scrolleada al mismo punto en vez de arrancar arriba.
+    window.scrollTo(0, 0)
   }, [lesson.id])
 
   return (

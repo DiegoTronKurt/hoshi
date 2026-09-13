@@ -45,6 +45,24 @@ const LEVEL_TITLE_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
   10: 'learn.level.10',
 }
 
+/** Resumen de "que se aprende en este nivel", especifico por nivel (fiel a
+ * las lecciones reales de cada uno, ver content/lessons/nN.ts) -- el nivel 0
+ * ademas antepone learn.level0Intro.whatIsGo (unico nivel que explica que es
+ * el Go en si, ver el render mas abajo), los demas van directo al resumen. */
+const LEVEL_INTRO_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
+  0: 'learn.level0Intro.whatYouLearn',
+  1: 'learn.levelIntro.1',
+  2: 'learn.levelIntro.2',
+  3: 'learn.levelIntro.3',
+  4: 'learn.levelIntro.4',
+  5: 'learn.levelIntro.5',
+  6: 'learn.levelIntro.6',
+  7: 'learn.levelIntro.7',
+  8: 'learn.levelIntro.8',
+  9: 'learn.levelIntro.9',
+  10: 'learn.levelIntro.10',
+}
+
 /** Agrupa los niveles por fase del juego para que se vea la forma del
  * camino completo, en vez de una lista plana de 11 tarjetas -- los titulos
  * de los niveles ya dicen "Opening"/"Joseki"/"Fuseki"/"Midgame"/"Endgame",
@@ -221,6 +239,10 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
           </button>
           <h2>{t(LEVEL_TITLE_KEY[view.level])}</h2>
         </div>
+        <section className="learn-level-intro">
+          {view.level === 0 && <p className="lesson-paragraph">{t('learn.level0Intro.whatIsGo')}</p>}
+          <p className="lesson-paragraph">{t(LEVEL_INTRO_KEY[view.level])}</p>
+        </section>
         {lessons.length === 0 ? (
           <p className="learn-empty">{t('learn.noLessons')}</p>
         ) : (

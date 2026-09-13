@@ -1,5 +1,262 @@
 # Notas de desarrollo
 
+## Segunda ronda de correcciones sobre cont. 39: intro por nivel (no solo Nivel 0), leccion del pase reescrita, scroll al tope en "Siguiente leccion", mismo bug de align-items ahora en Jugar (2026-09-13, cont. 40)
+
+Pedido explicito del usuario tras revisar cont. 39, 5 puntos: (1) el
+"sobre el tutorial" lo pidio en general, no solo Nivel 0 -- "maybe a
+message for each level would be nice"; (2) instrucciones poco claras
+tambien en la leccion de cuando pasar, pidio auditarla; (3) "Siguiente
+leccion" tiene que arrancar arriba del todo, no donde haya quedado el
+scroll; (4) dejar "red" (neuronal) tal cual, pero pregunta si el orden de
+STRENGTH_LEVELS refleja dificultad real y si el mecanismo adaptativo
+deberia usar 'expert' -- pendiente de aclaracion, ver mas abajo, no
+implementado en esta ronda; (5) aclaro que el reclamo de botones que
+cambian de tamano en Jugar era en la pantalla de CONFIGURAR partida (antes
+de arrancar), no en los controles durante la partida (eso ya estaba
+arreglado en cont. 39) -- ejemplo: activar las pistas.
+
+**Verificacion:** tsc limpio, oxlint sin categorias nuevas, y Playwright
+real contra el dev server para cada item con evidencia concreta (medidas
+de layout, texto exacto, scrollY) -- detalle en cada seccion. Suite
+completa de vitest corriendo en paralelo a esta nota (61 archivos / 3806
+tests antes de esta ronda); si algo rompiera se corrige antes de dar la
+ronda por cerrada.
+
+### Item 5 (el de esta ronda, no el de cont. 39): botones que cambian de tamano en Configurar partida (`App.css`)
+
+Mismo bug de fondo que el item 7 de cont. 39, encontrado en un contenedor
+distinto: `.play-config` tenia `align-items: center`. Un `.play-card-group`
+sin ancho propio (p.ej. "Pistas en partida" o "Aviso de errores en vivo",
+2 botones de texto corto) se encogia a su contenido real y quedaba
+centrado como caja angosta -- confirmado con Playwright, ESTABLE durante 3
+segundos sin tocar nada (79px+79px de dos botones que deberian medir 175px
+cada uno, centrados con un hueco de ~95px a cada lado). Grupos con texto
+mas largo ("Tamaño de tablero": 6 botones, "Regla de conteo": "China
+(área)"/"Japonesa (territorio)") ya ocupaban casi toda la fila por el
+tamaño de su propio contenido, así que ahi el bug no se notaba visualmente
+aunque el mecanismo fuera el mismo. Al tocar cualquier boton del grupo
+angosto, el re-render disparado por el cambio de estado terminaba
+mostrando el ancho correcto (175px) -- de ahi que se percibiera como "el
+boton cambia de tamaño al activarlo", cuando en realidad el boton SIEMPRE
+debio medir 175px; lo que pasaba es que el primer render lo mostraba mal.
+Arreglo de una linea, igual que en `.learn`: `align-items: center` ->
+`align-items: stretch`. Confirmado con Playwright midiendo el mismo grupo
+a los 50ms, 300ms, 1000ms y 3000ms de cargada la pantalla, sin ningun
+click: ancho correcto (175px) desde el primer frame, ya no hace falta
+ningun re-render para corregirlo.
+
+### Item 1: mensaje "que se aprende" en TODOS los niveles, no solo Nivel 0 (`LearnScreen.tsx`)
+
+Generalizacion de cont. 39: nuevo `LEVEL_INTRO_KEY: Record<Level,
+TranslationKey>` (mismo patron que `LEVEL_TITLE_KEY` ya existente) con un
+resumen por nivel, fiel a las lecciones reales de cada uno
+(`content/lessons/nN.ts` -- se leyeron los titulos reales de las 62
+lecciones de los niveles 1 a 10 antes de escribir cada resumen, ninguno
+inventado). El nivel 0 mantiene su parrafo extra "que es el Go"
+(`learn.level0Intro.whatIsGo`) antes del resumen -- unico nivel que lo
+necesita; los demas van directo al resumen de una sola oracion larga.
+10 claves nuevas (`learn.levelIntro.1` a `.10`) en `es.json` y `en.json`.
+Confirmado con Playwright en Nivel 1 y Nivel 3, texto exacto verificado
+contra lo escrito.
+
+### Item 2: leccion del pase reescrita tras auditoria (`es.json`/`en.json`)
+
+Auditoria pedida explicitamente sobre `lesson.n1-l2` ("El pase y el fin de
+la partida"): el prompt decia "En vez de pasar, toca la piedra blanca en
+atari para capturarla" -- confuso porque GuidedDemo (el ejemplo
+interactivo) no tiene ningun boton de pasar, solo clicks sobre el
+tablero, asi que ofrecer "pasar" como alternativa dentro de una
+instruccion de una leccion literalmente TITULADA "el pase" invita a buscar
+como pasar en un widget que no lo permite. Reescrito para dar la
+instruccion accionable primero (toca el punto marcado) y mover la
+explicacion de "por que no pasar" al feedback, que se muestra DESPUES de
+resolver el paso, no antes: mismo contenido pedagogico, sin la trampa de
+mencionar una accion no disponible como si fuera una opcion real. Se
+audito ademas el resto del texto de instrucciones buscando el mismo
+patron ("en vez de pasar") en las 31 lecciones con ejemplo interactivo:
+ningun otro caso real (un solo falso positivo, n3-l5, que dice "que pasa"
+en el sentido de "que sucede", sin relacion con el turno).
+
+### Item 3: "Siguiente leccion" ahora arranca arriba (`LessonScreen.tsx`)
+
+`LessonScreen` no se desmonta entre lecciones (mismo componente, `lesson`
+cambia de prop via el router interno de `LearnScreen`), asi que el
+navegador nunca reseteaba el scroll por si solo: si la persona llegaba al
+boton "Siguiente leccion" habiendo bajado hasta el final de la leccion
+anterior, la siguiente aparecia ya scrolleada al mismo punto en vez de
+arrancar por el titulo. Una linea, `window.scrollTo(0, 0)` agregada al
+`useEffect` que ya corria en cada cambio de `lesson.id` (el mismo que
+marca la leccion como leida). Confirmado con Playwright: scroll a 907px
+antes de tocar el boton, 0px exacto despues, con el titulo de la leccion
+siguiente ya visible arriba.
+
+### Item 4: orden de dificultad de STRENGTH_LEVELS -- confirmado, sin cambio de codigo
+
+El usuario pregunto si el orden refleja dificultad real y si, siendo
+'expert' mas fuerte, deberia "reemplazar el mecanismo" -- ambiguo entre
+(a) confirmar que el array ya esta ordenado ascendente por dificultad o
+(b) que el mecanismo de DIFICULTAD ADAPTATIVA (`learning/adaptiveDifficulty.ts`,
+que hoy excluye a proposito 'expert'/'maxima' de su escalera, tope fijo en
+'veryStrong') deberia extenderse hacia el motor 'net'. Se le pregunto al
+usuario con `AskUserQuestion` en vez de adivinar (alcance muy distinto
+entre ambas lecturas) -- eligio (a): solo quería la confirmación. Sin
+cambio de codigo: `STRENGTH_LEVELS` ya esta ordenado
+weak/normal/strong/veryStrong (motor 'classic', playouts crecientes) <
+expert/maxima (motor 'net', 300 y 1200 playouts respectivamente) tal como
+esta hoy.
+
+Pedido explicito del usuario en un solo mensaje con 8 puntos numerados
+(mas la entrega de los libros pedidos en cont. 38 -- `3-Tesuji.pdf`, 4
+volumenes de "Graded Go Problems for Beginner" de Kano Yoshinori, y un
+diccionario de joseki en 3 volumenes -- confirmados en `Go_app/`,
+pendientes de usarse en una sesion futura, no tocados en esta): materiales
+subidos; falta un "sobre el tutorial" en Nivel 0; instrucciones poco
+claras en algunos tutoriales; el boton "Continuar" de algunos ejemplos
+interactivos no hacia nada; que es "Experta (red)"; botones que cambian de
+tamano al presionarlos en Jugar; titulos/botones de Aprender siguen
+centrados pese al arreglo de cont. 38; grilla de temas ocupa demasiado
+espacio. Los 7 items de codigo/contenido se investigaron y corrigieron en
+la misma sesion, cada uno con causa raiz confirmada ANTES de tocar nada --
+ningun reporte se asumio cierto sin reproducirlo primero.
+
+**Verificacion:** tsc limpio, oxlint sin categorias de aviso nuevas (los
+dos `set-state-in-effect` de `GuidedDemo.tsx` ya existian antes, en los
+mismos efectos), paridad de i18n mantenida (toda clave nueva agregada a
+`es.json` Y `en.json`), suite completa de vitest (61 archivos / 3806
+tests) pasando, y un script de Playwright real contra el dev server que
+recorrio los 6 items visuales/interactivos de punta a punta con capturas y
+medidas de layout reales (`getBoundingClientRect`, `scrollWidth`), no solo
+lectura de CSS -- detalle de cada verificacion en su seccion.
+
+### Item: botones y titulos de Aprender centrados (`App.css`)
+
+El arreglo de la sesion anterior (cont. 38: `text-align:left` en
+`.learn-about-cta`) resulto insuficiente porque no atacaba la causa real:
+el CONTENEDOR `.learn` tenia `align-items: center` en su flex column, asi
+que cualquier hijo directo sin ancho explicito (el `<h2>` del titulo, el
+div `.learn-reference-ctas` que envuelve el boton "Referencia", cada
+`.learn-phase-group` con su `<h3>` de fase) se encogia a su contenido y se
+centraba como CAJA -- daba igual el text-align interno del boton, la caja
+entera flotaba en el medio de la pantalla. Afecta a las 8 pantallas que
+comparten la clase `.learn` (Aprender, Sobre el Go, Joseki, Tesuji,
+Avanzado, Partidas historicas, Tutoriales, Referencia), confirmado por
+grep de `className="learn`. Arreglo de raiz, 2 lineas: `.learn
+{align-items: stretch}` (antes `center`) + `.learn h2 {text-align: left}`
+(antes `center`). Verificado que nada dependia del centrado viejo: los
+elementos que si deben quedar centrados (`.learn-intro-demo`, la ficha
+`.learn-current-lesson`, el tablero de `.lesson-demo` dentro de un ejemplo
+interactivo) ya tenian su propio `align-items`/ancho explicito en una
+regla separada, sin heredar de `.learn`. Confirmado con Playwright: el
+titulo y el boton "Referencia" pasaron de una caja centrada angosta a
+`x:16, width:358` (ancho completo del contenido, igual que el resto de la
+pantalla) en un viewport de 390px.
+
+### Item: "Sobre el tutorial" en Nivel 0 (`LearnScreen.tsx`)
+
+Bloque nuevo, solo texto, sin pantalla ni ruta nueva (para no tocar el
+manejo de "atras" fisico de Android, que ya distingue profundidad por tipo
+de vista en el `useEffect` de `reportLocalBack` dentro de `LearnScreen`):
+dentro de la lista de lecciones del Nivel 0 unicamente (`view.level ===
+0`), justo bajo el encabezado, dos parrafos nuevos -- que es Go, y que se
+aprende en este nivel especificamente (resumen fiel de las 6 lecciones
+reales de `content/lessons/n0.ts`, no generico). No duplica ni enlaza a
+`AboutGoScreen` ("Sobre el Go" en la Referencia, que ya cubre objetivo/
+estilos/historia/reglas/glosario) -- enlazar hubiera exigido sumar
+'levelIntro' al set de vistas con back-nav propio, riesgo innecesario para
+dos parrafos de texto. 2 claves nuevas (`learn.level0Intro.whatIsGo`,
+`.whatYouLearn`) en `es.json` y `en.json`. Confirmado visible con
+Playwright, texto exacto verificado contra lo escrito.
+
+### Item: boton "Continuar" que no hacia nada (`GuidedDemo.tsx`)
+
+Bug real, no percepcion: en el ULTIMO paso de cualquier ejemplo
+interactivo, resolverlo mostraba su feedback + un boton "Continuar" que
+llevaba a un mensaje de completado de tono casi identico -- un click que
+solo cambiaba una frase de exito por otra, facil de sentir como que "no
+hizo nada". Con la mayoria de las lecciones de Nivel 0 teniendo un solo
+paso, esto pasaba en la PRIMERA interaccion de casi cada leccion. Arreglo:
+nuevo `isLastStep = stepIndex === script.steps.length - 1`: si el paso
+resuelto es el ultimo, se pasa directo a `status:'done'` (sin pasar por
+`'feedback'` ni mostrar el boton); el feedback de ese ultimo paso no se
+pierde, se muestra junto con el mensaje de completado en el mismo bloque.
+Los pasos intermedios (demos de varios pasos, como n0-l5 "Atari" o n4-l3
+"Hane") siguen mostrando "Continuar" tal cual, porque ahi si hace algo
+(avanza a un prompt distinto). `handleContinue` simplificado de paso: como
+ya nunca se lo llama estando en el ultimo paso, el branch `next < length ?
+'awaiting-move' : 'done'` tenia una rama muerta; se dejo solo
+`setStatus('awaiting-move')`. Confirmado con Playwright en un demo de 1
+paso (n0-l1) y uno de 3 pasos con auto-jugada (n0-l5): el de 1 paso ahora
+resuelve en un solo click sin boton extra; el de 3 pasos mantiene
+"Continuar" entre pasos y lo saca solo en el ultimo.
+
+### Item: instrucciones poco claras en Nivel 4 (`es.json`/`en.json`)
+
+Se reviso el texto de los 31 `promptKey` de ejemplos interactivos del
+curriculo (`lesson.*.demo.*.prompt`) buscando cuales rompian el patron
+establecido ("Juegas con [color]. Toca [donde] para [que].", presente en
+29 de los 31). Dos casos reales en `n4-l3` ("Hane y el riesgo de corte"):
+el texto llamaba a la jugada "cabecear" ("Cabecea alrededor de la piedra
+blanca") -- verbo inventado para traducir "hane" que no significa nada en
+espanol de Go (cabecear es de futbol), inconsistente ademas con el TITULO
+de la misma leccion que si dice correctamente "Hane", y con el patron ya
+usado para "keima"/"atari" (termino japones tal cual, sin traducir). El
+segundo paso tampoco decia que tocar ("Persigue a la piedra de corte
+empujandola hacia la esquina"). Corregido para seguir el patron
+establecido y usar "hane" como termino, igual que el ingles ya hacia
+correctamente en el mismo archivo (`en.json` ya decia "Hane around the
+white stone", nunca traducido) -- de paso se ajusto el ingles de los dos
+prompts para que tambien nombren el color y digan "toca", por consistencia
+con el resto del curriculo en ambos idiomas. El `step1.prompt` de `n4-l2`
+tenia ademas una redaccion mas vaga que el `p2` de la misma leccion, que
+ya explicaba lo mismo con claridad -- unificado a esa version. Cambio de
+contenido, no de logica: los `expectedPoints` no se tocaron.
+
+### Item: "Experta (red)" poco claro (`strengthLevels.ts` via `es.json`)
+
+No era un bug de codigo -- "red" ya es la palabra correcta en espanol para
+"neural network" (motor `'net'` en `strengthLevels.ts`, el que consulta la
+red en cada nodo en vez de solo en la raiz), pero la abreviatura sola
+resulto ambigua igual. Expandido a "Experta (red neuronal)"
+(`play.strength.expert` en `es.json`) y, por paridad y la misma ambiguedad
+en ingles, "Expert (net)" -> "Expert (neural net)" en `en.json`. Sin
+cambios de logica: el nivel sigue siendo 300 playouts, motor `net`, sin
+kyu estimado (ver el comentario ya existente en `strengthLevels.ts` sobre
+por que no se inventa uno).
+
+### Item: botones que cambian de tamano en Jugar (`App.css`)
+
+Causa real: `.play-ingame-controls button` tenia `flex: 1` (los botones de
+la fila -- Deshacer/Pasar/Contar/Pista/Salir -- se reparten el ancho
+disponible en partes iguales). El boton de Pista cambia su TEXTO al pensar
+("Pista (N quedan)" -> "Pensando..."), y con `flex:1` un cambio de ancho
+de contenido en un boton redistribuye el ancho de TODOS los botones del
+grupo -- se ven "cambiar de tamano" con solo tocar Pista, sin que nadie mas
+haya cambiado. Arreglo de una linea: `flex: 1` -> `flex: 0 0 auto` (cada
+boton ocupa su propio contenido, ninguno crece para llenar espacio ajeno);
+la fila sigue centrada por el `justify-content:center` que ya tenia.
+Confirmado con Playwright, no solo leyendo el CSS: partida local con
+pistas activadas, medido el `getBoundingClientRect()` de los 5 botones
+antes, durante ("Pensando...") y despues del click de Pista -- Deshacer/
+Pasar/Contar mantuvieron ancho identico en los 3 momentos (89.2/72/72px),
+algo que con `flex:1` no pasaba.
+
+### Item: grilla de temas muy alta en Ajustes (`App.css`)
+
+`.settings-apptheme-grid` (14 temas de app: sistema + 13) era una grilla de
+3 columnas, ~5 filas completas de la pantalla de Ajustes solo para elegir
+un color de fondo. Convertida a una franja horizontal con scroll
+(`display:flex` + `overflow-x:auto` + `scroll-snap-type:x proximity`, cada
+tarjeta con ancho fijo de 82px) -- una sola fila sin importar cuantos temas
+haya, patron estandar movil (swipe lateral). Margen negativo de -1rem +
+padding de 1rem para que la franja llegue hasta el borde de la pantalla
+(confirmado que el padding horizontal real del contenedor `.app` es
+exactamente 1rem antes de escribir el numero, no adivinado). La grilla de
+temas de TABLERO (`.settings-theme-grid`, solo 4 items, 2 filas) se dejo
+igual a proposito -- no era el problema que el usuario senalo. Confirmado
+con Playwright: `scrollWidth` (1305px, los 14 temas en fila) contra
+`clientWidth` (390px, el viewport) del contenedor, mas captura de pantalla
+mostrando una sola fila con el siguiente tema asomando en el borde.
+
 ## Fase 4 completa: dojo de analisis libre (C2), filtro de dificultad en Ejercicios (C3), exportar SGF (C4), conceptos debiles en el Test de nivel (D2), limpieza de carga de clientes (E1), inferencia remota opcional (E3), E2 descartado a proposito (2026-09-13, cont. 38)
 
 Pedido explicito: el usuario pregunto "what are the next steps in the plan?"

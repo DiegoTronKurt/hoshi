@@ -1500,14 +1500,20 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1rem;
 }
 
 .learn h2 {
   font-size: 1.1rem;
   margin: 0;
-  text-align: center;
+  text-align: left;
+}
+
+.learn-level-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .learn-progress-overall {
@@ -2368,12 +2374,24 @@
 }
 
 .settings-apptheme-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Franja horizontal con scroll en vez de grilla: 14 temas en columnas fijas
+     ocupaban 5 filas completas de la pantalla de Ajustes. Con esto siempre
+     es una sola fila, cualquiera sea la cantidad de temas. */
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
   gap: 0.6rem;
+  padding-bottom: 0.3rem;
+  margin: 0 -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .settings-apptheme-option {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 82px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2613,7 +2631,15 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* stretch, no center: un .play-card-group sin ancho propio (p.ej. "Pistas
+     en partida", 2 botones de texto corto) se encogia a su contenido y
+     quedaba centrado como caja angosta -- attach recien al tamano real de
+     .play-config en el click siguiente (cualquier re-render), lo que se
+     veia como que los botones "cambiaban de tamano" al tocar el toggle.
+     Grupos con texto largo (tamano de tablero, China/Japonesa) ya llenaban
+     la fila por casualidad, por eso el bug no se notaba ahi. Mismo
+     mecanismo que .learn, ver App.css mas arriba. */
+  align-items: stretch;
   gap: 1rem;
 }
 
@@ -2666,7 +2692,11 @@
 }
 
 .play-ingame-controls button {
-  flex: 1;
+  /* flex fijo (no crece ni se achica) a proposito: el boton de pista cambia
+     de texto al pensar ("Pista (N)" -> "Pensando...") -- con flex:1 ese
+     cambio de ancho de contenido redistribuye el espacio de TODOS los
+     botones del grupo (se ven "cambiar de tamano" al tocar uno solo). */
+  flex: 0 0 auto;
   min-width: 72px;
   min-height: 44px;
   padding: 0 0.8rem;
