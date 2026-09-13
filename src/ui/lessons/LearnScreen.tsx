@@ -14,6 +14,7 @@ import { LockIcon } from '../common/LockIcon'
 import type { PlaySeed } from '../play/playConfig'
 import { AboutGoScreen } from './AboutGoScreen'
 import { AdvancedScreen } from './AdvancedScreen'
+import { HistoricGamesScreen } from './HistoricGamesScreen'
 import { IntroDemo } from './IntroDemo'
 import { JosekiScreen } from './JosekiScreen'
 import { LessonScreen } from './LessonScreen'
@@ -76,6 +77,7 @@ type View =
   | { kind: 'about' }
   | { kind: 'joseki' }
   | { kind: 'advanced' }
+  | { kind: 'historicGames' }
 
 function fallbackPreview() {
   const size = 5
@@ -130,7 +132,7 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
   // nivel, aunque se haya entrado directo via initialLessonId) -- ver
   // navigation/localBack.ts.
   useEffect(() => {
-    const referenceKinds: View['kind'][] = ['lessonList', 'about', 'joseki', 'advanced']
+    const referenceKinds: View['kind'][] = ['lessonList', 'about', 'joseki', 'advanced', 'historicGames']
     const depth = view.kind === 'lesson' ? 2 : referenceKinds.includes(view.kind) ? 1 : 0
     reportLocalBack(() => {
       if (view.kind === 'lesson') {
@@ -157,6 +159,10 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
 
   if (view.kind === 'advanced') {
     return <AdvancedScreen onBack={goBack} />
+  }
+
+  if (view.kind === 'historicGames') {
+    return <HistoricGamesScreen onBack={goBack} />
   }
 
   if (view.kind === 'lesson') {
@@ -257,6 +263,9 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
         </button>
         <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'advanced' })}>
           {t('advanced.cta')}
+        </button>
+        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'historicGames' })}>
+          {t('historicGames.cta')}
         </button>
       </div>
       {overallProgress.total > 0 && (

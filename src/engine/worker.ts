@@ -28,11 +28,18 @@ export interface EngineResponse {
   visits: number
   winRate: number
   playoutsRun: number
+  /** Tiempo de pared real de esta llamada (Date.now() antes/despues, mismo
+   * reloj que usa mctsNet.ts para su propio maxTimeMs) -- pensado para A2
+   * (perfil real de 'maxima' en un WebView de Android, ver NOTAS.md): toda
+   * medicion previa de mctsNet.ts fue en GPU de escritorio via Playwright,
+   * nunca en el dispositivo real donde de verdad corre la app. */
+  elapsedMs: number
 }
 
 self.onmessage = async (event: MessageEvent<EngineRequest>) => {
   const { requestId, state, playouts, randomSeed, maxTimeMs, style, rootPriors, net } = event.data
   try {
+    const startedAt = Date.now()
     const result = net
       ? await chooseMoveWithNet(state, await loadModel(net.modelUrl), {
           playouts,
@@ -41,7 +48,7 @@ self.onmessage = async (event: MessageEvent<EngineRequest>) => {
           priorBoards: net.priorBoards,
         })
       : chooseMove(state, { playouts, randomSeed, maxTimeMs, style, rootPriors })
-    const response: EngineResponse = { requestId, ...result }
+    const response: EngineResponse = { requestId, ...result, elapsedMs: Date.now() - startedAt }
     postMessage(response)
   } catch (err) {
     postMessage({ requestId, error: err instanceof Error ? err.message : String(err) })

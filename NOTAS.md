@@ -1,5 +1,244 @@
 # Notas de desarrollo
 
+## A2 (perfil real) y primer item de la Fase 2 (2026-09-13, cont. 32)
+
+Pedido explicito: seguir con A2 (perfil real de `'maxima'` en un dispositivo
+Android real) y arrancar la Fase 2 (contenido).
+
+### A2: instrumentacion real + APK entregado, todavia sin numero de un telefono real
+
+No hay ningun dispositivo ni emulador Android conectado a este entorno
+(`flutter devices` solo ve Windows desktop y Edge web; `adb` ni siquiera
+esta instalado) -- confirmado, no asumido. Como no se puede medir
+directamente, se armo lo necesario para que el usuario mida en su propio
+telefono:
+
+- `engine/worker.ts`: `EngineResponse` gano `elapsedMs` (Date.now() antes/
+  despues de `chooseMove`/`chooseMoveWithNet`, mismo reloj que ya usa
+  mctsNet.ts para su propio `maxTimeMs`).
+- `ui/play/PlayGameScreen.tsx`: tras cada jugada del engine `'net'`
+  (solo ese nivel, no tiene sentido para el MCTS clasico) se muestra una
+  linea chica bajo el tablero: "Maxima: Xs, Y playouts" (`play.netTiming`).
+  No hace falta ninguna herramienta de debug remoto -- alcanza con jugar una
+  partida contra "Máxima (lenta)" y leer el numero en pantalla.
+- Build real: `hoshi-flutter` a `1.28.0+33`, APK release (`--split-per-abi`,
+  arm64-v8a, 26.7MB) entregado al usuario para instalar directo en su
+  telefono. Pendiente: que lo pruebe y reporte el numero mostrado (mas que
+  telefono es, aproximadamente).
+
+**Hallazgo real, no menor, mientras se verificaba esto con Playwright antes
+de mandar el APK:** Playwright headless usa **SwiftShader** (renderer WebGL
+por software, confirmado leyendo `UNMASKED_RENDERER_WEBGL` con y sin
+`headless`) en vez de la GPU real de la maquina -- solo `headless: false`
+usa la GPU real (ANGLE/Direct3D sobre la AMD Radeon de esta maquina).
+Con SwiftShader, una sola jugada de `'maxima'` (1200 playouts) no
+terminaba ni pasados 180s; con la GPU real termino en **19.0s** (jugada de
+apertura en 9x9, presupuesto completo de 1200 playouts, muy por debajo del
+tope de 45s). Esto es una correccion metodologica real para cualquier
+medicion futura con Playwright en este proyecto: **toda medicion de
+`mctsNet`/inferencia real hecha con Playwright debe confirmar
+`headless: false` (o revisar el renderer WebGL), o el numero puede estar
+midiendo software, no la GPU** -- no se puede confirmar retroactivamente si
+mediciones de sesiones anteriores (incluida la cifra de "~8ms/llamada" en
+el comentario de `evaluatePositionsBatch`) usaron GPU real o no, asi que
+esa cifra queda con esta duda hasta que se re-verifique.
+
+De paso, jugando contra `'maxima'` para esta prueba se encontro y corrigio
+un bug chico preexistente (no introducido esta sesion): el titulo de
+partida mostraba "Bot: ~0 kyu" para `'maxima'` (`approxKyu: null` cayendo
+en el `?? 0` de `PlayGameScreen.tsx`) en vez de algo honesto -- ya existia
+el patron correcto en otro lado (`ReviewScreen`'s `vsBotKyu`/`vsBot`, que
+si rama en `kyu !== null`), asi que `PlayGameScreen` ahora hace lo mismo
+(`play.bot.labelUnrated`, "Bot: sin clasificar").
+
+### Fase 2, primer item: "Seis en linea" en Avanzado (B3)
+
+Se intento primero B2 (una tercera entrada de joseki, aproximacion a un
+komoku): descartado. Con una sola piedra en el tablero, la red SIEMPRE
+prefiere un punto grande vacio en otra esquina antes que responder a una
+aproximacion sin contacto directo (probado con 4 variantes de aproximacion
+keima/ikken-takagakari, ninguna paso de ~30% de concentracion de politica,
+muy por debajo del piso ~47-70% de las 2 entradas ya existentes, ambas con
+contacto directo). Confirma algo real: esta metodologia de verificacion
+solo funciona bien para secuencias con contacto inmediato (que crean
+urgencia local), no para aproximaciones espaciadas -- anotado para no
+reintentar lo mismo en una sesion futura.
+
+Se probo despues un hexomino en L (barra de 4 + pata de 2) para B3: el
+solucionador no lo resuelve en un tiempo razonable ni a `maxDepth: 14` (el
+maximo) -- **se quedo sin memoria despues de ~17 minutos** (heap de Node
+>4GB, `FATAL ERROR: Ineffective mark-compacts near heap limit`). Hallazgo
+real: `MAX_SEARCH_DEPTH = 14` no es un techo seguro para cualquier forma de
+6 puntos -- puede explotar en memoria, no solo en tiempo, dependiendo de la
+forma exacta (un hexomino irregular parece bastante mas caro de leer que un
+rectangulo compacto de la misma area). `maxDepth: 10` (el que ya usan
+cruzDeCinco/rectangularDeSeis) sigue siendo el techo practico establecido;
+no vale la pena forzar 14 "para estar mas seguro".
+
+Aceptado en cambio: `seisEnLinea` (recta de 6, `content/seeds.ts`), tercera
+forma de Avanzado. A diferencia de las otras dos, el solucionador confirma
+que es **incondicionalmente viva** (`objective: 'kill'` con blanco jugando
+primero en cualquier punto: `solved: false`, ninguna jugada mata). Pero
+"incondicionalmente viva" no es "cualquier respuesta sirve": si blanco
+igual intenta el nakade mas tentador (uno de los dos puntos centrales),
+solo los dos puntos miai pegados a esa piedra salvan al grupo -- los demas
+(confirmado con al menos uno de los mas lejanos) pierden, leyendo los hijos
+del arbol del solucionador (no a mano). La demo (`content/advanced.ts`)
+refleja exactamente esto: blanco juega el nakade solo (`auto`), el
+aprendiz responde con negro y solo los 2 puntos miai se aceptan.
+
+Verificacion: tsc limpio, oxlint limpio, paridad de i18n exacta (891/891),
+`tests/content/advanced.test.ts` (9/9, incluyendo los 2 tests nuevos de
+`seisEnLinea`, ~37s en esta maquina por la busqueda exhaustiva), Playwright
+real contra el dev server confirmando el flujo completo (nakade automatico,
+un punto lejano rechazado, un punto miai aceptado con el feedback
+correcto).
+
+## Plan "Zero to Pro" y arranque de la Fase 1 (2026-09-13, cont. 31)
+
+Pedido explicito: el usuario pidio un plan completo para que la app tambien
+sirva a jugadores amateur/avanzados ("so i can really go from zero to pro
+with this app"). Se investigo (tamanos reales de redes KataGo mas grandes,
+disponibilidad de conversion a TF.js, un archivo de 90000+ partidas
+profesionales de dominio publico) y se publico como artifact un roadmap
+completo ("Zero to Pro") organizado en 5 categorias (A: fuerza del bot: B:
+contenido intermedio-a-dan; C: herramientas de estudio; D: el bot como
+profesor; E: infraestructura) con una fase sugerida. El usuario aprobo el
+plan y pidio arrancar. Se registra aca la fase sugerida completa (para no
+depender del artifact externo) y el trabajo real de la Fase 1 hecho esta
+sesion.
+
+**Fases sugeridas (menu, no compromiso -- el usuario elige el orden real):**
+- **Fase 1 (corto plazo):** A2 (perfil real de rendimiento en Android/WebView),
+  A1 (validar la fuerza real de Maxima con mas autojuego), C1 (revision de IA
+  de partida completa), B7 primer lote chico (biblioteca de partidas
+  profesionales). Responde "¿que tan fuerte es el bot en realidad?" y "¿la
+  idea de partidas profesionales funciona de verdad?" antes de invertir mas.
+- **Fase 2 (profundidad de contenido):** B1 (mantener tracks paralelos en vez
+  de agrandar la escalera graduada), B2 (diccionario de joseki), B3 (tsumego
+  nivel dan), B6 (diccionario de tesuji), B5 (precision de finales), C5
+  (test de nivel real). Cola larga, crece sesion a sesion, un item
+  verificado a la vez -- mismo patron que Joseki/Avanzado.
+- **Fase 3 (techo del bot):** A4 (escalones de dificultad intermedios), A3
+  (red mas grande, condicional), D1 (modos de bot deliberadamente
+  instructivos). Solo si la Fase 1 muestra que la red actual es de verdad el
+  factor limitante.
+- **Fase 4 (depende de escala):** C2 (modo de analisis libre / "dojo"), C3
+  (busqueda/etiquetado de problemas), C4 (exportar SGF), D2 (explicaciones
+  "por que" desde el catalogo de conceptos), E1 (limpieza de carga de
+  EvalClient), E2 (descarga de modelo bajo demanda), E3 (inferencia remota
+  opcional). Cada uno se gana su costo una vez que las fases anteriores le
+  dan algo con que trabajar.
+
+**Direccion de contenido para B7, decidida por el usuario:** sin favoritos
+propios de curriculum/partidas, el usuario eligio seguir el duelo AlphaGo
+vs. Lee Sedol (Seul, marzo 2016) como punto de partida, "y tambien
+estrategias despues de ese duelo" (los cambios de teoria de apertura
+post-2016: invasion temprana en 3-3 bajo una piedra en 4-4, menos miedo a
+los intercambios de espesor por territorio, proverbios como "hane en la
+cabeza de dos piedras" con mas excepciones que antes). Antes de comprometerse
+a esta direccion se verifico la licencia: **los registros de jugadas (SGF) de
+una partida de Go, igual que los de ajedrez, no son contenido protegible por
+derecho de autor por si solos** -- son la descripcion de un hecho (que jugada
+se jugo), no una obra original; el comentario/analisis SI lo es. Confirmado
+ademas empiricamente: el mismo archivo de dominio publico que respalda B7
+(homepages.cwi.nl/~aeb/go/games, "The games here are in the public domain")
+incluye una subcarpeta `AlphaGo/` con las 5 partidas de este duelo (mas Fan
+Hui, Master, Ke Jie), dentro de la misma coleccion sin reclamo de derechos.
+Regla seguida: usar la version SIN comentarios (`N.sgf`, no `Nc.sgf`, que
+trae anotaciones de Fan Hui insertadas -- texto de otra persona que no hay
+licencia para redistribuir); cualquier analisis mostrado en la app es
+siempre generado por Hoshi mismo, nunca copiado.
+
+### C1: revision de IA de partida completa (`ui/review/FullGameReviewPanel.tsx`)
+
+Hasta ahora Revisar solo mostraba errores puntuales por concepto reconocido
+(`analysis/mistakes.ts`) mas una opinion de la red sobre UN punto a la vez
+(`ReviewMistakeBoard::askAi`). Nuevo: un boton "Analizar partida completa
+(IA)" que recorre la partida entera jugada a jugada, arma una curva de
+probabilidad de victoria (perspectiva fija de negro, `ui/review/WinRateChart.tsx`,
+SVG puro sin libreria) y una lista de las 5 mayores caidas de probabilidad
+para quien jugo cada una (`ui/review/fullGameReview.ts::summarizeWinRates`).
+
+- `eval/worker.ts`/`eval/client.ts`: `EvalClient` gano `evaluateBatch()`,
+  una sola llamada al Worker para N posiciones (un solo `executeAsync`
+  interno, ver `evaluatePositionsBatch` en `eval/model.ts`) en vez de N
+  llamadas -- necesario porque el overhead fijo por llamada (~8ms, ya medido
+  en sesiones previas) se pagaria N veces si se recorriera una partida real
+  de ~150-280 jugadas jugada por jugada. `position`/`positions` conviven en
+  el mismo tipo plano (no una union discriminada) porque `Omit<Req,'requestId'>`
+  sobre una union pierde los campos especificos de cada variante en
+  TypeScript (`Pick`/`Omit` no se distribuyen sobre uniones).
+- `FullGameReviewPanel` junta las posiciones de a 32 (el mayor tamano de
+  lote ya medido contra el modelo real, ver el comentario de
+  `evaluatePositionsBatch`) en vez de mandar las ~150-280 de una partida
+  real en una sola llamada nunca probada a ese tamano.
+- **Hallazgo real durante la verificacion, documentado en el test:** la red
+  cruda SIN busqueda (una sola pasada por posicion, igual que
+  `ReviewMistakeBoard::askAi` -- este pipeline nunca corre MCTS) puede
+  juzgar catastroficamente mal una captura local chica en un tablero por lo
+  demas casi vacio -- en una prueba real, la probabilidad de negro paso de
+  ~93% a ~4% justo al capturar una piedra que claramente lo beneficiaba.
+  Descartado como bug del pipeline (la codificacion de esa posicion se
+  verifico a mano, canal por canal, y es correcta); es la misma limitacion
+  ya conocida y ya declarada en `review.aiDisclaimer` ("opinion de la IA, no
+  un hecho verificado"), aplicada ahora a una partida completa en vez de un
+  solo punto. Por eso `tests/ui/review/fullGameReview.test.ts` no afirma que
+  la red juzgue bien una jugada especifica arbitraria -- solo que el
+  pipeline (replay real, forma y rango de la salida) funciona de punta a
+  punta contra el modelo vendorizado real.
+- Se probo tambien, y se descarto, verificar el pipeline haciendo pasar a
+  un lado varias veces seguidas para simular una ventaja de hándicap: la red
+  evaluo eso como catastrofico para quien "recibia" el hándicap, casi
+  seguro por quedar fuera de la distribucion de autojuego real (ninguna
+  partida de autojuego real tiene a un lado pasando repetidas veces estando
+  muy por detras). Reemplazado por una secuencia con una captura real.
+
+### B7 primer lote: biblioteca de partidas profesionales (`content/historicGames.ts`)
+
+Las 5 partidas de AlphaGo vs. Lee Sedol, SGF exacto (verificado byte a byte
+contra el archivo descargado, no retipeado a mano -- un primer intento a
+mano perdio 4 jugadas de la partida 4 sin que el conteo total lo delatara
+de forma obvia, encontrado por un test que compara contra el numero de
+jugadas conocido de la tabla publicada) embebido como contenido fijo,
+**no** como `SavedGameRecord` via `content/sgfImport.ts`: las 5 partidas
+terminaron por rendicion (`RE[W+R]`/`RE[B+R]`), y `parseGameResult` en
+`core/sgf.ts` solo entiende resultados con margen numerico a proposito (para
+el importador de partidas de usuario, "sin resultado" es la respuesta
+correcta ante una rendicion). Forzar estas 5 partidas por ese camino las
+habria rechazado las 5. En cambio: contenido fijo propio
+(`HistoricGame`, con `result: {winner, method: 'resign'|'points'}` leido a
+mano de la propiedad `RE` del SGF), una pantalla nueva
+(`ui/lessons/HistoricGamesScreen.tsx`, dentro de Aprender junto a
+Joseki/Avanzado, mismo patron de sub-pantalla) con navegador jugada a jugada
+y el mismo `FullGameReviewPanel` de C1 reusado tal cual (se le saco la
+dependencia de `SavedGameRecord`, ahora toma `{width,height,komi,moves}`
+directo -- lo unico que un juego necesita, sea guardado o fijo).
+
+Verificado (`tests/content/historicGames.test.ts`): las 5 partidas
+reproducen 100% legal contra el motor de reglas real, numero de jugadas
+(186/211/176/180/280) y ganador de cada una cruzados a mano contra la tabla
+publicada Y contra el resultado historico conocido (4-1 AlphaGo, unica
+victoria de Lee Sedol en la partida 4) -- no solo confiar en que el parser
+leyera bien `RE`.
+
+**Verificacion completa de la sesion:** tsc limpio, oxlint limpio (unico
+aviso preexistente, no introducido esta sesion: `set-state-in-effect` en la
+carga perezosa de `EvalClient`, mismo patron ya usado en `ReviewScreen`
+desde antes), paridad de i18n exacta (882/882 claves, +18 nuevas), suite
+completa de vitest (51 archivos / 3748 tests) pasando, Playwright real
+contra el dev server confirmando visualmente: los botones de Aprender
+siguen alineados a la izquierda (no centrados) con la nueva tarjeta
+"Partidas históricas" agregada, la lista de 5 partidas muestra
+ganador/color correctos, el navegador jugada a jugada funciona, y el
+analisis de partida completa produce un grafico y una lista de caidas
+reales sobre una partida profesional real.
+
+**Pendiente de la Fase 1 (no hecho esta sesion):** A1 (mas autojuego de
+Maxima) sigue diferido a proposito, pedido explicito del usuario en una
+sesion anterior. A2 (perfil real en un dispositivo Android) sigue bloqueado
+en tener un telefono real -- ver `cont. 30` para el detalle completo.
+
 ## Estado general del proyecto (2026-09-12, cont. 30: repaso de items pendientes, contenido nuevo, factibilidad de una red mas grande)
 
 Pedido explicito: repasar que quedaba pendiente de `cont. 29` y del plan mas

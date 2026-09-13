@@ -139,6 +139,12 @@ export function PlayGameScreen({
   const [message, setMessage] = useState<IllegalReason | null>(null)
   const [botThinking, setBotThinking] = useState(false)
   const [botError, setBotError] = useState(false)
+  // Solo para A2 (ver NOTAS.md): perfil real del motor guiado por red
+  // ('maxima') en un dispositivo Android real, algo que nunca se pudo medir
+  // desde este entorno. Se completa con cada jugada del engine 'net'; se
+  // muestra solo para ese nivel (ver strengthLevel?.engine mas abajo), no
+  // tiene sentido para el MCTS clasico.
+  const [lastNetMoveTiming, setLastNetMoveTiming] = useState<{ elapsedMs: number; playoutsRun: number } | null>(null)
   const [justSaved, setJustSaved] = useState(false)
   const [savedGameId, setSavedGameId] = useState<number | null>(null)
   const [showCount, setShowCount] = useState(false)
@@ -557,6 +563,9 @@ export function PlayGameScreen({
             : await engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle, rootPriors)
         if (cancelled) return
         setBotThinking(false)
+        if (strength.engine === 'net') {
+          setLastNetMoveTiming({ elapsedMs: response.elapsedMs, playoutsRun: response.playoutsRun })
+        }
         const color = game.toMove
         const result = applyMove(game, response.move)
         if (!result.legal || !result.state) return
@@ -647,7 +656,9 @@ export function PlayGameScreen({
       <p className="play-game-header">
         {config.width}x{config.height} ·{' '}
         {config.mode === 'bot'
-          ? t('play.bot.label', { kyu: strengthLevel?.approxKyu ?? 0 })
+          ? strengthLevel?.approxKyu === null
+            ? t('play.bot.labelUnrated')
+            : t('play.bot.label', { kyu: strengthLevel?.approxKyu ?? 0 })
           : t('play.mode.local')}
         {config.mode === 'bot' && config.botStyle !== 'standard' && <> · {t(BOT_STYLE_LABEL_KEY[config.botStyle])}</>}
       </p>
@@ -700,6 +711,14 @@ export function PlayGameScreen({
         )}
         {message && <p className="illegal-message">{t(`board.illegal.${message}`)}</p>}
         {botError && <p className="illegal-message">{t('engine.error')}</p>}
+        {strengthLevel?.engine === 'net' && lastNetMoveTiming && (
+          <p className="play-net-timing">
+            {t('play.netTiming', {
+              seconds: (lastNetMoveTiming.elapsedMs / 1000).toFixed(1),
+              playouts: lastNetMoveTiming.playoutsRun,
+            })}
+          </p>
+        )}
         <p className="captures">
           {t('board.captures')}: {t('board.captures.black')} {game.captures.black} · {t('board.captures.white')}{' '}
           {game.captures.white}

@@ -34,7 +34,18 @@ export class EvalClient {
    * juegue, no debe poder colgar la partida por mucho tiempo si falla. */
   async evaluate(position: EvalPosition, timeoutMs?: number): Promise<RawEvalOutput> {
     const { result } = await this.rpc.call({ position, modelUrl: this.modelUrl }, timeoutMs)
-    return result
+    return result as RawEvalOutput
+  }
+
+  /** Una sola llamada al Worker (un solo executeAsync por dentro, ver
+   * evaluatePositionsBatch) para N posiciones -- pensado para recorrer una
+   * partida entera jugada a jugada (ver ui/review/fullGameReview.ts) sin
+   * pagar el overhead fijo por llamada N veces. El llamador es quien decide
+   * el tamano del lote; ~32 es el mayor tamano medido realmente contra el
+   * modelo vendorizado (ver el comentario de evaluatePositionsBatch). */
+  async evaluateBatch(positions: EvalPosition[], timeoutMs?: number): Promise<RawEvalOutput[]> {
+    const { results } = await this.rpc.call({ positions, modelUrl: this.modelUrl }, timeoutMs)
+    return results as RawEvalOutput[]
   }
 
   terminate(): void {

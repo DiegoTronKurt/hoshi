@@ -18,6 +18,7 @@ import { approxKyuForStrengthId } from '../play/strengthLevels'
 import { gameHeight, gameWidth, listGames, saveGame } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
+import { FullGameReviewPanel } from './FullGameReviewPanel'
 import { ReviewMistakeBoard } from './ReviewMistakeBoard'
 import { stateAtMove } from './reviewState'
 
@@ -265,6 +266,15 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
       {events.some((e) => e.pointCost !== undefined) && (
         <p className="review-point-cost-disclaimer">{t('review.pointCostDisclaimer')}</p>
       )}
+
+      <FullGameReviewPanel
+        key={selectedGame.id}
+        width={gameWidth(selectedGame)}
+        height={gameHeight(selectedGame)}
+        komi={selectedGame.komi}
+        moves={moves}
+        evalClient={evalClient}
+      />
 
       {events.length === 0 ? (
         <p className="review-empty">{t('review.noMistakes')}</p>

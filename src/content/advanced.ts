@@ -1,7 +1,7 @@
 import { toPoint } from '../core/board'
 import { WHITE } from '../core/types'
 import type { TranslationKey } from '../i18n'
-import { cruzDeCinco, rectangularDeSeis } from './seeds'
+import { cruzDeCinco, rectangularDeSeis, seisEnLinea } from './seeds'
 import type { DemoScript } from './lessons/types'
 
 export interface AdvancedEntry {
@@ -73,6 +73,42 @@ function buildRectangularDeSeisDemo(): DemoScript {
   }
 }
 
+/**
+ * "Seis en linea": a diferencia de las otras dos formas de esta seccion, acá
+ * no hay ningun punto que blanco pueda jugar primero y matar -- ver seeds.ts
+ * para el detalle completo de la verificacion (incluyendo por que "vive
+ * incondicionalmente" no es lo mismo que "cualquier respuesta sirve"). Por
+ * eso la demo no le pide al aprendiz jugar blanco buscando una muerte que no
+ * existe: en cambio, blanco intenta igual el nakade mas tentador (paso
+ * automatico) y el aprendiz responde con negro -- ahi si hay una respuesta
+ * correcta (dos puntos miai pegados a la piedra blanca), no cualquiera de
+ * los puntos vacios restantes.
+ */
+function buildSeisEnLineaDemo(): DemoScript {
+  const { board } = seisEnLinea
+
+  return {
+    width: board.width,
+    height: board.height,
+    initialStones: board.stones,
+    toMove: WHITE,
+    steps: [
+      {
+        promptKey: 'advanced.seisEnLinea.step1.prompt',
+        expectedPoints: [],
+        auto: toPoint(board.width, 4, 4),
+        feedbackKey: 'advanced.seisEnLinea.step1.feedback',
+      },
+      {
+        promptKey: 'advanced.seisEnLinea.step2.prompt',
+        expectedPoints: [toPoint(board.width, 3, 4), toPoint(board.width, 5, 4)],
+        feedbackKey: 'advanced.seisEnLinea.step2.feedback',
+      },
+    ],
+    completionKey: 'advanced.seisEnLinea.completion',
+  }
+}
+
 export const ADVANCED_ENTRIES: AdvancedEntry[] = [
   {
     id: 'cruz-de-cinco',
@@ -85,5 +121,11 @@ export const ADVANCED_ENTRIES: AdvancedEntry[] = [
     titleKey: 'advanced.rectangularDeSeis.title',
     descriptionKey: 'advanced.rectangularDeSeis.description',
     demo: buildRectangularDeSeisDemo(),
+  },
+  {
+    id: 'seis-en-linea',
+    titleKey: 'advanced.seisEnLinea.title',
+    descriptionKey: 'advanced.seisEnLinea.description',
+    demo: buildSeisEnLineaDemo(),
   },
 ]

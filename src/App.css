@@ -373,6 +373,13 @@
   margin: 0;
 }
 
+.play-net-timing {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  color: var(--hoshi-text-faint);
+  margin: 0.3rem 0 0;
+}
+
 .status .result {
   font-weight: 600;
   margin: 0 0 0.35rem;
@@ -863,6 +870,132 @@
 .review-secondary-mistake-summary-line {
   flex: 1;
   font-size: 0.9rem;
+}
+
+.review-full-analysis {
+  width: 100%;
+}
+
+.review-full-analysis-result {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--hoshi-border);
+  background: var(--hoshi-surface);
+}
+
+.review-full-analysis-result h3,
+.review-full-analysis-result h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  align-self: flex-start;
+}
+
+.review-full-analysis-result h4 {
+  font-size: 0.85rem;
+  color: var(--hoshi-text-faint);
+  margin-top: 0.4rem;
+}
+
+.winrate-chart {
+  width: 100%;
+  height: auto;
+}
+
+.winrate-grid-line {
+  stroke: var(--hoshi-border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.winrate-fill {
+  fill: var(--hoshi-accent);
+  fill-opacity: 0.18;
+  stroke: none;
+}
+
+.winrate-line {
+  fill: none;
+  stroke: var(--hoshi-accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.winrate-swing-dot {
+  fill: var(--hoshi-danger);
+}
+
+.winrate-side-label,
+.winrate-axis-label {
+  font-size: 9px;
+  fill: var(--hoshi-text-muted);
+}
+
+.review-full-analysis-swings {
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.review-full-analysis-swing-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: var(--hoshi-surface-alt);
+  border: 1px solid var(--hoshi-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.review-full-analysis-swing-amount {
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
+  white-space: nowrap;
+}
+
+.historic-games-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+}
+
+.historic-games-card-result {
+  font-size: 0.8rem;
+  color: var(--hoshi-text-muted);
+}
+
+.historic-games-nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.6rem 0;
+}
+
+.historic-games-move-count {
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 5.5rem;
+  text-align: center;
 }
 
 .today {

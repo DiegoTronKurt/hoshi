@@ -147,6 +147,35 @@ export const rectangularDeSeis = buildEnclosedShape(
 )
 
 /**
+ * "Seis en linea" (recta de seis, no el rectangulo de 2x3 de arriba):
+ * tercera forma de la seccion Avanzado. A diferencia de las otras dos, esta
+ * es incondicionalmente viva -- confirmado con el solucionador, blanco
+ * jugando primero en CUALQUIER punto de los 6 nunca logra matar (`objective:
+ * 'kill'` da `solved: false` para la busqueda completa, no solo para un
+ * intento puntual). Pero "incondicionalmente viva" no es lo mismo que "no
+ * hace falta responder bien": si blanco igual intenta el nakade mas
+ * tentador (uno de los dos puntos centrales), negro SI necesita bloquear
+ * pegado a esa piedra -- de los otros 4 puntos vacios, solo los dos
+ * adyacentes al nakade salvan el grupo (miai entre ellos), los otros 3
+ * (mas lejos del nakade) pierden. Confirmado programaticamente leyendo los
+ * hijos del arbol del solucionador tras aplicar el nakade (no a mano) --
+ * ver tests/content/advanced.test.ts. La leccion real: un espacio de ojo
+ * grande no necesita el punto vital exacto para sobrevivir a CUALQUIER
+ * ataque, pero cada ataque concreto todavia tiene una respuesta correcta.
+ */
+export const seisEnLinea = buildEnclosedShape(
+  11,
+  [
+    [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3],
+    [1, 4], [8, 4],
+    [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5],
+  ],
+  [
+    [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
+  ],
+)
+
+/**
  * Red (geta) verificada en la leccion n3-l4: blanco en (1,1) queda sin
  * escapatoria una vez que negro juega (0,0), sin necesidad de perseguirlo
  * como en una escalera. Reutilizada tal cual (mismo tablero, mismas

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
-import { cruzDeCinco, rectangularDeSeis } from '../../src/content/seeds'
+import { cruzDeCinco, rectangularDeSeis, seisEnLinea } from '../../src/content/seeds'
 import { ADVANCED_ENTRIES } from '../../src/content/advanced'
 import { applyMove, gameStateFromBoard } from '../../src/core/rules'
 import { BLACK, WHITE } from '../../src/core/types'
@@ -99,6 +99,62 @@ describe('rectangularDeSeis: verificacion con el solucionador', () => {
     expect(result.solved).toBe(true)
     expect(winningChild(result.root, centerTop)?.liveForDefender).toBe(false)
     expect(winningChild(result.root, centerBottom)?.liveForDefender).toBe(false)
+  }, 60000)
+})
+
+/**
+ * A diferencia de cruzDeCinco/rectangularDeSeis (blanco jugando primero SI
+ * logra matar en algun punto), seisEnLinea es incondicionalmente viva: la
+ * busqueda completa de blanco intentando matar (`objective: 'kill'` sobre
+ * TODOS los puntos posibles, no uno en particular) nunca encuentra una
+ * jugada ganadora. Pero eso no dice que cualquier respuesta de negro sirva
+ * si blanco igual ataca -- un segundo test aplica el nakade mas tentador de
+ * blanco a mano y confirma que, de los puntos restantes, solo los dos
+ * miai pegados a esa piedra salvan al grupo (y que al menos uno de los
+ * puntos mas lejanos NO alcanza), otra vez leyendo los hijos del arbol del
+ * solucionador en vez de afirmarlo a mano.
+ */
+describe('seisEnLinea: verificacion con el solucionador', () => {
+  it('blanco jugando primero NUNCA logra matar (vive incondicionalmente con buena defensa)', () => {
+    const { board, wallPoints } = seisEnLinea
+    const region = computeRegion(board, wallPoints, 1)
+    const result = solve({
+      board,
+      region,
+      targetPoints: wallPoints,
+      targetColor: BLACK,
+      toMove: WHITE,
+      objective: 'kill',
+      maxDepth: 10,
+    })
+    expect(result.solved).toBe(false)
+  }, 60000)
+
+  it('tras el nakade mas tentador de blanco, solo los dos puntos miai pegados a esa piedra salvan al grupo', () => {
+    const { board, wallPoints } = seisEnLinea
+    const nakade = toPoint(board.width, 4, 4)
+    const state = gameStateFromBoard(board, WHITE, 6.5)
+    const applied = applyMove(state, nakade)
+    expect(applied.legal).toBe(true)
+
+    const region = computeRegion(board, wallPoints, 1)
+    const result = solve({
+      board: (applied.state as GameState).board,
+      region,
+      targetPoints: wallPoints,
+      targetColor: BLACK,
+      toMove: BLACK,
+      objective: 'live',
+      maxDepth: 10,
+    })
+
+    expect(result.solved).toBe(true)
+    const left = toPoint(board.width, 3, 4)
+    const right = toPoint(board.width, 5, 4)
+    const tooFar = toPoint(board.width, 7, 4)
+    expect(winningChild(result.root, left)?.liveForDefender).toBe(true)
+    expect(winningChild(result.root, right)?.liveForDefender).toBe(true)
+    expect(winningChild(result.root, tooFar)?.liveForDefender).toBe(false)
   }, 60000)
 })
 
