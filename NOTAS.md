@@ -240,6 +240,80 @@ E2 (por la decision explicita de arriba). El roadmap "Zero to Pro" completo
 contenido nuevo (cola larga, mismo patron de siempre) o una fase nueva que
 el usuario decida, no un item pendiente de un plan viejo.
 
+### Bug real encontrado por el usuario: botones del vestibulo de Referencia centrados
+
+El usuario reporto ver los botones de Aprender centrados, cosa que no
+queria. Confirmado con captura real (Playwright): los 6 botones del
+vestibulo de Referencia (`ReferenceScreen.tsx`) y el boton de entrada
+("Referencia") en la pantalla principal de Aprender, ambos con clase
+`.learn-about-cta`, nunca tuvieron `text-align: left` -- a diferencia de
+`.learn-lesson-list button`/`.learn-level-list button` (que si lo tienen,
+via `justify-content: flex-start` en un layout flex), esta clase quedo como
+un `<button>` de ancho completo sin alineacion explicita, asi que el
+navegador centraba el texto por default. Bug real introducido en cont. 36
+(cuando se creo el vestibulo), no detectado hasta que el usuario lo vio en
+un build real. Fix de una linea (`text-align: left` en `.learn-about-cta`,
+`App.css`); verificado con capturas antes/despues.
+
+### Commit, push y AAB de todo lo de arriba (cont. 37 + cont. 38 + este fix)
+
+Pedido explicito: "Please commit, push and build the aab file." Nada de
+esto se habia commiteado todavia (la sesion entera desde cont. 37 en
+adelante estaba sin commitear). `hoshi`: un solo commit (`13f2766`) con
+todo el trabajo de cont. 37 (explicaciones de vaivenes, nivel 'expert',
+entrenamiento de punto debil) + cont. 38 (Dojo, inferencia remota, exportar
+SGF, conceptos debiles en Test de nivel, filtro de dificultad,
+`useLazyWorkerClient`) + el fix de alineacion de arriba; pusheado a
+`master`. `hoshi-flutter`: `npm run build` en `hoshi/` -> `sync-webapp.ps1`
+-> `pubspec.yaml` de `1.29.0+34` a `1.30.0+35` -> `flutter build appbundle
+--release` (`C:\flutter\bin\flutter.bat`) -> AAB firmado de 54.6MB en
+`hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`, commit
+`8c447e5`, pusheado.
+
+### Preguntas del usuario sobre contenido y modelo (respondidas, sin cambios de codigo)
+
+El usuario pregunto (1) si hace falta mas material/libros, (2) si el modelo
+actual alcanza o convendria uno mas fuerte, (3) si hay suficientes
+ejercicios/categorias, (4) si hay suficientes lecciones en las categorias
+nuevas de Aprender. Se audito el estado real (no se respondio de memoria)
+antes de contestar:
+
+- **Ejercicios reales por concepto** (`listBankEntries`): 1725 problemas
+  totales, 22 de 61 conceptos generan ejercicios (los otros 39 son
+  conceptos de juicio -- direccion, sacrificio, etc. -- que por diseno no
+  generan un ejercicio de un solo clic correcto/incorrecto, no es un hueco).
+  La mayoria de los 22 tiene un pool sano (100-370), pero cinco quedan
+  chicos: OJO_FALSO (8), NAKADE (10), RED_GETA (12), DOS_OJOS (13),
+  CAPTURA_SIMPLE (14) -- con SRS reciclando ese pool, son los que mas se
+  repiten identicos.
+- **Secciones de Referencia**, todas delgadas: Joseki 3 entradas, Avanzado 3,
+  Tutoriales 2, Tesuji apenas **1** (`red-geta`, la unica desde que se creo
+  en cont. 33), Partidas historicas fija en 5 (el duelo AlphaGo-Lee Sedol
+  completo, licencia no permite mas sin elegir otro material). Consistente
+  con el diseno de "cola larga" (crecen sesion a sesion), pero Tesuji es
+  hoy la mas desatendida de las cinco.
+- **Solo 2 de 61 conceptos siguen sin leccion propia**
+  (PRIMERA_LINEA_TEMPRANA, JUGADA_LEJOS_DEL_COMBATE), y ya estaban
+  documentados como deferidos a proposito (ningun nivel encaja), no
+  olvidados -- la escalera graduada (niveles 0-10) esta sustancialmente
+  completa.
+- **Libro real ya disponible pero nunca usado todavia:** se encontro
+  `Go_app/go-a-complete-introduction-to-the-game-cho-chi-kun_compress.pdf`
+  (Cho Chi-kun) en el disco, sin ningun `NOTAS-libro-*.md` correspondiente
+  -- a diferencia de Kageyama y Kajiwara (ya minados para Nivel 4 y
+  Niveles 5/7/8), este todavia no se aprovecho. Para crecer Tesuji con el
+  mismo estandar de verificacion (nunca inventar una tactica), haria falta
+  un libro de tesuji dedicado (p.ej. el volumen "Tesuji" de James Davies,
+  Elementary Go Series) -- no hay uno en el disco todavia.
+- **Sobre el modelo:** sigue siendo el mismo KataGo b10c128 vendorizado, sin
+  cambios. Ya investigado y descartado un modelo mas grande (Fase 3, item
+  A3) con evidencia real de un telefono Android: la red actual YA usa
+  65-75% del presupuesto de tiempo por jugada (cont. 35/37), asi que una red
+  varias veces mas grande casi seguro rompe ese presupuesto ademas de
+  agrandar mucho el AAB. La via real para mas fuerza sin ese costo en el
+  telefono es la inferencia remota de E3 -- un servidor propio con una red
+  KataGo mas grande, en una maquina con mas capacidad, no el telefono.
+
 ## Explicacion de los mayores vaivenes en Revisar, y Fase 3 completa: nivel intermedio 'expert' (A4), decision sobre 'A3', entrenamiento de punto debil (D1) (2026-09-13, cont. 37)
 
 Pedido explicito: "in the tutorials and for example lee sedol games, could
