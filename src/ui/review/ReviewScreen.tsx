@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ChangeEvent } from 'react'
 import { analyzeGame } from '../../analysis/mistakes'
 import type { ConceptOccurrence } from '../../analysis/mistakes'
 import { CONCEPTS } from '../../analysis/concepts'
 import type { ConceptId, ConceptSeverity } from '../../analysis/concepts'
 import { sgfToGameRecord } from '../../core/sgf'
 import { BLACK } from '../../core/types'
+import { buildImportedGameRecord } from '../../content/sgfImport'
+import type { SgfImportError } from '../../content/sgfImport'
 import { EvalClient } from '../../eval/client'
 import { EVAL_MODEL_URL } from '../../eval/modelUrl'
 import { useI18n } from '../../i18n'
@@ -12,11 +15,17 @@ import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
 import { reportLocalBack } from '../../navigation/localBack'
 import { approxKyuForStrengthId } from '../play/strengthLevels'
-import { gameHeight, gameWidth, listGames } from '../../storage/db'
+import { gameHeight, gameWidth, listGames, saveGame } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { useSettings } from '../settings'
 import { ReviewMistakeBoard } from './ReviewMistakeBoard'
 import { stateAtMove } from './reviewState'
+
+const IMPORT_ERROR_KEY: Record<SgfImportError, TranslationKey> = {
+  parse: 'review.import.errorParse',
+  'handicap-unsupported': 'review.import.errorHandicap',
+  'no-result': 'review.import.errorNoResult',
+}
 
 const SEVERITY_KEY: Record<ConceptSeverity, TranslationKey> = {
   high: 'review.severity.high',
@@ -62,12 +71,33 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(initialGameId ?? null)
   const [expandedSecondary, setExpandedSecondary] = useState<Set<number>>(new Set())
+  const [importError, setImportError] = useState<TranslationKey | null>(null)
+  const importInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
+  function reloadGames() {
     listGames()
       .then(setGames)
       .catch(() => setGames([]))
+  }
+
+  useEffect(() => {
+    reloadGames()
   }, [])
+
+  async function handleSgfFileSelected(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    setImportError(null)
+    const text = await file.text()
+    const imported = buildImportedGameRecord(text)
+    if (!imported.ok) {
+      setImportError(IMPORT_ERROR_KEY[imported.error])
+      return
+    }
+    await saveGame(imported.record)
+    reloadGames()
+  }
 
   // Un solo EvalClient para toda la vida de la pantalla (mismo patron que
   // SolverClient en TodayScreen/ExercisePracticeScreen/LessonPractice y
@@ -159,6 +189,19 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     return (
       <div className="review">
         <h2>{t('review.title')}</h2>
+        <div className="review-import">
+          <button type="button" onClick={() => importInputRef.current?.click()}>
+            {t('review.import.button')}
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".sgf"
+            className="review-import-file-input"
+            onChange={handleSgfFileSelected}
+          />
+        </div>
+        {importError && <p className="review-import-error">{t(importError)}</p>}
         {games.length === 0 ? (
           <p className="review-empty">{t('review.noGames')}</p>
         ) : (

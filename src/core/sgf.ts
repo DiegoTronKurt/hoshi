@@ -192,7 +192,36 @@ export function gameRecordToSgf(width: number, height: number, komi: number, mov
   return writeSgf({ root })
 }
 
-export function sgfToGameRecord(text: string): { width: number; height: number; komi: number; moves: RecordedMove[] } {
+export interface GameResult {
+  black: number
+  white: number
+  /** 'black'/'white' (como SavedGameRecord.result), no el Color numerico de
+   * core/types -- este resultado describe la partida terminada, no una
+   * jugada, y ese es el tipo que ya usa todo lo que muestra un resultado. */
+  winner: 'black' | 'white'
+}
+
+/**
+ * Interpreta la propiedad RE (resultado) del espec FF4: "B+3.5", "W+12",
+ * "B+R"/"W+T"/"W+F" (rendicion/tiempo/forfeit, sin margen numerico), "0"
+ * (tablas) o ausente. Solo el caso con margen numerico da un resultado que
+ * SavedGameRecord.result (siempre {black, white, winner}, sin lugar para
+ * tablas ni "gano por tiempo") puede representar de verdad -- los demas
+ * casos devuelven null, y quien llama decide como comunicar "sin resultado
+ * importable" en vez de inventar un margen de 0 que se veria como una
+ * partida real terminada 0 a 0.
+ */
+export function parseGameResult(re: string | undefined): GameResult | null {
+  if (!re) return null
+  const match = /^([BW])\+(\d+(?:\.\d+)?)$/.exec(re.trim())
+  if (!match) return null
+  const margin = Number(match[2])
+  return match[1] === 'B' ? { black: margin, white: 0, winner: 'black' } : { black: 0, white: margin, winner: 'white' }
+}
+
+export function sgfToGameRecord(
+  text: string,
+): { width: number; height: number; komi: number; moves: RecordedMove[]; result: GameResult | null } {
   const { root } = parseSgf(text)
   const { width, height } = parseSize(root.properties.SZ?.[0] ?? '19')
   const komi = Number(root.properties.KM?.[0] ?? '0')
@@ -205,5 +234,5 @@ export function sgfToGameRecord(text: string): { width: number; height: number; 
     node = node.children[0]
   }
 
-  return { width, height, komi, moves }
+  return { width, height, komi, moves, result: parseGameResult(root.properties.RE?.[0]) }
 }

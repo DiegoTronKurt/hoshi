@@ -1,5 +1,364 @@
 # Notas de desarrollo
 
+## Estado general del proyecto (2026-09-12, cont. 29: motor guiado por red, joseki y contenido avanzado)
+
+Pedido explicito: implementar los 3 items propuestos en `cont. 28` (motor/
+red mas fuerte, herramientas de estudio, contenido avanzado) y ademas
+pensar de verdad en hacer el bot mas dificil -- "mas de 10 kyu".
+
+**El hallazgo que cambio todo el plan.** Antes de tocar nada, se leyo
+`engine/mcts.ts` a fondo para entender por que el techo de fuerza es tan
+bajo. Resultado: no es que la red (`kata-b10c128`) sea chica -- es que
+**el MCTS clasico la consulta UNA sola vez por jugada real** (para armar
+`rootPriors`, un sesgo de orden solo en la raiz) y el resto de la busqueda
+entera es rollout aleatorio hasta el final de la partida, puntuado por
+conteo de area literal. Es, en la practica, el diseño de un programa de Go
+de ANTES de AlphaGo (2015), no el enfoque para el que esta red fue
+entrenada. Esto redefinio la prioridad: el item (A) original ("red mas
+grande bajo demanda") dejo de ser la palanca mas importante -- el cuello
+de botella real era como se usaba la red que YA esta empaquetada, no su
+tamaño.
+
+**Lo que se construyo: `engine/mctsNet.ts`, busqueda PUCT real (estilo
+AlphaZero/KataGo).** A diferencia del MCTS clasico, esta consulta la red
+en CADA nodo que expande (politica para las prioridades, valor en vez de
+rollout para puntuar la hoja), en tandas (`BATCH_SIZE`) para aprovechar
+que una sola llamada a la red cuesta casi lo mismo para 1 posicion que
+para 16. Motor completamente nuevo, no un reemplazo del clasico -- los 4
+niveles de siempre (`weak`/`normal`/`strong`/`veryStrong`) siguen
+corriendo exactamente el mismo codigo de antes, sin cambios. Nuevo nivel
+`'maxima'`: 1200 playouts, hasta 45s por jugada, motor `'net'`,
+`approxKyu: null` -- **deliberadamente sin ningun numero de kyu**: no hay
+forma honesta de estimar uno para un motor cualitativamente distinto sin
+partidas de referencia reales, inventarlo hubiera repetido exactamente el
+problema que este mismo pedido queria resolver.
+
+**El bache del SwiftShader -- vale la pena dejarlo escrito porque casi
+lleva a una decision de diseño equivocada.** La primera medicion de
+velocidad de esta sesion (un lote de inferencia sin llamar `.data()`
+despues) dio ~8ms por llamada "practicamente sin importar el batch", y el
+diseño de `mctsNet.ts` se baso en ese numero. Al medir el pipeline
+COMPLETO (incluyendo `.data()`, que es lo que `evaluatePositionsBatch` en
+verdad necesita para poder decidir algo) dentro de una busqueda real, el
+mismo lote de 16 tardaba **6 a 10 SEGUNDOS**, no milisegundos -- un motor
+practicamente inservible a esa velocidad. Investigando la causa:
+Chromium headless (el que usa Playwright por defecto en esta sesion) cae
+a SwiftShader, un renderer WebGL 100% por software, salvo que se le pase
+`--use-gl=angle --use-angle=d3d11` explicitamente. Con esos flags (GPU
+real de esta maquina, un AMD Radeon integrado) el mismo lote de 16 baja a
+~15-25ms/posicion -- 300-400 veces mas rapido, y el motor vuelve a ser
+completamente viable, ahora con un numero medido de verdad (`.data()`
+incluido) en vez de uno incompleto. El comentario de `mctsNet.ts` se
+corrigio para reflejar esto -- y para dejar constancia explicita de que
+**no se pudo verificar todavia en el WebView de Android real**
+(`hoshi-flutter`), solo en una GPU de escritorio via Playwright, la mejor
+referencia disponible esta sesion.
+
+**Tres bugs reales encontrados y arreglados en el camino** (ninguno
+hipotetico, los tres se hubieran manifestado en produccion):
+1. `learning/adaptiveDifficulty.ts`: `LEVEL_ORDER` incluia `'maxima'` sin
+   querer -- alguien ganando seguido contra `veryStrong` hubiera sido
+   promovido en automatico a un motor de hasta 45s por jugada sin haberlo
+   pedido nunca. Arreglado filtrando `LEVEL_ORDER` a solo motores
+   `'classic'`.
+2. `learning/selfRank.ts` (y su propio test, con la misma logica
+   duplicada): `WEAKEST_KYU`/`STRONGEST_KYU` via `Math.max/min(...
+   approxKyu)` -- con `approxKyu: null` de `'maxima'` en la lista,
+   `Math.min` trata `null` como `0`, corrompiendo en silencio los dos
+   extremos de toda la escala de autoevaluacion de rango. Arreglado
+   filtrando los `null` antes de `Math.max/min` en ambos lugares.
+3. `engine/mctsNet.ts` mismo: la condicion de "arbol agotado, no hay nada
+   mas que explorar" comparaba `playoutsRun === 0` (un conteo GLOBAL) en
+   vez del conteo al INICIO de la tanda actual -- una vez que CUALQUIER
+   tanda anterior hubiera progresado, esta condicion de corte quedaba
+   permanentemente inalcanzable. Arreglado guardando `roundStartPlayouts`
+   y comparando contra eso.
+
+**Verificacion real, no solo lectura de codigo:**
+- `evaluatePositionsBatch` (nueva, `eval/model.ts`): un lote de N
+  posiciones da, para cada una, el mismo resultado que evaluarla sola
+  (`tests/eval/model.test.ts`, nuevo caso) -- confirma que juntar varias
+  llamadas no mezcla resultados entre si.
+- `mctsNet.test.ts` (nuevo): contra el modelo vendorizado real (no
+  mockeado) -- corre sin tirar error, respeta el limite de tiempo en vez
+  de agotar siempre el presupuesto de playouts, es deterministico (sin
+  ningun random adentro, a diferencia del MCTS clasico), reusa
+  `shouldAcceptPass` de `engine/mcts.ts` correctamente, y en una posicion
+  claramente dominada por negro la busqueda le da una tasa de victoria
+  alta (mismo criterio de "direccion, no umbral exacto" que ya usaba
+  `eval/model.test.ts` para el mismo tipo de afirmacion sobre un modelo
+  de caja negra). Dos intentos de afirmar "elige EXACTAMENTE esta jugada
+  obvia" se descartaron -- en un tablero casi vacio, un motor que de
+  verdad entiende el juego puede preferir un punto grande de apertura en
+  vez de capturar de inmediato una piedra ya condenada e inofensiva, y
+  eso no es un bug.
+- Partida real jugada en la app de verdad (Playwright contra el dev
+  server): "Máxima (lenta)" seleccionada, jugada humana, el bot respondio
+  dentro de su presupuesto de tiempo sin errores de consola.
+- Comparacion de auto-juego real, motor nuevo vs. `veryStrong`, 7x7,
+  colores alternados entre partidas (para cancelar la ventaja de jugar
+  primero), con GPU real: **4 partidas completas, 2-2**. Nota de
+  honestidad, dos veces: (1) el motor nuevo corrio con un presupuesto
+  MENOR (300 playouts, no los 1200 reales de `'maxima'`) para que la
+  comparacion avanzara mas rapido -- si esta version mas debil ya compite
+  parejo, la real (con mas playouts) deberia ser al menos igual de
+  fuerte, nunca peor, asi que subestimar el presupuesto sesga la medicion
+  en CONTRA de la propia hipotesis, no a favor; (2) el script se colgo
+  despues de la partida 4 (timeout propio de 30 min esperando la partida
+  5, nunca crasheo con un error) y no se reintento una muestra mas
+  grande, dado el tiempo ya invertido esta sesion -- la causa mas probable
+  es agotamiento de la sesion de WebGL/GPU tras 30+ minutos de inferencia
+  continua en una sola pestaña del navegador (un modo de falla real y
+  conocido para sesiones largas de WebGL), NO necesariamente un cuelgue
+  del algoritmo en si -- `mctsNet.test.ts` ya verifica por separado que la
+  busqueda respeta su limite de tiempo, y el uso real (una jugada del bot
+  cada tanto durante una partida humana) nunca somete al motor a miles de
+  llamadas consecutivas sin pausa como si lo hace un script de auto-juego.
+  No se pudo verificar con certeza cual de las dos explicaciones es la
+  correcta en el tiempo de esta sesion -- **4 partidas es una muestra
+  chica, esto es evidencia real pero no concluyente, no una prueba de que
+  el motor nuevo es mas fuerte.**
+
+**Joseki: nueva seccion de referencia, aparte de la escalera 0-10.** Un
+joseki no tiene un resultado verificable con la misma certeza que vida y
+muerte -- es una convencion de buen juego, no un teorema, y esta sesion ya
+tuvo un momento de duda real sobre si confiar de memoria en la secuencia
+exacta de un joseki bien conocido (invasion en 3-3 bajo una piedra en
+4-4). En vez de arriesgarse a enseñar algo sutilmente equivocado, se uso
+la unica verificacion mecanica disponible: preguntarle a la propia red de
+KataGo ya empaquetada (la misma de `eval/model.ts`) su distribucion de
+politica en cada paso real de la secuencia candidata. Resultado
+(`content/joseki.ts` tiene el detalle completo, paso a paso): el bloqueo
+de negro tras la invasion concentra 47% de toda la politica (41% el
+espejo simetrico del otro lado, mencionado en el texto); el doble hane de
+blanco que sigue concentra **más del 91%**; la extension final de negro
+concentra 85% entre las dos opciones razonables. Una concentracion asi de
+alta, repetida en cada paso, es exactamente la señal que se esperaria de
+una secuencia real y no una casualidad -- pero se detiene ahi a proposito:
+el siguiente paso real de la teoria se ramifica en variantes nombradas que
+esta app no esta en condiciones de verificar con la misma disciplina.
+Nueva sub-pantalla `JosekiScreen.tsx` (mismo patron de router que
+`AboutGoScreen`), boton "Joseki" en la pantalla principal de Aprender,
+reusando `GuidedDemo.tsx` tal cual (sin cambios) para la demo interactiva.
+Verificado con un test nuevo (`tests/content/joseki.test.ts`, reproduce la
+demo entera contra el motor de reglas real) y con Playwright real
+(incluyendo un click equivocado primero, para confirmar que el fix de
+reintento de `cont. 27` sigue aplicando aca tambien).
+
+**Avanzado: nueva seccion, con contenido que SI tiene certeza matematica.**
+A diferencia de joseki, "vida y muerte de una forma mas grande" es
+exactamente el mismo tipo de afirmacion que el solucionador exhaustivo ya
+verifica en toda la app -- Principio 1 sin ninguna excepcion aca. Nueva
+semilla `cruzDeCinco` (`content/seeds.ts`, NO agregada a `SEED_SPECS`: es
+contenido de leccion, no semilla del banco de ejercicios, mismo caso que
+`dosOjosSeparados`): un espacio de ojo de 5 puntos en forma de cruz, mas
+grande que cualquier forma de Nivel 2 (todas de 3 o 4). Verificado con el
+solucionador: el centro es el UNICO punto vital (a diferencia del cuadrado
+de cuatro, que tiene 4 puntos vitales simetricos) -- negro vive si juega
+ahi primero, blanco mata si juega ahi primero, ningun otro punto alcanza
+para ninguno de los dos lados. Nueva sub-pantalla `AdvancedScreen.tsx`,
+mismo patron que `JosekiScreen.tsx`, boton "Avanzado" junto al de Joseki.
+Deliberadamente aparte de la escalera 0-10, no "Nivel 11": `Concept.level`
+es un tipo literal `0 | 1 | ... | 10` quemado en 7 archivos distintos
+(`analysis/concepts.ts`, `ui/lessons/LearnScreen.tsx`,
+`content/lessons/index.ts`, `ui/profile/ProfileScreen.tsx`,
+`content/lessons/types.ts`, `ui/play/strengthLevels.ts`,
+`content/lessons/n10.ts`) -- extender la escalera hacia arriba tocaria ese
+limite en los 7 lugares ademas de todo el contenido nuevo en si, mientras
+que una seccion separada (mismo mecanismo que Joseki, ya probado) lo evita
+por completo. Verificado con el solucionador real
+(`tests/content/advanced.test.ts`, ~28s por la region mas grande) y con
+el mismo tipo de test de reproduccion de demo que Joseki.
+
+**Lo que no se hizo, y por que:**
+- **Comentario de partidas profesionales** (parte del item B original):
+  descartado, no reducido de alcance. No hay partidas reales de dominio
+  publico disponibles esta sesion para curar responsablemente, e inventar
+  partidas "profesionales" y presentarlas como reales seria activamente
+  deshonesto -- no un atajo aceptable para llenar el hueco, sin importar
+  cuanto valor de contenido pareciera agregar. Si en el futuro hay
+  partidas reales (de dominio publico o comentadas por el propio usuario)
+  para usar, esto vuelve a ser viable.
+- **Red mas grande bajo demanda** (item A original): replanteado, no
+  descartado. El hallazgo de esta sesion (el cuello de botella real era
+  como se usaba la red empaquetada, no su tamaño) le baja la prioridad
+  frente a lo que ya se hizo, pero sigue siendo una direccion real a
+  futuro una vez que el motor guiado por red este puliendo mas -- con
+  `mctsNet.ts` ya construido y usando la red en cada nodo, una red mas
+  grande ahora tendria un efecto multiplicador claro (mejor politica Y
+  mejor valor en cada uno de esos nodos, no solo un sesgo de raiz), a
+  diferencia de antes de esta sesion.
+- **Diccionario de joseki mas grande / mas entradas**: la seccion nueva
+  tiene exactamente UNA entrada a proposito. Crecerlo es viable con la
+  misma metodologia (corroborar cada secuencia candidata contra la red
+  antes de aceptarla) pero es autoria de contenido real, no plumbing --
+  cada entrada nueva merece la misma revision cuidadosa que la primera.
+
+**Ineficiencia menor conocida, no arreglada:** en una partida con el nivel
+`'maxima'`, `PlayGameScreen.tsx` sigue creando/cargando el `EvalClient`
+separado que los niveles clasicos usan para `rootPriors` (ya innecesario
+para `'net'`, que calcula su propia prioridad de raiz), ademas del modelo
+que carga el propio Worker del motor -- dos copias del mismo modelo
+(~12MB) en memoria en vez de una. No se toco esta sesion porque ese mismo
+`EvalClient` tambien sirve a pistas y aviso de errores en vivo, funciones
+independientes de `rootPriors` que deberian seguir andando igual en
+`'maxima'`; evitar la carga duplicada especificamente para el caso
+`'net'` sin tocar esas otras dos funciones es un cambio real, mejor en su
+propia revision que mezclado aca.
+
+## Estado general del proyecto (2026-09-12, cont. 28: propuesta -- servir tambien a jugadores no principiantes/fuertes)
+
+Pedido explicito: pensar como Hoshi podria servir tambien a jugadores "pro
+o no principiantes", no solo a quien arranca de cero. Es una pregunta
+abierta de producto, no una tarea acotada -- esta entrada es esa
+propuesta (opciones + recomendacion), con una pieza chica ya implementada
+al final.
+
+**El problema, con numeros reales.** Hoy la app es, sin ambiguedad,
+principiante-a-intermedio-bajo: 11 niveles (0 a 10, "que es una piedra" a
+"semeai/yose"). Alguien ya en, digamos, 5 kyu para arriba agota el valor
+de la curricula rapido. Cuatro restricciones duras que cualquier
+propuesta tiene que asumir de entrada, todas verificadas en el codigo
+esta sesion, no supuestas:
+
+1. **El techo de fuerza del bot es bajo de verdad.** `ui/play/
+   strengthLevels.ts`: el nivel mas fuerte (`veryStrong`) usa 8000
+   playouts con un limite de 15s por jugada, y su propio comentario dice
+   "kyu aproximado, ESTIMADO a partir de la cantidad de playouts... no
+   calibrado jugando partidas reales todavia -- roadmap maestro, seccion
+   2.2, lo marca explicitamente como pendiente". Los 4 niveles estan
+   afinados para que el juego sea jugable en un telefono, no para dar
+   pelea a alguien fuerte. Ninguna propuesta que dependa de "el bot
+   desafia a un jugador fuerte" es realista sin resolver esto primero.
+2. **La red de evaluacion es chica a proposito.** `public/models/
+   kata-b10c128` (tambien en `hoshi-flutter/assets/webapp/models/`): un
+   export TensorFlow.js de una red estilo KataGo, 10 bloques residuales
+   / 128 canales, ~12MB, elegida por velocidad de inferencia en
+   navegador/movil, no por fuerza. Los "mejores movimientos" que sugiere
+   (pistas, deteccion de errores) no van a convencer a alguien fuerte.
+3. **La deteccion de errores y la generacion de ejercicios son
+   estructuralmente de principiante.** Los 11 detectores de
+   `analysis/mistakes.ts` (autoatari, atari ignorado, relleno de ojo
+   propio, triangulo vacio, primera linea temprana, pase prematuro,
+   etc.) buscan errores de principiante: un jugador fuerte casi nunca va
+   a disparar ninguno. La generacion de ejercicios (`tools/generate-
+   *.ts`) usa auto-juego acotado (100-800 playouts) filtrado por el
+   solucionador -- por eso el banco es fuerte en tactica simple y
+   practicamente no puede producir tsumego de nivel dan (el techo de
+   auto-juego mas el limite de tamaño de region del solucionador,
+   documentado en `content/seeds.ts`, lo impiden de raiz, no es "correr
+   el generador mas tiempo").
+4. **"Nivel" es un tipo literal 0-10 quemado en el codigo, no una lista
+   abierta.** `Concept['level']` en `analysis/concepts.ts` es
+   literalmente `0 | 1 | ... | 10`. Un grep de ese limite encuentra el
+   mismo supuesto repetido en 7 archivos (`concepts.ts`,
+   `ui/lessons/LearnScreen.tsx`, `content/lessons/index.ts`,
+   `ui/profile/ProfileScreen.tsx`, `content/lessons/types.ts`,
+   `ui/play/strengthLevels.ts`, `content/lessons/n10.ts`). Esto importa
+   para la pregunta de "Nivel 11 o algo aparte": extender la misma
+   escalera hacia arriba no es solo escribir contenido nuevo, es tocar un
+   limite de tipo repetido en 7 lugares.
+
+**Tres direcciones concretas, con tradeoffs reales:**
+
+**(A) Motor/evaluacion mas fuerte, bajo demanda en vez de empaquetado.**
+Una red KataGo mas grande (p.ej. b20c256 o b40c256) descargada la primera
+vez que alguien activa un "modo de analisis avanzado", en vez de venir
+en el instalador base -- mantiene el tamaño de instalacion actual y da
+fuerza real a quien la pida. Costo real: necesita un pipeline de
+conversion de la red al mismo formato TFJS que ya carga `eval/` (no es
+"bajar un archivo mas grande"), la latencia de inferencia en un celular
+real de gama media es un dato que no existe hoy (no inventarlo), y la
+app no tiene ningun precedente de descargar-y-cachear un modelo en
+tiempo de ejecucion (todo lo que carga hoy es un asset empaquetado) --
+es una capacidad nueva genuina (descarga, cache, version, que pasa sin
+conexion), no un ajuste de config.
+
+**(B) Herramientas de estudio que no dependen de la fuerza del bot.**
+Tres piezas, tamaño muy distinto entre si:
+- **Importar SGF externo a Revisar.** `core/sgf.ts` ya tenia un parser
+  SGF completo (`parseSgf`/`sgfToGameRecord`) escrito para el banco de
+  problemas; `ReviewScreen.tsx`/`analysis/mistakes.ts` ya operan sobre
+  `{width, height, komi, moves}` planos. Era, con diferencia, la pieza
+  mas chica de esta lista -- **implementada esta misma sesion, ver
+  detalle abajo.**
+- **Diccionario de joseki/fuseki.** Hoy: un glosario estatico de 11
+  terminos (`content/glossary.ts`) mas 5 menciones de joseki dentro de
+  lecciones (`content/lessons/n6.ts`). Un diccionario de verdad (posicion
+  -> variaciones, no solo un termino -> una frase) es autoria de
+  contenido nueva, no un hueco de codigo -- **usar solo posiciones de
+  dominio publico o escritas por vos; nunca escrapear un diccionario de
+  joseki comercial.**
+- **Comentario curado de partidas profesionales.** Mismo llamado de
+  atencion: **solo partidas de dominio publico (suficientemente
+  antiguas) o comentadas por vos mismo -- nunca partidas modernas con
+  copyright vigente**, sin importar lo tentador que sea como contenido.
+
+**(C) Un track de contenido avanzado curado a mano (tsumego nivel dan,
+juicio de tablero mas profundo), como seccion estructuralmente separada
+-- no "Nivel 11".** El hallazgo del punto 4 de arriba es la base de esta
+recomendacion: meterlo como continuacion de la misma escalera toca un
+limite de tipo repetido en 7 archivos ademas de todo el contenido nuevo
+en si. Una seccion separada ("Avanzado", fuera de la progresion 0-10)
+evita eso por completo. Es, de las tres direcciones, la mas lenta y de
+mayor artesania -- comparable en esfuerzo a lo que `cont. 26` ya
+identifico para llenar los huecos de ejercicios de los niveles 4/5/6/8
+existentes, pero para contenido que ni siquiera puede salir de
+auto-juego acotado (ver punto 3). Recomendado como su propia sesion
+dedicada, igual que ya se hizo con el juicio de tablero completo antes
+de que existiera.
+
+**Recomendacion:** de las tres, (B) es la unica con una pieza
+genuinamente chica y de bajo riesgo -- se implemento ahora. El resto de
+(B) (diccionario de joseki) y la totalidad de (A) y (C) quedan
+propuestas, no implementadas: son grandes, merecen su propia sesion, y
+apurarlas aca hubiera significado un trabajo a medias.
+
+**Lo implementado: importar una partida SGF externa a Revisar.**
+- `core/sgf.ts`: nueva `parseGameResult(re)` interpreta la propiedad RE
+  del espec FF4 ("B+3.5", "W+12") -- devuelve `null` para lo que
+  `SavedGameRecord.result` (`{black, white, winner}`, sin lugar para
+  tablas ni "gano por tiempo/rendicion") no puede representar de
+  verdad, en vez de inventar un margen de 0 que se veria como una
+  partida real. `sgfToGameRecord` ahora expone ese resultado.
+- `content/sgfImport.ts` (nuevo): `buildImportedGameRecord(text)` valida
+  antes de aceptar, no despues -- a diferencia de `analyzeGame`, que
+  ante una jugada ilegal simplemente corta el analisis ahi (una partida
+  real interrumpida por datos malos), un import corrupto truncado en
+  Revisar sin explicacion seria mas confuso que rechazarlo de entrada.
+  Reproduce la partida entera contra el motor de reglas real
+  (`core/rules.applyMove`) y rechaza con un motivo especifico:
+  texto no parseable, secuencia con una jugada ilegal o de color
+  equivocado, **partidas de hándicap (`AB`/`AW`) -- todavia no
+  soportadas explicitamente, en vez de arrancar el replay desde tablero
+  vacio y asignar mal los colores en silencio**, y partidas legales sin
+  un resultado numerico importable (rendicion/tiempo/tablas).
+- `ui/review/ReviewScreen.tsx`: boton "Importar partida (SGF)" + input
+  de archivo oculto, mismo patron ya usado por Configuracion > Copia de
+  seguridad (`SettingsScreen.tsx`, `file.text()` + confirmar). El
+  archivo importado se guarda como `mode: 'local'` (no hay un "color
+  humano" ni bot identificable en una partida ajena) y aparece en la
+  lista de Revisar como cualquier otra partida -- todo lo que ya existia
+  (deteccion de errores, preguntar a la IA, practicar el concepto del
+  error) funciona sin cambios porque opera sobre el mismo
+  `{width, height, komi, moves}` de siempre.
+- **Limitaciones honestas, no bugs silenciosos:** no importa partidas de
+  hándicap todavia, ni partidas sin un resultado final numerico en el
+  SGF. Ambas devuelven un mensaje especifico explicando por que, en vez
+  de fallar en silencio o mostrar un dato inventado.
+- Verificado: `tsc -b` limpio; 12 tests nuevos/extendidos (`parseGameResult`,
+  el campo `result` de `sgfToGameRecord`, 7 casos de
+  `buildImportedGameRecord` incluyendo hándicap/color equivocado/punto
+  ocupado/sin resultado); `oxlint` sin warnings nuevos (el unico
+  warning de `ReviewScreen.tsx` -- `set-state-in-effect` -- ya existia
+  antes de este cambio, confirmado contra `HEAD`); Playwright real
+  contra la app corriendo (no solo lectura de codigo): SGF invalido
+  rechazado con el mensaje correcto, partida legal sin resultado
+  rechazada con su propio mensaje, partida valida con `RE[B+3.5]`
+  importada, aparece en la lista y abre mostrando "Negro ganó por 3.5"
+  -- 0 errores de consola. Suite completa (`vitest run`): sin
+  regresiones.
+
 ## Estado general del proyecto (2026-09-12, cont. 27: auditoria completa de Aprender -- bug real de reintento encontrado y arreglado)
 
 Pedido explicito: revisar las 64 lecciones de Aprender (11 niveles) por

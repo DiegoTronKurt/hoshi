@@ -89,6 +89,35 @@ export const dosOjosSeparados = buildEnclosedShape(
 )
 
 /**
+ * "Cruz de cinco" (pentomino en cruz): 5 espacios de ojo, mas grande que
+ * cualquier forma de Nivel 2 (todas de 3 o 4) -- contenido de la seccion
+ * Avanzado (ui/lessons/AdvancedScreen.tsx), no de la escalera graduada.
+ * A diferencia de rectaDeTres/cuadradoDeCuatro/piramideDeCuatro, NO se
+ * agrega a SEED_SPECS: es contenido de leccion, no semilla del banco de
+ * ejercicios (mismo caso que dosOjosSeparados arriba).
+ * Verificado con el solucionador (ver tests/content/advanced.test.ts): el
+ * centro (unico punto vital, sin la simetria de 4 puntos de cuadradoDeCuatro)
+ * decide todo -- negro vive si juega ahi primero, blanco mata si juega ahi
+ * primero. Cualquier otro punto, para cualquiera de los dos lados, no
+ * alcanza.
+ */
+export const cruzDeCinco = buildEnclosedShape(
+  9,
+  [
+    [3, 2], [4, 2], [5, 2],
+    [2, 3], [3, 3], [5, 3], [6, 3],
+    [2, 4], [6, 4],
+    [2, 5], [3, 5], [5, 5], [6, 5],
+    [3, 6], [4, 6], [5, 6],
+  ],
+  [
+    [4, 3],
+    [3, 4], [4, 4], [5, 4],
+    [4, 5],
+  ],
+)
+
+/**
  * Red (geta) verificada en la leccion n3-l4: blanco en (1,1) queda sin
  * escapatoria una vez que negro juega (0,0), sin necesidad de perseguirlo
  * como en una escalera. Reutilizada tal cual (mismo tablero, mismas

@@ -305,7 +305,11 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
             </div>
           ) : (
             <div className="play-adaptive-status">
-              <p className="play-adaptive-current">{t('play.adaptive.current', { kyu: adaptiveLevel.approxKyu })}</p>
+              {/* adaptiveLevel siempre sale de computeAdaptiveStrength, que nunca
+                  devuelve 'maxima' (ver LEVEL_ORDER en learning/adaptiveDifficulty.ts) --
+                  approxKyu es null solo para ese nivel, asi que aca nunca lo es de
+                  verdad; el `?? 0` es solo para conformar al tipo, no un valor real. */}
+              <p className="play-adaptive-current">{t('play.adaptive.current', { kyu: adaptiveLevel.approxKyu ?? 0 })}</p>
               <p className="settings-description">
                 {adaptiveResult.sampleSize < ADAPTIVE_MIN_GAMES
                   ? t('play.adaptive.warmup', { needed: ADAPTIVE_MIN_GAMES })
@@ -314,6 +318,9 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
             </div>
           )}
           <p className="settings-description">{t('play.strength.disclaimer')}</p>
+          {difficultyMode === 'manual' && strengthId === 'maxima' && (
+            <p className="settings-description">{t('play.strength.maximaDisclaimer')}</p>
+          )}
 
           <div className="play-card-group">
             <span className="play-card-group-label">{t('play.botStyle.label')}</span>

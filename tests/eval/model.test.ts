@@ -3,7 +3,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import * as tf from '@tensorflow/tfjs'
 import { encodeInput } from '../../src/eval/features'
-import { evaluatePosition } from '../../src/eval/model'
+import { evaluatePosition, evaluatePositionsBatch } from '../../src/eval/model'
 import { createBoard, toPoint } from '../../src/core/board'
 import { gameStateFromBoard } from '../../src/core/rules'
 import { BLACK, WHITE } from '../../src/core/types'
@@ -119,5 +119,33 @@ describe('evaluatePosition (integracion real contra el modelo vendorizado)', () 
     // realmente distingue direccion: gana mucho mas seguido para quien
     // domina el tablero que para quien no.
     expect(asWinner.value[0]).toBeGreaterThan(asLoser.value[0])
+  }, 30000)
+
+  it('evaluar en lote da, para cada posicion, el mismo resultado que evaluarla sola', async () => {
+    // engine/mctsNet.ts junta varias hojas de la busqueda en una sola
+    // llamada por eficiencia (ver el comentario de evaluatePositionsBatch) --
+    // esto confirma que juntarlas no mezcla ni corrompe los resultados de
+    // cada posicion entre si.
+    const model = await loadVendoredModel()
+    const board = buildLopsidedBoard()
+    const positions = [
+      { state: gameStateFromBoard(createBoard(9), BLACK, 6.5) },
+      { state: gameStateFromBoard(board, BLACK, 6.5) },
+      { state: gameStateFromBoard(board, WHITE, 6.5) },
+    ]
+    const inputs = positions.map((p) => encodeInput(p))
+
+    const individually = await Promise.all(inputs.map((input) => evaluatePosition(model, input)))
+    const batched = await evaluatePositionsBatch(model, inputs)
+
+    expect(batched).toHaveLength(individually.length)
+    for (let i = 0; i < individually.length; i++) {
+      for (let k = 0; k < individually[i].value.length; k++) {
+        expect(batched[i].value[k]).toBeCloseTo(individually[i].value[k], 5)
+      }
+      for (let k = 0; k < individually[i].policy.length; k++) {
+        expect(batched[i].policy[k]).toBeCloseTo(individually[i].policy[k], 5)
+      }
+    }
   }, 30000)
 })

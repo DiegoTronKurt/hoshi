@@ -63,13 +63,34 @@ function softmax(logits: Float32Array): Float32Array {
 }
 
 /**
- * Corre una pasada de inferencia. `model.execute` no sirve para este grafo
- * (tiene un `Merge` dinamico -- confirmado corriendo el modelo real, ver
- * NOTAS.md), hace falta `executeAsync`.
+ * Corre una pasada de inferencia sobre un lote de N posiciones a la vez
+ * (una sola llamada a `executeAsync` para todo el lote, no N llamadas) --
+ * el grafo exportado soporta batch arbitrario sin reconversion (es una red
+ * convolucional comun, el batch es el eje 0 de siempre). `model.execute` no
+ * sirve para este grafo (tiene un `Merge` dinamico -- confirmado corriendo
+ * el modelo real, ver NOTAS.md), hace falta `executeAsync`.
+ *
+ * Medido en esta sesion con Chromium/WebGL real sobre el modelo
+ * vendorizado: ~8ms/llamada practicamente constante entre batch 1 y 32 (el
+ * costo esta dominado por el overhead fijo de la llamada, no por el
+ * computo) -- por eso vale la pena juntar varias posiciones en una sola
+ * llamada en vez de evaluarlas una por una (ver engine/mctsNet.ts, que es
+ * quien de verdad se beneficia de esto).
  */
-export async function evaluatePosition(model: tf.GraphModel, input: EncodedInput): Promise<RawEvalOutput> {
-  const binInputs = tf.tensor(input.spatial, [1, NN_LEN * NN_LEN, input.spatial.length / (NN_LEN * NN_LEN)])
-  const globalInputs = tf.tensor(input.global, [1, input.global.length])
+export async function evaluatePositionsBatch(model: tf.GraphModel, inputs: EncodedInput[]): Promise<RawEvalOutput[]> {
+  const batch = inputs.length
+  const spatialChannels = inputs[0].spatial.length / (NN_LEN * NN_LEN)
+  const globalLen = inputs[0].global.length
+
+  const spatial = new Float32Array(batch * inputs[0].spatial.length)
+  const global = new Float32Array(batch * globalLen)
+  for (let i = 0; i < batch; i++) {
+    spatial.set(inputs[i].spatial, i * inputs[0].spatial.length)
+    global.set(inputs[i].global, i * globalLen)
+  }
+
+  const binInputs = tf.tensor(spatial, [batch, NN_LEN * NN_LEN, spatialChannels])
+  const globalInputs = tf.tensor(global, [batch, globalLen])
 
   try {
     const result = await model.executeAsync(
@@ -79,23 +100,31 @@ export async function evaluatePosition(model: tf.GraphModel, input: EncodedInput
     const [policyTensor, valueTensor, ownershipTensor] = result as tf.Tensor[]
 
     try {
-      // policy_output: [1, 2, 362] -- la cabeza principal es el indice 0
+      // policy_output: [batch, 2, 362] -- la cabeza principal es el indice 0
       // del segundo eje; la cabeza [1] es auxiliar (no se usa aca).
-      const policyData = await policyTensor.data() as Float32Array
-      const policyLogits = policyData.slice(0, POLICY_PASS_INDEX + 1)
+      const policyData = (await policyTensor.data()) as Float32Array
+      const valueData = (await valueTensor.data()) as Float32Array
+      const ownershipData = (await ownershipTensor.data()) as Float32Array
 
-      const valueData = await valueTensor.data() as Float32Array
-      const valueProbs = softmax(valueData)
+      const policyHeadLen = POLICY_PASS_INDEX + 1
+      const policyStride = policyData.length / batch
+      const ownershipStride = ownershipData.length / batch
 
-      const ownershipData = await ownershipTensor.data() as Float32Array
-      const ownership = new Float32Array(ownershipData.length)
-      for (let i = 0; i < ownershipData.length; i++) ownership[i] = Math.tanh(ownershipData[i])
+      const outputs: RawEvalOutput[] = []
+      for (let i = 0; i < batch; i++) {
+        const policyLogits = policyData.slice(i * policyStride, i * policyStride + policyHeadLen)
+        const valueProbs = softmax(valueData.slice(i * 3, i * 3 + 3))
+        const ownershipRaw = ownershipData.slice(i * ownershipStride, (i + 1) * ownershipStride)
+        const ownership = new Float32Array(ownershipRaw.length)
+        for (let k = 0; k < ownershipRaw.length; k++) ownership[k] = Math.tanh(ownershipRaw[k])
 
-      return {
-        policy: softmax(policyLogits),
-        value: [valueProbs[0], valueProbs[1], valueProbs[2]],
-        ownership,
+        outputs.push({
+          policy: softmax(policyLogits),
+          value: [valueProbs[0], valueProbs[1], valueProbs[2]],
+          ownership,
+        })
       }
+      return outputs
     } finally {
       policyTensor.dispose()
       valueTensor.dispose()
@@ -105,4 +134,9 @@ export async function evaluatePosition(model: tf.GraphModel, input: EncodedInput
     binInputs.dispose()
     globalInputs.dispose()
   }
+}
+
+export async function evaluatePosition(model: tf.GraphModel, input: EncodedInput): Promise<RawEvalOutput> {
+  const [result] = await evaluatePositionsBatch(model, [input])
+  return result
 }

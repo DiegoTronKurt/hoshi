@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
 import { applyMove, createGame } from '../../src/core/rules'
-import { gameRecordToSgf, parseSgf, pointToSgf, sgfToGameRecord, sgfToPoint, writeSgf } from '../../src/core/sgf'
+import { gameRecordToSgf, parseGameResult, parseSgf, pointToSgf, sgfToGameRecord, sgfToPoint, writeSgf } from '../../src/core/sgf'
 import type { RecordedMove } from '../../src/core/sgf'
 import type { GameState } from '../../src/core/types'
 
@@ -64,6 +64,26 @@ describe('SGF', () => {
 
     expect(Array.from(replay.board.stones)).toEqual(Array.from(state.board.stones))
     expect(replay.captures).toEqual(state.captures)
+  })
+
+  it('parseGameResult interpreta RE con margen numerico, y devuelve null para lo que no se puede representar', () => {
+    expect(parseGameResult('B+3.5')).toEqual({ black: 3.5, white: 0, winner: 'black' })
+    expect(parseGameResult('W+12')).toEqual({ black: 0, white: 12, winner: 'white' })
+    // Rendicion, tiempo, forfeit, tablas o ausente: SavedGameRecord.result no
+    // tiene forma de representar ninguno de estos sin inventar un margen.
+    expect(parseGameResult('B+R')).toBeNull()
+    expect(parseGameResult('W+T')).toBeNull()
+    expect(parseGameResult('0')).toBeNull()
+    expect(parseGameResult(undefined)).toBeNull()
+    expect(parseGameResult('esto no es un RE valido')).toBeNull()
+  })
+
+  it('sgfToGameRecord expone el resultado (RE) cuando esta presente', () => {
+    const withResult = sgfToGameRecord('(;GM[1]FF[4]SZ[9]KM[6.5]RE[B+3.5];B[cc];W[gg])')
+    expect(withResult.result).toEqual({ black: 3.5, white: 0, winner: 'black' })
+
+    const withoutResult = sgfToGameRecord('(;GM[1]FF[4]SZ[9]KM[6.5];B[cc];W[gg])')
+    expect(withoutResult.result).toBeNull()
   })
 
   it('las coordenadas de la ultima fila/columna hacen ida y vuelta en 13x13 y 19x19', () => {

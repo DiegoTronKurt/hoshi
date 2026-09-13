@@ -7,9 +7,13 @@ import type { ConceptProfile } from './profile'
 
 // Extremos de la misma escala de kyu ESTIMADA que ya usa strengthLevels.ts
 // (mas bajo = mas fuerte), derivados de ahi en vez de repetidos a mano para
-// no poder desalinearse si esos numeros cambian.
-const WEAKEST_KYU = Math.max(...STRENGTH_LEVELS.map((level) => level.approxKyu))
-const STRONGEST_KYU = Math.min(...STRENGTH_LEVELS.map((level) => level.approxKyu))
+// no poder desalinearse si esos numeros cambian. Solo niveles con un kyu
+// real (ver StrengthLevel.approxKyu -- 'maxima' no tiene ninguno): Math.max/
+// min tratarian un null de la lista como 0, corrompiendo en silencio los dos
+// extremos de la escala entera.
+const RATED_KYUS = STRENGTH_LEVELS.map((level) => level.approxKyu).filter((kyu): kyu is number => kyu !== null)
+const WEAKEST_KYU = Math.max(...RATED_KYUS)
+const STRONGEST_KYU = Math.min(...RATED_KYUS)
 
 export interface SelfRankResult {
   kyu: number | null

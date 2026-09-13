@@ -8,8 +8,13 @@ import { computeSelfRankKyu } from '../../src/learning/selfRank'
 import type { SavedGameRecord } from '../../src/storage/db'
 import { STRENGTH_LEVELS } from '../../src/ui/play/strengthLevels'
 
-const WEAKEST_KYU = Math.max(...STRENGTH_LEVELS.map((level) => level.approxKyu))
-const STRONGEST_KYU = Math.min(...STRENGTH_LEVELS.map((level) => level.approxKyu))
+// Solo niveles con un kyu real (ver StrengthLevel.approxKyu -- 'maxima' no
+// tiene ninguno): Math.max/min tratarian ese null como 0, dando un
+// STRONGEST_KYU de prueba equivocado (mismo bug ya arreglado en
+// learning/selfRank.ts, duplicado aca sin querer).
+const RATED_KYUS = STRENGTH_LEVELS.map((level) => level.approxKyu).filter((kyu): kyu is number => kyu !== null)
+const WEAKEST_KYU = Math.max(...RATED_KYUS)
+const STRONGEST_KYU = Math.min(...RATED_KYUS)
 
 function profileWithScore(conceptId: ConceptId, score: number): ConceptProfile {
   return {

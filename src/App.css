@@ -585,7 +585,8 @@
 }
 
 .review-header button,
-.review-games-list button {
+.review-games-list button,
+.review-import button {
   min-height: 44px;
   padding: 0 0.9rem;
   border-radius: 8px;
@@ -594,6 +595,20 @@
   color: var(--hoshi-text);
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+.review-import {
+  display: flex;
+}
+
+.review-import-file-input {
+  display: none;
+}
+
+.review-import-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hoshi-danger);
 }
 
 .review-empty {
@@ -1824,6 +1839,12 @@
   color: var(--hoshi-text);
   font-size: 0.95rem;
   cursor: pointer;
+}
+
+.learn-reference-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .learn-about-cta {

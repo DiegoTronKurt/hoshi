@@ -521,14 +521,18 @@ export function PlayGameScreen({
     setBotError(false)
 
     async function playBotMove(engine: EngineClient) {
+      const recentMoves = moves.slice(Math.max(0, moves.length - 5))
+      const priorBoards = [history[history.length - 3]?.board, history[history.length - 2]?.board].filter(
+        (b): b is GameState['board'] => b !== undefined,
+      )
+
+      // engine/mctsNet.ts (nivel 'net') consulta la red en cada nodo que
+      // expande, no solo en la raiz -- no hace falta (ni tiene sentido)
+      // pedirle por separado una prioridad de raiz como al MCTS clasico.
       let rootPriors: Map<number | null, number> | undefined
       const evalClient = evalRef.current
-      if (evalClient && strength.netInfluence > 0) {
+      if (strength.engine === 'classic' && evalClient && strength.netInfluence > 0) {
         try {
-          const recentMoves = moves.slice(Math.max(0, moves.length - 5))
-          const priorBoards = [history[history.length - 3]?.board, history[history.length - 2]?.board].filter(
-            (b): b is GameState['board'] => b !== undefined,
-          )
           const output = await evalClient.evaluate({ state: game, recentMoves, priorBoards }, EVAL_TIMEOUT_IN_GAME_MS)
           const legal = listLegalMoves(game)
           const legalPoints = legal.filter((p): p is number => p !== null)
@@ -542,7 +546,15 @@ export function PlayGameScreen({
       if (cancelled) return
 
       try {
-        const response = await engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle, rootPriors)
+        const response =
+          strength.engine === 'net'
+            ? await engine.chooseMoveWithNet(game, strength.playouts, {
+                modelUrl: EVAL_MODEL_URL,
+                recentMoves,
+                priorBoards,
+                maxTimeMs: strength.maxTimeMs,
+              })
+            : await engine.chooseMove(game, strength.playouts, undefined, strength.maxTimeMs, config.botStyle, rootPriors)
         if (cancelled) return
         setBotThinking(false)
         const color = game.toMove

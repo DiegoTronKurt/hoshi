@@ -13,7 +13,9 @@ import { minimoTheme } from '../board/themes'
 import { LockIcon } from '../common/LockIcon'
 import type { PlaySeed } from '../play/playConfig'
 import { AboutGoScreen } from './AboutGoScreen'
+import { AdvancedScreen } from './AdvancedScreen'
 import { IntroDemo } from './IntroDemo'
+import { JosekiScreen } from './JosekiScreen'
 import { LessonScreen } from './LessonScreen'
 import { isLessonRead } from './readProgress'
 
@@ -72,6 +74,8 @@ type View =
   | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 }
   | { kind: 'lesson'; lessonId: string }
   | { kind: 'about' }
+  | { kind: 'joseki' }
+  | { kind: 'advanced' }
 
 function fallbackPreview() {
   const size = 5
@@ -121,18 +125,20 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     return { total, read }
   }, [lessonsByLevel])
 
-  // Boton fisico "atras" de Android: about/lessonList estan a un nivel de
-  // levels, lesson siempre a dos (lessonList de su propio nivel, aunque se
-  // haya entrado directo via initialLessonId) -- ver navigation/localBack.ts.
+  // Boton fisico "atras" de Android: about/joseki/advanced/lessonList estan
+  // a un nivel de levels, lesson siempre a dos (lessonList de su propio
+  // nivel, aunque se haya entrado directo via initialLessonId) -- ver
+  // navigation/localBack.ts.
   useEffect(() => {
-    const depth = view.kind === 'lesson' ? 2 : view.kind === 'lessonList' || view.kind === 'about' ? 1 : 0
+    const referenceKinds: View['kind'][] = ['lessonList', 'about', 'joseki', 'advanced']
+    const depth = view.kind === 'lesson' ? 2 : referenceKinds.includes(view.kind) ? 1 : 0
     reportLocalBack(() => {
       if (view.kind === 'lesson') {
         const level = (getLesson(view.lessonId)?.level ?? 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
         setView({ kind: 'lessonList', level })
         return true
       }
-      if (view.kind === 'lessonList' || view.kind === 'about') {
+      if (referenceKinds.includes(view.kind)) {
         setView({ kind: 'levels' })
         return true
       }
@@ -143,6 +149,14 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
 
   if (view.kind === 'about') {
     return <AboutGoScreen onBack={goBack} onNavigateToPlay={onNavigateToPlay} />
+  }
+
+  if (view.kind === 'joseki') {
+    return <JosekiScreen onBack={goBack} />
+  }
+
+  if (view.kind === 'advanced') {
+    return <AdvancedScreen onBack={goBack} />
   }
 
   if (view.kind === 'lesson') {
@@ -234,9 +248,17 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
   return (
     <div className="learn">
       <h2>{t('learn.title')}</h2>
-      <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'about' })}>
-        {t('about.cta')}
-      </button>
+      <div className="learn-reference-ctas">
+        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'about' })}>
+          {t('about.cta')}
+        </button>
+        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'joseki' })}>
+          {t('joseki.cta')}
+        </button>
+        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'advanced' })}>
+          {t('advanced.cta')}
+        </button>
+      </div>
       {overallProgress.total > 0 && (
         <div className="learn-progress-overall">
           <p className="learn-progress-label">

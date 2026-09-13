@@ -17,7 +17,13 @@ export const ADAPTIVE_STEP_UP_WIN_RATE = 0.65
 export const ADAPTIVE_STEP_DOWN_WIN_RATE = 0.35
 
 const DEFAULT_LEVEL_ID: StrengthLevel['id'] = 'normal'
-const LEVEL_ORDER = STRENGTH_LEVELS.map((level) => level.id)
+/** Solo los niveles 'classic' (ver StrengthLevel.engine): el ajuste
+ * adaptativo hace mas dificil o mas facil al MISMO bot de siempre subiendo
+ * o bajando playouts, nunca deberia cambiar de motor por su cuenta -- 'net'
+ * es bastante mas lento por jugada (hasta 45s) y es intencionalmente algo
+ * que la persona elige a mano, no algo a lo que el ajuste automatico la
+ * empuje sin que lo pida. */
+const LEVEL_ORDER = STRENGTH_LEVELS.filter((level) => level.engine === 'classic').map((level) => level.id)
 
 export interface AdaptiveDifficultyResult {
   strengthId: StrengthLevel['id']

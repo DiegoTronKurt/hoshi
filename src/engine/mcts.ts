@@ -242,7 +242,7 @@ export interface MctsResult {
  * playout, findOneLibertyPoints) y el puntaje de area de la posicion actual
  * ya favorece a quien le toca jugar, pasar es correcto.
  */
-function shouldAcceptPass(state: GameState): boolean {
+export function shouldAcceptPass(state: GameState): boolean {
   if (state.consecutivePasses !== 1) return false
 
   const { ownAtariPoints, oppCapturePoints } = findOneLibertyPoints(state)
