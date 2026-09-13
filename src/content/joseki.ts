@@ -139,6 +139,53 @@ function buildTsukeHaneDemo(): DemoScript {
   }
 }
 
+/**
+ * Ataque directo (tsuke) en 3-3, pero contra una piedra en komoku (3-4) en
+ * vez de en 4-4 -- un tercer punto de partida distinto a los dos de arriba
+ * (que solo usan 4-4), verificado con exactamente el mismo metodo (consultar
+ * la politica cruda de la red en cada paso real, sin aceptar ningun
+ * movimiento a mano sin ese chequeo -- script descartable, no en el repo).
+ *
+ * Resultado: el hane de negro tras el tsuke concentra **87.0%** de la
+ * politica -- la concentracion mas alta de las tres secuencias de esta
+ * seccion (el siguiente candidato mas cercano queda en 5.8%). Pero la
+ * jugada de blanco que sigue ya no tiene esa claridad: el corte en el punto
+ * que separa las dos piedras negras (la jugada favorita de la red ahi) solo
+ * concentra **36.3%**, con el resto repartido entre extender y jugadas en
+ * otras esquinas -- justo el punto real donde la teoria de joseki se abre en
+ * variantes con nombre propio (cortar vs. extenderse), un paso antes de
+ * donde se detienen sansanDoubleHane/tsukeHane. Por eso este fragmento tiene
+ * DOS pasos en vez de cuatro: se corta apenas se pierde esa concentracion
+ * alta, en vez de seguir adivinando cual de las dos variantes mostrar.
+ */
+function buildKomokuSanSanTsukeDemo(): DemoScript {
+  const width = 19
+  const height = 19
+  const board = createBoard(width, height)
+  board.stones[toPoint(width, 3, 2)] = BLACK
+
+  return {
+    width,
+    height,
+    initialStones: board.stones,
+    toMove: WHITE,
+    steps: [
+      {
+        promptKey: 'joseki.komokuSanSanTsuke.step1.prompt',
+        expectedPoints: [],
+        auto: toPoint(width, 2, 2),
+        feedbackKey: 'joseki.komokuSanSanTsuke.step1.feedback',
+      },
+      {
+        promptKey: 'joseki.komokuSanSanTsuke.step2.prompt',
+        expectedPoints: [toPoint(width, 2, 3)],
+        feedbackKey: 'joseki.komokuSanSanTsuke.step2.feedback',
+      },
+    ],
+    completionKey: 'joseki.komokuSanSanTsuke.completion',
+  }
+}
+
 export const JOSEKI_ENTRIES: JosekiEntry[] = [
   {
     id: 'sansan-double-hane',
@@ -151,5 +198,11 @@ export const JOSEKI_ENTRIES: JosekiEntry[] = [
     titleKey: 'joseki.tsukeHane.title',
     descriptionKey: 'joseki.tsukeHane.description',
     demo: buildTsukeHaneDemo(),
+  },
+  {
+    id: 'komoku-sansan-tsuke',
+    titleKey: 'joseki.komokuSanSanTsuke.title',
+    descriptionKey: 'joseki.komokuSanSanTsuke.description',
+    demo: buildKomokuSanSanTsukeDemo(),
   },
 ]

@@ -37,7 +37,7 @@ export function AdvancedScreen({ onBack }: AdvancedScreenProps) {
     <div className="learn advanced">
       <div className="lesson-header">
         <button type="button" onClick={onBack}>
-          {t('learn.backToLevels')}
+          {t('learn.back')}
         </button>
         <h2>{t('advanced.title')}</h2>
       </div>

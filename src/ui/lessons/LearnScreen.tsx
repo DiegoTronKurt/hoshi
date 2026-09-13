@@ -18,6 +18,10 @@ import { HistoricGamesScreen } from './HistoricGamesScreen'
 import { IntroDemo } from './IntroDemo'
 import { JosekiScreen } from './JosekiScreen'
 import { LessonScreen } from './LessonScreen'
+import { ReferenceScreen } from './ReferenceScreen'
+import type { ReferenceKind } from './ReferenceScreen'
+import { TesujiScreen } from './TesujiScreen'
+import { TutorialsScreen } from './TutorialsScreen'
 import { isLessonRead } from './readProgress'
 
 /** Leccion que dispara la demo visual corta de "ganar" (ver IntroDemo.tsx),
@@ -74,10 +78,13 @@ type View =
   | { kind: 'levels' }
   | { kind: 'lessonList'; level: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 }
   | { kind: 'lesson'; lessonId: string }
+  | { kind: 'reference' }
   | { kind: 'about' }
   | { kind: 'joseki' }
   | { kind: 'advanced' }
   | { kind: 'historicGames' }
+  | { kind: 'tutorials' }
+  | { kind: 'tesuji' }
 
 function fallbackPreview() {
   const size = 5
@@ -132,15 +139,20 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
   // nivel, aunque se haya entrado directo via initialLessonId) -- ver
   // navigation/localBack.ts.
   useEffect(() => {
-    const referenceKinds: View['kind'][] = ['lessonList', 'about', 'joseki', 'advanced', 'historicGames']
-    const depth = view.kind === 'lesson' ? 2 : referenceKinds.includes(view.kind) ? 1 : 0
+    const topKinds: View['kind'][] = ['lessonList', 'reference']
+    const nestedReferenceKinds: View['kind'][] = ['about', 'joseki', 'advanced', 'historicGames', 'tutorials', 'tesuji']
+    const depth = view.kind === 'lesson' || nestedReferenceKinds.includes(view.kind) ? 2 : topKinds.includes(view.kind) ? 1 : 0
     reportLocalBack(() => {
       if (view.kind === 'lesson') {
         const level = (getLesson(view.lessonId)?.level ?? 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
         setView({ kind: 'lessonList', level })
         return true
       }
-      if (referenceKinds.includes(view.kind)) {
+      if (nestedReferenceKinds.includes(view.kind)) {
+        setView({ kind: 'reference' })
+        return true
+      }
+      if (topKinds.includes(view.kind)) {
         setView({ kind: 'levels' })
         return true
       }
@@ -148,6 +160,10 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     }, depth)
     return () => reportLocalBack(null, 0)
   }, [view])
+
+  if (view.kind === 'reference') {
+    return <ReferenceScreen onBack={goBack} onOpen={(kind: ReferenceKind) => setView({ kind })} />
+  }
 
   if (view.kind === 'about') {
     return <AboutGoScreen onBack={goBack} onNavigateToPlay={onNavigateToPlay} />
@@ -163,6 +179,14 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
 
   if (view.kind === 'historicGames') {
     return <HistoricGamesScreen onBack={goBack} />
+  }
+
+  if (view.kind === 'tutorials') {
+    return <TutorialsScreen onBack={goBack} />
+  }
+
+  if (view.kind === 'tesuji') {
+    return <TesujiScreen onBack={goBack} />
   }
 
   if (view.kind === 'lesson') {
@@ -255,17 +279,8 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
     <div className="learn">
       <h2>{t('learn.title')}</h2>
       <div className="learn-reference-ctas">
-        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'about' })}>
-          {t('about.cta')}
-        </button>
-        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'joseki' })}>
-          {t('joseki.cta')}
-        </button>
-        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'advanced' })}>
-          {t('advanced.cta')}
-        </button>
-        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'historicGames' })}>
-          {t('historicGames.cta')}
+        <button type="button" className="learn-about-cta" onClick={() => setView({ kind: 'reference' })}>
+          {t('learn.referenceCta')}
         </button>
       </div>
       {overallProgress.total > 0 && (

@@ -121,7 +121,7 @@ export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
     <div className="learn historic-games">
       <div className="lesson-header">
         <button type="button" onClick={onBack}>
-          {t('learn.backToLevels')}
+          {t('learn.back')}
         </button>
         <h2>{t('historicGames.title')}</h2>
       </div>

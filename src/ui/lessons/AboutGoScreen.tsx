@@ -35,7 +35,7 @@ export function AboutGoScreen({ onBack, onNavigateToPlay }: AboutGoScreenProps) 
     <div className="learn about-go">
       <div className="lesson-header">
         <button type="button" onClick={onBack}>
-          {t('learn.backToLevels')}
+          {t('learn.back')}
         </button>
         <h2>{t('about.title')}</h2>
       </div>

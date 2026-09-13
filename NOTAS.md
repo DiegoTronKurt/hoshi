@@ -1,5 +1,346 @@
 # Notas de desarrollo
 
+## Cierre de la Fase 2 completa: vestibulo de Referencia, tercer joseki y Test de nivel (2026-09-13, cont. 36)
+
+Pedido explicito: "lets finish phase 2, also can u reduce the space the
+different themes used? maybe by a button or something? after that please
+commit push and build the aab". Tres partes: cerrar los items que quedaban
+de la Fase 2 (roadmap "Zero to Pro", ver cont. 31), reducir el espacio vertical
+fijo de las seis secciones de consulta en la pantalla principal de Aprender, y
+al final commit+push+AAB.
+
+### Vestibulo unico de Referencia (`ReferenceScreen.tsx`)
+
+Las seis secciones de consulta (Sobre el Go, Joseki, Avanzado, Partidas
+historicas, Tutoriales, Tesuji) vivian como seis botones de ancho completo
+apilados directo en la pantalla principal de Aprender (`.learn-about-cta`,
+min-height 44px cada uno) -- mucho espacio fijo para algo que se abre rara
+vez. Ahora la pantalla principal tiene un unico boton ("Referencia") que
+entra a un vestibulo nuevo con esos seis botones adentro; ningun contenido
+cambio, solo donde vive la navegacion. Detalle de la profundidad de
+navegacion local (`navigation/localBack.ts`, para el boton fisico "atras" de
+Android): las seis pantallas de consulta ahora anidan un nivel mas hondo
+(vuelven a `{kind:'reference'}`, no directo a `{kind:'levels'}`), asi que su
+boton de "volver" visible cambio de texto de "Volver a los niveles"
+(`learn.backToLevels`, ya no seria exacto) a un generico nuevo "Volver"
+(`learn.back`) -- el vestibulo en si es el unico que sigue diciendo "Volver a
+los niveles", porque es el unico que de verdad vuelve ahi. Verificado con
+Playwright real: Aprender -> Referencia (1 boton) -> Joseki -> Volver ->
+Referencia -> Volver -> Aprender, la cadena completa funciona.
+
+### Fase 2, ultimos items
+
+**B1 (tracks paralelos en vez de agrandar la escalera)**: confirmado ya
+satisfecho por la arquitectura existente -- Joseki/Avanzado/Tesuji/
+Tutoriales/Partidas historicas ya viven como secciones de consulta aparte de
+los niveles 0-10, sin seguimiento de progreso ni SRS. El vestibulo de
+Referencia de esta vuelta lo refuerza (las agrupa explicitamente bajo
+"material de consulta"), no fue necesario ningun cambio de contenido.
+
+**B2 (tercera entrada de joseki)**: el intento anterior (komoku con
+aproximacion keima, cont. 32) fallo porque una aproximacion sin contacto
+directo nunca concentra suficiente politica. Esta vuelta se probo en cambio
+un tsuke en 3-3 contra una piedra en **komoku (3-4)** en vez de en 4-4 (mismo
+principio de contacto directo que sansanDoubleHane/tsukeHane, pero un punto
+de partida distinto) -- script descartable, no en el repo, mismo metodo de
+consultar la politica cruda de la red en cada paso real. Resultado: el hane
+de negro tras el tsuke concentra **87.0%** de la politica, la concentracion
+mas alta de las tres secuencias de Joseki (siguiente candidato: 5.8%). Pero
+la jugada de blanco que sigue (el corte que separa las dos piedras negras)
+solo concentra 36.3% -- justo el punto real donde la teoria se abre en cortar
+vs. extenderse, un paso antes de donde sansanDoubleHane/tsukeHane se
+detienen. Por eso esta tercera entrada (`komoku-sansan-tsuke`) tiene
+deliberadamente **2 pasos en vez de 4**: se corta apenas se pierde la
+concentracion alta, mismo principio de honestidad ("mejor un fragmento corto
+y bien verificado que uno mas largo y adivinado") aplicado un paso mas
+temprano de lo habitual. Un segundo candidato probado en el mismo script
+(kakari a una linea contra hoshi, sin contacto) confirmo otra vez el mismo
+limite metodologico ya conocido (14.6% de concentracion, demasiado disperso)
+-- descartado, no se agrego.
+
+**B5 (precision de finales)**: al revisar el banco de problemas existente
+(`content/problemBank.ts`) se confirmo que esto ya estaba sustancialmente
+resuelto de una fase anterior, no detectado hasta ahora: **336 problemas**
+verificados por `solver/areaValue.ts` (197 en `yose-value.json`, 70 en
+`sente-gote.json`, 69 en `local-vs-global.json`), repartidos en los conceptos
+`EL_FINAL_TAMBIEN_ES_GRANDE`, `COMPARAR_VALOR_REAL`, `SENTE_ANTES_QUE_GOTE` y
+`JUICIO_LOCAL_VS_GLOBAL`, todos registrados en `analysis/concepts.ts` con su
+propio nivel/leccion y disponibles en Ejercicios/Hoy. No hizo falta contenido
+nuevo -- se documenta aca para que quede constancia de la revision, en vez de
+dejarlo como "pendiente" en el roadmap sin haberlo chequeado nunca.
+
+**C5 (test de nivel real)**: nuevo, `content/levelTest.ts` +
+`ui/profile/LevelTestScreen.tsx`, con entrada desde Perfil ("Hacer un test de
+nivel", junto al selfRank existente). A diferencia de `selfRank.ts` (estima
+kyu combinando dominio de conceptos YA practicados con tasa de victoria
+historica contra el bot -- una senal pasiva, acumulada con el tiempo), esto
+es una **bateria fija de 6 problemas resuelta ahora mismo** (2 faciles + 2
+medios + 2 dificiles, `difficulty.ts` ya los etiqueta para TODO el banco --
+1234/301/190 problemas disponibles por dificultad, no solo tsumego).
+Reutiliza integramente `useSolvableExercise`/`ExerciseView` (misma mecanica
+que Ejercicios, incluida la pista y el registro real en el SRS de cada
+intento -- un test tambien es un intento real) en vez de duplicar logica de
+resolver un problema; la pantalla nueva solo agrega la secuencia fija de 6 y
+la pantalla de resultado. Kyu estimado por interpolacion lineal ponderada por
+dificultad (mismo patron que `masteryKyu` en `selfRank.ts`, derivado de
+`StrengthLevel.approxKyu`, nunca numeros repetidos a mano): resolver un
+problema dificil pesa 3x mas que uno facil, en los dos sentidos (fallar uno
+dificil no dice mucho, fallar uno facil si). Mismo estandar de honestidad que
+el resto de la app: resultado etiquetado explicitamente como estimado, "no
+calibrado contra rangos reales".
+
+**Verificacion de extremo a extremo**: `tsc -b` limpio; `oxlint` sin
+advertencias nuevas fuera del patron ya existente en todo el codebase
+(`set-state-in-effect` en efectos que cargan datos, igual que
+`ExercisePracticeScreen.tsx`/`useSolvableExercise.ts`); paridad i18n 958/958
+(28 claves nuevas: 1 komoku-sansan-tsuke, 9 vestibulo de Referencia, 9 Test de
+nivel, resto renombres); `tests/content/levelTest.test.ts` nuevo (5/5,
+incluyendo que resolver un dificil pesa mas que uno facil) y
+`tests/content/joseki.test.ts` re-corrido sin romperse (6/6, ahora 3
+entradas); Playwright real contra el dev server confirmando el vestibulo de
+Referencia completo, la nueva entrada de joseki (auto -> click en el punto
+exacto del hane -> feedback del 87%), y el Test de nivel de punta a punta (6
+problemas en secuencia, pantalla de resultado con puntaje y kyu estimado).
+Suite completa (`vitest run`) re-corrida antes de cerrar esta vuelta.
+
+## A2 cerrado (numero real de un telefono) + tutorial sintetico de defensa (2026-09-13, cont. 35)
+
+Pedido explicito: el usuario confirmo que un tutorial sintetico (no solo de
+partidas historicas) tiene sentido y pidio arrancar con uno de defensa;
+de paso reporto el numero real de A2 que faltaba.
+
+### A2: CERRADO -- numero real de un telefono Android
+
+El usuario jugo contra `'maxima'` en un tablero 7x7 real: **entre 29 y 34
+segundos por jugada, 1200 playouts** (el presupuesto completo de esa
+categoria). Punto importante para interpretar el numero: la red siempre
+evalua sobre la grilla fija de 19x19 de KataGo sin importar el tablero real
+(ver `eval/features.ts`, `gamePointToNNIndex`), asi que el costo de
+inferencia por jugada NO depende del tamano del tablero -- este numero es
+comparable directo con el baseline de escritorio con GPU real de cont. 32
+(19.0s, tablero 9x9, mismos 1200 playouts). Un telefono real tarda entre
+1.5x y 1.8x mas que una GPU de escritorio real (AMD Radeon de esta maquina)
+para exactamente el mismo trabajo -- una diferencia de rendimiento
+esperable entre GPU movil y de escritorio, no un problema de la app. Esto
+confirma que la etiqueta ya existente "Maxima (lenta)" es honesta y
+correcta tal cual esta: 30 segundos por jugada es lento para jugar rapido,
+pero perfectamente utilizable para quien busca el nivel de juego mas fuerte
+disponible y esta dispuesto a esperar. No se identifico ningun cambio de
+codigo necesario a partir de este numero -- A2 queda cerrado.
+
+### Generalizacion: `historicTutorials.ts` -> `tutorials.ts`
+
+Antes de agregar el tutorial sintetico, se renombro el modulo nuevo de
+cont. 34 (`HistoricTutorial`/`HISTORIC_TUTORIALS`/`HistoricTutorialsScreen`
+-> `Tutorial`/`TUTORIALS`/`TutorialsScreen`, prefijo i18n
+`historicTutorials.*` -> `tutorials.*`) porque nada de esto se habia
+comiteado todavia -- mejor corregir el nombre ahora que arrastrar
+"Historic" en un modulo que ya no es solo de partidas historicas. La
+pantalla sigue viviendo en Aprender como "Momentos historicos", ahora con
+entradas de dos origenes distintos (historicas y sinteticas) bajo un mismo
+tipo `Tutorial { id, titleKey, descriptionKey, theme, demo }` sin un campo
+explicito de "origen": la diferencia esta solo en COMO se construye y
+verifica cada demo (una reproduce un SGF real, la otra arma una posicion a
+proposito), no en nada que la UI necesite distinguir.
+
+### Segundo tutorial: "El amague en la esquina" (tema: defensa)
+
+A diferencia de la cuña de Lee Sedol (hecho historico, no verificable
+matematicamente), este es sintetico y SI se verifica con el solucionador
+exhaustivo, mismo estandar que Avanzado/Tesuji. Reutiliza
+`rectangularDeSeis` (content/seeds.ts, ya usada en Avanzado): un espacio de
+seis puntos con dos centros que son miai entre si sobre el espacio intacto
+(jugar cualquiera de los dos alcanza para vivir, ya confirmado en
+`tests/content/advanced.test.ts`).
+
+**Hallazgo real y no obvio, verificado con `solve()` (script descartable,
+no en el repo, mismo patron de `walk()` sobre `RefutationNode` ya usado
+para la Red en tesuji.ts)**: el amague de blanco en una esquina del espacio
+(no el nakade central) NO es inofensivo -- rompe la simetria miai. De los 5
+puntos que quedan tras el amague, solo (4,4) sigue salvando al grupo
+(`liveForDefender:true`); el otro centro, (4,5) -- el que hubiera
+funcionado igual antes del amague -- ya NO alcanza solo, y ningun otro
+punto sirve tampoco. Confirmado ademas que, una vez que negro juega (4,4),
+blanco ya no tiene NINGUNA jugada ganadora en el resto del espacio
+(`objective:'kill'` da `solved:false` con `toMove:WHITE` en esa posicion),
+lo que justifica mostrar los intentos posteriores de blanco (incluido el
+propio (4,5), demasiado tarde) como jugadas ya inutiles en vez de
+omitirlos. El punto pedagogico central del tutorial es exactamente ese
+hallazgo: la respuesta "cualquiera de los dos centros sirve" (cierta en
+Avanzado, donde el espacio arranca intacto) deja de ser cierta apenas
+cambia la posicion -- hay que volver a leer, no repetir de memoria.
+
+Dos tests nuevos en `tests/content/tutorials.test.ts` reconstruyen esta
+verificacion desde cero (no confian solo en el comentario del archivo de
+contenido): confirman que tras el amague solo (4,4) vive y (4,5)
+especificamente muere, y que tras jugar (4,4) el solucionador no encuentra
+ninguna jugada ganadora para blanco en el resto del espacio.
+
+**Verificacion de extremo a extremo**: `tsc -b` limpio, `oxlint` sin
+advertencias nuevas, paridad i18n 939/939 (13 claves nuevas del tutorial de
+defensa, el resto del delta es el renombre de las 22 existentes), 7/7 tests
+nuevos pasando (`tutorials.test.ts`, cubre ambos tutoriales), y flujo
+completo confirmado en el navegador real via Playwright para AMBOS
+tutoriales (incluida una prueba de regresion de la cuña de Lee Sedol tras
+el renombre, y la trampa deliberada del tutorial de defensa: hacer clic en
+el punto viejo (4,5) se rechaza correctamente como jugada incorrecta).
+
+## Tercer item de la Fase 2: tutoriales de varios pasos sobre partidas historicas (2026-09-13, cont. 34)
+
+Pedido explicito: el usuario pregunto si tenia sentido agregar secuencias de
+varias jugadas con explicacion en cada paso (ataque/defensa/expansion,
+partidas historicas) -- se le contesto con la recomendacion y el tradeoff
+principal (ver mensaje de esa vuelta), y el usuario pidio arrancar, pidiendo
+en particular que sea de VARIOS pasos, no una sola jugada.
+
+### Nueva seccion: `src/content/historicTutorials.ts` + `HistoricTutorialsScreen.tsx`
+
+Distinta de Partidas Historicas (que muestra la partida ENTERA con el
+grafico de FullGameReviewPanel): cada entrada acá es un `DemoScript` de
+varios pasos (reutilizando GuidedDemo, igual que Joseki/Avanzado/Tesuji)
+centrado en un momento puntual real, con un campo `theme`
+(`'attack'|'defense'|'expansion'`) para poder agrupar/etiquetar futuras
+entradas (badge visible en la lista). Primera y unica entrada por ahora:
+**la cuña de Lee Sedol**, jugada 78 de la Partida 4 (2016-03-13) del duelo
+AlphaGo vs. Lee Sedol -- la unica partida que gano Lee Sedol, jugando
+blanco.
+
+**Diferencia de fondo con joseki.ts/tesuji.ts**: ninguno de los dos metodos
+de verificacion ya establecidos (concentracion de politica alta = joseki;
+solucionador exhaustivo = tesuji) aplica aca, porque el punto pedagogico de
+esta jugada es JUSTAMENTE que es sorprendente y dificil de ver, no que sea
+un patron reconocido. Verificado en cambio con el mismo rigor pero en la
+direccion opuesta (script descartable, no en el repo, reutilizando
+`buildFullGameEvalPositions`/`summarizeWinRates` de `ui/review/fullGameReview.ts`,
+el mismo pipeline de FullGameReviewPanel): en la posicion real un ply antes
+de la jugada 78, la politica cruda de la red (sin busqueda) ni siquiera
+pone la cuña entre sus primeras 25 candidatas (puesto 26 de las jugadas
+legales, 0.35% de probabilidad -- los primeros 3 candidatos concentran mas
+de 45% en otras zonas del tablero), y la evaluacion de valor le da a blanco
+solo 14.8% de probabilidad de ganar justo antes de jugarla. Ademas, la
+jugada 83 (5 jugadas despues, tambien mostrada en el tutorial) resulto ser
+el mayor vaiven de evaluacion de TODA la partida segun esta misma red
+(swing 0.76, el maximo de las 180 jugadas): la probabilidad de blanco salta
+de un extremo al otro varias veces seguidas entre las jugadas 83 y 90. El
+tutorial usa este dato tal cual es -- como evidencia de que una evaluacion
+sin busqueda profunda tiene serias dificultades para juzgar una pelea tan
+filosa -- sin nunca afirmar que esa jugada puntual sea "el error real" (
+mismo criterio de honestidad que el disclaimer ya existente en Revisar).
+
+**Fidelidad con el SGF real**: en vez de hardcodear coordenadas a mano (como
+si se hubiese hecho con `toPoint(width,x,y)` literal, con riesgo real de
+transcripcion, ver el error de calculo manual de este mismo turno mientras
+se exploraba el SGF a mano antes de escribir el script), el modulo nuevo
+reproduce las primeras 77 jugadas reales de la Partida 4 con el motor de
+reglas (`createGame`+`applyMove`, mismo patron que
+`buildFullGameEvalPositions`) para armar el tablero inicial de la demo, y
+referencia `game.moves[n-1].point` directo para cada paso -- cero
+coordenadas escritas a mano en el archivo de contenido. Tres tests nuevos
+en `tests/content/historicTutorials.test.ts` confirman que el paso 1 es
+exactamente la jugada 78 real (color blanco, punto (10,8)), que los pasos
+2-6 son las jugadas reales 79-83 en orden, y que el tablero inicial de la
+demo coincide byte a byte con reproducir las primeras 77 jugadas desde
+cero -- ademas del test generico de legalidad de cada paso (mismo patron
+que ADVANCED_ENTRIES/TESUJI_ENTRIES).
+
+**Verificacion de extremo a extremo**: `tsc -b` limpio, `oxlint` sin
+advertencias nuevas, paridad i18n 926/926 (22 claves nuevas), 4/4 tests
+nuevos pasando, y flujo completo confirmado en el navegador real via
+Playwright (rechazo del primer clic equivocado, aceptacion del punto real
+de la cuña, y los 5 pasos automaticos siguientes con su texto de
+retroalimentacion, terminando en la finalizacion) sobre el tablero 19x19
+real de mitad de partida (busy on purpose -- se ve exactamente como una
+posicion real de nivel profesional, no un diagrama simplificado).
+
+## Commit/push/AAB de cont. 32, y segundo item de la Fase 2: diccionario de Tesuji (2026-09-13, cont. 33)
+
+Pedido explicito: "commit push y build el aab", y despues "sigamos, despues te
+cuento lo que me dio" (seguir con la Fase 2 mientras el usuario prueba el APK
+en su telefono para A2).
+
+### Commit + push + AAB
+
+`hoshi` (commit `1b82172`) y `hoshi-flutter` (commit `89a46c6`, resincroniza
+`assets/webapp` con un build fresco de `hoshi` y ya traia la version
+1.28.0+33 subida en cont. 32) confirmados y pusheados a `origin/master` en
+ambos repos. Un `git commit --amend` justo despues del primer commit de
+`hoshi` porque me olvide la linea de atribucion requerida -- seguro de
+hacer porque todavia no se habia pusheado nada. AAB de release generado en
+`hoshi-flutter/build/app/outputs/bundle/release/app-release.aab` (54.5MB),
+no subido a ningun lado, solo generado localmente a pedido.
+
+### Diccionario de Tesuji: nueva seccion de referencia (`src/content/tesuji.ts`)
+
+Segundo item nuevo de la Fase 2 (el primero fue `seisEnLinea` en cont. 32).
+Mismo patron de sub-pantalla de consulta que Joseki/Avanzado (vive dentro de
+Aprender, sin seguimiento de progreso ni SRS) pero con una diferencia de
+fondo importante: a diferencia de joseki.ts (donde "correcto" es una
+convencion sin verificacion matematica posible, corroborada solo con la
+politica de la red), una tactica de captura como una red (geta) SI tiene un
+resultado verificable con certeza por el solucionador exhaustivo -- Principio
+1 aplica sin excepcion, igual que el resto del contenido de vida y muerte.
+
+Primera entrada: "La red (geta)", reutilizando `getaSeed2` (tablero 9x9, ya
+exportado de `content/seeds.ts` para esto) -- la misma posicion que ya usa el
+banco de problemas para la leccion n3-l4 y que `buildSeedProblems()` revalida
+en cada corrida. Blanco en (1,1) con dos piedras negras pegadas en (1,2) y
+(2,1) tiene dos libertades, (1,0) y (0,1); jugar negro en la diagonal (0,0)
+no le saca ninguna libertad de forma directa pero cierra las dos salidas de
+antemano.
+
+A diferencia de la verificacion de joseki (preguntarle a la red su politica),
+ahi si hubo que reconstruir la linea de juego real del solucionador para
+poder armar un demo de varios pasos (a mano, mirando `RefutationNode.move` no
+alcanza para eso: cada nodo devuelto por `search()` sobreescribe su propio
+campo `.move` con "la jugada que llevo hasta aca", no con "la jugada
+recomendada desde aca" -- ese dato solo se puede re-derivar filtrando
+`node.children` por el mismo criterio de ganador que usa `solve()`
+internamente). Con eso confirmado (script descartable, no en el repo):
+tras negro (0,0), CUALQUIERA de las dos libertades que blanco intente
+extender pierde igual (`liveForDefender:false` en ambas ramas -- el demo
+muestra la extension a (1,0) porque ademas es simetrica con la otra);
+despues de esa extension, negro en (2,0) deja al grupo con una sola
+libertad real, y el solucionador ya confirma que desde ahi no hay escape
+posible. El demo se detiene en el atari (no juega la captura mecanica final)
+por la misma razon que joseki.ts corta antes de las variantes con nombre
+propio: no suma claridad al punto pedagogico central, que es la jugada de
+(0,0) en si.
+
+Un segundo candidato (snapback, reutilizando `buildSnapbackSeed`) se
+descarto honestamente: al reconstruir su linea real con el mismo metodo, la
+primera jugada que el solucionador elige (arbitraria entre las que ya ganan,
+ya que con `maxDepth:5` y la posicion tan sobrecargada a favor de negro
+CUALQUIER jugada legal en la region termina ganando) no reproduce la
+narrativa humana esperada ("negro sacrifica en (4,3), blanco lo captura,
+negro recaptura en snapback") de forma limpia sin mas trabajo de
+verificacion dirigida que no alcance a hacer con el mismo nivel de rigor que
+el resto del contenido. Mejor un fragmento mas chico y bien verificado
+(la red) que uno mas vistoso pero adivinado en partes -- misma decision que
+el intento de komoku (B2) y el hexomino en L (B3) de cont. 32.
+
+**Verificacion de extremo a extremo**, incluyendo un hallazgo real sobre el
+propio script de Playwright: la primera corrida de la secuencia completa del
+demo fallo en el tercer paso (clic en (2,0) rechazado como "no es la
+jugada"), a pesar de que el estado del tablero confirmado por muestreo de
+pixeles del canvas era exactamente el esperado. Diagnostico con un log de
+debug temporal en `BoardCanvas.handleClick` (revertido despues): el clic se
+interpretaba en la fila y=4 en vez de y=0. Causa real: el script media el
+`boundingBox()` del canvas UNA sola vez al principio y lo reutilizaba para
+todos los clics, pero la pagina hace scroll vertical despues de cada clic en
+"Continuar" (el foco del boton desplaza la vista) -- el offset Y quedaba
+desactualizado mientras que X (que no se ve afectado por scroll vertical) SI
+coincidia, lo que explica por que solo la coordenada Y fallaba. Arreglado
+remidiendo `boundingBox()` antes de cada clic. Con eso: secuencia completa
+(paso 1 -> auto -> paso 3 -> finalizacion) confirmada correcta, y el
+rechazo/recuperacion ante un clic equivocado en el primer paso tambien
+confirmado.
+
+**Otras verificaciones**: `tsc -b` limpio; `oxlint` sin advertencias nuevas
+(las preexistentes no relacionadas); paridad i18n 904/904 (13 claves nuevas,
+en/es); `tests/content/tesuji.test.ts` nuevo (2 casos de solucionador + 1 de
+legalidad de la demo, los 3 pasando) mas `tests/content/advanced.test.ts` y
+`tests/content/seeds.test.ts` re-corridos sin romperse (14/14 combinados).
+
 ## A2 (perfil real) y primer item de la Fase 2 (2026-09-13, cont. 32)
 
 Pedido explicito: seguir con A2 (perfil real de `'maxima'` en un dispositivo

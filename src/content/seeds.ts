@@ -360,7 +360,11 @@ interface SeedSpec {
 }
 
 const getaSeed = buildGetaSeed()
-const getaSeed2 = buildGetaSeed2()
+/** Exportada (a diferencia de getaSeed/getaSeed3): reutilizada tal cual por
+ * content/tesuji.ts para el demo guiado de la Red, en vez de duplicar la
+ * geometria. Mismo tablero, mismas piedras, ya verificado por el banco de
+ * problemas (buildSeedProblems, tests/content/seeds.test.ts). */
+export const getaSeed2 = buildGetaSeed2()
 const getaSeed3 = buildGetaSeed3()
 const snapbackSeed = buildSnapbackSeed()
 const snapbackSeed2 = buildSnapbackSeed2()

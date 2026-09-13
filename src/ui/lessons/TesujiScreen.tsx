@@ -1,31 +1,31 @@
 import { useState } from 'react'
-import { JOSEKI_ENTRIES } from '../../content/joseki'
-import type { JosekiEntry } from '../../content/joseki'
+import { TESUJI_ENTRIES } from '../../content/tesuji'
+import type { TesujiEntry } from '../../content/tesuji'
 import { useI18n } from '../../i18n'
 import { GuidedDemo } from './GuidedDemo'
 
-interface JosekiScreenProps {
+interface TesujiScreenProps {
   onBack: () => void
 }
 
 /**
- * Referencia de joseki, seccion aparte de la escalera graduada de Aprender
- * (niveles 0-10) -- no es "el siguiente nivel", es material de consulta sin
- * seguimiento de lectura ni SRS. Mismo patron de router de sub-pantalla que
- * AboutGoScreen: vive dentro de Aprender, no es una pestana nueva. Un solo
- * fragmento hoy (ver content/joseki.ts sobre por que crecer esto tiene que
- * ir uno por uno, cada uno corroborado contra la red antes de aceptarlo).
+ * Diccionario de tesuji, mismo patron de sub-pantalla de consulta que
+ * JosekiScreen/AdvancedScreen (vive dentro de Aprender, sin seguimiento de
+ * progreso ni SRS). A diferencia de joseki.ts (convencion sin verificacion
+ * matematica posible), cada entrada aca es una tactica de captura con
+ * resultado verificable por el solucionador exhaustivo -- ver el comentario
+ * de content/tesuji.ts.
  */
-export function JosekiScreen({ onBack }: JosekiScreenProps) {
+export function TesujiScreen({ onBack }: TesujiScreenProps) {
   const { t } = useI18n()
-  const [selected, setSelected] = useState<JosekiEntry | null>(null)
+  const [selected, setSelected] = useState<TesujiEntry | null>(null)
 
   if (selected) {
     return (
-      <div className="learn joseki">
+      <div className="learn tesuji">
         <div className="lesson-header">
           <button type="button" onClick={() => setSelected(null)}>
-            {t('joseki.backToList')}
+            {t('tesuji.backToList')}
           </button>
           <h2>{t(selected.titleKey)}</h2>
         </div>
@@ -36,16 +36,16 @@ export function JosekiScreen({ onBack }: JosekiScreenProps) {
   }
 
   return (
-    <div className="learn joseki">
+    <div className="learn tesuji">
       <div className="lesson-header">
         <button type="button" onClick={onBack}>
           {t('learn.back')}
         </button>
-        <h2>{t('joseki.title')}</h2>
+        <h2>{t('tesuji.title')}</h2>
       </div>
-      <p className="lesson-paragraph">{t('joseki.intro')}</p>
+      <p className="lesson-paragraph">{t('tesuji.intro')}</p>
       <ul className="learn-lesson-list">
-        {JOSEKI_ENTRIES.map((entry) => (
+        {TESUJI_ENTRIES.map((entry) => (
           <li key={entry.id}>
             <button type="button" className="learn-lesson-card" onClick={() => setSelected(entry)}>
               <span>{t(entry.titleKey)}</span>

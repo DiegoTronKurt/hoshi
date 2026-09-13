@@ -13,6 +13,7 @@ import { reportLocalBack } from '../../navigation/localBack'
 import { listAttempts, listGames } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord } from '../../storage/db'
 import { SettingsScreen } from '../settings/SettingsScreen'
+import { LevelTestScreen } from './LevelTestScreen'
 import { RadarChart } from './RadarChart'
 
 const LEVELS = [0, 1, 2, 3] as const
@@ -25,7 +26,7 @@ function scoreClass(score: number): string {
 
 export function ProfileScreen() {
   const { t } = useI18n()
-  const [view, setView] = useState<'profile' | 'settings'>('profile')
+  const [view, setView] = useState<'profile' | 'settings' | 'levelTest'>('profile')
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [loaded, setLoaded] = useState(false)
@@ -54,10 +55,10 @@ export function ProfileScreen() {
   // navigation/localBack.ts.
   useEffect(() => {
     reportLocalBack(() => {
-      if (view !== 'settings') return false
+      if (view === 'profile') return false
       setView('profile')
       return true
-    }, view === 'settings' ? 1 : 0)
+    }, view === 'profile' ? 0 : 1)
     return () => reportLocalBack(null, 0)
   }, [view])
 
@@ -65,6 +66,10 @@ export function ProfileScreen() {
 
   if (view === 'settings') {
     return <SettingsScreen onBack={goBack} />
+  }
+
+  if (view === 'levelTest') {
+    return <LevelTestScreen onBack={goBack} />
   }
 
   return (
@@ -100,6 +105,9 @@ export function ProfileScreen() {
             {t('profile.mistakes.topInGame.line', { concept: t(`concept.${topMistake}.label` as TranslationKey) })}
           </p>
         )}
+        <button type="button" className="learn-about-cta profile-leveltest-cta" onClick={() => setView('levelTest')}>
+          {t('profile.levelTest.cta')}
+        </button>
       </section>
 
       <section className="profile-radar">
