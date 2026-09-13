@@ -1,5 +1,14 @@
 # Notas de desarrollo
 
+**Addendum 2026-09-13:** pedido explicito del usuario de commit/push/AAB
+para ambas rondas de esta nota (cont. 39 y cont. 40, nunca commiteadas
+hasta ahora). hoshi: commit `3c4dd34` (7 archivos), pusheado a
+`origin/master`. hoshi-flutter: `npm run build` en hoshi + `sync-webapp.ps1`
++ version 1.30.0+35 -> 1.31.0+36 en `pubspec.yaml`, commit `65ad7e7`,
+pusheado. AAB generado con `flutter build appbundle --release`:
+`hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`, 54.6MB
+(57.209.530 bytes), 1.31.0+36.
+
 ## Segunda ronda de correcciones sobre cont. 39: intro por nivel (no solo Nivel 0), leccion del pase reescrita, scroll al tope en "Siguiente leccion", mismo bug de align-items ahora en Jugar (2026-09-13, cont. 40)
 
 Pedido explicito del usuario tras revisar cont. 39, 5 puntos: (1) el
