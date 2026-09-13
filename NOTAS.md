@@ -1,6 +1,124 @@
 # Notas de desarrollo
 
-## Estado general del proyecto (2026-09-12, cont. 29: motor guiado por red, joseki y contenido avanzado)
+## Estado general del proyecto (2026-09-12, cont. 30: repaso de items pendientes, contenido nuevo, factibilidad de una red mas grande)
+
+Pedido explicito: repasar que quedaba pendiente de `cont. 29` y del plan mas
+viejo (`iridescent-inventing-dream.md`), avanzar en lo que aplicara, y
+ademas investigar (sin implementar) la factibilidad de una red mas grande
+"bajo demanda" para el nivel `'maxima'`.
+
+**La mayoria de los items "pendientes" ya estaban resueltos -- de sesiones
+anteriores a esta, no de `cont. 29`.** Verificado uno por uno contra el
+codigo real (nunca contra el plan viejo, que ya se sabia desactualizado):
+- Botones de Learn NO centrados (`justify-content: flex-start` en
+  `.learn-level-card`/`.learn-lesson-card`/`.learn-level-card-locked`,
+  `App.css:1424-1461`) y titulos de nivel duplicados ya corregidos --
+  ambos en el commit `8821cc1` ("Learn screen: left-align cards instead of
+  centering, fix level titles echoing their own phase group"), ANTES de
+  `cont. 29`. Confirmado tambien visualmente con Playwright real esta
+  sesion.
+- Historial de partidas ya limitado a 10 (`SavedGamesList.tsx`,
+  `MAX_VISIBLE_GAMES = 10`, con caption "+N mas") desde el commit
+  `8de54c8`.
+- Contenido de juicio local vs. global (`local-vs-global.json`, 69
+  problemas) esta completo, no truncado -- el comentario sobre "un proceso
+  de fondo matado" en `generate-sente-gote-problems.ts` se referia a un
+  intento ANTERIOR con `SELF_PLAY_GAMES = 30` que murio sin escribir nada a
+  disco (por eso se agrego checkpointing); la corrida real que genero el
+  banco uso `SELF_PLAY_GAMES = 16` y termino completa (69 problemas,
+  confirmado en el mensaje del commit `8de54c8`).
+- La "ineficiencia conocida" de `EvalClient` duplicado para `'maxima'`
+  (anotada al final de `cont. 29`, ver mas abajo en este archivo) resulto
+  ser falsa: el guard `netInfluence <= 0` ya existente (de antes de que
+  `'net'`/`'maxima'` existieran) ya evita esa carga, porque `'maxima'` se
+  definio con `netInfluence: 0`. Confirmado con instrumentacion real (no
+  solo lectura de codigo) -- ver la nota corregida in-place mas abajo.
+
+**Contenido nuevo, mismo estandar de verificacion que `cont. 29`.** Dos
+entradas nuevas, una por seccion, cada una corroborada mecanicamente antes
+de aceptarse (Principio 1 para avanzado/solucionador; corroboracion contra
+la red de KataGo para joseki, que no tiene un "correcto" verificable con
+certeza matematica):
+
+- `content/joseki.ts`: nueva entrada `tsuke-hane` ("Ataque directo (tsuke)
+  con hane") -- familia de joseki distinta a la invasion en 3-3 ya
+  existente (contacto directo sobre la piedra en 4-4, no un salto a la
+  esquina). Descubierta y verificada con un script descartable (vite-node,
+  no en el repo) que le pregunto a la red vendorizada su distribucion de
+  politica en cada paso real: hane de negro 69.7%, extension de blanco
+  84.6%, respuesta final de negro repartida 62.2%/28.7% entre dos opciones
+  (90.9% combinado). Antes de llegar a esta secuencia se probaron varias
+  otras (aproximaciones a un komoku, invasion en 3-3 sobre un tablero con
+  varias esquinas ya jugadas) que dieron distribuciones de politica
+  DEMASIADO planas para ser un joseki real (10-20% el primer lugar, sin
+  concentracion clara) -- se descartaron en vez de forzarlas como
+  contenido, mismo criterio de honestidad que el resto del proyecto.
+- `content/seeds.ts` + `content/advanced.ts`: nueva forma
+  `rectangularDeSeis` (espacio de ojo 2x3, 6 puntos -- mas grande que
+  `cruzDeCinco`). A diferencia de esa (un unico punto vital), esta tiene
+  DOS puntos vitales equivalentes (miai) sobre el eje central, confirmado
+  programaticamente leyendo `root.move` y los hijos del arbol del
+  solucionador (no a mano) -- ver `tests/content/advanced.test.ts`, que
+  ademas confirma que AMBOS puntos son ganadores por separado, no solo el
+  que el solucionador eligio de casualidad.
+- Verificacion completa: tsc limpio, suite de vitest completa (49 archivos
+  / 3729 tests) pasando, oxlint limpio en los archivos tocados, paridad de
+  i18n exacta (864/864 claves, ambos locales), Playwright real contra el
+  dev server para ambas entradas nuevas (incluyendo hacer click en el
+  punto vital "no default" de `rectangularDeSeis` para confirmar que
+  ambos son aceptados, no solo el primero).
+
+**Factibilidad de una red mas grande para `'maxima'` (investigacion, sin
+implementar -- pedido explicito del usuario).** La red actual
+(`kata-b10c128`, g170, CC0) pesa ~12MB en formato TF.js. Buscando tamanos
+reales de redes mas grandes de la misma familia (katagoarchive.org,
+formato `.bin.gz` comprimido, comparable en orden de magnitud al peso
+TF.js ya vendorizado): `b15c192` ~35MB (~3x), `b20c256x2` ~83MB (~7.5x),
+`b30c320x2`/`b40c256x2` 300MB+ (solo disponibles en `.zip`, no
+`.bin.gz` suelto -- señal de que son un salto de tamano mucho mayor, no
+solo el siguiente escalon).
+
+Tres obstaculos reales, no solo de tamano:
+1. **Licencia: no es un problema.** La licencia de redes de KataGo (CC0)
+   citada en `ATTRIBUTION.md` cubre cualquier tamano de red oficial
+   `g170`/`kata1`, no solo `b10c128`.
+2. **Conversion a TF.js: no hay un archivo ya listo para usar.** El origen
+   del modelo actual (`y-ich/KataGo` convierte, `maksimKorzh/kata-model-js`
+   vendoriza) solo publica `b10c128` ya convertido -- no se encontro
+   ninguna red mas grande de KataGo ya convertida a TF.js y lista para
+   usar. Habria que correr la conversion (pesos crudos de KataGo -> ONNX/TF
+   -> TF.js) por cuenta propia, sin ninguna herramienta de conversion ya
+   armada en este repo, y sin confirmar de antemano que el conversor de
+   `y-ich/KataGo` soporte arquitecturas mas grandes que `b10c128` sin
+   cambios.
+3. **El costo real no es solo un fetch de red -- es tamano de instalacion
+   de la app.** `hoshi-flutter/pubspec.yaml` empaqueta el modelo
+   DIRECTAMENTE como asset de Flutter (`assets/webapp/models/kata-b10c128/`),
+   no como algo que se descarga en runtime -- una red mas grande agranda el
+   APK/AAB instalado para TODOS los usuarios, no solo el uso de datos
+   moviles de quien elige `'maxima'`. Descargarla bajo demanda en vez de
+   empaquetarla es una arquitectura genuinamente distinta (necesita CDN,
+   manejo de cache, instalaciones sin conexion) que no existe hoy.
+
+Ademas, el riesgo de rendimiento ya anotado en `cont. 29` (que
+`mctsNet.ts` nunca se verifico en un WebView de Android real, solo en GPU
+de escritorio con Playwright) se multiplica con una red mas grande, no se
+suma: `mctsNet.ts` consulta la red en CADA nodo que expande, asi que
+cualquier aumento de latencia por inferencia pesa una vez por nodo, no una
+vez por jugada como en el motor clasico.
+
+**Recomendacion:** si esto se retoma, `b15c192` (~3x, ~35MB) es el
+siguiente escalon razonable a evaluar -- claramente mas fuerte segun la
+progresion oficial de KataGo, sin saltar todavia a los 300MB+ de
+`b30`/`b40`. Pero antes de invertir en la conversion misma, el paso que
+mas valor de informacion da por menos esfuerzo es cerrar el riesgo YA
+anotado en `cont. 29`: medir `mctsNet.ts` con la red ACTUAL (`b10c128`) en
+un WebView de Android real. Si esa medicion ya esta ajustada contra el
+presupuesto de 45s/jugada de `'maxima'`, una red 3-7x mas pesada
+probablemente no es viable en movil sin importar que tan bien resuelva los
+otros dos obstaculos.
+
+
 
 Pedido explicito: implementar los 3 items propuestos en `cont. 28` (motor/
 red mas fuerte, herramientas de estudio, contenido avanzado) y ademas
@@ -194,17 +312,23 @@ el mismo tipo de test de reproduccion de demo que Joseki.
   antes de aceptarla) pero es autoria de contenido real, no plumbing --
   cada entrada nueva merece la misma revision cuidadosa que la primera.
 
-**Ineficiencia menor conocida, no arreglada:** en una partida con el nivel
-`'maxima'`, `PlayGameScreen.tsx` sigue creando/cargando el `EvalClient`
-separado que los niveles clasicos usan para `rootPriors` (ya innecesario
-para `'net'`, que calcula su propia prioridad de raiz), ademas del modelo
-que carga el propio Worker del motor -- dos copias del mismo modelo
-(~12MB) en memoria en vez de una. No se toco esta sesion porque ese mismo
-`EvalClient` tambien sirve a pistas y aviso de errores en vivo, funciones
-independientes de `rootPriors` que deberian seguir andando igual en
-`'maxima'`; evitar la carga duplicada especificamente para el caso
-`'net'` sin tocar esas otras dos funciones es un cambio real, mejor en su
-propia revision que mezclado aca.
+**Correccion a la entrada anterior (revisado en sesion posterior, cont.
+30): la "ineficiencia conocida" de arriba resulto no ser real.** Se
+penso que `PlayGameScreen.tsx` seguia creando el `EvalClient` de
+`rootPriors` tambien para `'maxima'`, ademas del modelo propio del
+Worker del motor. Pero el efecto que crea ese `EvalClient` (linea ~216)
+ya estaba condicionado a `strength.netInfluence > 0` desde antes de que
+`'net'`/`'maxima'` existieran (commit `edc6258`, 5-sep), y `'maxima'` se
+definio esta misma sesion con `netInfluence: 0` -- asi que ese guard YA
+evitaba la carga duplicada, sin que nadie lo notara. Confirmado con
+verificacion real (no solo lectura de codigo, mismo principio de
+siempre): instrumentacion temporal en el constructor de `EvalClient`
+mas un script de Playwright que selecciona `'maxima'`, juega una jugada
+humana y espera la respuesta del bot -- cero creaciones de `EvalClient`
+en todo el ciclo. (Pistas y aviso de errores en vivo si pueden crear su
+propio `EvalClient` en partidas `'maxima'` si el usuario los usa/activa,
+pero eso es necesario -- son funciones reales, no la duplicacion que se
+sospechaba.) No se necesita ningun cambio de codigo.
 
 ## Estado general del proyecto (2026-09-12, cont. 28: propuesta -- servir tambien a jugadores no principiantes/fuertes)
 

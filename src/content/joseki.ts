@@ -78,11 +78,78 @@ function buildSanSanDoubleHaneDemo(): DemoScript {
   }
 }
 
+/**
+ * Ataque directo (tsuke) sobre una piedra propia en 4-4, con hane y
+ * extension -- familia de joseki distinta a la invasion en 3-3 de arriba
+ * (contacto directo sobre la piedra en vez de un salto a la esquina), igual
+ * de fundamental y con un proverbio propio ("al tsuke, hane").
+ *
+ * Misma metodologia y mismo estandar de honestidad que sansan-double-hane:
+ * se le pregunto a la red de KataGo ya empaquetada su distribucion de
+ * politica en cada paso real, sin aceptar ningun movimiento a mano sin ese
+ * chequeo (script descartable, no en el repo). Resultado: el hane de negro
+ * en (2,2) tras el tsuke concentra 69.7% de la politica; la extension de
+ * blanco en (4,2) que sigue concentra 84.6%; la respuesta final de negro se
+ * acepta en cualquiera de los dos puntos que juntos suman 90.9% de la
+ * politica en ese paso (62.2% + 28.7%). Misma señal que en la otra
+ * secuencia: una concentracion tan alta y repetida es lo que distingue un
+ * joseki real de una jugada cualquiera, no un resultado de vida o muerte con
+ * certeza matematica (eso no existe para joseki, ver comentario de arriba).
+ *
+ * Se detiene aca por la misma razon que la otra secuencia: el siguiente
+ * paso real se ramifica en variantes nombradas que esta app no esta en
+ * condiciones de verificar con la misma disciplina.
+ */
+function buildTsukeHaneDemo(): DemoScript {
+  const width = 19
+  const height = 19
+  const board = createBoard(width, height)
+  board.stones[toPoint(width, 3, 3)] = BLACK
+
+  return {
+    width,
+    height,
+    initialStones: board.stones,
+    toMove: WHITE,
+    steps: [
+      {
+        promptKey: 'joseki.tsukeHane.step1.prompt',
+        expectedPoints: [],
+        auto: toPoint(width, 3, 2),
+        feedbackKey: 'joseki.tsukeHane.step1.feedback',
+      },
+      {
+        promptKey: 'joseki.tsukeHane.step2.prompt',
+        expectedPoints: [toPoint(width, 2, 2)],
+        feedbackKey: 'joseki.tsukeHane.step2.feedback',
+      },
+      {
+        promptKey: 'joseki.tsukeHane.step3.prompt',
+        expectedPoints: [],
+        auto: toPoint(width, 4, 2),
+        feedbackKey: 'joseki.tsukeHane.step3.feedback',
+      },
+      {
+        promptKey: 'joseki.tsukeHane.step4.prompt',
+        expectedPoints: [toPoint(width, 4, 3), toPoint(width, 2, 3)],
+        feedbackKey: 'joseki.tsukeHane.step4.feedback',
+      },
+    ],
+    completionKey: 'joseki.tsukeHane.completion',
+  }
+}
+
 export const JOSEKI_ENTRIES: JosekiEntry[] = [
   {
     id: 'sansan-double-hane',
     titleKey: 'joseki.sansanDoubleHane.title',
     descriptionKey: 'joseki.sansanDoubleHane.description',
     demo: buildSanSanDoubleHaneDemo(),
+  },
+  {
+    id: 'tsuke-hane',
+    titleKey: 'joseki.tsukeHane.title',
+    descriptionKey: 'joseki.tsukeHane.description',
+    demo: buildTsukeHaneDemo(),
   },
 ]

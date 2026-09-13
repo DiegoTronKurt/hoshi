@@ -118,6 +118,35 @@ export const cruzDeCinco = buildEnclosedShape(
 )
 
 /**
+ * "Rectangular de seis" (2 filas x 3 columnas): 6 espacios de ojo, mas
+ * grande todavia que cruzDeCinco (5) -- segunda forma de la seccion
+ * Avanzado (ui/lessons/AdvancedScreen.tsx). Igual que cruzDeCinco, NO se
+ * agrega a SEED_SPECS: es contenido de leccion, no semilla del banco de
+ * ejercicios.
+ * Verificado con el solucionador (ver tests/content/advanced.test.ts): a
+ * diferencia de cuadradoDeCuatro/cruzDeCinco (un unico punto vital o cuatro
+ * simetricos), esta forma tiene DOS puntos vitales distintos pero
+ * equivalentes (miai) sobre el eje central del lado largo -- jugar
+ * cualquiera de los dos alcanza para el mismo resultado, para cualquiera de
+ * los dos colores. Confirmado programaticamente (root.move del
+ * solucionador, no a mano): negro vive jugando primero en cualquiera de los
+ * dos, blanco mata jugando primero en cualquiera de los dos.
+ */
+export const rectangularDeSeis = buildEnclosedShape(
+  9,
+  [
+    [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
+    [2, 4], [6, 4],
+    [2, 5], [6, 5],
+    [2, 6], [3, 6], [4, 6], [5, 6], [6, 6],
+  ],
+  [
+    [3, 4], [4, 4], [5, 4],
+    [3, 5], [4, 5], [5, 5],
+  ],
+)
+
+/**
  * Red (geta) verificada en la leccion n3-l4: blanco en (1,1) queda sin
  * escapatoria una vez que negro juega (0,0), sin necesidad de perseguirlo
  * como en una escalera. Reutilizada tal cual (mismo tablero, mismas

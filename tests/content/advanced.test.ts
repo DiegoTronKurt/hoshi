@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { cruzDeCinco } from '../../src/content/seeds'
+import { toPoint } from '../../src/core/board'
+import { cruzDeCinco, rectangularDeSeis } from '../../src/content/seeds'
 import { ADVANCED_ENTRIES } from '../../src/content/advanced'
 import { applyMove, gameStateFromBoard } from '../../src/core/rules'
 import { BLACK, WHITE } from '../../src/core/types'
 import type { GameState } from '../../src/core/types'
 import { computeRegion } from '../../src/solver/region'
 import { solve } from '../../src/solver/tsumego'
+import type { RefutationNode } from '../../src/solver/tsumego'
 
 /**
  * Misma disciplina que tests/content/lessons.test.ts para el Nivel 2:
@@ -46,6 +48,57 @@ describe('cruzDeCinco: verificacion con el solucionador', () => {
       maxDepth: 10,
     })
     expect(result.solved).toBe(true)
+  }, 60000)
+})
+
+/**
+ * A diferencia de cruzDeCinco (un unico punto vital), rectangularDeSeis
+ * tiene DOS puntos miai equivalentes -- no alcanza con `result.solved`
+ * (que solo confirma que EL solucionador encontro una jugada ganadora, sin
+ * decir cual): hay que revisar los hijos del arbol para confirmar que
+ * AMBOS puntos que la demo acepta son de verdad ganadores, no solo uno de
+ * los dos con el otro colado por el comentario.
+ */
+function winningChild(root: RefutationNode, point: number): RefutationNode | undefined {
+  return root.children.find((child) => child.move === point)
+}
+
+describe('rectangularDeSeis: verificacion con el solucionador', () => {
+  const centerTop = toPoint(9, 4, 4)
+  const centerBottom = toPoint(9, 4, 5)
+
+  it('negro vive si juega primero en cualquiera de los dos puntos centrales', () => {
+    const { board, wallPoints } = rectangularDeSeis
+    const region = computeRegion(board, wallPoints, 1)
+    const result = solve({
+      board,
+      region,
+      targetPoints: wallPoints,
+      targetColor: BLACK,
+      toMove: BLACK,
+      objective: 'live',
+      maxDepth: 10,
+    })
+    expect(result.solved).toBe(true)
+    expect(winningChild(result.root, centerTop)?.liveForDefender).toBe(true)
+    expect(winningChild(result.root, centerBottom)?.liveForDefender).toBe(true)
+  }, 60000)
+
+  it('blanco mata si juega primero en cualquiera de los dos puntos centrales', () => {
+    const { board, wallPoints } = rectangularDeSeis
+    const region = computeRegion(board, wallPoints, 1)
+    const result = solve({
+      board,
+      region,
+      targetPoints: wallPoints,
+      targetColor: BLACK,
+      toMove: WHITE,
+      objective: 'kill',
+      maxDepth: 10,
+    })
+    expect(result.solved).toBe(true)
+    expect(winningChild(result.root, centerTop)?.liveForDefender).toBe(false)
+    expect(winningChild(result.root, centerBottom)?.liveForDefender).toBe(false)
   }, 60000)
 })
 

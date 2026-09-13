@@ -1,7 +1,7 @@
 import { toPoint } from '../core/board'
 import { WHITE } from '../core/types'
 import type { TranslationKey } from '../i18n'
-import { cruzDeCinco } from './seeds'
+import { cruzDeCinco, rectangularDeSeis } from './seeds'
 import type { DemoScript } from './lessons/types'
 
 export interface AdvancedEntry {
@@ -47,11 +47,43 @@ function buildCruzDeCincoDemo(): DemoScript {
   }
 }
 
+/**
+ * "Rectangular de seis" (2x3): mas grande todavia que cruzDeCinco (6 vs 5
+ * espacios de ojo). A diferencia de cruzDeCinco (un unico punto vital),
+ * esta forma tiene DOS puntos vitales equivalentes (miai) sobre el eje
+ * central -- ver seeds.ts para el detalle de la verificacion. La demo
+ * acepta cualquiera de los dos como respuesta correcta.
+ */
+function buildRectangularDeSeisDemo(): DemoScript {
+  const { board } = rectangularDeSeis
+
+  return {
+    width: board.width,
+    height: board.height,
+    initialStones: board.stones,
+    toMove: WHITE,
+    steps: [
+      {
+        promptKey: 'advanced.rectangularDeSeis.step1.prompt',
+        expectedPoints: [toPoint(board.width, 4, 4), toPoint(board.width, 4, 5)],
+        feedbackKey: 'advanced.rectangularDeSeis.step1.feedback',
+      },
+    ],
+    completionKey: 'advanced.rectangularDeSeis.completion',
+  }
+}
+
 export const ADVANCED_ENTRIES: AdvancedEntry[] = [
   {
     id: 'cruz-de-cinco',
     titleKey: 'advanced.cruzDeCinco.title',
     descriptionKey: 'advanced.cruzDeCinco.description',
     demo: buildCruzDeCincoDemo(),
+  },
+  {
+    id: 'rectangular-de-seis',
+    titleKey: 'advanced.rectangularDeSeis.title',
+    descriptionKey: 'advanced.rectangularDeSeis.description',
+    demo: buildRectangularDeSeisDemo(),
   },
 ]
