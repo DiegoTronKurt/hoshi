@@ -7,6 +7,7 @@ import { exportBackup, importBackup, parseBackup } from '../../storage/backup'
 import type { BackupFile } from '../../storage/backup'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { BOARD_THEMES, getTheme } from '../board/themes'
+import { downloadTextFile } from '../common/downloadTextFile'
 import { APP_THEMES } from '../theme/appThemes'
 import { useSettings } from '../settings'
 
@@ -71,8 +72,12 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
     setAppThemeId,
     streakEnabled,
     setStreakEnabled,
+    remoteEvalUrl,
+    setRemoteEvalUrl,
   } = useSettings()
   const previewThemes = useMemo(() => BOARD_THEMES.map((theme) => getTheme(theme.id)), [])
+
+  const [remoteEvalDraft, setRemoteEvalDraft] = useState(remoteEvalUrl ?? '')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [pendingImport, setPendingImport] = useState<BackupFile | null>(null)
@@ -82,16 +87,8 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
     setBackupError(null)
     try {
       const backup = await exportBackup()
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
       const date = new Date().toISOString().slice(0, 10)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `hoshi-backup-${date}.json`
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-      URL.revokeObjectURL(url)
+      downloadTextFile(`hoshi-backup-${date}.json`, JSON.stringify(backup, null, 2), 'application/json')
     } catch {
       setBackupError(t('settings.backup.exportError'))
     }
@@ -286,6 +283,37 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             </div>
           </div>
         )}
+      </section>
+
+      <section className="settings-section">
+        <h3>{t('settings.remoteEval.label')}</h3>
+        <p className="settings-description">{t('settings.remoteEval.description')}</p>
+        <p className="settings-description">
+          {remoteEvalUrl ? t('settings.remoteEval.statusOn', { url: remoteEvalUrl }) : t('settings.remoteEval.statusOff')}
+        </p>
+        <div className="settings-remote-eval-actions">
+          <input
+            type="url"
+            inputMode="url"
+            placeholder={t('settings.remoteEval.placeholder')}
+            value={remoteEvalDraft}
+            onChange={(event) => setRemoteEvalDraft(event.target.value)}
+          />
+          <button type="button" onClick={() => setRemoteEvalUrl(remoteEvalDraft)}>
+            {t('settings.remoteEval.save')}
+          </button>
+          {remoteEvalUrl && (
+            <button
+              type="button"
+              onClick={() => {
+                setRemoteEvalUrl(null)
+                setRemoteEvalDraft('')
+              }}
+            >
+              {t('settings.remoteEval.useLocal')}
+            </button>
+          )}
+        </div>
       </section>
 
       <section className="settings-section">

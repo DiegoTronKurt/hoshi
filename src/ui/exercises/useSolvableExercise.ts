@@ -87,8 +87,10 @@ export interface SolvableProblemState {
   giveUp: () => void
 }
 
-/** A quien le toca jugar al empezar cada tipo de ejercicio. */
-function initialToMove(loaded: LoadedProblem): Color {
+/** A quien le toca jugar al empezar cada tipo de ejercicio. Exportada para
+ * que content/weaknessSparring.ts pueda reusarla al armar una PlaySeed desde
+ * un BankEntry cualquiera, en vez de duplicar esta misma rama por tipo. */
+export function initialToMove(loaded: LoadedProblem): Color {
   if (loaded.kind === 'tsumego') return loaded.problem.toMove
   if (loaded.kind === 'ladder') return loaded.problem.chaserColor
   if (loaded.kind === 'areaValue') return loaded.problem.toMove

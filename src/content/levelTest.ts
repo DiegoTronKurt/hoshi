@@ -1,3 +1,4 @@
+import type { ConceptId } from '../analysis/concepts'
 import type { Difficulty } from './difficulty'
 import type { BankEntry } from './problemBank'
 import { listBankEntries } from './problemBank'
@@ -30,6 +31,29 @@ export function pickLevelTestBattery(): BankEntry[] {
 export interface LevelTestItemResult {
   difficulty: Difficulty
   solved: boolean
+  conceptId: ConceptId
+}
+
+/**
+ * Conceptos fallados, sin repetir y en el orden en que aparecieron en la
+ * bateria (D2 del roadmap: explicaciones "por que" desde el catalogo de
+ * conceptos, aplicadas al resultado del test -- antes se descartaba el
+ * conceptId de cada item apenas se armaba el resultado, asi que la pantalla
+ * final no podia decir NADA sobre en que fallo la persona, solo un puntaje y
+ * un kyu). Puede repetirse el mismo concepto en dos items de la bateria (la
+ * bateria no garantiza conceptos distintos, ver pickLevelTestBattery); esta
+ * funcion es la que dedupe, para que la pantalla de resultado no muestre el
+ * mismo concepto dos veces.
+ */
+export function missedConcepts(results: LevelTestItemResult[]): ConceptId[] {
+  const seen = new Set<ConceptId>()
+  const missed: ConceptId[] = []
+  for (const result of results) {
+    if (result.solved || seen.has(result.conceptId)) continue
+    seen.add(result.conceptId)
+    missed.push(result.conceptId)
+  }
+  return missed
 }
 
 // Misma derivacion que masteryKyu en learning/selfRank.ts: los extremos de

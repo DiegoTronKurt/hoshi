@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { estimateKyuFromResults, pickLevelTestBattery } from '../../src/content/levelTest'
+import { estimateKyuFromResults, missedConcepts, pickLevelTestBattery } from '../../src/content/levelTest'
 import type { LevelTestItemResult } from '../../src/content/levelTest'
 import { listBankEntries } from '../../src/content/problemBank'
 
@@ -30,38 +30,65 @@ describe('estimateKyuFromResults', () => {
 
   it('resolver todo (incluidos los dificiles) da la estimacion mas fuerte de la escala', () => {
     const allSolved: LevelTestItemResult[] = [
-      { difficulty: 'easy', solved: true },
-      { difficulty: 'easy', solved: true },
-      { difficulty: 'medium', solved: true },
-      { difficulty: 'medium', solved: true },
-      { difficulty: 'hard', solved: true },
-      { difficulty: 'hard', solved: true },
+      { difficulty: 'easy', solved: true, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'easy', solved: true, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'medium', solved: true, conceptId: 'ESCALERA' },
+      { difficulty: 'medium', solved: true, conceptId: 'ESCALERA' },
+      { difficulty: 'hard', solved: true, conceptId: 'DOBLE_ATARI' },
+      { difficulty: 'hard', solved: true, conceptId: 'DOBLE_ATARI' },
     ]
     expect(estimateKyuFromResults(allSolved)).toBe(10)
   })
 
   it('no resolver nada da la estimacion mas debil de la escala', () => {
     const noneSolved: LevelTestItemResult[] = [
-      { difficulty: 'easy', solved: false },
-      { difficulty: 'easy', solved: false },
-      { difficulty: 'medium', solved: false },
-      { difficulty: 'medium', solved: false },
-      { difficulty: 'hard', solved: false },
-      { difficulty: 'hard', solved: false },
+      { difficulty: 'easy', solved: false, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'easy', solved: false, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'medium', solved: false, conceptId: 'ESCALERA' },
+      { difficulty: 'medium', solved: false, conceptId: 'ESCALERA' },
+      { difficulty: 'hard', solved: false, conceptId: 'DOBLE_ATARI' },
+      { difficulty: 'hard', solved: false, conceptId: 'DOBLE_ATARI' },
     ]
     expect(estimateKyuFromResults(noneSolved)).toBe(25)
   })
 
   it('resolver un problema dificil pesa mas que resolver uno facil', () => {
     const solvedHardOnly = estimateKyuFromResults([
-      { difficulty: 'easy', solved: false },
-      { difficulty: 'hard', solved: true },
+      { difficulty: 'easy', solved: false, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'hard', solved: true, conceptId: 'DOBLE_ATARI' },
     ])!
     const solvedEasyOnly = estimateKyuFromResults([
-      { difficulty: 'easy', solved: true },
-      { difficulty: 'hard', solved: false },
+      { difficulty: 'easy', solved: true, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'hard', solved: false, conceptId: 'DOBLE_ATARI' },
     ])!
     // Mas fuerte = numero de kyu mas chico.
     expect(solvedHardOnly).toBeLessThan(solvedEasyOnly)
+  })
+})
+
+describe('missedConcepts', () => {
+  it('vacio si no se fallo ningun item', () => {
+    const results: LevelTestItemResult[] = [
+      { difficulty: 'easy', solved: true, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'hard', solved: true, conceptId: 'DOBLE_ATARI' },
+    ]
+    expect(missedConcepts(results)).toEqual([])
+  })
+
+  it('solo incluye los conceptos de items fallados, en el orden en que aparecieron', () => {
+    const results: LevelTestItemResult[] = [
+      { difficulty: 'easy', solved: true, conceptId: 'CAPTURA_SIMPLE' },
+      { difficulty: 'medium', solved: false, conceptId: 'ESCALERA' },
+      { difficulty: 'hard', solved: false, conceptId: 'DOBLE_ATARI' },
+    ]
+    expect(missedConcepts(results)).toEqual(['ESCALERA', 'DOBLE_ATARI'])
+  })
+
+  it('no repite un concepto fallado en mas de un item de la bateria', () => {
+    const results: LevelTestItemResult[] = [
+      { difficulty: 'easy', solved: false, conceptId: 'ESCALERA' },
+      { difficulty: 'hard', solved: false, conceptId: 'ESCALERA' },
+    ]
+    expect(missedConcepts(results)).toEqual(['ESCALERA'])
   })
 })

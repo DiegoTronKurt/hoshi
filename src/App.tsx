@@ -181,7 +181,7 @@ function App() {
         {screen === 'review' && (
           <ReviewScreen key={navToken} onPracticeConcept={goToExercises} initialGameId={reviewGameId} />
         )}
-        {screen === 'profile' && <ProfileScreen />}
+        {screen === 'profile' && <ProfileScreen onNavigateToPlay={(seed) => attemptNav({ screen: 'play', playSeed: seed })} />}
       </main>
 
       <nav className="bottom-nav" role="navigation" aria-label={t('nav.label')}>

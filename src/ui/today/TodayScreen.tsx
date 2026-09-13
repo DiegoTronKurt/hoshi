@@ -13,12 +13,13 @@ import type { ConceptProfile } from '../../learning/profile'
 import { computeStreak } from '../../learning/streak'
 import { minutesForGoal, planSession } from '../../training-policy/session'
 import type { SessionItem, SessionPlan, SessionReason } from '../../training-policy/session'
-import { SolverClient } from '../../solver/client'
+import { createSolverClient } from '../../solver/client'
 import { reportLocalBack } from '../../navigation/localBack'
 import { listAttempts, listGames, listSrsCards } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord, SrsCardRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { ProgressRing } from '../common/ProgressRing'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
 import { StreakIcon } from '../icons/StreakIcon'
@@ -137,12 +138,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
     return () => reportLocalBack(null, 0)
   }, [sessionStarted])
 
-  const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
-  useEffect(() => {
-    const client = new SolverClient()
-    setSolverClient(client)
-    return () => client.terminate()
-  }, [])
+  const solverClient = useLazyWorkerClient(createSolverClient)
 
   const currentItem = sessionStarted && plan ? (plan.items[currentIndex] ?? null) : null
   const currentEntry = currentItem?.entry ?? null

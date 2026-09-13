@@ -17,13 +17,20 @@ interface PlayScreenProps {
 }
 
 function seededConfig(seed: PlaySeed): PlayConfig {
+  const mode = seed.mode ?? 'local'
   return {
     width: seed.width,
     height: seed.height,
-    mode: 'local',
+    mode,
     strengthId: 'normal',
     botStyle: 'standard',
-    humanColor: BLACK,
+    // En modo local (partida de comprobacion de una leccion) humanColor solo
+    // orienta la UI -- las dos partes las juega la misma persona, asi que
+    // BLACK de siempre no cambia nada real. En modo bot (entrenamiento de
+    // punto debil, ver content/weaknessSparring.ts) SI importa: el humano
+    // tiene que quedar del lado que le toca resolver la posicion (seed.toMove),
+    // no siempre Negro, o el bot terminaria jugando el lado del estudiante.
+    humanColor: mode === 'bot' ? seed.toMove : BLACK,
     // Una leccion no tiene nocion de regla de conteo propia: China es la
     // misma regla por defecto que cualquier partida nueva sin elegir.
     scoringRule: 'chinese',

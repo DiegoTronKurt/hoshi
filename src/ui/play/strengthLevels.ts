@@ -1,7 +1,7 @@
 import type { TranslationKey } from '../../i18n'
 
 export interface StrengthLevel {
-  id: 'weak' | 'normal' | 'strong' | 'veryStrong' | 'maxima'
+  id: 'weak' | 'normal' | 'strong' | 'veryStrong' | 'expert' | 'maxima'
   playouts: number
   /** Techo de tiempo por jugada del bot, ademas del limite de playouts: el
    * motor (classic: src/engine/mcts.ts, net: src/engine/mctsNet.ts) corta la
@@ -52,6 +52,21 @@ export const STRENGTH_LEVELS: StrengthLevel[] = [
   { id: 'normal', playouts: 500, maxTimeMs: 6000, approxKyu: 20, labelKey: 'play.strength.normal', netInfluence: 0.4, engine: 'classic' },
   { id: 'strong', playouts: 2000, maxTimeMs: 10000, approxKyu: 15, labelKey: 'play.strength.strong', netInfluence: 0.7, engine: 'classic' },
   { id: 'veryStrong', playouts: 8000, maxTimeMs: 15000, approxKyu: 10, labelKey: 'play.strength.veryStrong', netInfluence: 1, engine: 'classic' },
+  // Fase 3 (A4, escalon intermedio real entre veryStrong y maxima): mismo
+  // motor 'net' que maxima (consulta politica+valor en cada nodo, no solo
+  // rootPriors), con un presupuesto bastante menor -- 300 playouts es
+  // exactamente la configuracion ya puesta a prueba en auto-juego real
+  // contra veryStrong (ver NOTAS.md, cont. 29: 4 partidas 7x7 con GPU real,
+  // 2-2, motor nuevo corriendo A PROPOSITO con menos presupuesto que
+  // 'maxima' para no sesgar la comparacion a su favor) -- no es un numero
+  // elegido sin evidencia. maxTimeMs generoso (15s) frente al tiempo tipico
+  // esperado en movil real (~1/4 del tiempo medido para 1200 playouts en
+  // cont. 35: 29-34s -> ~7-8s para 300, con margen de sobra). approxKyu
+  // null por el mismo motivo que 'maxima': no hay forma honesta de estimar
+  // uno para un motor cualitativamente distinto sin partidas de referencia
+  // reales (inventar uno repetiria el problema que ese mismo principio ya
+  // evito una vez).
+  { id: 'expert', playouts: 300, maxTimeMs: 15000, approxKyu: null, labelKey: 'play.strength.expert', netInfluence: 0, engine: 'net' },
   { id: 'maxima', playouts: 1200, maxTimeMs: 45000, approxKyu: null, labelKey: 'play.strength.maxima', netInfluence: 0, engine: 'net' },
 ]
 

@@ -50,6 +50,31 @@ export function legalPolicyDistribution(
 }
 
 /**
+ * Jugada legal favorita de la red en esta posicion (el mismo calculo que
+ * antes vivia repetido dentro de ReviewMistakeBoard::askAi -- "cual de las
+ * jugadas legales concentra mas probabilidad"). null si `legalPoints` y
+ * `legalPass` vienen vacios (no deberia pasar con un estado real: siempre
+ * hay al menos pasar).
+ */
+export function topLegalPoint(
+  policy: Float32Array,
+  legalPoints: number[],
+  legalPass: boolean,
+  width: number,
+): number | null {
+  const distribution = legalPolicyDistribution(policy, legalPoints, legalPass, width)
+  let topPoint: number | null = null
+  let topProbability = -1
+  for (const [point, probability] of distribution) {
+    if (probability > topProbability) {
+      topProbability = probability
+      topPoint = point
+    }
+  }
+  return topPoint
+}
+
+/**
  * Mezcla una distribucion (p.ej. la de legalPolicyDistribution) con una
  * uniforme sobre las mismas jugadas, segun `influence` (0 = ignorar la
  * distribucion por completo, 1 = usarla tal cual). Usado para que cada

@@ -465,6 +465,11 @@
   color: var(--hoshi-text-muted);
 }
 
+.exercises-difficulty-filter button.active {
+  border-color: var(--hoshi-accent);
+  background: var(--hoshi-surface-alt);
+}
+
 .exercises-meta {
   text-align: center;
   font-size: 0.9rem;
@@ -666,6 +671,19 @@
 .review-margin-line {
   font-weight: 600;
   margin: 0 0 0.3rem;
+}
+
+.level-test-weak-concepts {
+  margin-top: 1rem;
+}
+
+.level-test-weak-concepts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .review-mistake-point-cost {
@@ -966,6 +984,12 @@
   font-size: 0.8rem;
   color: var(--hoshi-text-muted);
   white-space: nowrap;
+}
+
+.review-full-analysis-swing-explanation {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--hoshi-text-muted);
 }
 
 .historic-games-card-body {
@@ -2001,6 +2025,7 @@
   background: var(--hoshi-surface-alt);
   color: var(--hoshi-text);
   font-size: 0.95rem;
+  text-align: left;
   cursor: pointer;
 }
 
@@ -2187,7 +2212,8 @@
   color: var(--hoshi-text-muted);
 }
 
-.profile-leveltest-cta {
+.profile-leveltest-cta,
+.profile-sparring-cta {
   margin-top: 0.75rem;
 }
 
@@ -2424,6 +2450,34 @@
 }
 
 .settings-backup-actions button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-remote-eval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.settings-remote-eval-actions input {
+  flex: 1 1 220px;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--hoshi-border-strong);
+  background: var(--hoshi-surface);
+  color: var(--hoshi-text);
+  font-size: 0.9rem;
+}
+
+.settings-remote-eval-actions button {
   min-height: 44px;
   padding: 0 1rem;
   border-radius: 8px;

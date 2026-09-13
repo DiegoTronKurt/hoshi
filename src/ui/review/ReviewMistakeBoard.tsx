@@ -3,8 +3,8 @@ import { listLegalMoves } from '../../core/rules'
 import { BLACK } from '../../core/types'
 import type { GameState } from '../../core/types'
 import type { RecordedMove } from '../../core/sgf'
-import type { EvalClient } from '../../eval/client'
-import { legalPolicyDistribution } from '../../eval/policy'
+import type { EvalBackend } from '../../eval/backend'
+import { topLegalPoint } from '../../eval/policy'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { gameHeight, gameWidth } from '../../storage/db'
@@ -20,7 +20,7 @@ interface ReviewMistakeBoardProps {
   event: Mistake
   boardState: GameState
   theme: BoardTheme
-  evalClient: EvalClient | null
+  evalClient: EvalBackend | null
 }
 
 interface AiResult {
@@ -65,15 +65,7 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
       const legal = listLegalMoves(evalState)
       const legalPoints = legal.filter((p): p is number => p !== null)
       const legalPass = legal.includes(null)
-      const distribution = legalPolicyDistribution(output.policy, legalPoints, legalPass, width)
-      let topPoint: number | null = null
-      let topProbability = -1
-      for (const [point, probability] of distribution) {
-        if (probability > topProbability) {
-          topProbability = probability
-          topPoint = point
-        }
-      }
+      const topPoint = topLegalPoint(output.policy, legalPoints, legalPass, width)
 
       setAiResult({
         winProbability: output.value[0],

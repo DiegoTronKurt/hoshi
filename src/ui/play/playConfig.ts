@@ -54,6 +54,12 @@ export interface PlaySeed {
   height: number
   stones: Int8Array
   toMove: Color
+  /** 'bot' arranca directo contra el bot (humano jugando `toMove`, el color
+   * que le toca resolver la posicion) en vez del modo local de dos jugadores
+   * humanos -- el default existente cuando se omite, para no cambiar el
+   * comportamiento ya establecido de la partida de comprobacion de una
+   * leccion. Usado por content/weaknessSparring.ts (Fase 3, D1). */
+  mode?: GameMode
 }
 
 const STORAGE_KEY = 'hoshi-last-play-config'

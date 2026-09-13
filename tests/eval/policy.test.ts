@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { toPoint } from '../../src/core/board'
-import { POLICY_PASS_INDEX, legalPolicyDistribution } from '../../src/eval/policy'
+import { POLICY_PASS_INDEX, legalPolicyDistribution, topLegalPoint } from '../../src/eval/policy'
 
 // Regresion del bug real encontrado en esta sesion: legalPolicyDistribution
 // indexaba `policy[p]` con `p` en la convencion del tablero real
@@ -88,5 +88,29 @@ describe('legalPolicyDistribution (conversion tablero <-> grilla de la red)', ()
     expect(distribution.get(legalPoints[0])).toBeCloseTo(1 / 3)
     expect(distribution.get(legalPoints[1])).toBeCloseTo(1 / 3)
     expect(distribution.get(null)).toBeCloseTo(1 / 3)
+  })
+})
+
+// topLegalPoint extrae el bucle "cual punto de la distribucion tiene mayor
+// probabilidad" que antes vivia repetido dentro de ReviewMistakeBoard::askAi.
+describe('topLegalPoint', () => {
+  it('devuelve el punto legal con mayor probabilidad', () => {
+    const width = 9
+    const target = toPoint(width, 2, 5)
+    const policy = new Float32Array(362)
+    policy[5 * 19 + 2] = 0.9
+
+    const legalPoints = [target, toPoint(width, 0, 0)]
+    expect(topLegalPoint(policy, legalPoints, true, width)).toBe(target)
+  })
+
+  it('puede devolver null (pasar) si el pase concentra mas probabilidad que cualquier jugada', () => {
+    const width = 9
+    const policy = new Float32Array(362)
+    policy[POLICY_PASS_INDEX] = 0.9
+    policy[0] = 0.01
+
+    const legalPoints = [toPoint(width, 0, 0)]
+    expect(topLegalPoint(policy, legalPoints, true, width)).toBeNull()
   })
 })

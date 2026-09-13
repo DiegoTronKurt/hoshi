@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ALPHAGO_LEE_SEDOL_GAMES } from '../../content/historicGames'
 import type { HistoricGame } from '../../content/historicGames'
-import { EvalClient } from '../../eval/client'
-import { EVAL_MODEL_URL } from '../../eval/modelUrl'
+import { gameRecordToSgf } from '../../core/sgf'
+import { createEvalBackend } from '../../eval/backend'
 import { useI18n } from '../../i18n'
 import { BoardCanvas } from '../board/BoardCanvas'
+import { downloadTextFile } from '../common/downloadTextFile'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { FullGameReviewPanel } from '../review/FullGameReviewPanel'
 import { stateAtMove } from '../review/reviewState'
 import { useSettings } from '../settings'
@@ -27,22 +29,22 @@ interface HistoricGamesScreenProps {
  */
 export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
   const { t } = useI18n()
-  const { theme } = useSettings()
+  const { theme, remoteEvalUrl } = useSettings()
   const [selected, setSelected] = useState<HistoricGame | null>(null)
   const [moveIndex, setMoveIndex] = useState(0)
 
-  // Mismo patron que ReviewScreen/PlayGameScreen: un EvalClient para toda
-  // la vida de esta pantalla, no uno por partida abierta.
-  const [evalClient, setEvalClient] = useState<EvalClient | null>(null)
-  useEffect(() => {
-    const client = new EvalClient(EVAL_MODEL_URL)
-    setEvalClient(client)
-    return () => client.terminate()
-  }, [])
+  // Un solo backend de evaluacion para toda la vida de esta pantalla, no
+  // uno por partida abierta. Local o remoto segun Ajustes, ver ReviewScreen.
+  const evalClient = useLazyWorkerClient(() => createEvalBackend(remoteEvalUrl))
 
   function open(game: HistoricGame) {
     setSelected(game)
     setMoveIndex(game.moves.length)
+  }
+
+  function handleExportSgf(game: HistoricGame) {
+    const sgf = gameRecordToSgf(game.width, game.height, game.komi, game.moves)
+    downloadTextFile(`${game.id}.sgf`, sgf, 'application/x-go-sgf')
   }
 
   function resultLabel(game: HistoricGame): string {
@@ -105,6 +107,10 @@ export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
         </div>
 
         <p className="review-ai-disclaimer">{t('historicGames.sourceDisclaimer')}</p>
+
+        <button type="button" onClick={() => handleExportSgf(selected)}>
+          {t('review.exportSgf')}
+        </button>
 
         <FullGameReviewPanel
           width={selected.width}

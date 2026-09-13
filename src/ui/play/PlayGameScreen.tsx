@@ -714,6 +714,7 @@ export function PlayGameScreen({
         {strengthLevel?.engine === 'net' && lastNetMoveTiming && (
           <p className="play-net-timing">
             {t('play.netTiming', {
+              label: t(strengthLevel.labelKey),
               seconds: (lastNetMoveTiming.elapsedMs / 1000).toFixed(1),
               playouts: lastNetMoveTiming.playoutsRun,
             })}

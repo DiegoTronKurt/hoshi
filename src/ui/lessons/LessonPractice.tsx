@@ -3,9 +3,10 @@ import type { Concept } from '../../analysis/concepts'
 import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { useI18n } from '../../i18n'
-import { SolverClient } from '../../solver/client'
+import { createSolverClient } from '../../solver/client'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { useSettings } from '../settings'
 
 interface LessonPracticeProps {
@@ -21,12 +22,7 @@ export function LessonPractice({ concept, onPracticeMore }: LessonPracticeProps)
   const [entry] = useState<BankEntry | null>(() => (entries.length > 0 ? entries[0] : null))
   const [loaded, setLoaded] = useState<LoadedProblem | null>(null)
 
-  const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
-  useEffect(() => {
-    const client = new SolverClient()
-    setSolverClient(client)
-    return () => client.terminate()
-  }, [])
+  const solverClient = useLazyWorkerClient(createSolverClient)
 
   useEffect(() => {
     setLoaded(entry ? loadEntry(entry) : null)

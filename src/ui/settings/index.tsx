@@ -11,6 +11,7 @@ const SOUND_STORAGE_KEY = 'hoshi-sound-enabled'
 const DAILY_GOAL_STORAGE_KEY = 'hoshi-daily-goal'
 const APP_THEME_STORAGE_KEY = 'hoshi-app-theme'
 const STREAK_STORAGE_KEY = 'hoshi-streak-enabled'
+const REMOTE_EVAL_URL_STORAGE_KEY = 'hoshi-remote-eval-url'
 /** 13, no un numero redondo: es la cantidad de problemas que hoy planifica
  * planSession con su DEFAULT_SESSION_MINUTES (10) antes de que la meta
  * diaria realmente la determine (ver training-policy/session.ts). Asi una
@@ -35,6 +36,13 @@ interface SettingsContextValue {
   appTheme: AppTheme
   streakEnabled: boolean
   setStreakEnabled: (enabled: boolean) => void
+  /** URL base de un servidor de inferencia remota (E3 del roadmap), o null
+   * para usar el Worker local (comportamiento por defecto, siempre
+   * disponible sin configurar nada). Ver eval/remoteClient.ts y
+   * tools/eval-server.ts -- desplegar ese servidor es decision de la
+   * persona usuaria, la app nunca elige ni paga uno por su cuenta. */
+  remoteEvalUrl: string | null
+  setRemoteEvalUrl: (url: string | null) => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
@@ -79,6 +87,16 @@ function detectInitialStreakEnabled(): boolean {
   return true
 }
 
+function detectInitialRemoteEvalUrl(): string | null {
+  try {
+    const stored = window.localStorage.getItem(REMOTE_EVAL_URL_STORAGE_KEY)
+    if (stored) return stored
+  } catch {
+    // sin persistencia disponible, la inferencia remota queda desactivada para esta sesion
+  }
+  return null
+}
+
 function clampDailyGoal(value: number): number {
   return Math.max(MIN_DAILY_GOAL, Math.min(MAX_DAILY_GOAL, Math.round(value)))
 }
@@ -102,6 +120,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [dailyGoal, setDailyGoalState] = useState<number>(detectInitialDailyGoal)
   const [appThemeId, setAppThemeId] = useState<string>(detectInitialAppThemeId)
   const [streakEnabled, setStreakEnabled] = useState<boolean>(detectInitialStreakEnabled)
+  const [remoteEvalUrl, setRemoteEvalUrl] = useState<string | null>(detectInitialRemoteEvalUrl)
 
   useEffect(() => {
     try {
@@ -143,6 +162,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [streakEnabled])
 
+  useEffect(() => {
+    try {
+      if (remoteEvalUrl) window.localStorage.setItem(REMOTE_EVAL_URL_STORAGE_KEY, remoteEvalUrl)
+      else window.localStorage.removeItem(REMOTE_EVAL_URL_STORAGE_KEY)
+    } catch {
+      // sin persistencia disponible, la preferencia de inferencia remota sigue funcionando solo para esta sesion
+    }
+  }, [remoteEvalUrl])
+
   const value = useMemo<SettingsContextValue>(
     () => ({
       themeId,
@@ -160,8 +188,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       appTheme: getAppTheme(appThemeId),
       streakEnabled,
       setStreakEnabled,
+      remoteEvalUrl,
+      setRemoteEvalUrl: (url: string | null) => setRemoteEvalUrl(url && url.trim() !== '' ? url.trim() : null),
     }),
-    [themeId, soundEnabled, dailyGoal, appThemeId, streakEnabled],
+    [themeId, soundEnabled, dailyGoal, appThemeId, streakEnabled, remoteEvalUrl],
   )
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>

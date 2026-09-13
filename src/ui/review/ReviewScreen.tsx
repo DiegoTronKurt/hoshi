@@ -8,8 +8,7 @@ import { sgfToGameRecord } from '../../core/sgf'
 import { BLACK } from '../../core/types'
 import { buildImportedGameRecord } from '../../content/sgfImport'
 import type { SgfImportError } from '../../content/sgfImport'
-import { EvalClient } from '../../eval/client'
-import { EVAL_MODEL_URL } from '../../eval/modelUrl'
+import { createEvalBackend } from '../../eval/backend'
 import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { goBack } from '../../navigation/backNav'
@@ -17,7 +16,10 @@ import { reportLocalBack } from '../../navigation/localBack'
 import { approxKyuForStrengthId } from '../play/strengthLevels'
 import { gameHeight, gameWidth, listGames, saveGame } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
+import { downloadTextFile } from '../common/downloadTextFile'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { useSettings } from '../settings'
+import { DojoScreen } from './DojoScreen'
 import { FullGameReviewPanel } from './FullGameReviewPanel'
 import { ReviewMistakeBoard } from './ReviewMistakeBoard'
 import { stateAtMove } from './reviewState'
@@ -68,11 +70,12 @@ interface ReviewScreenProps {
 
 export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenProps) {
   const { t, language } = useI18n()
-  const { theme } = useSettings()
+  const { theme, remoteEvalUrl } = useSettings()
   const [games, setGames] = useState<SavedGameRecord[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(initialGameId ?? null)
   const [expandedSecondary, setExpandedSecondary] = useState<Set<number>>(new Set())
   const [importError, setImportError] = useState<TranslationKey | null>(null)
+  const [dojoOpen, setDojoOpen] = useState(false)
   const importInputRef = useRef<HTMLInputElement>(null)
 
   function reloadGames() {
@@ -100,18 +103,13 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     reloadGames()
   }
 
-  // Un solo EvalClient para toda la vida de la pantalla (mismo patron que
-  // SolverClient en TodayScreen/ExercisePracticeScreen/LessonPractice y
-  // EngineClient en PlayGameScreen): recrearlo por cada mistake
-  // reconsultado obligaria a recargar el modelo (~11.5MB) cada vez. Estado
-  // (no solo ref) porque ReviewMistakeBoard lo recibe como prop y necesita
-  // re-renderizar cuando pasa de null al cliente real, tras el mount.
-  const [evalClient, setEvalClient] = useState<EvalClient | null>(null)
-  useEffect(() => {
-    const client = new EvalClient(EVAL_MODEL_URL)
-    setEvalClient(client)
-    return () => client.terminate()
-  }, [])
+  // Un solo backend de evaluacion para toda la vida de la pantalla:
+  // recrearlo por cada mistake reconsultado obligaria a recargar el modelo
+  // (~11.5MB) cada vez. Local o remoto segun Ajustes (E3 del roadmap) --
+  // cambiar la preferencia mientras la pantalla ya esta abierta se aplica
+  // recien la proxima vez que se entra a Revisar, mismo criterio que el
+  // resto de las preferencias de SettingsContext.
+  const evalClient = useLazyWorkerClient(() => createEvalBackend(remoteEvalUrl))
 
   const gameMistakes = useMemo(() => {
     const map = new Map<number, Mistake[]>()
@@ -153,6 +151,12 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     setSelectedGameId(null)
   }
 
+  function handleExportSgf() {
+    if (!selectedGame) return
+    const date = selectedGame.createdAt.slice(0, 10)
+    downloadTextFile(`hoshi-partida-${date}-${selectedGame.id}.sgf`, selectedGame.sgf, 'application/x-go-sgf')
+  }
+
   function toggleSecondary(index: number) {
     setExpandedSecondary((prev) => {
       const next = new Set(prev)
@@ -162,16 +166,22 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
     })
   }
 
-  // Boton fisico "atras" de Android: detalle de partida -> lista -- ver
-  // navigation/localBack.ts.
+  // Boton fisico "atras" de Android: detalle de partida o Dojo -> lista --
+  // ver navigation/localBack.ts. dojoOpen y selectedGameId nunca estan
+  // activos a la vez (el Dojo se abre solo desde la lista), asi que un solo
+  // nivel de profundidad alcanza para los dos.
   useEffect(() => {
     reportLocalBack(() => {
+      if (dojoOpen) {
+        setDojoOpen(false)
+        return true
+      }
       if (selectedGameId === null) return false
       backToList()
       return true
-    }, selectedGameId === null ? 0 : 1)
+    }, dojoOpen || selectedGameId !== null ? 1 : 0)
     return () => reportLocalBack(null, 0)
-  }, [selectedGameId])
+  }, [dojoOpen, selectedGameId])
 
   // Un tablero por error, no solo el seleccionado -- cada mistake (principal
   // y secundarios) muestra su propio ReviewMistakeBoard con su propio botón
@@ -185,6 +195,10 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
   }, [selectedGame, moves, sortedEvents])
 
   const locale = language === 'es' ? 'es' : 'en'
+
+  if (dojoOpen) {
+    return <DojoScreen evalClient={evalClient} onBack={() => setDojoOpen(false)} />
+  }
 
   if (!selectedGame) {
     return (
@@ -201,6 +215,9 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
             className="review-import-file-input"
             onChange={handleSgfFileSelected}
           />
+          <button type="button" onClick={() => setDojoOpen(true)}>
+            {t('dojo.openCta')}
+          </button>
         </div>
         {importError && <p className="review-import-error">{t(importError)}</p>}
         {games.length === 0 ? (
@@ -263,6 +280,9 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
           winner: t(selectedGame.result.winner === 'black' ? 'color.black' : 'color.white'),
         })}
       </p>
+      <button type="button" onClick={handleExportSgf}>
+        {t('review.exportSgf')}
+      </button>
       {events.some((e) => e.pointCost !== undefined) && (
         <p className="review-point-cost-disclaimer">{t('review.pointCostDisclaimer')}</p>
       )}

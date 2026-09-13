@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import type { RecordedMove } from '../../core/sgf'
 import { BLACK } from '../../core/types'
-import type { EvalClient } from '../../eval/client'
+import type { EvalBackend } from '../../eval/backend'
 import { useI18n } from '../../i18n'
 import { useSettings } from '../settings'
 import { BoardCanvas } from '../board/BoardCanvas'
-import { buildFullGameEvalPositions, summarizeWinRates } from './fullGameReview'
-import type { WinRatePoint, WinRateSwing } from './fullGameReview'
+import { buildFullGameEvalPositions, explainSwing, formatSwingPercent, summarizeWinRates } from './fullGameReview'
+import type { SwingExplanation, WinRatePoint, WinRateSwing } from './fullGameReview'
 import { stateAtMove } from './reviewState'
 import { WinRateChart } from './WinRateChart'
 
@@ -27,7 +27,7 @@ interface FullGameReviewPanelProps {
   height: number
   komi: number
   moves: RecordedMove[]
-  evalClient: EvalClient | null
+  evalClient: EvalBackend | null
 }
 
 interface FullGameReviewResult {
@@ -52,6 +52,7 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
   const [result, setResult] = useState<FullGameReviewResult | null>(null)
+  const [swingExplanations, setSwingExplanations] = useState<Map<number, SwingExplanation>>(new Map())
   const [expandedSwing, setExpandedSwing] = useState<number | null>(null)
 
   async function analyze() {
@@ -62,6 +63,11 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
       const positions = buildFullGameEvalPositions(width, height, komi, moves)
       setProgress({ done: 0, total: positions.length })
       const values: number[] = []
+      // Se guarda la politica cruda de cada posicion (no solo value[0]) para
+      // poder explicar los mayores vaivenes despues -- ver explainSwing en
+      // fullGameReview.ts. El costo de memoria es chico incluso para una
+      // partida larga (362 floats por posicion).
+      const policies: Float32Array[] = []
       for (let i = 0; i < positions.length; i += EVAL_BATCH_SIZE) {
         const chunk = positions.slice(i, i + EVAL_BATCH_SIZE)
         // Timeout generoso (igual criterio que el default de EvalClient):
@@ -69,10 +75,20 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
         // solo porque un lote de 32 posiciones tarda mas en un dispositivo
         // lento.
         const chunkResults = await evalClient.evaluateBatch(chunk, 30000)
-        for (const r of chunkResults) values.push(r.value[0])
+        for (const r of chunkResults) {
+          values.push(r.value[0])
+          policies.push(r.policy)
+        }
         setProgress({ done: values.length, total: positions.length })
       }
-      setResult(summarizeWinRates(moves, values))
+      const summary = summarizeWinRates(moves, values)
+      const explanations = new Map<number, SwingExplanation>()
+      for (const swing of summary.swings.slice(0, TOP_SWINGS_SHOWN)) {
+        const beforeState = stateAtMove(width, height, komi, moves, swing.moveNumber - 1)
+        explanations.set(swing.moveNumber, explainSwing(policies[swing.moveNumber - 1], beforeState, swing.point))
+      }
+      setSwingExplanations(explanations)
+      setResult(summary)
       setStatus('idle')
     } catch {
       setStatus('error')
@@ -111,6 +127,7 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
               <ul className="review-full-analysis-swings">
                 {result.swings.slice(0, TOP_SWINGS_SHOWN).map((swing) => {
                   const expanded = expandedSwing === swing.moveNumber
+                  const explanation = swingExplanations.get(swing.moveNumber) ?? null
                   return (
                     <li key={swing.moveNumber}>
                       <button
@@ -129,6 +146,20 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
                       </button>
                       {expanded && (
                         <div className="review-board">
+                          {explanation && (
+                            <p className="review-full-analysis-swing-explanation">
+                              {explanation.rank === 1
+                                ? t('review.fullAnalysis.swingExplanation.wasFavorite', {
+                                    percent: formatSwingPercent(explanation.playedProbability),
+                                  })
+                                : t('review.fullAnalysis.swingExplanation.wasSurprising', {
+                                    percent: formatSwingPercent(explanation.playedProbability),
+                                    rank: explanation.rank,
+                                    total: explanation.candidateCount,
+                                    topPercent: formatSwingPercent(explanation.topProbability),
+                                  })}
+                            </p>
+                          )}
                           <BoardCanvas
                             width={width}
                             height={height}

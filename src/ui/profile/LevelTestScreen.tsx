@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { estimateKyuFromResults, pickLevelTestBattery } from '../../content/levelTest'
+import { CONCEPTS } from '../../analysis/concepts'
+import { estimateKyuFromResults, missedConcepts, pickLevelTestBattery } from '../../content/levelTest'
 import type { LevelTestItemResult } from '../../content/levelTest'
 import { loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { useI18n } from '../../i18n'
-import { SolverClient } from '../../solver/client'
+import type { TranslationKey } from '../../i18n'
+import { createSolverClient } from '../../solver/client'
 import { ExerciseView } from '../exercises/ExerciseView'
 import { useSolvableExercise } from '../exercises/useSolvableExercise'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { useSettings } from '../settings'
 
 interface LevelTestScreenProps {
@@ -33,12 +36,7 @@ export function LevelTestScreen({ onBack }: LevelTestScreenProps) {
   const [results, setResults] = useState<LevelTestItemResult[]>([])
   const [loaded, setLoaded] = useState<LoadedProblem | null>(null)
 
-  const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
-  useEffect(() => {
-    const client = new SolverClient()
-    setSolverClient(client)
-    return () => client.terminate()
-  }, [])
+  const solverClient = useLazyWorkerClient(createSolverClient)
 
   const entry = battery[index] ?? null
   useEffect(() => {
@@ -65,7 +63,7 @@ export function LevelTestScreen({ onBack }: LevelTestScreenProps) {
 
   function recordAndAdvance(solved: boolean) {
     if (!entry) return
-    setResults((r) => [...r, { difficulty: entry.difficulty, solved }])
+    setResults((r) => [...r, { difficulty: entry.difficulty, solved, conceptId: entry.conceptId }])
     setIndex((i) => i + 1)
   }
 
@@ -77,6 +75,7 @@ export function LevelTestScreen({ onBack }: LevelTestScreenProps) {
   if (index >= battery.length) {
     const correct = results.filter((r) => r.solved).length
     const kyu = estimateKyuFromResults(results)
+    const weakConcepts = missedConcepts(results)
     return (
       <div className="profile level-test">
         <div className="lesson-header">
@@ -91,6 +90,19 @@ export function LevelTestScreen({ onBack }: LevelTestScreenProps) {
             <p className="profile-selfrank-value">{t('levelTest.result.kyu', { kyu: Math.round(kyu) })}</p>
             <p className="settings-description">{t('levelTest.result.disclaimer')}</p>
           </>
+        )}
+        {weakConcepts.length > 0 && (
+          <div className="level-test-weak-concepts">
+            <h3>{t('levelTest.result.weakConceptsTitle')}</h3>
+            <ul>
+              {weakConcepts.map((conceptId) => (
+                <li key={conceptId}>
+                  <p className="review-mistake-concept">{t(CONCEPTS[conceptId].labelKey as TranslationKey)}</p>
+                  <p className="review-mistake-summary">{t(CONCEPTS[conceptId].summaryKey as TranslationKey)}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     )

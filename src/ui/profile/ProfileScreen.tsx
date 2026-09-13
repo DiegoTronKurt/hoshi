@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { conceptsWithEvidence } from '../../analysis/concepts'
 import { AXIS_LABEL_KEY, computeAxisScores } from '../../analysis/axes'
+import { pickWeaknessSparringSeed } from '../../content/weaknessSparring'
 import { computeKnowledgeApplicationInsights } from '../../learning/insights'
 import { computeProfiles, topGameMistake, weakestConcepts } from '../../learning/profile'
 import type { ConceptProfile } from '../../learning/profile'
@@ -12,6 +13,7 @@ import { goBack } from '../../navigation/backNav'
 import { reportLocalBack } from '../../navigation/localBack'
 import { listAttempts, listGames } from '../../storage/db'
 import type { AttemptRecord, SavedGameRecord } from '../../storage/db'
+import type { PlaySeed } from '../play/playConfig'
 import { SettingsScreen } from '../settings/SettingsScreen'
 import { LevelTestScreen } from './LevelTestScreen'
 import { RadarChart } from './RadarChart'
@@ -24,7 +26,11 @@ function scoreClass(score: number): string {
   return 'profile-bar-low'
 }
 
-export function ProfileScreen() {
+interface ProfileScreenProps {
+  onNavigateToPlay: (seed: PlaySeed) => void
+}
+
+export function ProfileScreen({ onNavigateToPlay }: ProfileScreenProps) {
   const { t } = useI18n()
   const [view, setView] = useState<'profile' | 'settings' | 'levelTest'>('profile')
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
@@ -50,6 +56,11 @@ export function ProfileScreen() {
   const selfRank = useMemo(() => computeSelfRankKyu(profiles, games), [profiles, games])
   const selfRankTrend = useMemo(() => computeSelfRankTrend(attempts, games), [attempts, games])
   const topMistake = useMemo(() => topGameMistake(games), [games])
+  // Se recalcula (nueva posicion al azar del mismo concepto) cada vez que
+  // cambia el perfil, no en cada render -- el boton de abajo dispara la
+  // navegacion real con esta MISMA semilla ya elegida, para no arriesgarse a
+  // reelegir otra distinta entre el click y el arranque de la partida.
+  const sparringSeed = useMemo(() => pickWeaknessSparringSeed(profiles), [profiles])
 
   // Boton fisico "atras" de Android: settings -> profile -- ver
   // navigation/localBack.ts.
@@ -133,6 +144,17 @@ export function ProfileScreen() {
               </li>
             ))}
           </ul>
+          {sparringSeed && (
+            <button
+              type="button"
+              className="learn-about-cta profile-sparring-cta"
+              onClick={() => onNavigateToPlay(sparringSeed.seed)}
+            >
+              {t('profile.weakest.sparringCta', {
+                concept: t(`concept.${sparringSeed.conceptId}.label` as TranslationKey),
+              })}
+            </button>
+          )}
         </section>
       )}
 

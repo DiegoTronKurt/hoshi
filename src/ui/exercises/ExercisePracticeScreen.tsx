@@ -1,16 +1,28 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
+import type { Difficulty } from '../../content/difficulty'
 import { listBankEntries, loadEntry } from '../../content/problemBank'
 import type { BankEntry, LoadedProblem } from '../../content/problemBank'
 import { pickStratifiedByConcept, pickWithoutRepeat, recentWindowSize } from '../../content/pickWithoutRepeat'
 import { useI18n } from '../../i18n'
-import { SolverClient } from '../../solver/client'
+import type { TranslationKey } from '../../i18n'
+import { createSolverClient } from '../../solver/client'
+import { useLazyWorkerClient } from '../common/useLazyWorkerClient'
 import { useSettings } from '../settings'
 import { ExerciseView } from './ExerciseView'
 import { useSolvableExercise } from './useSolvableExercise'
 
 const RECENT_WINDOW = 5
 const RECENT_CONCEPT_WINDOW = 5
+
+const DIFFICULTY_FILTERS: readonly (Difficulty | 'all')[] = ['all', 'easy', 'medium', 'hard']
+
+const DIFFICULTY_LABEL_KEY: Record<Difficulty | 'all', TranslationKey> = {
+  all: 'exercises.difficulty.all',
+  easy: 'exercises.difficulty.easy',
+  medium: 'exercises.difficulty.medium',
+  hard: 'exercises.difficulty.hard',
+}
 
 interface ExercisePracticeScreenProps {
   conceptFilter: ConceptId | 'all'
@@ -32,6 +44,17 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
     [conceptFilter],
   )
 
+  // C3 del roadmap (busqueda/etiquetado de problemas): la unica forma de
+  // acotar el pool antes de esto era por concepto (pantalla A). La
+  // dificultad ya etiqueta TODO el banco (difficulty.ts, mismo criterio que
+  // usa el Test de nivel) asi que filtrar por ella aca era la pieza que
+  // faltaba, no un mecanismo nuevo que inventar.
+  const [difficultyFilter, setDifficultyFilter] = useState<Difficulty | 'all'>('all')
+  const filteredEntries = useMemo(
+    () => (difficultyFilter === 'all' ? entries : entries.filter((e) => e.difficulty === difficultyFilter)),
+    [entries, difficultyFilter],
+  )
+
   // Solo en "todos los conceptos": agrupar por concepto para elegir en dos
   // pasos (concepto al azar, despues problema dentro de ese concepto) en vez
   // de un unico sorteo sobre el pool plano de abajo -- los conteos por
@@ -42,13 +65,13 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
   const conceptGroups = useMemo(() => {
     if (conceptFilter !== 'all') return null
     const groups = new Map<ConceptId, BankEntry[]>()
-    for (const e of entries) {
+    for (const e of filteredEntries) {
       const group = groups.get(e.conceptId)
       if (group) group.push(e)
       else groups.set(e.conceptId, [e])
     }
     return groups
-  }, [entries, conceptFilter])
+  }, [filteredEntries, conceptFilter])
 
   const recentIdsRef = useRef<string[]>([])
   const recentConceptIdsRef = useRef<string[]>([])
@@ -77,23 +100,19 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
   )
 
   // Arranca en null: el primer pick lo hace el efecto de mas abajo (misma
-  // dependencia [entries] que ya se ejecuta al montar), asi pickNext -- que
-  // lee/escribe recentIdsRef -- nunca se llama durante el render.
+  // dependencia [filteredEntries] que ya se ejecuta al montar y cada vez que
+  // cambia el filtro de dificultad), asi pickNext -- que lee/escribe
+  // recentIdsRef -- nunca se llama durante el render.
   const [entry, setEntry] = useState<BankEntry | null>(null)
   const [loaded, setLoaded] = useState<LoadedProblem | null>(null)
 
-  const [solverClient, setSolverClient] = useState<SolverClient | null>(null)
-  useEffect(() => {
-    const client = new SolverClient()
-    setSolverClient(client)
-    return () => client.terminate()
-  }, [])
+  const solverClient = useLazyWorkerClient(createSolverClient)
 
   useEffect(() => {
     recentIdsRef.current = []
     recentConceptIdsRef.current = []
-    setEntry(pickNext(entries))
-  }, [entries, pickNext])
+    setEntry(pickNext(filteredEntries))
+  }, [filteredEntries, pickNext])
 
   useEffect(() => {
     setLoaded(entry ? loadEntry(entry) : null)
@@ -118,7 +137,7 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
   } = useSolvableExercise(entry, loaded, solverClient)
 
   function handleNext() {
-    setEntry(pickNext(entries))
+    setEntry(pickNext(filteredEntries))
   }
 
   return (
@@ -135,7 +154,21 @@ export function ExercisePracticeScreen({ conceptFilter, onBackToConcepts }: Exer
         </button>
       </div>
 
-      {entries.length === 0 || !loaded || !game ? (
+      <div className="exercises-controls exercises-difficulty-filter" role="group" aria-label={t('exercises.difficulty.label')}>
+        {DIFFICULTY_FILTERS.map((difficulty) => (
+          <button
+            key={difficulty}
+            type="button"
+            className={difficulty === difficultyFilter ? 'active' : ''}
+            aria-pressed={difficulty === difficultyFilter}
+            onClick={() => setDifficultyFilter(difficulty)}
+          >
+            {t(DIFFICULTY_LABEL_KEY[difficulty])}
+          </button>
+        ))}
+      </div>
+
+      {filteredEntries.length === 0 || !loaded || !game ? (
         <div className="exercises-empty">
           <p>{t('exercises.noProblems')}</p>
         </div>

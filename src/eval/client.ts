@@ -1,4 +1,6 @@
+import type { EvalBackend } from './backend'
 import type { EvalPosition } from './features'
+import { EVAL_MODEL_URL } from './modelUrl'
 import type { RawEvalOutput } from './model'
 import { createWorkerRpc } from '../workerRpc'
 import type { EvalRequest, EvalResponse } from './worker'
@@ -17,7 +19,7 @@ const EVAL_TIMEOUT_MS = 20000
  * porque el Worker no tiene acceso directo a `import.meta.env.BASE_URL`
  * del hilo principal.
  */
-export class EvalClient {
+export class EvalClient implements EvalBackend {
   private rpc = createWorkerRpc<EvalRequest, EvalResponse>(
     () => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }),
     EVAL_TIMEOUT_MS,
@@ -51,4 +53,13 @@ export class EvalClient {
   terminate(): void {
     this.rpc.terminate()
   }
+}
+
+/** Referencia estable (definida al nivel del modulo) para pasar a
+ * useLazyWorkerClient sin disparar react-hooks/exhaustive-deps -- mismo
+ * motivo que createSolverClient en solver/client.ts. Siempre con el modelo
+ * vendorizado; quien necesite un modelUrl distinto sigue pudiendo llamar
+ * `new EvalClient(otroUrl)` directo, sin pasar por este atajo. */
+export function createEvalClient(): EvalClient {
+  return new EvalClient(EVAL_MODEL_URL)
 }

@@ -26,3 +26,12 @@ export class SolverClient {
     this.rpc.terminate()
   }
 }
+
+/** Referencia estable (definida al nivel del modulo, no dentro de un
+ * componente) para pasar a useLazyWorkerClient sin disparar
+ * react-hooks/exhaustive-deps: una funcion inline nueva en cada render
+ * forzaria a listarla como dependencia, y eso reconstruiria el cliente -- y
+ * recargaria el Worker -- en cada render. */
+export function createSolverClient(): SolverClient {
+  return new SolverClient()
+}

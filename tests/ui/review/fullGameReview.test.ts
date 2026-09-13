@@ -2,12 +2,14 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import * as tf from '@tensorflow/tfjs'
-import { toPoint } from '../../../src/core/board'
+import { createBoard, toPoint } from '../../../src/core/board'
+import { gameStateFromBoard } from '../../../src/core/rules'
 import { BLACK, EMPTY, WHITE } from '../../../src/core/types'
 import type { RecordedMove } from '../../../src/core/sgf'
-import { encodeInput } from '../../../src/eval/features'
+import { encodeInput, gamePointToNNIndex, NN_LEN } from '../../../src/eval/features'
 import { evaluatePositionsBatch } from '../../../src/eval/model'
-import { buildFullGameEvalPositions, summarizeWinRates } from '../../../src/ui/review/fullGameReview'
+import { POLICY_PASS_INDEX } from '../../../src/eval/policy'
+import { buildFullGameEvalPositions, explainSwing, formatSwingPercent, summarizeWinRates } from '../../../src/ui/review/fullGameReview'
 
 const MODEL_DIR = path.resolve(__dirname, '../../../public/models/kata-b10c128')
 
@@ -119,6 +121,72 @@ describe('summarizeWinRates', () => {
     for (let i = 1; i < swings.length; i++) {
       expect(swings[i - 1].swing).toBeGreaterThanOrEqual(swings[i].swing)
     }
+  })
+})
+
+describe('explainSwing', () => {
+  // Tablero 3x3 vacio: los 9 puntos mas el pase son legales para negro. La
+  // politica es sintetica (no viene de la red real, a diferencia del resto
+  // de esta suite) -- legalPolicyDistribution renormaliza sobre las
+  // candidatas legales, asi que solo importa la magnitud RELATIVA entre
+  // ellas, no que ya sea una distribucion de probabilidad valida.
+  const width = 3
+  const state = gameStateFromBoard(createBoard(width, width), BLACK)
+
+  function syntheticPolicy(entries: Array<[point: number, weight: number]>): Float32Array {
+    const policy = new Float32Array(NN_LEN * NN_LEN + 1)
+    for (const [point, weight] of entries) policy[gamePointToNNIndex(width, point)] = weight
+    return policy
+  }
+
+  it('jugada de bajo rango: puesto y probabilidades reflejan que otra jugada era muy favorita', () => {
+    const played = toPoint(width, 0, 0)
+    const favorite = toPoint(width, 2, 2)
+    const policy = syntheticPolicy([
+      [played, 1],
+      [favorite, 10],
+    ])
+
+    const result = explainSwing(policy, state, played)
+
+    expect(result.rank).toBe(2)
+    expect(result.candidateCount).toBe(10) // 9 puntos + pase
+    expect(result.playedProbability).toBeCloseTo(1 / 11, 9)
+    expect(result.topProbability).toBeCloseTo(10 / 11, 9)
+  })
+
+  it('jugada ya favorita: rank 1 y topProbability === playedProbability', () => {
+    const played = toPoint(width, 1, 1)
+    const policy = syntheticPolicy([[played, 5]])
+
+    const result = explainSwing(policy, state, played)
+
+    expect(result.rank).toBe(1)
+    expect(result.playedProbability).toBeCloseTo(result.topProbability, 9)
+  })
+
+  it('el pase cuenta como candidata legal cuando corresponde', () => {
+    const played = toPoint(width, 1, 1)
+    const policy = syntheticPolicy([[played, 1]])
+    policy[POLICY_PASS_INDEX] = 3 // el pase es la jugada favorita de la red aca
+
+    const result = explainSwing(policy, state, played)
+
+    expect(result.rank).toBe(2)
+    expect(result.topProbability).toBeCloseTo(3 / 4, 9)
+  })
+})
+
+describe('formatSwingPercent', () => {
+  it('redondea a entero cuando no hay riesgo de confundir con cero', () => {
+    expect(formatSwingPercent(0.67)).toBe('67')
+    expect(formatSwingPercent(0)).toBe('0')
+    expect(formatSwingPercent(1)).toBe('100')
+  })
+
+  it('usa un decimal para una probabilidad chica pero real, para no mostrar "0%"', () => {
+    expect(formatSwingPercent(0.004)).toBe('0.4')
+    expect(formatSwingPercent(0.0035)).toBe('0.4')
   })
 })
 

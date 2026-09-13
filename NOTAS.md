@@ -1,5 +1,460 @@
 # Notas de desarrollo
 
+## Fase 4 completa: dojo de analisis libre (C2), filtro de dificultad en Ejercicios (C3), exportar SGF (C4), conceptos debiles en el Test de nivel (D2), limpieza de carga de clientes (E1), inferencia remota opcional (E3), E2 descartado a proposito (2026-09-13, cont. 38)
+
+Pedido explicito: el usuario pregunto "what are the next steps in the plan?"
+tras el cierre de la Fase 3 (cont. 37); se le presento el menu de la Fase 4
+del roadmap "Zero to Pro" (cont. 31: C2, C3, C4, D2, E1, E2, E3) y pidio
+"please do all of them. and don't make the on-demand model on-demand, just
+include please" -- es decir, todos los items salvo que E2 (descarga de
+modelo bajo demanda) se cierra sin implementar la descarga bajo demanda en
+si, dejando el modelo empaquetado tal cual ya estaba. Se hicieron los 6
+items restantes en una sola sesion larga, cada uno verificado por separado
+(tsc, oxlint, paridad de i18n, tests unitarios nuevos, y Playwright real
+contra el dev server) antes de pasar al siguiente -- mismo patron de "cola
+larga, un item verificado a la vez" que el resto del proyecto.
+
+**Verificacion final de la sesion completa:** tsc limpio, oxlint sin
+categorias de aviso nuevas (los unicos avisos son el mismo patron
+`set-state-in-effect`/`only-export-components`/`exhaustive-deps` que ya
+existia antes, ver el detalle de cada item abajo), paridad de i18n exacta
+(983/983 claves, +21 nuevas), suite completa de vitest (61 archivos / 3806
+tests) pasando, y Playwright real contra el dev server confirmando cada
+feature de punta a punta (detalle en cada seccion).
+
+### E1: limpieza de la carga de EvalClient/SolverClient (`ui/common/useLazyWorkerClient.ts`)
+
+Antes de esto, el patron "un cliente de Worker que vive toda la vida de la
+pantalla, construido en un efecto y terminado al desmontar" estaba repetido
+CASI IDENTICO en 6 pantallas (`TodayScreen`/`ExercisePracticeScreen`/
+`LessonPractice`/`LevelTestScreen` con `SolverClient`, `ReviewScreen`/
+`HistoricGamesScreen` con `EvalClient`), cada una con su propio comentario
+explicando por que hace falta estado (no solo ref): un hijo (`ReviewMistakeBoard`,
+`useSolvableExercise`) necesita re-renderizar cuando el cliente pasa de null
+al real. Nuevo hook generico `useLazyWorkerClient<T extends
+{terminate():void}>(factory: () => T): T | null` que reemplaza las 6
+repeticiones por una sola llamada cada una.
+
+- De paso, `solver/client.ts::createSolverClient()` y `eval/client.ts::createEvalClient()`
+  (funciones de nivel de modulo, referencia estable) para no tener que pasar
+  una funcion inline nueva en cada render -- aunque resulto NO ser necesario
+  para evitar avisos de lint (ver mas abajo), sigue siendo una reduccion real
+  de repeticion (2 lineas menos por sitio, y ReviewScreen/HistoricGamesScreen
+  ya no necesitan importar `EVAL_MODEL_URL` directo).
+- **Hallazgo real durante la verificacion:** el aviso
+  `react-hooks/exhaustive-deps` sobre `factory` aparece UNA sola vez, dentro
+  de la definicion del hook mismo (`useLazyWorkerClient.ts`) -- no en los 6
+  sitios que lo llaman, sin importar si le pasan una funcion inline (que
+  cierra sobre una variable reactiva, como `remoteEvalUrl` en E3 mas abajo)
+  o una funcion de modulo estable. Confirmado probando ambas formas y
+  comparando el oxlint completo antes/despues. Este es el resultado neto
+  reportado en el balance de avisos: -6 `set-state-in-effect` (uno por sitio,
+  consolidados en 1 solo dentro del hook) +1 `exhaustive-deps` nuevo (tambien
+  dentro del hook, documentado con un comentario explicando por que `factory`
+  debe ejecutarse una sola vez en el mount, nunca de nuevo si cambia de
+  identidad) -- sin agregar ningun `eslint-disable`/`oxlint-disable`, cosa
+  que el proyecto nunca habia usado hasta ahora (confirmado por grep antes de
+  empezar) y que se evito a proposito.
+- De paso se extrajo `eval/policy.ts::topLegalPoint()` (el bucle "cual punto
+  de la distribucion tiene mayor probabilidad" que vivia repetido dentro de
+  `ReviewMistakeBoard::askAi`) y se reuso tambien en el nuevo `DojoScreen`
+  (ver C2 mas abajo) -- mismo criterio de deduplicar codigo real encontrado
+  al escribir la tercera copia, no antes.
+- Tests nuevos: `tests/ui/common/useLazyWorkerClient.test.tsx` (3 tests, con
+  `renderHook` de `@testing-library/react`, ya en el proyecto) y ampliacion
+  de `tests/eval/policy.test.ts` (2 tests nuevos para `topLegalPoint`).
+
+### C4: exportar SGF (`ui/review/ReviewScreen.tsx`, `ui/lessons/HistoricGamesScreen.tsx`)
+
+Boton "Exportar SGF" en el detalle de una partida, tanto en Revisar (las
+partidas propias) como en Partidas historicas (las 5 de AlphaGo-Lee Sedol).
+
+- Nuevo `ui/common/downloadTextFile.ts`: extrae el mecanismo
+  Blob+ancla-temporal+revocar-URL que YA estaba verificado en un AAB real
+  (el respaldo de datos de Ajustes, sesion 2026-09-01) -- se reuso tal cual
+  en vez de reinventar el patron de descarga, y de paso `SettingsScreen.tsx`
+  se refactorizo para usarlo tambien (mismo mecanismo, una sola definicion).
+- Partidas propias: usa `SavedGameRecord.sgf` DIRECTO (el campo ya viene
+  guardado desde que la partida se creo, no hace falta re-serializar nada).
+  Partidas historicas: usa `core/sgf.ts::gameRecordToSgf()` (ya existia,
+  construido para el importador de partidas de usuario) sobre
+  `{width,height,komi,moves}`, porque `HistoricGame` no guarda un string SGF
+  propio.
+- Verificado con Playwright real: partida real jugada de punta a punta en
+  Jugar (5x5, pase-pase para terminar rapido) -> Revisar -> Exportar SGF
+  descarga `hoshi-partida-2026-09-13-1.sgf` con contenido SGF real
+  (`(;GM[1]FF[4]SZ[5]KM[6.5]RU[Chinese];B[];...`); y por separado, Partidas
+  historicas -> partida 1 -> Exportar SGF descarga `alphago-leesedol-1.sgf`.
+
+### D2: conceptos debiles en el resultado del Test de nivel (`content/levelTest.ts`, `ui/profile/LevelTestScreen.tsx`)
+
+Auditoria previa (mismo criterio que ya encontro B1/B5 "ya satisfechos" en
+la Fase 2): Revisar y Ejercicios YA mostraban la explicacion "por que" de un
+concepto (el campo `Concept.summaryKey` del catalogo, `analysis/concepts.ts`)
+en el momento del error/ejercicio -- `review-mistake-summary` en
+`ReviewScreen.tsx` y `exercises.why` en `ExerciseView.tsx`. El hueco real
+era otro: `LevelTestScreen` reusa `ExerciseView` (asi que SI mostraba el
+"por que" durante cada item), pero `LevelTestItemResult` solo guardaba
+`{difficulty, solved}` -- el `conceptId` se descartaba apenas se armaba el
+resultado, asi que la pantalla final (puntaje + kyu estimado) no podia decir
+NADA sobre en que fallo la persona.
+
+- `LevelTestItemResult` gano `conceptId: ConceptId`; nueva
+  `missedConcepts(results): ConceptId[]` (deduplica, mantiene el orden de
+  aparicion). Pantalla final: si `missedConcepts` no esta vacio, lista cada
+  concepto fallado con su `labelKey`/`summaryKey` (reusando las mismas
+  clases CSS `review-mistake-concept`/`review-mistake-summary` que ya
+  existian para el mismo proposito en Revisar).
+- Tests: 3 nuevos en `tests/content/levelTest.test.ts` para
+  `missedConcepts` (vacio, orden de aparicion, sin repetir concepto).
+- Verificado con Playwright real: fallar las 6 preguntas del Test de nivel
+  (boton "No lo se") muestra la seccion "Conceptos para repasar" con 6
+  entradas (una por concepto de la bateria, sin repetidos).
+
+### C3: filtro de dificultad en Ejercicios (`ui/exercises/ExercisePracticeScreen.tsx`)
+
+Hasta ahora la unica forma de acotar el pool de problemas era por concepto
+(pantalla A de Ejercicios); la dificultad (`content/difficulty.ts`, ya
+etiqueta TODO el banco -- 1234 faciles/301 medios/190 dificiles al momento
+de escribir esto, no solo tsumego) nunca era filtrable desde la interfaz,
+solo se usaba internamente (Test de nivel). Fila nueva de botones
+(Todas/Facil/Medio/Dificil) en la pantalla de practica; filtra `entries`
+antes de agruparlas por concepto, con el mismo mecanismo de "sin repetir
+reciente" (`pickWithoutRepeat`/`pickStratifiedByConcept`) que ya existia,
+sin duplicar logica de sorteo.
+
+- `exercises.difficulty.*` nuevo en i18n (5 claves: label + 4 opciones).
+- Verificado con Playwright real: entrar a Ejercicios (todos los conceptos),
+  aplicar el filtro "Dificil" (queda visualmente activo, `aria-pressed`
+  correcto) y confirmar que sigue cargando un problema real (tablero visible,
+  ningun error de consola).
+
+### C2: Dojo, modo de analisis libre (`ui/review/DojoScreen.tsx`)
+
+A diferencia de Revisar/Partidas historicas (analizan una partida real ya
+jugada por alguien), el Dojo deja armar cualquier posicion piedra por piedra
+y preguntarle a la red que opina -- util para probar "que dice la red de
+ESTA forma" sin jugarla ni importarla primero. Entrada nueva ("Modo de
+analisis libre (Dojo)") en la lista de Revisar, mismo nivel de navegacion
+que el detalle de una partida (`dojoOpen`, boton fisico "atras" de Android
+extendido para cubrir los dos casos con un solo nivel de profundidad, ya que
+nunca estan activos a la vez).
+
+- Interaccion: click en un punto vacio/propio/rival lo cicla
+  EMPTY->NEGRO->BLANCO->EMPTY (no depende de a quien le toca jugar, a
+  diferencia de una partida real); selector de tamano (9x9/13x13/19x19,
+  reinicia el tablero) y de a quien le toca (para la perspectiva del
+  analisis); "Analizar posicion" llama a `EvalClient.evaluate()` sobre
+  `core/rules.ts::gameStateFromBoard()` (YA generico para construir un
+  `GameState` fresco y valido desde cualquier tablero -- sin historial que
+  violar, no hizo falta tocar el motor de reglas) y muestra probabilidad de
+  victoria + anillo de la jugada favorita de la red (reusando
+  `topLegalPoint`, ver E1).
+- Deliberadamente sin selector de komi propio (usa el mismo 6.5 estandar que
+  Jugar) para no multiplicar controles en una primera version.
+- Verificado con Playwright real: Revisar -> Dojo -> cambiar a 13x13 ->
+  colocar 2 piedras -> Analizar posicion -> "Probabilidad de victoria
+  (Negro): 92%" real (valor real de la red vendorizada, no inventado).
+
+### E3: inferencia remota opcional (`eval/backend.ts`, `eval/remoteClient.ts`, `eval/wireFormat.ts`, `tools/eval-server.ts`)
+
+Alcance decidido a proposito: solo para las pantallas de ANALISIS (Revisar,
+Partidas historicas, Dojo), nunca para el bot en Jugar ni para las pistas de
+Ejercicios -- ahi una red externa lenta o caida degradaria una mecanica
+central de la app (jugar una partida, resolver un ejercicio) en vez de una
+herramienta de analisis opcional que ya tolera esperar. Misma logica que ya
+goberno A3 (no arriesgar lo que ya esta verificado y funcionando sin
+evidencia de que haga falta).
+
+- `eval/backend.ts::EvalBackend`: interfaz comun (`evaluate`/`evaluateBatch`/
+  `terminate`) que `EvalClient` (Worker local) y la nueva `RemoteEvalClient`
+  (HTTP a un servidor externo) implementan -- `FullGameReviewPanel`/
+  `ReviewMistakeBoard`/`DojoScreen` programan contra esto, cambio
+  puramente de tipos (ningun cambio de comportamiento cuando no hay URL
+  remota configurada). `createEvalBackend(remoteEvalUrl)` elige cual
+  construir.
+- `eval/wireFormat.ts`: codec JSON para `EvalPosition`/`RawEvalOutput` -- el
+  RPC del Worker local usa clonado estructurado (Int8Array/Float32Array/
+  bigint viajan tal cual), pero HTTP+JSON no soporta bigint ni typed arrays
+  directo. La parte no trivial es `GameState.history` (lista enlazada de
+  hashes bigint para el chequeo REAL de superko, ver `core/types.ts`): se
+  aplana a un arreglo de strings decimales y se reconstruye la lista
+  enlazada al decodificar, preservando la cadena COMPLETA (no solo el hash
+  mas reciente) -- verificado con un round-trip real jugando varias jugadas
+  de verdad (no un `HistoryNode` armado a mano) y comparando la cadena de
+  hashes completa antes/despues.
+- `eval/remoteClient.ts::RemoteEvalClient`: mismo contrato que `EvalClient`,
+  usa `fetch` con un timeout mas generoso (30s vs 20s local, una red externa
+  puede tener mas latencia que el Worker local que nunca sale del
+  dispositivo).
+- `tools/eval-server.ts`: servidor de referencia (`node:http`, sin
+  dependencias nuevas), corre con `npm run eval:server [puerto]`. Envuelve
+  el MISMO modelo vendorizado y pipeline `evaluatePosition`/
+  `evaluatePositionsBatch` que ya usa el Worker del navegador -- mismo
+  IOHandler de disco que ya usaban `tests/eval/model.test.ts` y
+  `tests/ui/review/fullGameReview.test.ts` para cargar el modelo bajo Node.
+  CORS abierto (`Access-Control-Allow-Origin: *`) a proposito: no hay nada
+  que proteger salvo ciclos de CPU/GPU propios. **Esta app nunca despliega,
+  aloja ni paga un servidor por su cuenta** -- correr esto y donde exponerlo
+  (una VPS propia, un servicio de hosting, HTTPS si se expone fuera de una
+  red local) es decision de quien lo use, documentado explicito en el
+  comentario del archivo y en `settings.remoteEval.description`.
+- Ajustes gano una seccion nueva ("Inferencia remota (avanzado)"): URL
+  opcional + boton "Volver al modelo local", persistida en localStorage
+  (`hoshi-remote-eval-url`, mismo patron que el resto de `SettingsContext`).
+  Cambiar la preferencia mientras una pantalla de analisis ya esta abierta
+  se aplica recien la proxima vez que se entra a esa pantalla (mismo
+  criterio que el resto de las preferencias de `SettingsContext` -- no hay
+  ningun mecanismo de "aplicar en caliente" para NINGUNA preferencia hoy).
+- **Verificacion real de punta a punta, no solo mocks:** se levanto
+  `tools/eval-server.ts` de verdad (`vite-node`, modelo vendorizado real
+  cargado en un proceso Node) y se le pego con `RemoteEvalClient` real desde
+  un script descartable -- `/evaluate` y `/evaluateBatch` devolvieron
+  resultados reales (`policy` de 362, `value` de 3, `ownership` de 361,
+  `Float32Array` reconstruido correctamente del lado del cliente). Despues,
+  con Playwright real contra el dev server: configurar la URL remota en
+  Ajustes, abrir el Dojo, analizar una posicion, y confirmar (interceptando
+  requests de red) que efectivamente pega un POST real a
+  `http://localhost:8789/evaluate` y muestra un resultado real ("Probabilidad
+  de victoria (Negro): 91%") -- no solo que el codigo compila.
+- Tests nuevos: `tests/eval/wireFormat.test.ts` (5, incluyendo el round-trip
+  de historial multi-nodo con hashes reales), `tests/eval/remoteClient.test.ts`
+  (4, con `fetch` mockeado), `tests/eval/backend.test.ts` (2, con un stub
+  minimo de `Worker` -- jsdom no lo implementa -- para poder construir un
+  `EvalClient` real bajo vitest y confirmar que `createEvalBackend` elige la
+  clase correcta segun haya o no URL configurada).
+
+### E2: descartado a proposito, sin implementar descarga bajo demanda
+
+Pedido explicito del usuario: "don't make the on-demand model on-demand,
+just include please" -- el modelo (~11.5MB) sigue empaquetado en el AAB tal
+cual ya estaba (misma decision que ya senalaba cont. 31: "el modelo
+empaquetado directo en el AAB para todos los usuarios"). Sin cambios de
+codigo; se documenta aca solo para que quede registro de que el item se
+reviso y se descarto por pedido explicito, no que se paso por alto.
+
+**Pendiente real de esta fase:** ninguno de los 6 items quedo a medio
+terminar. El unico item de la Fase 4 original que no se toco fue justamente
+E2 (por la decision explicita de arriba). El roadmap "Zero to Pro" completo
+(Fases 1-4) queda cerrado con esto -- cualquier trabajo futuro seria
+contenido nuevo (cola larga, mismo patron de siempre) o una fase nueva que
+el usuario decida, no un item pendiente de un plan viejo.
+
+## Explicacion de los mayores vaivenes en Revisar, y Fase 3 completa: nivel intermedio 'expert' (A4), decision sobre 'A3', entrenamiento de punto debil (D1) (2026-09-13, cont. 37)
+
+Pedido explicito: "in the tutorials and for example lee sedol games, could
+add an explanation on the biggest moves you highlight to why they are
+important moves please? Then continue with phase 3."
+
+### Explicacion de los mayores vaivenes (`FullGameReviewPanel`, Revisar + Partidas historicas)
+
+Al revisar donde vive de verdad "los movimientos mas grandes que se
+destacan": el tutorial de la cuña de Lee Sedol (`content/tutorials.ts`) YA
+tenia explicaciones solidas para sus dos pasos destacados (paso 1: puesto 26
+de politica, 0.35%; paso 6: mayor vaiven de toda la partida) desde cont. 34 --
+nada que agregar ahi. El hueco real estaba en `FullGameReviewPanel.tsx`
+(compartido por Revisar Y Partidas Historicas -- la misma pieza analiza tanto
+partidas guardadas propias como las 5 partidas AlphaGo-Lee Sedol): la lista
+de "Mayores caidas segun la IA" mostraba numero de jugada + magnitud del
+vaiven + un diagrama de tablero, sin ninguna explicacion de por que.
+
+**Solucion generica, no comentario a mano por partida** (esta pieza corre
+sobre CUALQUIER partida, no solo las historicas curadas): nueva funcion pura
+`explainSwing()` en `fullGameReview.ts`, misma idea que ya usa el tutorial de
+Lee Sedol pero calculada en vivo -- para cada uno de los 5 mayores vaivenes,
+se guarda la politica cruda de la posicion ANTES de esa jugada (ya se pedia
+al modelo, antes se descartaba todo menos `value[0]`) y se compara la
+probabilidad que la red le daba a la jugada REALMENTE jugada contra su
+propia favorita en ese momento. Dos historias posibles, mostradas sin
+confundirlas (el mismo criterio de honestidad que ya distingue "jugada
+sorprendente" (`0.35%, puesto 26`) de "el error se revela despues" en el
+tutorial): si la jugada jugada NO era la favorita de la red (rank > 1), se
+muestra su probabilidad, su puesto entre las candidatas legales, y la
+probabilidad de la favorita real; si la jugada jugada YA era la favorita
+(rank === 1), un texto distinto aclara que el vaiven no viene de una
+sorpresa sino de como se revelo la posicion despues.
+
+Bug de redondeo encontrado probando esto contra la Partida 1 real: mostrar
+`Math.round(prob*100)` para una probabilidad chica pero real (ej. 0.4%) daba
+"0%", que se lee como "imposible" en vez de "chica". Arreglado con
+`formatSwingPercent()`: un decimal cuando el redondeo a entero mostraria
+"0%", entero en el resto (mismo principio que "puesto 26, 0.35%" escrito a
+mano en el tutorial).
+
+Como `ReviewScreen.tsx` ya reutiliza el mismo `FullGameReviewPanel`, esta
+mejora aplica automaticamente tambien a las partidas guardadas del usuario
+contra el bot, no solo a las historicas -- sin tocar `ReviewScreen.tsx` en
+absoluto.
+
+**Verificacion**: `tsc -b` limpio, `oxlint` sin advertencias nuevas, paridad
+i18n 960/960 (2 claves nuevas), `tests/ui/review/fullGameReview.test.ts`
+ampliado (13/13, incluye rank/probabilidad sintetica cubriendo el pase como
+candidata legal y el redondeo de `formatSwingPercent`), Playwright real
+contra la Partida 1 de AlphaGo-Lee Sedol confirmando el texto final en
+pantalla con numeros reales del modelo vendorizado.
+
+### Fase 3 arranca: A4 (escalon intermedio real) shippeado, A3 (red mas grande) decidido en contra con evidencia real
+
+Roadmap (cont. 31): "Fase 3 (techo del bot): A4 (escalones de dificultad
+intermedios), A3 (red mas grande, condicional), D1 (modos de bot
+deliberadamente instructivos). Solo si la Fase 1 muestra que la red actual es
+de verdad el factor limitante." A1 quedo diferido a proposito (pedido
+explicito de una sesion anterior), pero A2 SI se cerro con un numero real de
+telefono (cont. 35) -- exactamente la medicion que cont. 30 identifico como
+"el paso que mas valor de informacion da por menos esfuerzo" antes de
+invertir en A3.
+
+**A3 (red mas grande): decidido en CONTRA, con evidencia real, no
+implementado.** El numero real de Android de cont. 35 (1200 playouts, 'net',
+entre 29 y 34 segundos en un telefono real) ya usa 65-75% del presupuesto de
+45s de `'maxima'` con la red ACTUAL (`kata-b10c128`). `mctsNet.ts` consulta
+la red en CADA nodo que expande, asi que el costo de una red mas grande
+(`b15c192`, ~3x mas pesada, el siguiente escalon segun cont. 30) se
+multiplica por nodo, no se suma una vez por jugada -- practicamente
+garantizado que el mismo telefono se pasaria del presupuesto de 45s. Sumado
+a los otros dos obstaculos ya anotados en cont. 30 (conversion TF.js sin
+herramienta lista, y el modelo empaquetado directo en el AAB para todos los
+usuarios, no descargado bajo demanda), la conclusion es clara sin necesitar
+gastar el esfuerzo de la conversion: **no vale la pena perseguir A3 con la
+arquitectura actual.** Si esto cambia en el futuro, tendria que ser una
+descarga bajo demanda (E3 del roadmap), no un asset empaquetado.
+
+**A4 (escalon intermedio real entre `veryStrong` y `maxima`): shippeado.**
+Nuevo nivel `'expert'` en `ui/play/strengthLevels.ts`: mismo motor `'net'`
+que `'maxima'` (PUCT real, consulta politica+valor en cada nodo), pero con
+**300 playouts** en vez de 1200 -- exactamente la configuracion que cont. 29
+ya puso a prueba en auto-juego real contra `'veryStrong'` (4 partidas 7x7 con
+GPU real, 2-2, corriendo A PROPOSITO con menos presupuesto que `'maxima'`
+para no sesgar la comparacion a favor del motor nuevo) -- no un numero
+elegido sin evidencia esta vuelta, reutiliza la unica evidencia real ya
+generada. `maxTimeMs: 15000` (vs. 45000 de maxima), razonado por
+extrapolacion lineal de la medicion de cont. 35 (~1/4 de 1200 playouts ->
+~7-8s esperados en movil real; confirmado ademas en desktop real esta sesion:
+7.3-7.4s con GPU real via Playwright). `approxKyu: null`, mismo principio de
+honestidad que `'maxima'` (no hay forma de calcular uno sin partidas de
+referencia reales para un motor cualitativamente distinto).
+
+**El motor entero ya estaba disenado para esto sin cambios de codigo mas
+alla de la entrada del array**: `engine/worker.ts` (dispatch generico segun
+si se pasa un `net` config, no hardcoded a un id), `learning/
+adaptiveDifficulty.ts` (`LEVEL_ORDER` ya filtraba por `engine === 'classic'`,
+no por id -- excluye `'expert'` automaticamente igual que `'maxima'`),
+`learning/selfRank.ts` (ya filtraba `approxKyu !== null` de forma generica),
+y `PlayGameScreen.tsx` (el aviso "Bot: sin clasificar" y el marcador de
+timing ya ramificaban por `engine === 'net'`/`approxKyu === null`, no por
+id) -- todo esto confirma que la arquitectura de cont. 29/30 fue construida
+pensando en mas de un nivel `'net'` desde el principio, aunque solo hubiera
+uno hasta ahora.
+
+**Un lugar SI necesito generalizarse (bug real encontrado jugando una
+partida de prueba)**: `play.netTiming` tenia el texto "Maxima: Xs, Y
+playouts" HARDCODEADO a mano en el string de traduccion -- con `'expert'`
+jugando de verdad se mostraba "Maxima: 7.3s, 300 playouts", atribuyendole a
+`'maxima'` una jugada que en realidad hizo `'expert'`. Arreglado
+parametrizando el string (`"{{label}}: ..."`) y pasando
+`t(strengthLevel.labelKey)` desde `PlayGameScreen.tsx` en vez de texto fijo.
+Tambien se generalizo el aviso de `PlayConfigScreen.tsx` (antes
+`strengthId === 'maxima'` a mano para mostrar el disclaimer de "motor lento,
+sin kyu" con "medio minuto" fijo en el texto) a `selectedLevel?.engine ===
+'net'` con el numero de segundos real de cada nivel interpolado -- ambos
+bugs son la misma familia de error (asumir que solo existiria un nivel
+`'net'` alguna vez), encontrados los dos por probar la funcionalidad de
+verdad jugando una partida real contra el nivel nuevo, no solo revisando el
+codigo.
+
+Nueva etiqueta: "Experta (red)" / "Expert (net)", entre "~10 kyu" y "Máxima
+(lenta)" en el selector.
+
+**Verificacion**: `tsc -b` limpio, `oxlint` sin advertencias nuevas, paridad
+i18n 961/961 (2 claves nuevas: `play.strength.expert` +
+`play.strength.netEngineDisclaimer` reemplazando a `maximaDisclaimer`),
+`tests/ui/play/strengthLevels.test.ts` nuevo (4/4: ningun nivel `'net'` tiene
+kyu inventado, orden correcto en el array, presupuesto de `'expert'` menor
+que el de `'maxima'`, `approxKyuForStrengthId` devuelve null para ambos
+niveles net), `tests/learning/selfRank.test.ts` y
+`tests/learning/adaptiveDifficulty.test.ts` re-corridos sin romperse.
+Playwright real contra el dev server: el selector de fuerza en Jugar muestra
+"Experta (red)" en el orden correcto, el disclaimer cambia de "hasta 15
+segundos" a "hasta 45 segundos" segun el nivel seleccionado y desaparece del
+todo para los niveles clasicos, y una partida real 5x5 contra `'expert'`
+termino en 7.3-7.4s con 300 playouts (GPU real via Playwright,
+`headless:false`) mostrando la etiqueta correcta tras el arreglo del bug de
+arriba.
+
+### D1: "entrenamiento de punto débil" -- partida real contra el bot desde una posicion del concepto mas flojo del jugador
+
+Presentadas 3 interpretaciones concretas de "modo de bot deliberadamente
+instructivo" (distinto a `botStyles.ts`, que ya existe pero es personalidad
+de juego -- territorial/influence/combative -- no un modo pensado para
+enseñar), mismo patron que la decision historico-vs-sintetico de tutoriales
+en cont. 35: (1) partidas dirigidas al concepto mas flojo del perfil, (2)
+comentario en vivo de la propia jugada del bot via `explainSwing` (la funcion
+de mas arriba, reusada para narrar en vez de solo revisar), (3) un
+`botStyle` nuevo que reproduce a proposito una categoria de error conocida.
+El usuario eligio la (1).
+
+**Decision de diseño clave: reusar posiciones REALES ya verificadas del
+banco, no intentar sesgar el MCTS para que "cree" la situacion.** Sesgar
+`styleWeight` por concepto (como hace `botStyles.ts` para
+territorial/influence/combative) exigiria una heuristica nueva y sin
+verificar POR CADA UNO de los ~20 conceptos del catalogo, sin garantia
+mecanica de que el bot realmente termine creando esa situacion -- la misma
+clase de riesgo que ya llevo a descartar heuristicas sin verificar en otras
+partes de esta sesion (komoku B2, hexomino B3). En cambio: se arranca una
+partida de verdad contra el bot desde una posicion REAL del banco ya
+verificado (Principio 1, igual que Ejercicios), del concepto donde
+`weakestConcepts` (ya calculado y mostrado en Perfil) da el peor puntaje. El
+humano juega el lado que le toca resolver la posicion; el bot responde con
+normalidad y la partida sigue -- a diferencia de Ejercicios (que termina en
+cuanto se resuelve el problema puntual), la idea es practicar el concepto
+DENTRO de una partida que continua.
+
+**`content/weaknessSparring.ts` (nuevo)**: `pickWeaknessSparringSeed(profiles)`
+usa `weakestConcepts(profiles, 1)` (cont. 26, ya mostrado en Perfil),
+`listBankEntries(conceptId)` + `loadEntry()` (ya existentes, Ejercicios) para
+elegir una entrada al azar del concepto mas flojo, y `initialToMove()` --
+**exportada de `useSolvableExercise.ts`** en vez de duplicada -- para saber
+que color le toca jugar al humano, generica sobre los 5 tipos de problema
+(tsumego/ladder/doubleAtari/areaValue/semeaiLiberty), no solo tsumego. Null
+si ningun concepto tiene evidencia todavia (`MIN_EXERCISE_ATTEMPTS = 5` en
+`profile.ts`, mismo umbral que ya usa Perfil) -- mismo caso que
+`profile.selfRank.insufficientData`.
+
+**`PlaySeed` (playConfig.ts) gano un campo `mode?: GameMode`** (antes
+inexistente: `seededConfig()` en `PlayScreen.tsx` SIEMPRE armaba modo
+`'local'`, para la partida de comprobacion de una leccion). Con `mode` en
+`'bot'`, `humanColor` pasa a ser `seed.toMove` (no siempre Negro como en modo
+local) para que el bot nunca termine jugando el lado que le toca resolver al
+estudiante. Default preservado exactamente (`seed.mode ?? 'local'`,
+`humanColor: BLACK` cuando no es bot) -- cero cambio de comportamiento para
+el uso ya existente de `PlaySeed` en lecciones.
+
+**Entrada en Perfil**: boton nuevo "Jugar una partida practicando
+{{concepto}}" en la seccion de conceptos mas flojos (`ProfileScreen.tsx`),
+que ahora recibe `onNavigateToPlay` (mismo prop que ya usa `LearnScreen`,
+enchufado en `App.tsx` con el mismo patron). Semilla calculada una sola vez
+por render (`useMemo`) para no reelegir una posicion distinta entre el click
+y el arranque real de la partida.
+
+**Verificacion**: `tsc -b` limpio, `oxlint` sin advertencias nuevas, paridad
+i18n 962/962 (2 claves nuevas), `tests/content/weaknessSparring.test.ts`
+nuevo (8/8: null sin evidencia, elige el peor puntaje y no el primero
+declarado, semilla en modo bot con tablero valido, y un caso representativo
+de cada uno de los 5 tipos de problema -- CAPTURA_SIMPLE/ESCALERA/
+DOBLE_ATARI/RELLENO_TERRITORIO_PROPIO/CONTAR_LIBERTADES_ANTES_DE_JUGAR).
+Playwright real de punta a punta (el mas concluyente de la sesion para esta
+funcionalidad): 6 intentos reales sembrados directo en IndexedDB
+(`'intentos'`, mismo schema que `storage/db.ts`) para DOBLE_ATARI (llegar
+ahi via clics reales hubiera exigido resolver 5 problemas de verdad, cada
+uno con su propio punto correcto desconocido de antemano), Perfil muestra el
+boton correcto ("Doble atari"), el click arranca una partida real con un
+tablero cargado (capturas 0-0, turno de negro), y **el bot responde de
+verdad** tras la jugada humana ("Pensando..." -> vuelve a "Le toca a negro")
+-- confirma que es una partida contra el bot de verdad, no el modo local sin
+segundo jugador.
+
+## Cierre de la Fase 2 completa: vestibulo de Referencia, tercer joseki y Test de nivel (2026-09-13, cont. 36)
+
 ## Cierre de la Fase 2 completa: vestibulo de Referencia, tercer joseki y Test de nivel (2026-09-13, cont. 36)
 
 Pedido explicito: "lets finish phase 2, also can u reduce the space the
