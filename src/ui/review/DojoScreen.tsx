@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createBoard } from '../../core/board'
 import { gameStateFromBoard, listLegalMoves } from '../../core/rules'
-import { BLACK, EMPTY, WHITE } from '../../core/types'
+import { BLACK, EMPTY, WHITE, opponent } from '../../core/types'
 import type { Color } from '../../core/types'
 import type { EvalBackend } from '../../eval/backend'
 import { topLegalPoint } from '../../eval/policy'
@@ -9,6 +9,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { useSettings } from '../settings'
+import { formatWinProbabilityPercent } from './fullGameReview'
 
 interface DojoScreenProps {
   evalClient: EvalBackend | null
@@ -23,9 +24,13 @@ const SIZES = [9, 13, 19] as const
 // libertad sin necesitar tambien variar la regla de puntaje.
 const DOJO_KOMI = 6.5
 
-function cycleStone(current: number): number {
-  if (current === EMPTY) return BLACK
-  if (current === BLACK) return WHITE
+/** Ciclo vacio -> `toMove` -> el otro color -> vacio, en vez de siempre
+ * empezar en negro: antes, clickear con blanco seleccionado como "a quien
+ * le toca" igual ponia una piedra negra en el primer click de cada punto,
+ * porque el ciclo ignoraba `toMove` por completo. */
+export function cycleStone(current: number, toMove: Color): number {
+  if (current === EMPTY) return toMove
+  if (current === toMove) return opponent(toMove)
   return EMPTY
 }
 
@@ -66,7 +71,7 @@ export function DojoScreen({ evalClient, onBack }: DojoScreenProps) {
     setAnalysisState('idle')
     setStones((prev) => {
       const next = new Int8Array(prev)
-      next[point] = cycleStone(prev[point])
+      next[point] = cycleStone(prev[point], toMove)
       return next
     })
   }
@@ -163,9 +168,10 @@ export function DojoScreen({ evalClient, onBack }: DojoScreenProps) {
       {analysis && (
         <div className="review-ai-panel">
           <p className="review-ai-winprob">
-            {t('review.aiWinProbability', { color: t(colorKey), percent: Math.round(analysis.winProbability * 100) })}
+            {t('review.aiWinProbability', { color: t(colorKey), percent: formatWinProbabilityPercent(analysis.winProbability) })}
           </p>
           {analysis.topPoint !== null && <p className="review-hint-legend">{t('review.aiSuggestedMove')}</p>}
+          <p className="review-ai-disclaimer">{t('review.winProbabilityExplainer')}</p>
           <p className="review-ai-disclaimer">{t('review.aiDisclaimer')}</p>
         </div>
       )}

@@ -186,6 +186,64 @@ function buildKomokuSanSanTsukeDemo(): DemoScript {
   }
 }
 
+/**
+ * Golpe de hombro (kata-tsuki) contra una piedra propia en 4-4 -- a
+ * diferencia de las tres secuencias de arriba (todas contacto ortogonal
+ * directo, tsuke), esta es una jugada de contacto DIAGONAL, un paso mas
+ * lejos de la esquina. Es una de las jugadas mas caracteristicas de la
+ * teoria de apertura moderna (posterior a AlphaGo): la valoracion de este
+ * tipo de jugada subio mucho respecto a la teoria clasica una vez que
+ * hubo motores fuertes para probarla.
+ *
+ * Misma metodologia que las tres anteriores: se le pregunto a la red de
+ * KataGo ya empaquetada su distribucion de politica en cada paso real, sin
+ * aceptar ningun movimiento a mano sin ese chequeo (script descartable, no
+ * en el repo). Resultado: el bloqueo de negro por encima, tras el golpe de
+ * hombro, concentra **70.2%** de la politica -- dentro del mismo rango que
+ * las otras tres secuencias (41-92%). La jugada de blanco que sigue ya no
+ * tiene esa claridad: el mejor punto LOCAL (extenderse al lado) cae a
+ * apenas 6.1%, indistinguible del resto de jugadas grandes en otras partes
+ * del tablero (16.6% el punto mas alto, pero ninguno cerca de esta zona) --
+ * a diferencia de las otras secuencias, aca ni siquiera hay una
+ * continuacion local que valga la pena discutir: el fragmento se corta en
+ * el bloqueo mismo, el punto mas temprano de toda esta seccion.
+ *
+ * Nota sobre el primer paso: igual que en las otras tres secuencias, el
+ * golpe de hombro de blanco se muestra como ilustracion de una idea real y
+ * reconocida, no como "la jugada favorita de la red en un tablero vacio" --
+ * en un tablero tan vacio, la red prefiere ocupar otro punto abierto grande
+ * antes que iniciar contacto en cualquier esquina, lo mismo que pasa con
+ * las otras tres aperturas de esta seccion (ninguna de las cuatro afirma
+ * ser la jugada mas probada en su primer paso).
+ */
+function buildShoulderHitDemo(): DemoScript {
+  const width = 19
+  const height = 19
+  const board = createBoard(width, height)
+  board.stones[toPoint(width, 3, 3)] = BLACK
+
+  return {
+    width,
+    height,
+    initialStones: board.stones,
+    toMove: WHITE,
+    steps: [
+      {
+        promptKey: 'joseki.shoulderHit.step1.prompt',
+        expectedPoints: [],
+        auto: toPoint(width, 4, 2),
+        feedbackKey: 'joseki.shoulderHit.step1.feedback',
+      },
+      {
+        promptKey: 'joseki.shoulderHit.step2.prompt',
+        expectedPoints: [toPoint(width, 3, 2)],
+        feedbackKey: 'joseki.shoulderHit.step2.feedback',
+      },
+    ],
+    completionKey: 'joseki.shoulderHit.completion',
+  }
+}
+
 export const JOSEKI_ENTRIES: JosekiEntry[] = [
   {
     id: 'sansan-double-hane',
@@ -204,5 +262,11 @@ export const JOSEKI_ENTRIES: JosekiEntry[] = [
     titleKey: 'joseki.komokuSanSanTsuke.title',
     descriptionKey: 'joseki.komokuSanSanTsuke.description',
     demo: buildKomokuSanSanTsukeDemo(),
+  },
+  {
+    id: 'shoulder-hit',
+    titleKey: 'joseki.shoulderHit.title',
+    descriptionKey: 'joseki.shoulderHit.description',
+    demo: buildShoulderHitDemo(),
   },
 ]

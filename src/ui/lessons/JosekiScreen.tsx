@@ -12,9 +12,10 @@ interface JosekiScreenProps {
  * Referencia de joseki, seccion aparte de la escalera graduada de Aprender
  * (niveles 0-10) -- no es "el siguiente nivel", es material de consulta sin
  * seguimiento de lectura ni SRS. Mismo patron de router de sub-pantalla que
- * AboutGoScreen: vive dentro de Aprender, no es una pestana nueva. Un solo
- * fragmento hoy (ver content/joseki.ts sobre por que crecer esto tiene que
- * ir uno por uno, cada uno corroborado contra la red antes de aceptarlo).
+ * AboutGoScreen: vive dentro de Aprender, no es una pestana nueva. Pocos
+ * fragmentos por diseno (ver content/joseki.ts sobre por que crecer esto
+ * tiene que ir uno por uno, cada uno corroborado contra la red antes de
+ * aceptarlo).
  */
 export function JosekiScreen({ onBack }: JosekiScreenProps) {
   const { t } = useI18n()

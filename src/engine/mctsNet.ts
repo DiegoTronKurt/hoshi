@@ -60,6 +60,19 @@ const VIRTUAL_LOSS = 1
  * respaldo del lado del Worker sin duplicar el numero. */
 export const NET_DEFAULT_MAX_TIME_MS = 30000
 
+/** Presupuesto de playouts por defecto para una busqueda puntual bajo
+ * demanda (Revisar: "Analizar mas profundo", eval/backend.ts::analyzeDeeply)
+ * -- NO para elegir la jugada del bot en Jugar, que usa sus propios niveles
+ * en ui/play/strengthLevels.ts. Mismo numero que ya usa el nivel 'expert' de
+ * ese archivo (300), reutilizado a proposito: es el unico presupuesto de
+ * este motor puesto a prueba en auto-juego real contra 'veryStrong' (ver
+ * NOTAS.md, cont. 29), no un numero elegido sin evidencia para este boton
+ * nuevo. Constante independiente (no un import de strengthLevels.ts) porque
+ * las dos cosas se ajustan por razones distintas: esta es "cuanto tarda un
+ * click bajo demanda antes de sentirse lento", esa es "que tan fuerte juega
+ * el bot" -- no deberian moverse juntas solo porque hoy coinciden. */
+export const DEEP_ANALYZE_DEFAULT_PLAYOUTS = 300
+
 interface NetNode {
   move: number | null
   parent: NetNode | null

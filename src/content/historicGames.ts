@@ -227,6 +227,15 @@ export interface HistoricGame {
   whiteName: string
   /** ISO (YYYY-MM-DD), tal cual DT del SGF original. */
   date: string
+  /** Contexto factual corto (torneo/evento, o lugar si no hay un evento con
+   * nombre propio) -- texto plano sin traducir, igual que blackName/
+   * whiteName: es un dato historico, no contenido de UI. Antes vivia
+   * hardcodeado dentro de la clave de traduccion historicGames.gameSubtitle
+   * (solo tenia sentido mientras la unica partida en esta seccion era el
+   * duelo AlphaGo vs. Lee Sedol); ahora es un campo por partida para que una
+   * partida clasica sin relacion con ese evento no muestre "Google DeepMind
+   * Challenge Match" en su propia ficha. */
+  eventLabel: string
   width: number
   height: number
   komi: number
@@ -234,7 +243,7 @@ export interface HistoricGame {
   result: HistoricGameResult
 }
 
-function buildHistoricGame(id: string, sgfText: string): HistoricGame {
+function buildHistoricGame(id: string, sgfText: string, eventLabel: string): HistoricGame {
   const { root } = parseSgf(sgfText)
   const { width, height, komi, moves } = sgfToGameRecord(sgfText)
   const re = root.properties.RE?.[0] ?? ''
@@ -247,6 +256,7 @@ function buildHistoricGame(id: string, sgfText: string): HistoricGame {
     blackName: root.properties.PB?.[0] ?? '?',
     whiteName: root.properties.PW?.[0] ?? '?',
     date: root.properties.DT?.[0] ?? '',
+    eventLabel,
     width,
     height,
     komi,
@@ -262,10 +272,102 @@ function buildHistoricGame(id: string, sgfText: string): HistoricGame {
 /** Duelo AlphaGo vs. Lee Sedol, Seul, marzo de 2016 -- 4-1 para AlphaGo,
  * con la unica victoria de Lee Sedol en la partida 4. Orden cronologico
  * real (mismo orden que RO en cada SGF). */
+const ALPHAGO_EVENT_LABEL = 'Google DeepMind Challenge Match'
+
 export const ALPHAGO_LEE_SEDOL_GAMES: HistoricGame[] = [
-  buildHistoricGame('alphago-leesedol-1', GAME_1_SGF),
-  buildHistoricGame('alphago-leesedol-2', GAME_2_SGF),
-  buildHistoricGame('alphago-leesedol-3', GAME_3_SGF),
-  buildHistoricGame('alphago-leesedol-4', GAME_4_SGF),
-  buildHistoricGame('alphago-leesedol-5', GAME_5_SGF),
+  buildHistoricGame('alphago-leesedol-1', GAME_1_SGF, ALPHAGO_EVENT_LABEL),
+  buildHistoricGame('alphago-leesedol-2', GAME_2_SGF, ALPHAGO_EVENT_LABEL),
+  buildHistoricGame('alphago-leesedol-3', GAME_3_SGF, ALPHAGO_EVENT_LABEL),
+  buildHistoricGame('alphago-leesedol-4', GAME_4_SGF, ALPHAGO_EVENT_LABEL),
+  buildHistoricGame('alphago-leesedol-5', GAME_5_SGF, ALPHAGO_EVENT_LABEL),
 ]
+
+/**
+ * Shusaku vs. Gennan Inseki, Osaka, 11/14/15 de septiembre de 1846 -- la
+ * "partida de las orejas rojas" (jugada 127 puso tan nervioso a Gennan que
+ * un medico presente en la sala, viendole las orejas rojas, predijo que
+ * perderia). SGF exacto (sin ningun cambio) de
+ * homepages.cwi.nl/~aeb/go/games/games/Shusaku/126.sgf -- mismo sitio y
+ * misma declaracion de dominio publico que ya respalda las 5 partidas de
+ * AlphaGo de arriba ("I do not claim any rights on this collection. The
+ * games here are in the public domain."), confirmada de nuevo especificamente
+ * para este archivo, no asumida por estar en el mismo dominio.
+ *
+ * Hechos historicos cruzados contra una segunda fuente independiente antes
+ * de aceptar el archivo (nunca transcripto de memoria, siguiendo la misma
+ * regla que el resto de este archivo): "Invincible: The Games of Shusaku"
+ * (compilado, editado y traducido por John Power, comentario de Miyamoto
+ * Naoki 9-dan, Kiseido Publishing Company; capitulo de muestra publico en
+ * smartgo.com/pdf/ear_reddening_game.pdf), que da exactamente los mismos
+ * datos que este SGF sin haber sido la fuente del archivo: blanco Gennan
+ * Inseki 8-dan, negro Kuwahara Shusaku 4-dan (17 años), 11/14/15 de
+ * septiembre de 1846, jugado en Osaka, 325 jugadas, negro gana por 2 puntos
+ * -- y las primeras 6 jugadas del diagrama publicado coinciden en posicion
+ * con las primeras 6 jugadas de este SGF. La muestra gratuita de ese libro
+ * solo llega hasta la jugada 71 (no confirma el detalle especifico de la
+ * jugada 127 mas alla de que 127 es correcta como numero de jugada del
+ * "movimiento de las orejas rojas" segun multiples fuentes independientes),
+ * asi que el "momento" puntual de esa jugada queda pendiente para un
+ * `Tutorials`-style opcional futuro en vez de afirmarlo sin verificarlo
+ * directamente -- ver Fase 3 del plan de contenido. Sin KM (no existia komi
+ * estandarizado en el Japon de 1846): `sgfToGameRecord` ya default a 0
+ * cuando no hay KM, mismo comportamiento correcto sin cambios de codigo.
+ */
+const SHUSAKU_GENNAN_1846_SGF = `(;
+PB[Yasuda Shusaku]
+BR[4d]
+PW[Inoue Gennan Inseki]
+WR[8d]
+RE[B+2]
+JD[Koka 3-7-21,24,25]
+DT[1846-09-11,14,15]
+
+;B[qd];W[dc];B[pq];W[oc];B[cp];W[cf];B[ep];W[qo];B[pe];W[np]
+;B[po];W[pp];B[op];W[qp];B[oq];W[oo];B[pn];W[qq];B[nq];W[on]
+;B[pm];W[om];B[pl];W[mp];B[mq];W[ol];B[pk];W[lq];B[lr];W[kr]
+;B[lp];W[kq];B[qr];W[rr];B[rs];W[mr];B[nr];W[pr];B[ps];W[qs]
+;B[no];W[mo];B[qr];W[rm];B[rl];W[qs];B[lo];W[mn];B[qr];W[qm]
+;B[or];W[ql];B[qj];W[rj];B[ri];W[rk];B[ln];W[mm];B[qi];W[rq]
+;B[jn];W[ls];B[ns];W[gq];B[go];W[ck];B[kc];W[ic];B[pc];W[nj]
+;B[ke];W[og];B[oh];W[pb];B[qb];W[ng];B[mi];W[mj];B[nd];W[ph]
+;B[qg];W[pg];B[hq];W[hr];B[ir];W[iq];B[hp];W[jr];B[fc];W[lc]
+;B[ld];W[mc];B[lb];W[mb];B[md];W[qf];B[pf];W[qh];B[rg];W[rh]
+;B[sh];W[rf];B[sg];W[pj];B[pi];W[oi];B[oj];W[ni];B[qk];W[ok]
+;B[qe];W[kb];B[jb];W[ka];B[jc];W[ob];B[ja];W[la];B[db];W[cc]
+;B[fe];W[cn];B[gr];W[is];B[fq];W[io];B[ji];W[eb];B[fb];W[eg]
+;B[dj];W[dk];B[ej];W[cj];B[dh];W[ij];B[hm];W[gj];B[eh];W[fl]
+;B[fg];W[er];B[dm];W[fn];B[dn];W[gn];B[jj];W[jk];B[kk];W[ii]
+;B[ik];W[jl];B[kl];W[il];B[jh];W[co];B[do];W[ih];B[hn];W[hl]
+;B[bl];W[dg];B[gh];W[ch];B[ig];W[ec];B[cr];W[fd];B[gd];W[ed]
+;B[gc];W[bk];B[cm];W[gs];B[gp];W[li];B[kg];W[in];B[lj];W[lg]
+;B[gm];W[jf];B[jg];W[im];B[fm];W[kf];B[lf];W[mf];B[le];W[gf]
+;B[hf];W[ff];B[gg];W[lk];B[kj];W[km];B[lm];W[ll];B[jm];W[ge]
+;B[he];W[ef];B[ea];W[cb];B[fr];W[fs];B[dr];W[qa];B[ra];W[pa]
+;B[rb];W[da];B[gi];W[fj];B[fi];W[fa];B[ga];W[gl];B[ek];W[em]
+;B[ho];W[el];B[en];W[jo];B[kn];W[ci];B[lh];W[mh];B[mg];W[di]
+;B[ei];W[lg];B[qn];W[rn];B[re];W[sl];B[mg];W[bm];B[am];W[lg]
+;B[eq];W[es];B[mg];W[ha];B[gb];W[lg];B[ds];W[hs];B[mg];W[sj]
+;B[si];W[lg];B[sr];W[sq];B[mg];W[hd];B[hb];W[lg];B[ro];W[so]
+;B[mg];W[ss];B[qs];W[lg];B[sn];W[rp];B[mg];W[cl];B[bn];W[lg]
+;B[ml];W[mk];B[mg];W[pj];B[sf];W[lg];B[nn];W[nl];B[mg];W[ib]
+;B[ia];W[lg];B[nc];W[nb];B[mg];W[jd];B[kd];W[lg];B[ma];W[na]
+;B[mg];W[qc];B[rc];W[lg];B[js];W[ks];B[mg];W[hc];B[id];W[lg]
+;B[fk];W[hj];B[mg];W[hh];B[hg];W[lg];B[gk];W[hk];B[mg];W[ak]
+;B[lg];W[al];B[bm];W[nf];B[od];W[ki];B[ms];W[kp];B[ip];W[jp]
+;B[lr];W[oj];B[mr];W[ea];B[sr])`
+
+/** Partidas clasicas fuera del duelo AlphaGo -- coleccion separada a
+ * proposito (no simplemente agregadas a ALPHAGO_LEE_SEDOL_GAMES) porque esa
+ * constante ya tiene su propio test de regresion con expectativas exactas
+ * por indice (tests/content/historicGames.test.ts); una lista nueva evita
+ * tener que reescribir ese test para acomodar contenido sin relacion. */
+export const CLASSICAL_GAMES: HistoricGame[] = [
+  buildHistoricGame('shusaku-gennan-1846', SHUSAKU_GENNAN_1846_SGF, 'Played in Osaka'),
+]
+
+/** Union de ambas colecciones para pantallas que muestran "todas las
+ * partidas historicas" sin importar de que coleccion vienen (hoy
+ * HistoricGamesScreen). Mantener ambas exportadas por separado (arriba)
+ * ademas de esta union: el test de regresion de AlphaGo necesita la lista
+ * sin mezclar. */
+export const ALL_HISTORIC_GAMES: HistoricGame[] = [...ALPHAGO_LEE_SEDOL_GAMES, ...CLASSICAL_GAMES]

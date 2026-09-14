@@ -9,7 +9,13 @@ import type { RecordedMove } from '../../../src/core/sgf'
 import { encodeInput, gamePointToNNIndex, NN_LEN } from '../../../src/eval/features'
 import { evaluatePositionsBatch } from '../../../src/eval/model'
 import { POLICY_PASS_INDEX } from '../../../src/eval/policy'
-import { buildFullGameEvalPositions, explainSwing, formatSwingPercent, summarizeWinRates } from '../../../src/ui/review/fullGameReview'
+import {
+  buildFullGameEvalPositions,
+  explainSwing,
+  formatSwingPercent,
+  formatWinProbabilityPercent,
+  summarizeWinRates,
+} from '../../../src/ui/review/fullGameReview'
 
 const MODEL_DIR = path.resolve(__dirname, '../../../public/models/kata-b10c128')
 
@@ -187,6 +193,23 @@ describe('formatSwingPercent', () => {
   it('usa un decimal para una probabilidad chica pero real, para no mostrar "0%"', () => {
     expect(formatSwingPercent(0.004)).toBe('0.4')
     expect(formatSwingPercent(0.0035)).toBe('0.4')
+  })
+})
+
+describe('formatWinProbabilityPercent', () => {
+  it('redondea normalmente lejos de los extremos', () => {
+    expect(formatWinProbabilityPercent(0.67)).toBe(67)
+    expect(formatWinProbabilityPercent(0.5)).toBe(50)
+  })
+
+  it('nunca muestra 100, ni siquiera para una probabilidad de 1 exacta', () => {
+    expect(formatWinProbabilityPercent(1)).toBe(99)
+    expect(formatWinProbabilityPercent(0.999)).toBe(99)
+  })
+
+  it('nunca muestra 0, ni siquiera para una probabilidad de 0 exacta', () => {
+    expect(formatWinProbabilityPercent(0)).toBe(1)
+    expect(formatWinProbabilityPercent(0.001)).toBe(1)
   })
 })
 

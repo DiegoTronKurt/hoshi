@@ -66,4 +66,12 @@ describe('RemoteEvalClient', () => {
 
     await expect(client.evaluate({ state })).rejects.toThrow()
   })
+
+  it('supportsDeepAnalysis es false y analyzeDeeply() rechaza -- este backend no tiene busqueda propia', async () => {
+    const client = new RemoteEvalClient('https://mi-servidor.example')
+    expect(client.supportsDeepAnalysis).toBe(false)
+
+    const state = gameStateFromBoard(createBoard(9), BLACK, 6.5)
+    await expect(client.analyzeDeeply({ state }, 300)).rejects.toThrow()
+  })
 })

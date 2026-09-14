@@ -3,6 +3,7 @@ import type { EvalPosition } from './features'
 import type { RawEvalOutput } from './model'
 import { decodeRawEvalOutput, encodeEvalPosition } from './wireFormat'
 import type { WireRawEvalOutput } from './wireFormat'
+import type { MctsResult } from '../engine/mcts'
 
 /** Respaldo del lado del cliente para detectar un servidor remoto colgado o
  * inalcanzable -- mismo espiritu que EVAL_TIMEOUT_MS en client.ts, pero mas
@@ -22,6 +23,12 @@ const REMOTE_EVAL_TIMEOUT_MS = 30000
  */
 export class RemoteEvalClient implements EvalBackend {
   private baseUrl: string
+  /** Siempre false: este backend es solo-evaluacion (un fetch por posicion,
+   * sin modelo ni busqueda propia de este lado, ver el comentario de la
+   * clase). Quien lo consuma debe revisar esto y ocultar el boton de
+   * "analizar mas profundo" en vez de mostrarlo deshabilitado -- ver
+   * EvalBackend::supportsDeepAnalysis. */
+  readonly supportsDeepAnalysis = false
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl
@@ -52,6 +59,15 @@ export class RemoteEvalClient implements EvalBackend {
   async evaluateBatch(positions: EvalPosition[], timeoutMs = REMOTE_EVAL_TIMEOUT_MS): Promise<RawEvalOutput[]> {
     const wire = await this.post<WireRawEvalOutput[]>('/evaluateBatch', positions.map(encodeEvalPosition), timeoutMs)
     return wire.map(decodeRawEvalOutput)
+  }
+
+  /** Nunca deberia llamarse en la practica -- ver supportsDeepAnalysis. Tira
+   * en vez de devolver un resultado inventado (p.ej. envolver evaluate() sin
+   * busqueda real) porque eso violaria en silencio lo que EvalBackend
+   * promete: analyzeDeeply es especificamente una busqueda, no una pasada
+   * simple disfrazada. */
+  async analyzeDeeply(): Promise<MctsResult> {
+    throw new Error('RemoteEvalClient no soporta analisis profundo: revisa supportsDeepAnalysis antes de llamar.')
   }
 
   terminate(): void {

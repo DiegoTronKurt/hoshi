@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ALPHAGO_LEE_SEDOL_GAMES } from '../../content/historicGames'
+import { ALL_HISTORIC_GAMES } from '../../content/historicGames'
 import type { HistoricGame } from '../../content/historicGames'
 import { gameRecordToSgf } from '../../core/sgf'
 import { createEvalBackend } from '../../eval/backend'
@@ -20,7 +20,9 @@ interface HistoricGamesScreenProps {
  * que JosekiScreen/AdvancedScreen (lista -> detalle, sin reportLocalBack
  * propio -- el fisico "atras" de Android vuelve directo a niveles, ver
  * LearnScreen). A diferencia de esas dos, el contenido no es un DemoScript
- * de pasos guiados: son 5 partidas reales completas (content/historicGames.ts)
+ * de pasos guiados: son partidas reales completas (content/historicGames.ts,
+ * ALL_HISTORIC_GAMES -- hoy el duelo AlphaGo vs. Lee Sedol mas partidas
+ * clasicas sueltas, cada una con su propio contexto factual en eventLabel)
  * navegables jugada a jugada, con el mismo analisis de IA de partida
  * completa que Revisar (FullGameReviewPanel) -- reusado tal cual sobre
  * {width,height,komi,moves} en vez de un SavedGameRecord, porque estas
@@ -45,6 +47,12 @@ export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
   function handleExportSgf(game: HistoricGame) {
     const sgf = gameRecordToSgf(game.width, game.height, game.komi, game.moves)
     downloadTextFile(`${game.id}.sgf`, sgf, 'application/x-go-sgf')
+  }
+
+  function titleLabel(game: HistoricGame): string {
+    return game.round > 0
+      ? t('historicGames.gameLabel', { round: game.round, black: game.blackName, white: game.whiteName })
+      : t('historicGames.gameLabelStandalone', { black: game.blackName, white: game.whiteName })
   }
 
   function resultLabel(game: HistoricGame): string {
@@ -72,7 +80,7 @@ export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
         </div>
 
         <p className="lesson-paragraph">
-          {t('historicGames.gameSubtitle', { date: selected.date })} · {resultLabel(selected)}
+          {t('historicGames.gameSubtitle', { date: selected.date, event: selected.eventLabel })} · {resultLabel(selected)}
         </p>
 
         <BoardCanvas
@@ -133,13 +141,11 @@ export function HistoricGamesScreen({ onBack }: HistoricGamesScreenProps) {
       </div>
       <p className="lesson-paragraph">{t('historicGames.intro')}</p>
       <ul className="learn-lesson-list">
-        {ALPHAGO_LEE_SEDOL_GAMES.map((game) => (
+        {ALL_HISTORIC_GAMES.map((game) => (
           <li key={game.id}>
             <button type="button" className="learn-lesson-card" onClick={() => open(game)}>
               <span className="historic-games-card-body">
-                <span className="historic-games-card-title">
-                  {t('historicGames.gameLabel', { round: game.round, black: game.blackName, white: game.whiteName })}
-                </span>
+                <span className="historic-games-card-title">{titleLabel(game)}</span>
                 <span className="historic-games-card-result">{resultLabel(game)}</span>
               </span>
             </button>

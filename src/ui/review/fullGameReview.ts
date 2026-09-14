@@ -139,6 +139,18 @@ export function formatSwingPercent(probability: number): string {
   return String(Math.round(percent))
 }
 
+/**
+ * Redondea a entero para mostrar, pero nunca a 0 ni a 100: la red es una
+ * sola pasada sin busqueda (ver review.aiDisclaimer), nunca un hecho ya
+ * decidido, y "100% de probabilidad de ganar" se lee como "ninguna jugada
+ * futura puede cambiar esto", que es mas fuerte de lo que la red realmente
+ * afirma. Se deja siempre un margen visible de al menos 1 punto en ambos
+ * extremos.
+ */
+export function formatWinProbabilityPercent(probability: number): number {
+  return Math.min(99, Math.max(1, Math.round(probability * 100)))
+}
+
 export function explainSwing(policy: Float32Array, state: GameState, playedPoint: number | null): SwingExplanation {
   const legal = listLegalMoves(state)
   const legalPoints = legal.filter((p): p is number => p !== null)

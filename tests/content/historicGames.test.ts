@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ALPHAGO_LEE_SEDOL_GAMES } from '../../src/content/historicGames'
+import { ALPHAGO_LEE_SEDOL_GAMES, CLASSICAL_GAMES } from '../../src/content/historicGames'
 import { applyMove, createGame } from '../../src/core/rules'
 
 /**
@@ -55,5 +55,44 @@ describe('ALPHAGO_LEE_SEDOL_GAMES', () => {
         state = result.state as typeof state
       }
     })
+  })
+})
+
+/**
+ * Mismo principio que el describe de arriba, aplicado a la partida de las
+ * orejas rojas (Shusaku vs. Gennan Inseki, 1846): jugadas y ganador
+ * cruzados a mano contra "Invincible: The Games of Shusaku" (John Power,
+ * comentario de Miyamoto Naoki 9-dan, Kiseido Publishing) -- ver el
+ * comentario de content/historicGames.ts para el detalle completo de esa
+ * verificacion independiente (fecha, lugar, rangos, 325 jugadas, B+2, todo
+ * coincide sin haber sido la fuente del SGF).
+ */
+describe('CLASSICAL_GAMES', () => {
+  it('shusaku-gennan-1846: metadatos coinciden con el registro historico conocido', () => {
+    const game = CLASSICAL_GAMES.find((g) => g.id === 'shusaku-gennan-1846')
+    expect(game).toBeDefined()
+    if (!game) return
+    expect(game.width).toBe(19)
+    expect(game.height).toBe(19)
+    expect(game.komi).toBe(0)
+    expect(game.moves).toHaveLength(325)
+    expect(game.blackName).toBe('Yasuda Shusaku')
+    expect(game.whiteName).toBe('Inoue Gennan Inseki')
+    expect(game.result.winner).toBe('black')
+    expect(game.result.method).toBe('points')
+    expect(game.result.margin).toBe(2)
+  })
+
+  it('shusaku-gennan-1846: las 325 jugadas son legales en orden contra el motor de reglas real', () => {
+    const game = CLASSICAL_GAMES.find((g) => g.id === 'shusaku-gennan-1846')
+    expect(game).toBeDefined()
+    if (!game) return
+    let state = createGame(game.width, game.height, game.komi)
+    for (const move of game.moves) {
+      expect(move.color).toBe(state.toMove)
+      const result = applyMove(state, move.point)
+      expect(result.legal).toBe(true)
+      state = result.state as typeof state
+    }
   })
 })
