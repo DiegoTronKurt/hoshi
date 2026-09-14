@@ -47,6 +47,16 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
    * del ultimo paso no se pierde -- se muestra junto con el mensaje de
    * completado en el branch 'done' de mas abajo. */
   const isLastStep = stepIndex === script.steps.length - 1
+  /** Muchos promptKey dicen "toca el punto marcado", pero el tablero nunca
+   * dibujaba ningun marcador -- la persona tenia que ubicarlo solo leyendo
+   * la posicion (ver NOTAS.md). Cuando el paso tiene un unico punto valido
+   * lo mostramos como hintMove (el mismo anillo que ya usan los ejercicios).
+   * Con varios puntos validos no marcamos ninguno: resaltar uno solo daria a
+   * entender que es la unica respuesta correcta. */
+  const hintPoint =
+    step && step.expectedPoints.length === 1 && (status === 'awaiting-move' || status === 'wrong')
+      ? step.expectedPoints[0]
+      : null
 
   useEffect(() => {
     if (!step || step.auto === undefined || step.auto === false || status !== 'awaiting-move') return
@@ -105,6 +115,7 @@ export function GuidedDemo({ script }: GuidedDemoProps) {
         height={script.height}
         stones={game.board.stones}
         lastMove={null}
+        hintMove={hintPoint}
         theme={theme}
         onIntersectionClick={handleClick}
       />

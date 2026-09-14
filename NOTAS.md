@@ -1,5 +1,43 @@
 # Notas de desarrollo
 
+## Auditoria de puntuacion en toda la app, aclaracion de "probabilidad de victoria" en Revisar, y un bug de nakade encontrado en el proceso (2026-09-13, cont. 42)
+
+Pedido explicito del usuario en dos mensajes: (1) "check all the readings in the app, try to avoid using em-dashes, ';' or ':' unless its necessary. Also check the clarity in the explanations and check the demos and interactive examples"; (2) "in the reviews of matches, what does the probability of win mean? its not clear".
+
+**Alcance:** se interpreto "todas las lecturas de la app" como todo el contenido narrativo de `es.json`/`en.json` (lecciones de los 11 niveles, joseki, tesuji, avanzado, tutoriales, partidas historicas, sobre el Go, y los textos de Revisar/Jugar/Perfil/Ajustes que explican como funciona algo), no las etiquetas cortas de UI. Se corrigieron TODOS los guiones largos (—), guiones dobles (--) y punto y coma encontrados; los dos puntos se dejaron en su mayoria (uso idiomatico y extendido en todo el contenido para introducir una definicion directa, cambiarlos todos habria significado reescribir casi cada parrafo del curriculo sin ganancia clara de claridad), salvo donde ya se estaba reescribiendo la misma oracion por otro motivo.
+
+**Verificacion:** ambos archivos validados como JSON valido y con paridad exacta de claves (997 en cada uno, confirmado programaticamente, ninguna faltante en cualquier direccion). Recuento de guiones largos/dobles/punto y coma confirmado en 0 en ambos archivos tras la ronda completa. tsc limpio, oxlint sin categorias nuevas. Suite completa de vitest (61 archivos / 3806 tests) pasando. Playwright real contra el dev server: titulos de nivel, varias lecciones fuertemente reescritas (n7-l2, n8-l3, n1-l6), las tres pantallas de Referencia (Joseki, Tesuji, Avanzado), y el analisis de partida completa en Partidas Historicas (para probar el arreglo de "probabilidad de victoria" en un flujo real de punta a punta).
+
+### "Que significa la probabilidad de victoria" -- no estaba definida en ningun lado
+
+Buscando donde aparece ese numero (`review.aiWinProbability` en el analisis de un error puntual, `review.fullAnalysis.title` en el grafico de partida completa), se confirmo que la app nunca explicaba el CONCEPTO, solo un disclaimer sobre cuanto confiar en el (`review.aiDisclaimer`, sobre confiabilidad, no sobre significado). Revisando `fullGameReview.ts` y `ReviewMistakeBoard.tsx` se confirmo la semantica real: es `value[0]` de la red (una sola pasada, sin busqueda ni rollouts), la probabilidad de que gane la partida quien tenga el turno en esa posicion, evaluada en perspectiva fija por partida para el grafico (siempre Negro) o en la perspectiva de quien cometio el error para el analisis puntual. Arreglado en dos frentes: (1) `review.aiWinProbability` reescrito como oracion completa que ya incluye la definicion ("Negro tendria 62% de probabilidad de ganar si la partida siguiera desde aca"), en vez de una etiqueta desnuda "Probabilidad de victoria (Negro): 62%"; (2) nueva clave `review.winProbabilityExplainer` agregada como parrafo fijo debajo del titulo del grafico en `FullGameReviewPanel.tsx`, confirmada en vivo via el analisis completo de una partida real de Partidas Historicas.
+
+### Bug encontrado durante la auditoria: n2-l8 "Nakade" prometia un unico "punto marcado" que no existia
+
+Auditando cada prompt de demo que menciona un punto marcado contra la cantidad real de `expectedPoints` en su leccion (`content/lessons/nN.ts`), se encontro que n2-l8 dice "Toca el punto marcado" pero en realidad acepta CUALQUIERA de 4 puntos equivalentes (los 4 puntos centrales del "cuadrado de cuatro", simetricos por la forma, tal como ya ensena n2-l7). El arreglo de `hintMove` de cont. 41 correctamente NO dibuja marcador cuando hay mas de un punto valido (para no sugerir una unica respuesta como si fuera la unica), asi que este caso seguia sin marcador y con un texto que prometia uno. Reescrito a "Toca cualquiera de los cuatro puntos del centro del espacio negro", siguiendo el mismo patron ya usado en los demas pasos multi-punto de la app (n0-l2, n2-l3, n3-l6, n4-l2). Confirmado en vivo con Playwright: el prompt nuevo coincide con el comportamiento real, y clickear cualquiera de los 4 puntos sigue resolviendo el paso.
+
+### Alcance de la limpieza de puntuacion
+
+104 guiones largos/dobles + 12 punto y coma en `es.json`, 111 + 12 en `en.json`, en todos los namespaces con contenido narrativo (`lesson.*`, `joseki.*`, `tesuji.*`, `advanced.*`, `tutorials.*`, `historicGames.*`, `about.*`, `review.*`, `play.*`, `exercises.*`, `today.*`, `profile.*`, `settings.*`, `reference.*`, `concept.*`). Tecnica usada segun el caso: la mayoria se partio en dos oraciones con punto; un inciso corto paso a parentesis en vez de guion; los 11 titulos de nivel ("Nivel N — Titulo") pasaron a usar "·", el mismo separador compacto que ya usaba `play.count.estimate` para "Negro X · Blanco Y", en vez de inventar una convencion nueva.
+
+## Auditoria de "instrucciones poco claras" en Nivel 1: causa raiz en GuidedDemo, mas piedras muertas y cuando dejar de jugar (2026-09-13, cont. 41)
+
+Pedido explicito del usuario: "in lesson level 1, in passing and the end of the game, i think the instructions are not clear. Also the dead stones lesson can be clearer, please. And in when to stop playing, the instruction is not clear or is not intuitive to think that the solution is passing" -- tres lecciones especificas de Nivel 1 senaladas: n1-l2 (el pase), n1-l6 (piedras muertas), n1-l7 (cuando dejar de jugar).
+
+**Verificacion:** tsc limpio, oxlint sin categorias nuevas (mismos dos set-state-in-effect de siempre en GuidedDemo.tsx, corridos a otra linea por el comentario agregado), paridad de i18n mantenida, suite completa de vitest (61 archivos / 3806 tests) pasando, Playwright real contra el dev server para las tres lecciones con capturas de pantalla confirmando el marcador nuevo.
+
+### Causa raiz compartida: GuidedDemo nunca dibujaba el "punto marcado" que prometia el texto
+
+Investigando por que las tres lecciones se sentian poco claras, se encontro que el texto de MUCHOS pasos interactivos dice "toca el punto marcado" (o variantes), pero `GuidedDemo.tsx` nunca pasaba `hintMove` a `BoardCanvas` -- pasaba `lastMove={null}` siempre y ningun otro marcador, a diferencia de TODOS los demas lugares de la app que ya usan `hintMove` (ejercicios, pistas de Jugar, Dojo, revision de errores). La persona tenia que adivinar el punto exacto solo leyendo la posicion. Arreglado con un `hintPoint` derivado (`step.expectedPoints[0]` cuando el paso tiene exactamente un punto valido, `null` si tiene 0 o varios) pasado como `hintMove`, visible mientras el paso esta `'awaiting-move'` o `'wrong'`. Confirmado con captura de pantalla en n1-l2 y n1-l7: el anillo aparece exactamente en el punto correcto, y persiste tras un click equivocado.
+
+### n1-l6 "Piedras muertas": referencia adelantada a "dos ojos" (concepto de Nivel 2)
+
+La justificacion de por que el grupo blanco esta muerto usaba "ninguna forma de hacer dos ojos" -- pero "ojo" como concepto recien se ensena en Nivel 2 (n2-l1 "Ojo" a n2-l3 "Dos ojos: vida incondicional"), confirmado leyendo los titulos reales de ambos niveles antes de tocar nada. Reescrito para justificar la muerte del grupo solo con conceptos ya vistos a esta altura (atari + sin forma de escapar ni ganar libertades, ambos de Nivel 0), ademas mas preciso para este ejemplo puntual (un grupo YA en atari, no un caso de vida/muerte con espacio de ojo que amerite el analisis de dos ojos, guardado correctamente para Nivel 2).
+
+### n1-l7 "Cuando dejar de jugar": la demo prueba encontrar una jugada mejor, no pasar
+
+GuidedDemo no tiene boton de pasar (solo clicks sobre el tablero), asi que ninguna demo puede tener "pasar" como respuesta correcta -- confirmado leyendo `handleClick`. La demo de esta leccion pide encontrar una captura en atari en vez de jugar en territorio ya sellado, pero el texto nunca conectaba explicitamente esa idea con "pasar": el aha que faltaba era "si no hubiera quedado ninguna jugada asi, ahi si convendria pasar". Agregado un tercer parrafo (`lesson.n1-l7.p3`) con esa conclusion y la misma idea repetida en el feedback de la demo, justo despues de resolver el paso.
+
 **Addendum 2026-09-13:** pedido explicito del usuario de commit/push/AAB
 para ambas rondas de esta nota (cont. 39 y cont. 40, nunca commiteadas
 hasta ahora). hoshi: commit `3c4dd34` (7 archivos), pusheado a

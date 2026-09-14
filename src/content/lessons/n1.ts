@@ -241,6 +241,7 @@ export const LESSONS_N1: Lesson[] = [
     blocks: [
       { kind: 'paragraph', textKey: 'lesson.n1-l7.p1' },
       { kind: 'paragraph', textKey: 'lesson.n1-l7.p2' },
+      { kind: 'paragraph', textKey: 'lesson.n1-l7.p3' },
     ],
     demo: {
       width: SIZE,

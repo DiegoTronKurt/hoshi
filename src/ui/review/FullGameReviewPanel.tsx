@@ -112,6 +112,7 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
       {result && (
         <div className="review-full-analysis-result">
           <h3>{t('review.fullAnalysis.title')}</h3>
+          <p className="review-ai-disclaimer">{t('review.winProbabilityExplainer')}</p>
           <WinRateChart
             curve={result.curve}
             highlightMoveNumbers={result.swings.slice(0, TOP_SWINGS_SHOWN).map((s) => s.moveNumber)}
