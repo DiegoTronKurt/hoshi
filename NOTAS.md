@@ -16,6 +16,21 @@ Ultima fase del plan. Cuatro piezas independientes: coordenadas, tamano de piedr
 
 **Verificacion:** Playwright en vivo -- toggle/sliders/color picker probados uno por uno en Ajustes (incluye el label en vivo "Tamano de piedra: 120%" actualizandose con el slider); tablero real en Jugar con las 3 preferencias en default vs. al maximo (1.2x/3x/coordenadas on), radio de piedra y grosor de linea medidos por pixel directo del canvas (`getImageData`, no solo captura de pantalla) y comparados contra la formula teorica; texto de coordenadas confirmado presente en el margen izquierdo solo cuando el toggle esta activo; ciclo completo de exportar -> cambiar todo -> importar -> confirmar que lo respaldado vuelve y lo excluido no. `tsc -b`, `oxlint` y `npm run build` limpios (mismos warnings preexistentes de siempre). Vitest completo: 63 archivos / 3819 tests, todos verdes.
 
+**Addendum 2026-09-15:** pedido explicito del usuario de commit/push/AAB
+para todo el plan de pulido visual (Fases 1 a 5, cont. 46-51, ninguna
+commiteada hasta ahora -- incluida la Fase 1/texturas de Piedra y Madera,
+que quedo pendiente de commit desde su propia sesion). hoshi: commit
+`57a635b` (25 archivos), pusheado a origin/master; el mensaje del commit
+resume 2a-5 pero no menciona texturas de fondo explicitamente pese a que
+`App.css` y `src/assets/app-textures/` de la Fase 1 tambien viajaron ahi
+-- se deja registrado aca para que el historial de NOTAS sea la fuente
+completa, ya que reescribir un commit ya pusheado no vale la pena para un
+gap solo de redaccion. hoshi-flutter: `npm run build` en hoshi +
+`sync-webapp.ps1` + version 1.33.0+38 -> 1.34.0+39 en `pubspec.yaml`,
+commit `35884b8`, pusheado. AAB generado con `flutter build appbundle
+--release`: `hoshi-flutter/build/app/outputs/bundle/release/app-release.aab`,
+54.6MB (57.235.223 bytes), 1.34.0+39.
+
 ## Fase 4 del plan de pulido visual: temas de tablero Cristal y Daltonico (2026-09-15, cont. 50)
 
 Dos temas nuevos en `BOARD_THEMES` (`src/ui/board/themes.ts`). Nada mas necesito cambios: `getTheme(id)`, la grilla de previsualizacion de Ajustes (`previewThemes = BOARD_THEMES.map(...)`) y `detectInitialThemeId` (valida contra `BOARD_THEMES.some(...)`) ya generalizan a cualquier cantidad de temas -- confirmado leyendo cada sitio en vez de asumirlo por lo que decia el plan.
