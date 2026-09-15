@@ -10,13 +10,7 @@ import { BOARD_THEMES, getTheme } from '../board/themes'
 import { ConfirmDialog } from '../common/ConfirmDialog'
 import { downloadTextFile } from '../common/downloadTextFile'
 import { APP_THEMES } from '../theme/appThemes'
-import {
-  MAX_GRID_THICKNESS_MULTIPLIER,
-  MAX_STONE_SIZE_MULTIPLIER,
-  MIN_GRID_THICKNESS_MULTIPLIER,
-  MIN_STONE_SIZE_MULTIPLIER,
-  useSettings,
-} from '../settings'
+import { MAX_GRID_THICKNESS_MULTIPLIER, MIN_GRID_THICKNESS_MULTIPLIER, useSettings } from '../settings'
 
 const THEME_NAME_KEY: Record<string, TranslationKey> = {
   minimo: 'settings.theme.minimo',
@@ -79,7 +73,6 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
     setDailyGoal,
     appThemeId,
     setAppThemeId,
-    appTheme,
     streakEnabled,
     setStreakEnabled,
     captureAnimationEnabled,
@@ -88,12 +81,8 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
     setRemoteEvalUrl,
     coordinatesEnabled,
     setCoordinatesEnabled,
-    stoneSizeMultiplier,
-    setStoneSizeMultiplier,
     gridThicknessMultiplier,
     setGridThicknessMultiplier,
-    customAccentColor,
-    setCustomAccentColor,
   } = useSettings()
   const previewThemes = useMemo(() => BOARD_THEMES.map((theme) => getTheme(theme.id)), [])
 
@@ -196,24 +185,6 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
       </section>
 
       <section className="settings-section">
-        <h3>{t('settings.customAccent.label')}</h3>
-        <p className="settings-description">{t('settings.customAccent.description')}</p>
-        <div className="settings-custom-accent">
-          <input
-            type="color"
-            value={customAccentColor ?? appTheme.colors.accent}
-            onChange={(event) => setCustomAccentColor(event.target.value)}
-            aria-label={t('settings.customAccent.label')}
-          />
-          {customAccentColor && (
-            <button type="button" onClick={() => setCustomAccentColor(null)}>
-              {t('settings.customAccent.reset')}
-            </button>
-          )}
-        </div>
-      </section>
-
-      <section className="settings-section">
         <h3>{t('settings.theme.label')}</h3>
         <div className="settings-theme-grid">
           {previewThemes.map((theme) => (
@@ -249,17 +220,6 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             onChange={(event) => setCoordinatesEnabled(event.target.checked)}
           />
           {t('settings.boardCustomization.coordinates')}
-        </label>
-        <label className="settings-slider">
-          <span>{t('settings.boardCustomization.stoneSize', { percent: Math.round(stoneSizeMultiplier * 100) })}</span>
-          <input
-            type="range"
-            min={MIN_STONE_SIZE_MULTIPLIER}
-            max={MAX_STONE_SIZE_MULTIPLIER}
-            step={0.05}
-            value={stoneSizeMultiplier}
-            onChange={(event) => setStoneSizeMultiplier(Number(event.target.value))}
-          />
         </label>
         <label className="settings-slider">
           <span>

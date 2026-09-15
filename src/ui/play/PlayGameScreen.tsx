@@ -99,14 +99,8 @@ export function PlayGameScreen({
   onActiveChange,
 }: PlayGameScreenProps) {
   const { t } = useI18n()
-  const {
-    theme,
-    playStoneSoundIfEnabled,
-    captureAnimationEnabled,
-    coordinatesEnabled,
-    stoneSizeMultiplier,
-    gridThicknessMultiplier,
-  } = useSettings()
+  const { theme, playStoneSoundIfEnabled, captureAnimationEnabled, coordinatesEnabled, gridThicknessMultiplier } =
+    useSettings()
 
   const komi = config.handicapStones && config.handicapStones.length > 0 ? HANDICAP_KOMI : KOMI
 
@@ -702,7 +696,6 @@ export function PlayGameScreen({
         territory={territory}
         theme={theme}
         coordinatesEnabled={coordinatesEnabled}
-        stoneSizeMultiplier={stoneSizeMultiplier}
         lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={handleIntersectionClick}
       />

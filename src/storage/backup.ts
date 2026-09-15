@@ -19,12 +19,7 @@ const SETTINGS_KEYS = [
   // esta lista por descuido -- se suma aca de paso.
   'hoshi-capture-animation-enabled',
   'hoshi-coordinates-enabled',
-  'hoshi-stone-size-multiplier',
   'hoshi-grid-thickness-multiplier',
-  // 'hoshi-custom-accent-color' queda fuera a proposito: de las 4
-  // preferencias nuevas de la Fase 5, es la mas propensa a verse mal
-  // restaurada en otro dispositivo u otro tema de app (un hex elegido a
-  // mano puede quedar sin contraste contra un fondo de tema distinto).
 ] as const
 
 export type BackupSettings = Partial<Record<(typeof SETTINGS_KEYS)[number], string>>

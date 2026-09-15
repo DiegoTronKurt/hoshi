@@ -2527,22 +2527,6 @@ button:active {
   width: 100%;
 }
 
-.settings-custom-accent {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.settings-custom-accent input[type='color'] {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid var(--hoshi-border-strong);
-  border-radius: 8px;
-  background: var(--hoshi-surface);
-  cursor: pointer;
-}
-
 .settings-backup-actions {
   display: flex;
   flex-wrap: wrap;

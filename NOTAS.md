@@ -1,5 +1,15 @@
 # Notas de desarrollo
 
+## Se retiran el slider de tamano de piedra y el acento personalizado (2026-09-15, cont. 52)
+
+Pedido explicito del usuario, sobre lo recien agregado en la Fase 5 (cont. 51): sacar el slider de "Tamano de piedra" y toda la seccion de "Acento personalizado" de Ajustes. Se dejan intactos coordenadas y grosor de rejilla, las otras dos piezas de esa misma fase.
+
+**Tamano de piedra:** se quito `stoneSizeMultiplier` de punta a punta -- prop de `BoardCanvas` (vuelve a `stoneRadius = cell*0.46` sin multiplicador), campo de `SettingsContextValue`/constantes MIN/MAX/DEFAULT/`clampStoneSizeMultiplier`/`detectInitialStoneSizeMultiplier`/efecto de guardado en `src/ui/settings/index.tsx`, el slider y su import en `SettingsScreen.tsx`, las claves de i18n `settings.boardCustomization.stoneSize` en ambos idiomas, y la clave de respaldo `hoshi-stone-size-multiplier` en `storage/backup.ts`. Los 5 llamadores que la pasaban (`PlayGameScreen`, `DojoScreen`, `FullGameReviewPanel`, `ReviewMistakeBoard`, `ExerciseView`) se limpiaron para no desestructurarla ni pasarla.
+
+**Acento personalizado:** se quito `customAccentColor` completo -- constante `HEX_COLOR_PATTERN`, campo de contexto/`detectInitialCustomAccentColor`/efecto de guardado en `index.tsx`, la seccion entera de Ajustes (color picker + boton de reset) en `SettingsScreen.tsx`, las claves `settings.customAccent.*` en ambos idiomas, y las reglas `.settings-custom-accent`/`input[type='color']` en `App.css`. En `App.tsx` se revirtio `contrastColorFor()` y el `useMemo` de `accentStyle` -- la raiz `<div className="app">` vuelve a no llevar `style` inline, ya que no queda ningun override de `--hoshi-accent` que aplicar. Esta preferencia nunca habia entrado al allowlist de respaldo (exclusion deliberada de la Fase 5), asi que `storage/backup.ts` no necesito otro cambio ahi.
+
+**Verificacion:** Playwright en vivo contra Ajustes confirmando que no aparece la seccion de acento ni ningun `input[type='color']`, que el texto "Tamano de piedra" ya no esta, que el slider de grosor de rejilla sigue presente y es el unico `input[type='range']` de la pantalla, y que el checkbox de coordenadas sigue ahi. `tsc -b` y `oxlint` limpios (mismos warnings preexistentes de siempre, ninguno nuevo). Vitest completo corrido de nuevo tras el cambio.
+
 ## Fase 5 del plan de pulido visual: profundidad de personalizacion (2026-09-15, cont. 51)
 
 Ultima fase del plan. Cuatro piezas independientes: coordenadas, tamano de piedra/grosor de rejilla, acento personalizado, y el allowlist de respaldo.

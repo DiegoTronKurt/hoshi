@@ -48,7 +48,7 @@ interface FullGameReviewResult {
  */
 export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: FullGameReviewPanelProps) {
   const { t } = useI18n()
-  const { theme, coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
+  const { theme, coordinatesEnabled, gridThicknessMultiplier } = useSettings()
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
   const [result, setResult] = useState<FullGameReviewResult | null>(null)
@@ -168,7 +168,6 @@ export function FullGameReviewPanel({ width, height, komi, moves, evalClient }: 
                             lastMove={swing.point}
                             theme={theme}
                             coordinatesEnabled={coordinatesEnabled}
-                            stoneSizeMultiplier={stoneSizeMultiplier}
                             lineWidthMultiplier={gridThicknessMultiplier}
                             onIntersectionClick={() => {}}
                           />

@@ -64,7 +64,7 @@ export function ExerciseView({
   onPass,
 }: ExerciseViewProps) {
   const { t } = useI18n()
-  const { coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
+  const { coordinatesEnabled, gridThicknessMultiplier } = useSettings()
   const toMoveKey: TranslationKey = displayColor(loaded) === BLACK ? 'color.black' : 'color.white'
 
   return (
@@ -104,7 +104,6 @@ export function ExerciseView({
         wrongFlash={status === 'incorrect' ? wrongFlash : null}
         theme={theme}
         coordinatesEnabled={coordinatesEnabled}
-        stoneSizeMultiplier={stoneSizeMultiplier}
         lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={onIntersectionClick}
       />

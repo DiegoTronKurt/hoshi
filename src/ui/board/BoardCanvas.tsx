@@ -68,10 +68,6 @@ interface BoardCanvasProps {
    * el texto no alcanza a leerse -- esos usos de BoardCanvas simplemente no
    * pasan esta prop. */
   coordinatesEnabled?: boolean
-  /** Multiplicador sobre el radio de piedra base de cada tema (0.46*cell),
-   * por encima del valor propio del tema, no en su reemplazo. Default 1
-   * (sin cambio para los usos que no lo pasan). */
-  stoneSizeMultiplier?: number
   /** Multiplicador sobre el grosor de linea de rejilla base de cada tema.
    * Default 1 (sin cambio para los usos que no lo pasan). */
   lineWidthMultiplier?: number
@@ -104,7 +100,6 @@ export function BoardCanvas({
   territory = null,
   theme,
   coordinatesEnabled = false,
-  stoneSizeMultiplier = 1,
   lineWidthMultiplier = 1,
   onIntersectionClick,
 }: BoardCanvasProps) {
@@ -203,7 +198,7 @@ export function BoardCanvas({
       }
     }
 
-    const stoneRadius = cell * 0.46 * stoneSizeMultiplier
+    const stoneRadius = cell * 0.46
 
     if (territory) {
       const revealProgress = territoryAnimRef.current
@@ -329,7 +324,6 @@ export function BoardCanvas({
     theme,
     textureImage,
     coordinatesEnabled,
-    stoneSizeMultiplier,
     lineWidthMultiplier,
   ])
 

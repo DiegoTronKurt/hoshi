@@ -47,7 +47,7 @@ interface DeepResult {
 
 export function ReviewMistakeBoard({ game, moves, event, boardState, theme, evalClient }: ReviewMistakeBoardProps) {
   const { t } = useI18n()
-  const { coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
+  const { coordinatesEnabled, gridThicknessMultiplier } = useSettings()
   const [aiState, setAiState] = useState<'idle' | 'loading' | 'error'>('idle')
   const [aiResult, setAiResult] = useState<AiResult | null>(null)
   const [deepState, setDeepState] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -139,7 +139,6 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
         territory={aiResult?.territory ?? null}
         theme={theme}
         coordinatesEnabled={coordinatesEnabled}
-        stoneSizeMultiplier={stoneSizeMultiplier}
         lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={() => {}}
       />
