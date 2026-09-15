@@ -1,5 +1,15 @@
 # Notas de desarrollo
 
+## Fix de contraste del aro de pista (hint marker) sobre territorio negro (2026-09-15, cont. 53)
+
+Reporte del usuario: en el analisis de IA (Revisar, `ReviewMistakeBoard` -- unico lugar que combina `hintMove` con `territory` al mismo tiempo), el aro azul que marca la jugada sugerida a veces se ve con muy poco contraste cuando cae sobre un cuadrado de territorio pintado de negro.
+
+**Causa raiz:** el overlay de territorio (`BoardCanvas.tsx`, bloque `if (territory)`) dibuja un cuadrado semitransparente (`globalAlpha = 0.45`) del color de piedra del dueño (`theme.blackStone.fill` para negro) encima del fondo del tema, *antes* de dibujar el aro de pista. El resultado no es negro puro sino un gris compuesto (p.ej. sobre el fondo claro de Cristal, `#e7edf3` + 45% de `#161a22` da un gris medio ~rgb(137,142,149)), y el color de aro de cada tema (`hintMarker.color`, tonos de azul medio-oscuro: `#2f6f9f`, `#2f8fae`, `#0072b2`, etc.) puede quedar muy cerca de ese gris en luminosidad. Medido analiticamente (formula de contraste WCAG) contra ese fondo compuesto para los 6 temas: **1.12 a 6.93**, la mayoria muy por debajo del minimo recomendado para componentes no-textuales (3.0).
+
+**Fix:** el aro de pista ahora se dibuja como tres trazos concentricos en vez de uno -- un anillo exterior negro opaco (`lineWidth 6.5`), uno blanco opaco encima (`lineWidth 4.5`), y el color propio del tema encima de esos dos (`lineWidth 2`, sin cambios). La idea es la tecnica estandar de "marcador con contorno de dos tonos" (como un pin de mapa): sin importar si el fondo local es oscuro o claro, siempre hay uno de los dos anillos (negro o blanco) con contraste alto contra el, haciendo que la marca sea localizable de inmediato. Ambos opacos a proposito -- un halo semitransparente se mezcla con lo que hay debajo y pierde parte de la mejora (probado primero con blanco al 85% de opacidad, insuficiente en el caso de gris medio). No afecta el caso comun (fondo claro sin territorio): el anillo negro es una banda finita de ~1px, casi imperceptible, y el blanco sobre un fondo ya claro no se nota.
+
+**Verificacion:** contraste WCAG recalculado analiticamente para los 6 temas con el fix -- **4.70 a 19.44**, los 6 por encima del minimo de 3.0 (antes solo Nocturno lo cumplia). Chequeo visual renderizando el caso mas grave (Cristal, 1.12 antes del fix) con Playwright: el aro azul ahora se ve claramente delineado sobre el cuadrado gris de territorio. `tsc -b` y `oxlint` limpios sobre el archivo tocado.
+
 ## Se retiran el slider de tamano de piedra y el acento personalizado (2026-09-15, cont. 52)
 
 Pedido explicito del usuario, sobre lo recien agregado en la Fase 5 (cont. 51): sacar el slider de "Tamano de piedra" y toda la seccion de "Acento personalizado" de Ajustes. Se dejan intactos coordenadas y grosor de rejilla, las otras dos piezas de esa misma fase.

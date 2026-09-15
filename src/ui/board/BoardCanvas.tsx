@@ -293,8 +293,37 @@ export function BoardCanvas({
 
     if (hintMove !== null) {
       const [x, y] = toXY(width, hintMove)
+      const hx = margin + x * cell
+      const hy = margin + y * cell
+      const hintRadius = stoneRadius * 0.55
+      // Halo de dos tonos (oscuro afuera, blanco adentro) detras del aro:
+      // sin esto, el aro azul (hintMarker.color) pierde contraste cuando
+      // cae encima de un cuadrado de territorio pintado de negro (ver
+      // core/scoring.ts -- el overlay de territorio dibuja un cuadrado
+      // semitransparente ahi arriba, antes de las piedras). Un solo halo
+      // blanco ya alcanza contra fondos oscuros, pero se queda corto (ratio
+      // WCAG ~2.9, no ~3.0) contra el gris medio que resulta de territorio
+      // negro al 45% de opacidad sobre un tema de fondo blanco -- el anillo
+      // oscuro exterior cubre justo ese caso intermedio. Ambos opacos (no
+      // semitransparentes): un halo parcialmente transparente se mezcla con
+      // lo que hay debajo y pierde parte de la mejora de contraste. No
+      // afecta el caso comun (fondo claro, sin territorio) porque el anillo
+      // oscuro es finito (1px de banda visible) y el blanco sobre claro no
+      // se nota.
       ctx.beginPath()
-      ctx.arc(margin + x * cell, margin + y * cell, stoneRadius * 0.55, 0, Math.PI * 2)
+      ctx.arc(hx, hy, hintRadius, 0, Math.PI * 2)
+      ctx.lineWidth = 6.5
+      ctx.strokeStyle = '#000000'
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.arc(hx, hy, hintRadius, 0, Math.PI * 2)
+      ctx.lineWidth = 4.5
+      ctx.strokeStyle = '#ffffff'
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.arc(hx, hy, hintRadius, 0, Math.PI * 2)
       ctx.lineWidth = 2
       ctx.strokeStyle = theme.hintMarker.color
       ctx.stroke()
