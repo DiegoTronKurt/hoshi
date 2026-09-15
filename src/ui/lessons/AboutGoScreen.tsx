@@ -51,7 +51,7 @@ export function AboutGoScreen({ onBack, onNavigateToPlay }: AboutGoScreenProps) 
         <p className="lesson-paragraph">{t('about.styles.moyo')}</p>
         <p className="lesson-paragraph">{t('about.styles.fighting')}</p>
         <p className="lesson-paragraph">{t('about.styles.history')}</p>
-        <button type="button" className="about-go-styles-cta" onClick={() => onNavigateToPlay()}>
+        <button type="button" className="about-go-styles-cta primary" onClick={() => onNavigateToPlay()}>
           {t('about.styles.cta')}
         </button>
       </section>

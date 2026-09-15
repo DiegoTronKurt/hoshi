@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import type { ComponentType } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { ComponentType, CSSProperties } from 'react'
 import type { ConceptId } from './analysis/concepts'
 import { useI18n } from './i18n'
 import type { TranslationKey } from './i18n'
@@ -56,11 +56,34 @@ function useSystemScheme(): 'light' | 'dark' {
   return scheme
 }
 
+/** Negro o blanco, el que de mejor contraste de texto sobre `hex` -- formula
+ * YIQ de brillo percibido (BT.601), el mismo criterio practico usado por
+ * cualquier "elegi texto legible sobre un color arbitrario". El acento
+ * personalizado (ver customAccentColor) es un hex libre elegido por la
+ * persona usuaria, no uno de los 13 pares acento/contraste ya afinados a
+ * mano en appThemes.ts -- sin esto, un acento claro heredando el
+ * `--hoshi-accent-contrast` del tema de base podria quedar ilegible (texto
+ * blanco sobre amarillo, por ejemplo). */
+function contrastColorFor(hex: string): string {
+  const r = Number.parseInt(hex.slice(1, 3), 16)
+  const g = Number.parseInt(hex.slice(3, 5), 16)
+  const b = Number.parseInt(hex.slice(5, 7), 16)
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000
+  return brightness >= 128 ? '#1a1a1a' : '#ffffff'
+}
+
 function App() {
   const { t } = useI18n()
-  const { appThemeId, appTheme } = useSettings()
+  const { appThemeId, appTheme, customAccentColor } = useSettings()
   const systemScheme = useSystemScheme()
   const scheme = appThemeId === 'system' ? systemScheme : appTheme.scheme
+  const accentStyle = useMemo<CSSProperties | undefined>(() => {
+    if (!customAccentColor) return undefined
+    return {
+      '--hoshi-accent': customAccentColor,
+      '--hoshi-accent-contrast': contrastColorFor(customAccentColor),
+    } as CSSProperties
+  }, [customAccentColor])
   const [screen, setScreen] = useState<Screen>('today')
   const [exercisesConcept, setExercisesConcept] = useState<ConceptId | undefined>(undefined)
   const [reviewGameId, setReviewGameId] = useState<number | undefined>(undefined)
@@ -143,7 +166,7 @@ function App() {
   }, [screen, pendingNav, attemptNav])
 
   return (
-    <div className="app" data-app-theme={appThemeId} data-scheme={scheme}>
+    <div className="app" data-app-theme={appThemeId} data-scheme={scheme} style={accentStyle}>
       {screen === 'today' && (
         <header className="app-header">
           <h1>{t('app.title')}</h1>

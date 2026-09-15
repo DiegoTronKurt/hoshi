@@ -88,6 +88,7 @@ export function LessonScreen({ lesson, onBack, onNavigateToExercises, onNavigate
         <h3>{t('learn.checkGame.title')}</h3>
         <button
           type="button"
+          className="primary"
           onClick={() =>
             onNavigateToPlay(
               lesson.demo

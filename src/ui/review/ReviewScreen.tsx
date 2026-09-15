@@ -335,7 +335,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
               )}
               <button
                 type="button"
-                className="review-practice-concept"
+                className="review-practice-concept primary"
                 onClick={() => onPracticeConcept(primaryEvent.conceptId)}
               >
                 {t('review.practiceConcept')}
@@ -400,7 +400,7 @@ export function ReviewScreen({ onPracticeConcept, initialGameId }: ReviewScreenP
                         )}
                         <button
                           type="button"
-                          className="review-practice-concept"
+                          className="review-practice-concept primary"
                           onClick={() => onPracticeConcept(event.conceptId)}
                         >
                           {t('review.practiceConcept')}

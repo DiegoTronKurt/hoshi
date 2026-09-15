@@ -116,7 +116,7 @@ export function ProfileScreen({ onNavigateToPlay }: ProfileScreenProps) {
             {t('profile.mistakes.topInGame.line', { concept: t(`concept.${topMistake}.label` as TranslationKey) })}
           </p>
         )}
-        <button type="button" className="learn-about-cta profile-leveltest-cta" onClick={() => setView('levelTest')}>
+        <button type="button" className="learn-about-cta profile-leveltest-cta primary" onClick={() => setView('levelTest')}>
           {t('profile.levelTest.cta')}
         </button>
       </section>

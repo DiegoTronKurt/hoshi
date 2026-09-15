@@ -51,7 +51,7 @@ interface Analysis {
  */
 export function DojoScreen({ evalClient, onBack }: DojoScreenProps) {
   const { t } = useI18n()
-  const { theme } = useSettings()
+  const { theme, coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
   const [size, setSize] = useState(9)
   const [stones, setStones] = useState(() => createBoard(9).stones)
   const [toMove, setToMove] = useState<Color>(BLACK)
@@ -151,6 +151,9 @@ export function DojoScreen({ evalClient, onBack }: DojoScreenProps) {
         lastMove={null}
         hintMove={analysis?.topPoint ?? null}
         theme={theme}
+        coordinatesEnabled={coordinatesEnabled}
+        stoneSizeMultiplier={stoneSizeMultiplier}
+        lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={handleIntersectionClick}
       />
 

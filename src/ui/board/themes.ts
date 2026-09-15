@@ -82,7 +82,44 @@ export const nocturnoTheme: BoardTheme = {
   coordinates: { color: '#8a6a2a' },
 }
 
-export const BOARD_THEMES: BoardTheme[] = [minimoTheme, sumieTheme, kayaTheme, nocturnoTheme]
+export const cristalTheme: BoardTheme = {
+  id: 'cristal',
+  background: '#e7edf3',
+  // Sin textura a propósito: plano y frío es el carácter de este tema.
+  lines: { color: '#93a4b8', widthPx: 1 },
+  hoshi: { color: '#5e7086', radiusPx: 3 },
+  blackStone: { fill: '#161a22', stroke: '#000000', strokeWidth: 1, highlight: '#4c5a6b', dropShadow: true },
+  whiteStone: { fill: '#f7fafc', stroke: '#8695a8', strokeWidth: 1, highlight: '#ffffff', dropShadow: true },
+  lastMoveMarker: { color: '#d6553a' },
+  hintMarker: { color: '#2f8fae' },
+  coordinates: { color: '#7c8ba1' },
+}
+
+// Marcadores en paleta Okabe-Ito (naranja/azul): se distinguen entre si en
+// los tres tipos comunes de daltonismo, a diferencia del rojo/azul de
+// `minimoTheme`. El resto del tema se mantiene cercano a Mínimo -- alto
+// contraste ya es "seguro" para blanco/negro, que se distinguen por
+// luminosidad, no por matiz.
+export const daltonicoTheme: BoardTheme = {
+  id: 'daltonico',
+  background: '#ffffff',
+  lines: { color: '#595959', widthPx: 1 },
+  hoshi: { color: '#595959', radiusPx: 3 },
+  blackStone: { fill: '#161616', stroke: '#000000', strokeWidth: 1.5, highlight: '#5c5c5c', dropShadow: true },
+  whiteStone: { fill: '#fbfbf9', stroke: '#1a1a1a', strokeWidth: 1.5, highlight: '#ffffff', dropShadow: true },
+  lastMoveMarker: { color: '#e69f00' },
+  hintMarker: { color: '#0072b2' },
+  coordinates: { color: '#595959' },
+}
+
+export const BOARD_THEMES: BoardTheme[] = [
+  minimoTheme,
+  sumieTheme,
+  kayaTheme,
+  nocturnoTheme,
+  cristalTheme,
+  daltonicoTheme,
+]
 
 export type BoardThemeId = (typeof BOARD_THEMES)[number]['id']
 

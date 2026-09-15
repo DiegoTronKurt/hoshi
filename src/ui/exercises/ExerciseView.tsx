@@ -6,6 +6,7 @@ import { useI18n } from '../../i18n'
 import type { TranslationKey } from '../../i18n'
 import { BoardCanvas } from '../board/BoardCanvas'
 import type { BoardTheme } from '../board/themes'
+import { useSettings } from '../settings'
 import type { ProblemStatus, WrongFlash } from './useSolvableExercise'
 
 interface ExerciseViewProps {
@@ -63,6 +64,7 @@ export function ExerciseView({
   onPass,
 }: ExerciseViewProps) {
   const { t } = useI18n()
+  const { coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
   const toMoveKey: TranslationKey = displayColor(loaded) === BLACK ? 'color.black' : 'color.white'
 
   return (
@@ -101,6 +103,9 @@ export function ExerciseView({
         hintMove={hintPoint}
         wrongFlash={status === 'incorrect' ? wrongFlash : null}
         theme={theme}
+        coordinatesEnabled={coordinatesEnabled}
+        stoneSizeMultiplier={stoneSizeMultiplier}
+        lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={onIntersectionClick}
       />
 

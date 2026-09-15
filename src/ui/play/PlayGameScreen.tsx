@@ -9,7 +9,7 @@ import type { AreaScore } from '../../core/scoring'
 import { gameRecordToSgf } from '../../core/sgf'
 import type { RecordedMove } from '../../core/sgf'
 import { BLACK, WHITE } from '../../core/types'
-import type { GameState, IllegalReason } from '../../core/types'
+import type { Color, GameState, IllegalReason } from '../../core/types'
 import { EngineClient } from '../../engine/client'
 import { EvalClient } from '../../eval/client'
 import { EVAL_MODEL_URL } from '../../eval/modelUrl'
@@ -99,7 +99,14 @@ export function PlayGameScreen({
   onActiveChange,
 }: PlayGameScreenProps) {
   const { t } = useI18n()
-  const { theme, playStoneSoundIfEnabled } = useSettings()
+  const {
+    theme,
+    playStoneSoundIfEnabled,
+    captureAnimationEnabled,
+    coordinatesEnabled,
+    stoneSizeMultiplier,
+    gridThicknessMultiplier,
+  } = useSettings()
 
   const komi = config.handicapStones && config.handicapStones.length > 0 ? HANDICAP_KOMI : KOMI
 
@@ -209,6 +216,11 @@ export function PlayGameScreen({
   // no vale la pena complicar.
   const pendingRetroMistakeRef = useRef<{ moveIndex: number } | null>(null)
   const [retroMistakeFlag, setRetroMistakeFlag] = useState<{ conceptId: ConceptId } | null>(null)
+  // Desvanecido opt-in de piedras capturadas (settings.captureAnimationEnabled,
+  // Fase 2b del plan de pulido visual) -- fire-and-forget, ver el comentario de
+  // capturedFlash en BoardCanvasProps: no hace falta un setTimeout para
+  // limpiarlo, BoardCanvas ya expira la animacion sola via su propio rAF.
+  const [capturedFlash, setCapturedFlash] = useState<{ points: number[]; color: Color; id: number } | null>(null)
   // Captura el tablero inicial una sola vez, para precalentar la red sin
   // depender de `history` (que cambia en cada jugada -- no queremos que el
   // efecto de abajo se repita por eso).
@@ -436,6 +448,9 @@ export function PlayGameScreen({
     setHistory((prev) => [...prev, result.state as GameState])
     setMessage(null)
     if (point !== null) playStoneSoundIfEnabled()
+    if (captureAnimationEnabled && result.captured.length > 0) {
+      setCapturedFlash({ points: result.captured, color: color === BLACK ? WHITE : BLACK, id: result.state.moveNumber })
+    }
   }
 
   function handleIntersectionClick(point: number) {
@@ -457,6 +472,7 @@ export function PlayGameScreen({
     setHistory((prev) => prev.slice(0, prev.length - popMoves))
     setMessage(null)
     setBotThinking(false)
+    setCapturedFlash(null)
     if (game.gameOver) {
       savedThisGameRef.current = false
       setJustSaved(false)
@@ -572,6 +588,9 @@ export function PlayGameScreen({
         setMoves((prev) => [...prev, { color, point: response.move }])
         setHistory((prev) => [...prev, result.state as GameState])
         if (response.move !== null) playStoneSoundIfEnabled()
+        if (captureAnimationEnabled && result.captured.length > 0) {
+          setCapturedFlash({ points: result.captured, color: color === BLACK ? WHITE : BLACK, id: result.state.moveNumber })
+        }
       } catch {
         if (cancelled) return
         setBotThinking(false)
@@ -584,7 +603,17 @@ export function PlayGameScreen({
     return () => {
       cancelled = true
     }
-  }, [game, moves, history, config.mode, config.humanColor, config.strengthId, config.botStyle, playStoneSoundIfEnabled])
+  }, [
+    game,
+    moves,
+    history,
+    config.mode,
+    config.humanColor,
+    config.strengthId,
+    config.botStyle,
+    playStoneSoundIfEnabled,
+    captureAnimationEnabled,
+  ])
 
   const finalScore = useMemo(() => {
     if (!game.gameOver) return null
@@ -669,8 +698,12 @@ export function PlayGameScreen({
         stones={game.board.stones}
         lastMove={lastMove}
         hintMove={hintPoint ?? mistakeFlag?.ghostPoint ?? null}
+        capturedFlash={captureAnimationEnabled ? capturedFlash : null}
         territory={territory}
         theme={theme}
+        coordinatesEnabled={coordinatesEnabled}
+        stoneSizeMultiplier={stoneSizeMultiplier}
+        lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={handleIntersectionClick}
       />
       {hintPoint !== null && (
@@ -762,6 +795,7 @@ export function PlayGameScreen({
           <div className="play-end-actions">
             <button
               type="button"
+              className="primary"
               disabled={savedGameId === null}
               onClick={() => savedGameId !== null && onNavigateToReview(savedGameId)}
             >

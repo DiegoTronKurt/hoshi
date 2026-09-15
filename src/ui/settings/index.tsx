@@ -11,7 +11,12 @@ const SOUND_STORAGE_KEY = 'hoshi-sound-enabled'
 const DAILY_GOAL_STORAGE_KEY = 'hoshi-daily-goal'
 const APP_THEME_STORAGE_KEY = 'hoshi-app-theme'
 const STREAK_STORAGE_KEY = 'hoshi-streak-enabled'
+const CAPTURE_ANIMATION_STORAGE_KEY = 'hoshi-capture-animation-enabled'
 const REMOTE_EVAL_URL_STORAGE_KEY = 'hoshi-remote-eval-url'
+const COORDINATES_STORAGE_KEY = 'hoshi-coordinates-enabled'
+const STONE_SIZE_STORAGE_KEY = 'hoshi-stone-size-multiplier'
+const GRID_THICKNESS_STORAGE_KEY = 'hoshi-grid-thickness-multiplier'
+const CUSTOM_ACCENT_COLOR_STORAGE_KEY = 'hoshi-custom-accent-color'
 /** 13, no un numero redondo: es la cantidad de problemas que hoy planifica
  * planSession con su DEFAULT_SESSION_MINUTES (10) antes de que la meta
  * diaria realmente la determine (ver training-policy/session.ts). Asi una
@@ -21,6 +26,13 @@ export const DEFAULT_DAILY_GOAL = 13
 const MIN_DAILY_GOAL = 1
 const MAX_DAILY_GOAL = 20
 const DEFAULT_APP_THEME_ID = 'system'
+export const MIN_STONE_SIZE_MULTIPLIER = 0.8
+export const MAX_STONE_SIZE_MULTIPLIER = 1.2
+export const DEFAULT_STONE_SIZE_MULTIPLIER = 1
+export const MIN_GRID_THICKNESS_MULTIPLIER = 1
+export const MAX_GRID_THICKNESS_MULTIPLIER = 3
+export const DEFAULT_GRID_THICKNESS_MULTIPLIER = 1
+const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/
 
 interface SettingsContextValue {
   themeId: string
@@ -36,6 +48,11 @@ interface SettingsContextValue {
   appTheme: AppTheme
   streakEnabled: boolean
   setStreakEnabled: (enabled: boolean) => void
+  /** Anima el desvanecido de las piedras capturadas en PlayGameScreen (ver
+   * BoardCanvas capturedFlash). Opt-in a pedido explicito de la persona
+   * usuaria, no siempre-on como el resto del feedback visual. */
+  captureAnimationEnabled: boolean
+  setCaptureAnimationEnabled: (enabled: boolean) => void
   /** URL base de un servidor de inferencia remota (E3 del roadmap), o null
    * para usar el Worker local (comportamiento por defecto, siempre
    * disponible sin configurar nada). Ver eval/remoteClient.ts y
@@ -43,6 +60,23 @@ interface SettingsContextValue {
    * persona usuaria, la app nunca elige ni paga uno por su cuenta. */
   remoteEvalUrl: string | null
   setRemoteEvalUrl: (url: string | null) => void
+  /** Letras/numeros de coordenadas alrededor del tablero, ver BoardCanvas. */
+  coordinatesEnabled: boolean
+  setCoordinatesEnabled: (enabled: boolean) => void
+  /** Multiplicadores sobre los valores base de cada tema (no un reemplazo),
+   * ver BoardCanvas.tsx. */
+  stoneSizeMultiplier: number
+  setStoneSizeMultiplier: (multiplier: number) => void
+  gridThicknessMultiplier: number
+  setGridThicknessMultiplier: (multiplier: number) => void
+  /** Reemplaza `--hoshi-accent`/`--hoshi-accent-contrast` del tema de app
+   * activo, aplicado como estilo inline en la raiz (ver App.tsx) -- null
+   * usa el acento propio del tema, sin override. No participa del respaldo
+   * (storage/backup.ts): es la mas propensa de las 4 preferencias nuevas de
+   * esta fase a verse mal si se restaura en otro dispositivo u otro tema de
+   * app con un fondo de contraste distinto. */
+  customAccentColor: string | null
+  setCustomAccentColor: (color: string | null) => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
@@ -87,6 +121,16 @@ function detectInitialStreakEnabled(): boolean {
   return true
 }
 
+function detectInitialCaptureAnimationEnabled(): boolean {
+  try {
+    const stored = window.localStorage.getItem(CAPTURE_ANIMATION_STORAGE_KEY)
+    if (stored === 'false') return false
+  } catch {
+    // sin persistencia disponible, la animacion de captura queda activada por defecto para esta sesion
+  }
+  return true
+}
+
 function detectInitialRemoteEvalUrl(): string | null {
   try {
     const stored = window.localStorage.getItem(REMOTE_EVAL_URL_STORAGE_KEY)
@@ -99,6 +143,59 @@ function detectInitialRemoteEvalUrl(): string | null {
 
 function clampDailyGoal(value: number): number {
   return Math.max(MIN_DAILY_GOAL, Math.min(MAX_DAILY_GOAL, Math.round(value)))
+}
+
+function detectInitialCoordinatesEnabled(): boolean {
+  try {
+    if (window.localStorage.getItem(COORDINATES_STORAGE_KEY) === 'true') return true
+  } catch {
+    // sin persistencia disponible, las coordenadas quedan desactivadas por defecto para esta sesion
+  }
+  return false
+}
+
+function clampStoneSizeMultiplier(value: number): number {
+  return Math.max(MIN_STONE_SIZE_MULTIPLIER, Math.min(MAX_STONE_SIZE_MULTIPLIER, value))
+}
+
+function detectInitialStoneSizeMultiplier(): number {
+  try {
+    const stored = window.localStorage.getItem(STONE_SIZE_STORAGE_KEY)
+    if (stored) {
+      const parsed = Number(stored)
+      if (Number.isFinite(parsed)) return clampStoneSizeMultiplier(parsed)
+    }
+  } catch {
+    // sin persistencia disponible, se usa el valor por defecto para esta sesion
+  }
+  return DEFAULT_STONE_SIZE_MULTIPLIER
+}
+
+function clampGridThicknessMultiplier(value: number): number {
+  return Math.max(MIN_GRID_THICKNESS_MULTIPLIER, Math.min(MAX_GRID_THICKNESS_MULTIPLIER, value))
+}
+
+function detectInitialGridThicknessMultiplier(): number {
+  try {
+    const stored = window.localStorage.getItem(GRID_THICKNESS_STORAGE_KEY)
+    if (stored) {
+      const parsed = Number(stored)
+      if (Number.isFinite(parsed)) return clampGridThicknessMultiplier(parsed)
+    }
+  } catch {
+    // sin persistencia disponible, se usa el valor por defecto para esta sesion
+  }
+  return DEFAULT_GRID_THICKNESS_MULTIPLIER
+}
+
+function detectInitialCustomAccentColor(): string | null {
+  try {
+    const stored = window.localStorage.getItem(CUSTOM_ACCENT_COLOR_STORAGE_KEY)
+    if (stored && HEX_COLOR_PATTERN.test(stored)) return stored
+  } catch {
+    // sin persistencia disponible, se usa el acento del tema sin override para esta sesion
+  }
+  return null
 }
 
 function detectInitialDailyGoal(): number {
@@ -120,7 +217,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [dailyGoal, setDailyGoalState] = useState<number>(detectInitialDailyGoal)
   const [appThemeId, setAppThemeId] = useState<string>(detectInitialAppThemeId)
   const [streakEnabled, setStreakEnabled] = useState<boolean>(detectInitialStreakEnabled)
+  const [captureAnimationEnabled, setCaptureAnimationEnabled] = useState<boolean>(detectInitialCaptureAnimationEnabled)
   const [remoteEvalUrl, setRemoteEvalUrl] = useState<string | null>(detectInitialRemoteEvalUrl)
+  const [coordinatesEnabled, setCoordinatesEnabled] = useState<boolean>(detectInitialCoordinatesEnabled)
+  const [stoneSizeMultiplier, setStoneSizeMultiplierState] = useState<number>(detectInitialStoneSizeMultiplier)
+  const [gridThicknessMultiplier, setGridThicknessMultiplierState] = useState<number>(detectInitialGridThicknessMultiplier)
+  const [customAccentColor, setCustomAccentColorState] = useState<string | null>(detectInitialCustomAccentColor)
 
   useEffect(() => {
     try {
@@ -164,12 +266,53 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
+      window.localStorage.setItem(CAPTURE_ANIMATION_STORAGE_KEY, String(captureAnimationEnabled))
+    } catch {
+      // sin persistencia disponible, la preferencia de animacion de captura sigue funcionando solo para esta sesion
+    }
+  }, [captureAnimationEnabled])
+
+  useEffect(() => {
+    try {
       if (remoteEvalUrl) window.localStorage.setItem(REMOTE_EVAL_URL_STORAGE_KEY, remoteEvalUrl)
       else window.localStorage.removeItem(REMOTE_EVAL_URL_STORAGE_KEY)
     } catch {
       // sin persistencia disponible, la preferencia de inferencia remota sigue funcionando solo para esta sesion
     }
   }, [remoteEvalUrl])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(COORDINATES_STORAGE_KEY, String(coordinatesEnabled))
+    } catch {
+      // sin persistencia disponible, la preferencia de coordenadas sigue funcionando solo para esta sesion
+    }
+  }, [coordinatesEnabled])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STONE_SIZE_STORAGE_KEY, String(stoneSizeMultiplier))
+    } catch {
+      // sin persistencia disponible, el tamano de piedra sigue funcionando solo para esta sesion
+    }
+  }, [stoneSizeMultiplier])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(GRID_THICKNESS_STORAGE_KEY, String(gridThicknessMultiplier))
+    } catch {
+      // sin persistencia disponible, el grosor de rejilla sigue funcionando solo para esta sesion
+    }
+  }, [gridThicknessMultiplier])
+
+  useEffect(() => {
+    try {
+      if (customAccentColor) window.localStorage.setItem(CUSTOM_ACCENT_COLOR_STORAGE_KEY, customAccentColor)
+      else window.localStorage.removeItem(CUSTOM_ACCENT_COLOR_STORAGE_KEY)
+    } catch {
+      // sin persistencia disponible, el acento personalizado sigue funcionando solo para esta sesion
+    }
+  }, [customAccentColor])
 
   const value = useMemo<SettingsContextValue>(
     () => ({
@@ -188,10 +331,33 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       appTheme: getAppTheme(appThemeId),
       streakEnabled,
       setStreakEnabled,
+      captureAnimationEnabled,
+      setCaptureAnimationEnabled,
       remoteEvalUrl,
       setRemoteEvalUrl: (url: string | null) => setRemoteEvalUrl(url && url.trim() !== '' ? url.trim() : null),
+      coordinatesEnabled,
+      setCoordinatesEnabled,
+      stoneSizeMultiplier,
+      setStoneSizeMultiplier: (multiplier: number) => setStoneSizeMultiplierState(clampStoneSizeMultiplier(multiplier)),
+      gridThicknessMultiplier,
+      setGridThicknessMultiplier: (multiplier: number) =>
+        setGridThicknessMultiplierState(clampGridThicknessMultiplier(multiplier)),
+      customAccentColor,
+      setCustomAccentColor: (color: string | null) => setCustomAccentColorState(color && HEX_COLOR_PATTERN.test(color) ? color : null),
     }),
-    [themeId, soundEnabled, dailyGoal, appThemeId, streakEnabled, remoteEvalUrl],
+    [
+      themeId,
+      soundEnabled,
+      dailyGoal,
+      appThemeId,
+      streakEnabled,
+      captureAnimationEnabled,
+      remoteEvalUrl,
+      coordinatesEnabled,
+      stoneSizeMultiplier,
+      gridThicknessMultiplier,
+      customAccentColor,
+    ],
   )
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>

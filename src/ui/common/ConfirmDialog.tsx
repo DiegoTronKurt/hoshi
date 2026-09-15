@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react'
+
 interface ConfirmDialogProps {
   title: string
-  message: string
+  message: ReactNode
   confirmLabel: string
   cancelLabel: string
   onConfirm: () => void

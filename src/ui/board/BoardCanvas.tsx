@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toPoint, toXY } from '../../core/board'
 import { BLACK, EMPTY } from '../../core/types'
+import type { Color } from '../../core/types'
 import { getHoshiPoints } from './hoshiPoints'
 import type { BoardTheme } from './themes'
 
@@ -28,6 +29,12 @@ interface WrongFlashProp {
   id: number
 }
 
+interface CapturedFlashProp {
+  points: number[]
+  color: Color
+  id: number
+}
+
 interface BoardCanvasProps {
   width: number
   height?: number
@@ -39,19 +46,46 @@ interface BoardCanvasProps {
    * punto. `id` (no `point`) es lo que dispara la animacion -- clickear el
    * mismo punto invalido dos veces seguidas debe destellar las dos veces. */
   wrongFlash?: WrongFlashProp | null
+  /** Piedras recien capturadas (jugador o bot), para un desvanecido breve en
+   * PlayGameScreen -- opt-in via settings.captureAnimationEnabled, por eso
+   * PlayGameScreen solo pasa esto cuando la preferencia esta activada; el
+   * resto de los ~17 usos de BoardCanvas nunca lo pasan y no cambian en
+   * nada. `id` (no el contenido de `points`) dispara la animacion, igual
+   * que wrongFlash -- deshacer y repetir la misma captura debe volver a
+   * animar. */
+  capturedFlash?: CapturedFlashProp | null
   /** Dueño final de cada punto (BLACK/WHITE/EMPTY para neutral), solo al
    * terminar la partida -- ver core/scoring.ts::computeAreaOwnership. Al
    * pasar de ausente a presente dispara la animacion de revelado; mientras
    * la referencia no cambie no se repite. */
   territory?: Int8Array | null
   theme: BoardTheme
+  /** Letras de columna (A-T, salteando la I por convencion) y numeros de
+   * fila (1 abajo, creciendo hacia arriba) dibujados en el margen ya
+   * existente alrededor de la rejilla -- no agranda el canvas. Preferencia
+   * de Ajustes (settings.coordinatesEnabled), default false: no todo el
+   * mundo quiere el ruido visual extra, y en miniaturas pequenas (72-88px)
+   * el texto no alcanza a leerse -- esos usos de BoardCanvas simplemente no
+   * pasan esta prop. */
+  coordinatesEnabled?: boolean
+  /** Multiplicador sobre el radio de piedra base de cada tema (0.46*cell),
+   * por encima del valor propio del tema, no en su reemplazo. Default 1
+   * (sin cambio para los usos que no lo pasan). */
+  stoneSizeMultiplier?: number
+  /** Multiplicador sobre el grosor de linea de rejilla base de cada tema.
+   * Default 1 (sin cambio para los usos que no lo pasan). */
+  lineWidthMultiplier?: number
   onIntersectionClick: (point: number) => void
 }
+
+/** Notacion Go estandar: sin "I" para no confundirla con el numero 1. */
+const COLUMN_LETTERS = 'ABCDEFGHJKLMNOPQRSTUVWXYZ'
 
 /** Duracion del asentado de una piedra recien jugada. Diseno original
  * (roadmap), implementado aca porque el tablero es canvas, no DOM: no hay
  * transicion CSS posible, cada cuadro se redibuja a mano via rAF. */
 const STONE_SETTLE_MS = 120
+const CAPTURE_FLASH_MS = 350
 const TERRITORY_REVEAL_MS = 450
 const WRONG_FLASH_MS = 500
 
@@ -66,8 +100,12 @@ export function BoardCanvas({
   lastMove,
   hintMove = null,
   wrongFlash = null,
+  capturedFlash = null,
   territory = null,
   theme,
+  coordinatesEnabled = false,
+  stoneSizeMultiplier = 1,
+  lineWidthMultiplier = 1,
   onIntersectionClick,
 }: BoardCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -78,9 +116,11 @@ export function BoardCanvas({
   const prevLastMoveRef = useRef(lastMove)
   const prevTerritoryRef = useRef(territory)
   const prevWrongFlashRef = useRef(wrongFlash)
+  const prevCapturedFlashRef = useRef(capturedFlash)
   const stoneAnimRef = useRef<{ point: number; start: number } | null>(null)
   const territoryAnimRef = useRef<{ start: number } | null>(null)
   const wrongAnimRef = useRef<{ point: number; start: number } | null>(null)
+  const captureAnimRef = useRef<{ points: number[]; color: Color; start: number } | null>(null)
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -123,7 +163,7 @@ export function BoardCanvas({
     ctx.fillRect(0, 0, displayWidth, displayHeight)
 
     ctx.strokeStyle = theme.lines.color
-    ctx.lineWidth = theme.lines.widthPx
+    ctx.lineWidth = theme.lines.widthPx * lineWidthMultiplier
     for (let x = 0; x < width; x++) {
       const pos = margin + x * cell
       ctx.beginPath()
@@ -147,7 +187,23 @@ export function BoardCanvas({
       ctx.fill()
     }
 
-    const stoneRadius = cell * 0.46
+    if (coordinatesEnabled) {
+      const fontSize = Math.max(9, Math.min(13, cell * 0.28))
+      ctx.fillStyle = theme.coordinates.color
+      ctx.font = `${fontSize}px system-ui, sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      const columnLabelY = margin + (height - 1) * cell + margin / 2
+      for (let x = 0; x < width; x++) {
+        ctx.fillText(COLUMN_LETTERS[x] ?? '', margin + x * cell, columnLabelY)
+      }
+      const rowLabelX = margin / 2
+      for (let y = 0; y < height; y++) {
+        ctx.fillText(String(height - y), rowLabelX, margin + y * cell)
+      }
+    }
+
+    const stoneRadius = cell * 0.46 * stoneSizeMultiplier
 
     if (territory) {
       const revealProgress = territoryAnimRef.current
@@ -210,6 +266,28 @@ export function BoardCanvas({
       ctx.globalAlpha = 1
     }
 
+    if (captureAnimRef.current) {
+      const progress = Math.min(1, (performance.now() - captureAnimRef.current.start) / CAPTURE_FLASH_MS)
+      const alpha = 1 - easeOutCubic(progress)
+      if (alpha > 0.02) {
+        const style = captureAnimRef.current.color === BLACK ? theme.blackStone : theme.whiteStone
+        ctx.globalAlpha = alpha
+        for (const point of captureAnimRef.current.points) {
+          const [x, y] = toXY(width, point)
+          const cx = margin + x * cell
+          const cy = margin + y * cell
+          ctx.beginPath()
+          ctx.arc(cx, cy, stoneRadius, 0, Math.PI * 2)
+          ctx.fillStyle = style.fill
+          ctx.fill()
+          ctx.lineWidth = style.strokeWidth
+          ctx.strokeStyle = style.stroke
+          ctx.stroke()
+        }
+        ctx.globalAlpha = 1
+      }
+    }
+
     if (lastMove !== null) {
       const [x, y] = toXY(width, lastMove)
       ctx.beginPath()
@@ -241,7 +319,19 @@ export function BoardCanvas({
         ctx.globalAlpha = 1
       }
     }
-  }, [width, height, stones, lastMove, hintMove, territory, theme, textureImage])
+  }, [
+    width,
+    height,
+    stones,
+    lastMove,
+    hintMove,
+    territory,
+    theme,
+    textureImage,
+    coordinatesEnabled,
+    stoneSizeMultiplier,
+    lineWidthMultiplier,
+  ])
 
   useEffect(() => {
     if (lastMove !== null && lastMove !== prevLastMoveRef.current && stones[lastMove] !== EMPTY) {
@@ -259,6 +349,11 @@ export function BoardCanvas({
     }
     prevWrongFlashRef.current = wrongFlash
 
+    if (capturedFlash && capturedFlash !== prevCapturedFlashRef.current) {
+      captureAnimRef.current = { points: capturedFlash.points, color: capturedFlash.color, start: performance.now() }
+    }
+    prevCapturedFlashRef.current = capturedFlash
+
     let rafId: number | null = null
     function tick() {
       draw()
@@ -271,10 +366,16 @@ export function BoardCanvas({
       if (wrongAnimRef.current && performance.now() - wrongAnimRef.current.start >= WRONG_FLASH_MS) {
         wrongAnimRef.current = null
       }
-      rafId = stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current ? requestAnimationFrame(tick) : null
+      if (captureAnimRef.current && performance.now() - captureAnimRef.current.start >= CAPTURE_FLASH_MS) {
+        captureAnimRef.current = null
+      }
+      rafId =
+        stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current || captureAnimRef.current
+          ? requestAnimationFrame(tick)
+          : null
     }
 
-    if (stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current) {
+    if (stoneAnimRef.current || territoryAnimRef.current || wrongAnimRef.current || captureAnimRef.current) {
       rafId = requestAnimationFrame(tick)
     } else {
       draw()
@@ -288,7 +389,7 @@ export function BoardCanvas({
       if (rafId !== null) cancelAnimationFrame(rafId)
       observer.disconnect()
     }
-  }, [draw, lastMove, stones, territory, wrongFlash])
+  }, [draw, lastMove, stones, territory, wrongFlash, capturedFlash])
 
   function handleClick(event: React.MouseEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current

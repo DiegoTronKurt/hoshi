@@ -7,15 +7,24 @@ import { exportBackup, importBackup, parseBackup } from '../../storage/backup'
 import type { BackupFile } from '../../storage/backup'
 import { BoardCanvas } from '../board/BoardCanvas'
 import { BOARD_THEMES, getTheme } from '../board/themes'
+import { ConfirmDialog } from '../common/ConfirmDialog'
 import { downloadTextFile } from '../common/downloadTextFile'
 import { APP_THEMES } from '../theme/appThemes'
-import { useSettings } from '../settings'
+import {
+  MAX_GRID_THICKNESS_MULTIPLIER,
+  MAX_STONE_SIZE_MULTIPLIER,
+  MIN_GRID_THICKNESS_MULTIPLIER,
+  MIN_STONE_SIZE_MULTIPLIER,
+  useSettings,
+} from '../settings'
 
 const THEME_NAME_KEY: Record<string, TranslationKey> = {
   minimo: 'settings.theme.minimo',
   sumie: 'settings.theme.sumie',
   kaya: 'settings.theme.kaya',
   nocturno: 'settings.theme.nocturno',
+  cristal: 'settings.theme.cristal',
+  daltonico: 'settings.theme.daltonico',
 }
 
 const APP_THEME_NAME_KEY: Record<string, TranslationKey> = {
@@ -70,10 +79,21 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
     setDailyGoal,
     appThemeId,
     setAppThemeId,
+    appTheme,
     streakEnabled,
     setStreakEnabled,
+    captureAnimationEnabled,
+    setCaptureAnimationEnabled,
     remoteEvalUrl,
     setRemoteEvalUrl,
+    coordinatesEnabled,
+    setCoordinatesEnabled,
+    stoneSizeMultiplier,
+    setStoneSizeMultiplier,
+    gridThicknessMultiplier,
+    setGridThicknessMultiplier,
+    customAccentColor,
+    setCustomAccentColor,
   } = useSettings()
   const previewThemes = useMemo(() => BOARD_THEMES.map((theme) => getTheme(theme.id)), [])
 
@@ -176,6 +196,24 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
       </section>
 
       <section className="settings-section">
+        <h3>{t('settings.customAccent.label')}</h3>
+        <p className="settings-description">{t('settings.customAccent.description')}</p>
+        <div className="settings-custom-accent">
+          <input
+            type="color"
+            value={customAccentColor ?? appTheme.colors.accent}
+            onChange={(event) => setCustomAccentColor(event.target.value)}
+            aria-label={t('settings.customAccent.label')}
+          />
+          {customAccentColor && (
+            <button type="button" onClick={() => setCustomAccentColor(null)}>
+              {t('settings.customAccent.reset')}
+            </button>
+          )}
+        </div>
+      </section>
+
+      <section className="settings-section">
         <h3>{t('settings.theme.label')}</h3>
         <div className="settings-theme-grid">
           {previewThemes.map((theme) => (
@@ -203,6 +241,42 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
       </section>
 
       <section className="settings-section">
+        <h3>{t('settings.boardCustomization.label')}</h3>
+        <label className="settings-toggle">
+          <input
+            type="checkbox"
+            checked={coordinatesEnabled}
+            onChange={(event) => setCoordinatesEnabled(event.target.checked)}
+          />
+          {t('settings.boardCustomization.coordinates')}
+        </label>
+        <label className="settings-slider">
+          <span>{t('settings.boardCustomization.stoneSize', { percent: Math.round(stoneSizeMultiplier * 100) })}</span>
+          <input
+            type="range"
+            min={MIN_STONE_SIZE_MULTIPLIER}
+            max={MAX_STONE_SIZE_MULTIPLIER}
+            step={0.05}
+            value={stoneSizeMultiplier}
+            onChange={(event) => setStoneSizeMultiplier(Number(event.target.value))}
+          />
+        </label>
+        <label className="settings-slider">
+          <span>
+            {t('settings.boardCustomization.gridThickness', { percent: Math.round(gridThicknessMultiplier * 100) })}
+          </span>
+          <input
+            type="range"
+            min={MIN_GRID_THICKNESS_MULTIPLIER}
+            max={MAX_GRID_THICKNESS_MULTIPLIER}
+            step={0.5}
+            value={gridThicknessMultiplier}
+            onChange={(event) => setGridThicknessMultiplier(Number(event.target.value))}
+          />
+        </label>
+      </section>
+
+      <section className="settings-section">
         <h3>{t('settings.sound.label')}</h3>
         <label className="settings-toggle">
           <input
@@ -211,6 +285,19 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
             onChange={(event) => setSoundEnabled(event.target.checked)}
           />
           {t('settings.sound.enabled')}
+        </label>
+      </section>
+
+      <section className="settings-section">
+        <h3>{t('settings.captureAnimation.label')}</h3>
+        <p className="settings-description">{t('settings.captureAnimation.description')}</p>
+        <label className="settings-toggle">
+          <input
+            type="checkbox"
+            checked={captureAnimationEnabled}
+            onChange={(event) => setCaptureAnimationEnabled(event.target.checked)}
+          />
+          {t('settings.captureAnimation.enabled')}
         </label>
       </section>
 
@@ -264,24 +351,23 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
         {backupError && <p className="settings-backup-error">{backupError}</p>}
 
         {pendingImport && (
-          <div className="settings-backup-confirm">
-            <p>
-              {t('settings.backup.confirmSummary', {
-                games: pendingImport.partidas.length,
-                attempts: pendingImport.intentos.length,
-                date: new Date(pendingImport.exportedAt).toLocaleDateString(),
-              })}
-            </p>
-            <p className="settings-backup-warning">{t('settings.backup.confirmWarning')}</p>
-            <div className="settings-backup-confirm-actions">
-              <button type="button" onClick={handleConfirmImport}>
-                {t('settings.backup.confirmButton')}
-              </button>
-              <button type="button" onClick={() => setPendingImport(null)}>
-                {t('settings.backup.cancelButton')}
-              </button>
-            </div>
-          </div>
+          <ConfirmDialog
+            title={t('settings.backup.confirmTitle')}
+            message={
+              <>
+                {t('settings.backup.confirmSummary', {
+                  games: pendingImport.partidas.length,
+                  attempts: pendingImport.intentos.length,
+                  date: new Date(pendingImport.exportedAt).toLocaleDateString(),
+                })}{' '}
+                <strong className="confirm-dialog-warning">{t('settings.backup.confirmWarning')}</strong>
+              </>
+            }
+            confirmLabel={t('settings.backup.confirmButton')}
+            cancelLabel={t('settings.backup.cancelButton')}
+            onConfirm={handleConfirmImport}
+            onCancel={() => setPendingImport(null)}
+          />
         )}
       </section>
 

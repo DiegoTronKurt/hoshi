@@ -341,14 +341,14 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
               theme={theme}
               onIntersectionClick={() => {}}
             />
-            <button type="button" onClick={() => handleStart(0)}>
+            <button type="button" className="primary" onClick={() => handleStart(0)}>
               {t('today.exercisePreview.start')}
             </button>
           </section>
         )}
 
         {!focus && plan.items.length > 0 && (
-          <button type="button" onClick={() => handleStart(0)}>
+          <button type="button" className="primary" onClick={() => handleStart(0)}>
             {t('today.start')}
           </button>
         )}
@@ -363,7 +363,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
             </p>
             <button
               type="button"
-              className="today-reopen-cta"
+              className="today-reopen-cta primary"
               onClick={() => onNavigateToLearn(reopenedLessons[0].lesson.id)}
             >
               {t('today.reopen.cta')}
@@ -393,7 +393,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
                         {t(`concept.${conceptId}.label` as TranslationKey)}
                       </span>
                     </span>
-                    <button type="button" onClick={() => onNavigateToLearn(lesson.id)}>
+                    <button type="button" className="primary" onClick={() => onNavigateToLearn(lesson.id)}>
                       {t('today.reopen.cta')}
                     </button>
                   </li>
@@ -438,7 +438,7 @@ export function TodayScreen({ onNavigateToPlay, onNavigateToLearn }: TodayScreen
             </ul>
           </div>
         )}
-        <button type="button" className="today-complete-cta" onClick={exitSession}>
+        <button type="button" className="today-complete-cta primary" onClick={exitSession}>
           {t('today.complete.cta')}
         </button>
       </div>

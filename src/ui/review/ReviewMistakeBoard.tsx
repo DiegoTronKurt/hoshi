@@ -13,6 +13,7 @@ import { gameHeight, gameWidth } from '../../storage/db'
 import type { SavedGameRecord } from '../../storage/db'
 import { BoardCanvas } from '../board/BoardCanvas'
 import type { BoardTheme } from '../board/themes'
+import { useSettings } from '../settings'
 import type { Mistake } from './ReviewScreen'
 import { formatWinProbabilityPercent } from './fullGameReview'
 import { bucketOwnership, stateAtMove } from './reviewState'
@@ -46,6 +47,7 @@ interface DeepResult {
 
 export function ReviewMistakeBoard({ game, moves, event, boardState, theme, evalClient }: ReviewMistakeBoardProps) {
   const { t } = useI18n()
+  const { coordinatesEnabled, stoneSizeMultiplier, gridThicknessMultiplier } = useSettings()
   const [aiState, setAiState] = useState<'idle' | 'loading' | 'error'>('idle')
   const [aiResult, setAiResult] = useState<AiResult | null>(null)
   const [deepState, setDeepState] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -136,6 +138,9 @@ export function ReviewMistakeBoard({ game, moves, event, boardState, theme, eval
         hintMove={hintMove}
         territory={aiResult?.territory ?? null}
         theme={theme}
+        coordinatesEnabled={coordinatesEnabled}
+        stoneSizeMultiplier={stoneSizeMultiplier}
+        lineWidthMultiplier={gridThicknessMultiplier}
         onIntersectionClick={() => {}}
       />
 

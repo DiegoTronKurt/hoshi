@@ -361,7 +361,7 @@ export function PlayConfigScreen({ onStart }: PlayConfigScreenProps) {
         </>
       )}
 
-      <button type="button" className="play-start-button" onClick={handleStart}>
+      <button type="button" className="play-start-button primary" onClick={handleStart}>
         {t('play.config.start')}
       </button>
 

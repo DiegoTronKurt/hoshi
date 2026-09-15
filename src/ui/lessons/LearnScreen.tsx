@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import type { ConceptId } from '../../analysis/concepts'
 import { getLesson, lessonsForLevel } from '../../content/lessons'
 import type { Lesson } from '../../content/lessons'
@@ -67,11 +68,17 @@ const LEVEL_INTRO_KEY: Record<(typeof LEVELS)[number], TranslationKey> = {
  * camino completo, en vez de una lista plana de 11 tarjetas -- los titulos
  * de los niveles ya dicen "Opening"/"Joseki"/"Fuseki"/"Midgame"/"Endgame",
  * esto solo hace visible una estructura que ya existia. */
-const LEVEL_GROUPS: Array<{ headingKey: TranslationKey; levels: Array<(typeof LEVELS)[number]> }> = [
-  { headingKey: 'learn.phase.fundamentals', levels: [0, 1, 2, 3, 4] },
-  { headingKey: 'learn.phase.opening', levels: [5, 6, 7] },
-  { headingKey: 'learn.phase.midgame', levels: [8] },
-  { headingKey: 'learn.phase.endgame', levels: [9, 10] },
+/** `accentVar` apunta a un token de color definido en App.css (2 variantes
+ * claro/oscuro via [data-scheme], igual que --hoshi-success/--hoshi-danger/
+ * etc. -- NO uno de los 13 temas de app), asignado como --level-accent
+ * inline en el div de cada grupo mas abajo. Fijo por fase, no por tema: son
+ * "capitulos" del camino de aprendizaje, no deberian cambiar con el tema de
+ * color que la persona usuaria elija. */
+const LEVEL_GROUPS: Array<{ headingKey: TranslationKey; levels: Array<(typeof LEVELS)[number]>; accentVar: string }> = [
+  { headingKey: 'learn.phase.fundamentals', levels: [0, 1, 2, 3, 4], accentVar: '--hoshi-phase-fundamentals' },
+  { headingKey: 'learn.phase.opening', levels: [5, 6, 7], accentVar: '--hoshi-phase-opening' },
+  { headingKey: 'learn.phase.midgame', levels: [8], accentVar: '--hoshi-phase-midgame' },
+  { headingKey: 'learn.phase.endgame', levels: [9, 10], accentVar: '--hoshi-phase-endgame' },
 ]
 
 /**
@@ -319,13 +326,18 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
         </div>
       )}
       {LEVEL_GROUPS.map((group) => (
-        <div key={group.headingKey} className="learn-phase-group">
+        <div
+          key={group.headingKey}
+          className="learn-phase-group"
+          style={{ '--level-accent': `var(${group.accentVar})` } as CSSProperties}
+        >
           <h3 className="learn-phase-heading">{t(group.headingKey)}</h3>
           <ul className="learn-level-list">
             {group.levels.map((level) => {
               const lessons = lessonsByLevel[level]
               const readCount = lessons.filter((lesson) => isLessonRead(lesson.id)).length
               const complete = lessons.length > 0 && readCount === lessons.length
+              const preview = lessons.length > 0 ? lessonPreview(lessons[0]) : null
               return (
                 <li key={level}>
                   <button type="button" className="learn-level-card" onClick={() => setView({ kind: 'lessonList', level })}>
@@ -336,6 +348,18 @@ export function LearnScreen({ initialLessonId, onNavigateToExercises, onNavigate
                         {t('learn.lessonsCount', { read: readCount, total: lessons.length })}
                       </span>
                     </span>
+                    {preview && (
+                      <span className="learn-level-preview">
+                        <BoardCanvas
+                          width={preview.width}
+                          height={preview.height}
+                          stones={preview.stones}
+                          lastMove={null}
+                          theme={minimoTheme}
+                          onIntersectionClick={() => {}}
+                        />
+                      </span>
+                    )}
                   </button>
                 </li>
               )
